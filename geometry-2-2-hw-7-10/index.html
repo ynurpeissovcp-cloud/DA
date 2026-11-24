@@ -1,0 +1,310 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Геометрия 2.2 — домашка 7–10</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Layout: тетрадь в клетку, одна колонка: памятка → № 7 (выбор) → № 8 (поиск треугольников) → № 9–10 (касания по клеткам) */
+:root{
+  --paper:#f6f8fc; --grid:rgba(60,90,170,.07); --card:#ffffff; --ink:#1b2236; --muted:#5d6782;
+  --pen:#2546c4; --pen-soft:#e6ebfb; --line:#dde3f0; --red:#c4382e; --red-soft:#fbe9e7; --ok:#1f8a57; --ok-soft:#e3f4ea; --amber:#a8670f; --amber-soft:#fdf1dc;
+  --fig:#1597c9; --mark:#d0453a; --med:#d0453a; --mid:#c27a0a; --hl:rgba(37,70,196,.16); --gridline:#cfe6f3;
+  --display:"Unbounded","Golos Text",system-ui,sans-serif; --body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#11151e; --grid:rgba(140,165,240,.06); --card:#191f2c; --ink:#e7ebf5; --muted:#9aa4bf;
+  --pen:#8aa2ff; --pen-soft:#232d4a; --line:#2a3245; --red:#ff8a7e; --red-soft:#3a2224; --ok:#5fd39a; --ok-soft:#1d3329; --amber:#f0b75a; --amber-soft:#382c17;
+  --fig:#5cc4ec; --mark:#ff7b70; --med:#ff7b70; --mid:#f0b75a; --hl:rgba(138,162,255,.22); --gridline:#22384a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#11151e; --grid:rgba(140,165,240,.06); --card:#191f2c; --ink:#e7ebf5; --muted:#9aa4bf;
+  --pen:#8aa2ff; --pen-soft:#232d4a; --line:#2a3245; --red:#ff8a7e; --red-soft:#3a2224; --ok:#5fd39a; --ok-soft:#1d3329; --amber:#f0b75a; --amber-soft:#382c17;
+  --fig:#5cc4ec; --mark:#ff7b70; --med:#ff7b70; --mid:#f0b75a; --hl:rgba(138,162,255,.22); --gridline:#22384a; color-scheme:dark}
+[hidden]{display:none!important}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px}
+.wrap{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 64px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--pen);font-weight:600}
+h1{font-family:var(--display);font-size:clamp(23px,5vw,32px);line-height:1.15;margin:6px 0 10px;text-wrap:balance}
+h2{font-family:var(--display);font-weight:500;font-size:19px;margin:0 0 6px;text-wrap:balance;display:flex;gap:10px;align-items:baseline}
+h2 .ok{font-size:14px;color:var(--ok);font-family:var(--body);font-weight:600}
+.lead{color:var(--muted);margin:0;max-width:62ch}
+section{margin-top:30px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px;min-width:0}
+.card>p:first-child{margin-top:0}.card>p:last-child{margin-bottom:0}
+.card.done{border-color:var(--ok)}
+.en{font-style:italic;color:var(--muted);font-size:14.5px;margin:0 0 4px}
+.ru{margin:0 0 8px}
+.note{font-size:14px;color:var(--muted)}
+.prog{display:flex;align-items:center;gap:12px;font-size:14px;font-variant-numeric:tabular-nums;margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.track{flex:1;height:8px;background:var(--pen-soft);border-radius:4px;overflow:hidden}
+.fill{height:100%;background:var(--ok);width:0;transition:width .3s}
+.memo{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:14.5px}
+.memo div{background:var(--pen-soft);border-radius:8px;padding:8px 10px;min-width:0}
+.memo b{display:block;color:var(--pen)}
+@media (max-width:480px){.memo{grid-template-columns:1fr}}
+svg.f{display:block;width:100%;height:auto}
+.figs7{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin:8px 0}
+.figs7 svg{max-width:320px;margin:0 auto}
+.figs7 svg{border:1px solid var(--line);border-radius:8px;background:var(--card)}
+.q7{border-top:1px dashed var(--line);padding:12px 0 2px}
+.q7 .stem{font-weight:600}
+.q7 .stem i{font-weight:400;color:var(--muted)}
+.opts{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.opts button{font:inherit;font-size:14.5px;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:6px 11px;border-radius:8px;cursor:pointer}
+.opts button.right{background:var(--ok-soft);border-color:var(--ok);font-weight:600}
+.opts button.wrong{background:var(--red-soft);text-decoration:line-through}
+.opts button:disabled{cursor:default}
+.fb{margin-top:8px;font-size:15px}
+.msg{padding:8px 11px;border-radius:8px;margin-top:6px}
+.msg.ok{background:var(--ok-soft)}.msg.ok b{color:var(--ok)}
+.msg.no{background:var(--red-soft)}
+.msg.hint{background:var(--amber-soft)}.msg.hint b{color:var(--amber)}
+.msg.sol{background:var(--pen-soft)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--pen);outline-offset:2px}
+.irow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.irow input{font:inherit;font-size:18px;width:120px;padding:7px 10px;border:1.5px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);text-transform:uppercase;letter-spacing:.06em}
+.go{font:inherit;font-size:14.5px;background:var(--pen);color:var(--card);border:1px solid var(--pen);padding:7px 13px;border-radius:8px;cursor:pointer;font-weight:600}
+.ghost{font:inherit;font-size:14px;background:var(--card);color:var(--ink);border:1px solid var(--line);padding:6px 12px;border-radius:8px;cursor:pointer}
+.found{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.found span{background:var(--ok-soft);color:var(--ink);border-radius:6px;padding:2px 9px;font-weight:600;letter-spacing:.04em;cursor:pointer}
+.found span.empty{background:var(--paper);border:1px dashed var(--line);color:var(--muted);font-weight:400;cursor:default}
+.count{font-variant-numeric:tabular-nums;font-weight:600}
+.tap{display:block;width:100%;max-width:340px;height:auto;touch-action:manipulation;cursor:crosshair;border:1px solid var(--line);border-radius:10px;background:var(--card);user-select:none;-webkit-user-select:none}
+.steps{margin:6px 0 0;padding-left:20px}
+.steps li{margin:3px 0}
+.foot{margin-top:24px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:14px}
+@media (prefers-reduced-motion:reduce){.fill{transition:none}}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Геометрия 7 · тема 2.2 · Problems № 7–10, с. 66–67</div>
+  <h1>Домашка по элементам треугольника</h1>
+  <p class="lead">Ответы страница проверяет сама. Если ошибёшься, она даст подсказку, а решение покажет только после трёх попыток. Забыл, что такое медиана или средняя линия? Сначала загляни в объяснение темы 2.2.</p>
+  <div class="prog"><span>Сделано:</span><div class="track"><div class="fill" id="pf"></div></div><span id="pt">0 из 4</span></div>
+
+  <section>
+    <div class="card">
+      <p><b>Памятка: как узнать отрезок по пометкам</b></p>
+      <div class="memo">
+        <div><b>Чёрточки на стороне</b>сторона поделена пополам → из вершины туда идёт <b>медиана</b> (median)</div>
+        <div><b>Дужки в углу</b>угол поделён пополам → <b>биссектриса</b> (bisector)</div>
+        <div><b>Квадратик</b>прямой угол 90° → <b>высота</b> (altitude), если из вершины</div>
+        <div><b>Квадратик + чёрточки</b>прямая через середину под 90° → <b>серединный перпендикуляр</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="s7">
+    <h2>№ 7 <span class="ok" id="ok7"></span></h2>
+    <p class="en">Use the figures below to complete the statements.</p>
+    <p class="ru">Посмотри на рисунки и закончи предложения.</p>
+    <div class="card">
+      <div class="figs7" id="figs7"></div>
+      <div id="q7"></div>
+    </div>
+  </section>
+
+  <section id="s8">
+    <h2>№ 8 <span class="ok" id="ok8"></span></h2>
+    <p class="en">In the triangle ABC, CD is a median of side AB, AE is the bisector of angle BAC and is an altitude to the side BC. The intersection point of AE and CD is at point M. Draw and name all triangles in the figure formed.</p>
+    <p class="ru">CD — медиана к стороне AB. AE — биссектриса угла A и одновременно высота к BC. AE и CD пересекаются в точке M. Нарисуй и назови <b>все</b> треугольники на рисунке.</p>
+    <div class="card" id="c8">
+      <div id="fig8" style="max-width:340px"></div>
+      <p class="note">Треугольник — это три точки, которые попарно соединены отрезками с рисунка и не лежат на одной прямой. Не забывай маленькие треугольники внутри и большие, которые состоят из нескольких.</p>
+      <div class="irow"><span>Треугольник</span><input id="t8" maxlength="3" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Название треугольника, три буквы" placeholder="ABC"><button type="button" class="go" id="b8">Проверить</button></div>
+      <div class="fb" id="fb8"></div>
+      <p style="margin:12px 0 0">Найдено: <span class="count" id="n8">0</span> из 8</p>
+      <div class="found" id="found8"></div>
+    </div>
+  </section>
+
+  <section id="s9">
+    <h2>№ 9 <span class="ok" id="ok9"></span></h2>
+    <p class="en">Find the intersection point of medians of the given triangle, given in a 1 cm square grid.</p>
+    <p class="ru">Найди точку пересечения медиан. Одна клетка — 1 см.</p>
+    <div class="card" id="c9">
+      <ol class="steps">
+        <li>Найди <b>середину</b> стороны: посчитай клетки от одной вершины до другой по горизонтали и по вертикали и раздели пополам.</li>
+        <li>Коснись этой точки на сетке. Можно ставить точки и на середине клетки.</li>
+        <li>Страница проведёт медиану из противоположной вершины. Найди середины двух сторон, и медианы пересекутся.</li>
+      </ol>
+      <svg class="tap" id="g9" viewBox="0 0 300 300" role="img" aria-label="Треугольник на клетчатой сетке, коснись середины стороны"></svg>
+      <div class="fb" id="fb9"></div>
+    </div>
+  </section>
+
+  <section id="s10">
+    <h2>№ 10 <span class="ok" id="ok10"></span></h2>
+    <p class="en">Draw all midlines of given triangle, given in a 1 cm square grid.</p>
+    <p class="ru">Проведи все средние линии треугольника.</p>
+    <div class="card" id="c10">
+      <p>Средняя линия соединяет <b>середины двух сторон</b>. Сторон три, значит средних линий тоже три. Отметь касанием середины всех трёх сторон.</p>
+      <svg class="tap" id="g10" viewBox="0 0 300 300" role="img" aria-label="Треугольник на клетчатой сетке, коснись середин сторон"></svg>
+      <div class="fb" id="fb10"></div>
+    </div>
+  </section>
+
+  <div class="foot"><span>Учебник Geometry 7, с. 66–67</span><button type="button" class="ghost" id="reset">Начать заново</button></div>
+</div>
+
+<script>
+/* ---------- утилиты ---------- */
+const V=(x,y)=>({x,y}),add=(a,b)=>V(a.x+b.x,a.y+b.y),sub=(a,b)=>V(a.x-b.x,a.y-b.y),mul=(a,k)=>V(a.x*k,a.y*k),len=a=>Math.hypot(a.x,a.y),dist=(a,b)=>len(sub(a,b)),mid=(a,b)=>mul(add(a,b),.5),unit=a=>{const l=len(a)||1;return V(a.x/l,a.y/l)},perp=a=>V(-a.y,a.x);
+const P2=p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`;
+const L=(a,b,extra="")=>`<line x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${b.x.toFixed(1)}" y2="${b.y.toFixed(1)}" stroke="var(--fig)" stroke-width="2" stroke-linecap="round" ${extra}/>`;
+const dot=(p,c="var(--ink)",r=3)=>`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${r}" fill="${c}"/>`;
+const T=(p,t,dx,dy,size=13)=>`<text x="${(p.x+dx).toFixed(1)}" y="${(p.y+dy).toFixed(1)}" fill="var(--ink)" font-size="${size}" font-weight="700" font-family="var(--body)">${t}</text>`;
+function ticks(P,Q,n){const m=mid(P,Q),d=unit(sub(Q,P)),nn=perp(d);let s="";for(let i=0;i<n;i++){const c=add(m,mul(d,(i-(n-1)/2)*3.5)),a=add(c,mul(nn,4.5)),b=add(c,mul(nn,-4.5));s+=`<line x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${b.x.toFixed(1)}" y2="${b.y.toFixed(1)}" stroke="var(--mark)" stroke-width="1.6"/>`}return s}
+function arc(Vx,P,Q,r){const a=unit(sub(P,Vx)),b=unit(sub(Q,Vx)),s=add(Vx,mul(a,r)),e=add(Vx,mul(b,r)),cr=a.x*b.y-a.y*b.x;return `<path d="M${P2(s)} A${r},${r} 0 0 ${cr>0?1:0} ${P2(e)}" fill="none" stroke="var(--mark)" stroke-width="1.5"/>`}
+function bisFoot(A,B,C){const ab=dist(A,B),ac=dist(A,C);return add(mul(B,ac/(ab+ac)),mul(C,ab/(ab+ac)))}
+function inter(P1,P2_,P3,P4){const d=(P1.x-P2_.x)*(P3.y-P4.y)-(P1.y-P2_.y)*(P3.x-P4.x);const t=((P1.x-P3.x)*(P3.y-P4.y)-(P1.y-P3.y)*(P3.x-P4.x))/d;return add(P1,mul(sub(P2_,P1),t))}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const KEY="geo22hw-arsen";let st={};try{st=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+
+/* ---------- № 7: рисунки ---------- */
+function fig1(){const A=V(85,22),B=V(14,128),C=V(186,128);const E=bisFoot(A,B,C),D=bisFoot(B,C,A),O=inter(A,E,B,D);
+  return `<svg class="f" viewBox="0 0 200 145" role="img" aria-label="Треугольник ABC, AE и BD — отрезки с дужками в углах A и B">${L(A,B)+L(B,C)+L(C,A)+L(A,E)+L(B,D)}${arc(A,B,E,15)+arc(A,E,C,15)}${arc(B,C,D,16)+arc(B,D,A,19)}${[A,B,C,D,E,O].map(p=>dot(p)).join("")}${T(A,"A",-5,-6)+T(B,"B",-9,14)+T(C,"C",-2,14)+T(D,"D",4,-3)+T(E,"E",-4,15)+T(O,"O",5,12)}</svg>`}
+function fig2(){const Tt=V(18,118),S=V(92,18),R=V(190,118);const J=mid(Tt,S),H=mid(Tt,R);const d=unit(perp(sub(S,Tt)));const Q=inter(H,add(H,V(0,-1)),J,add(J,d));
+  const ar=(p,dir)=>{const u=unit(dir),n=perp(u),t=add(p,mul(u,0));return `<path d="M${P2(p)} L${P2(add(sub(p,mul(u,8)),mul(n,4)))} L${P2(add(sub(p,mul(u,8)),mul(n,-4)))}Z" fill="var(--fig)"/>`};
+  const v1=V(H.x,8),v2=V(H.x,138),p1=add(J,mul(d,-40)),p2=add(J,mul(d,90));
+  return `<svg class="f" viewBox="0 0 205 145" role="img" aria-label="Треугольник TSR: J — середина TS, H — середина TR, через них прямые под прямым углом, они пересекаются в Q">${L(Tt,S)+L(S,R)+L(Tt,R)+L(J,R)}${L(v1,v2)+ar(v1,V(0,-1))+ar(v2,V(0,1))}${L(p1,p2)+ar(p1,mul(d,-1))+ar(p2,d)}${ticks(Tt,J,1)+ticks(J,S,1)+ticks(Tt,H,2)+ticks(H,R,2)}<path d="M${H.x-9},${H.y} L${H.x-9},${H.y-9} L${H.x},${H.y-9}" fill="none" stroke="var(--mark)" stroke-width="1.4"/>${[Tt,S,R,J,H,Q].map(p=>dot(p)).join("")}${T(Tt,"T",-4,15)+T(S,"S",-12,-2)+T(R,"R",-3,15)+T(J,"J",-14,-2)+T(H,"H",-4,15)+T(Q,"Q",6,4)}</svg>`}
+function fig3(){const K=V(100,14),Lp=V(28,130),N=V(172,130);const P=mid(K,Lp),G=mid(K,N),F=mid(Lp,N),M=mul(add(add(K,Lp),N),1/3);
+  return `<svg class="f" viewBox="0 0 200 148" role="img" aria-label="Треугольник KLN: P, G, F — середины сторон, отрезки LG, NP, KF пересекаются в M, в угле K дужки">${L(K,Lp)+L(Lp,N)+L(N,K)+L(Lp,G)+L(N,P)+L(K,F)}${ticks(K,P,1)+ticks(P,Lp,1)+ticks(K,G,2)+ticks(G,N,2)+ticks(Lp,F,3)+ticks(F,N,3)}${arc(K,Lp,F,14)+arc(K,F,N,14)}${[K,Lp,N,P,G,F,M].map(p=>dot(p)).join("")}${T(K,"K",-4,-4)+T(Lp,"L",-10,14)+T(N,"N",0,14)+T(P,"P",-14,0)+T(G,"G",5,0)+T(F,"F",-4,15)+T(M,"M",-16,-2)}</svg>`}
+document.getElementById("figs7").innerHTML=fig1()+fig2()+fig3();
+
+const Q7=[
+ {s:"a. Point O is an intersection point of ____.",ru:"O — точка пересечения …",o:["medians — медиан","angle bisectors — биссектрис","altitudes — высот","midlines — средних линий"],r:1,h:"Посмотри на первый рисунок: что нарисовано в углах A и B?",why:"В углах A и B дужки — углы поделены пополам. Значит, AE и BD — биссектрисы, а O — точка их пересечения."},
+ {s:"b. Line segments ____ are medians.",ru:"Отрезки … — медианы.",o:["AE and BD","JQ and HQ","LG, NP and KF","PG and MF"],r:2,h:"Медиана идёт из вершины в середину стороны. Где на рисунках стороны поделены чёрточками пополам и к серединам идут отрезки из вершин?",why:"P, G, F — середины сторон треугольника KLN (чёрточки), а LG, NP и KF идут из вершин в эти середины."},
+ {s:"c. Line segment ____ is an altitude of a triangle ____.",ru:"Отрезок … — высота треугольника …",o:["AE, △ABC","JR, △TSR","KF, △KLN","QH, △TSR"],r:2,h:"Подумай про KF: она одновременно медиана (F — середина LN) и биссектриса (дужки в K). Такое бывает только в равнобедренном треугольнике — и тогда она ещё и высота.",why:"KF и медиана, и биссектриса, значит △KLN равнобедренный (KL = KN), а в нём такой отрезок — ещё и высота. Учебник ждёт ответ KF, △KLN."},
+ {s:"d. Lines JQ and HQ are ____.",ru:"Прямые JQ и HQ — это …",o:["medians — медианы","bisectors — биссектрисы","perpendicular bisectors — серединные перпендикуляры","midlines — средние линии"],r:2,h:"Посмотри на второй рисунок: J и H — середины сторон (чёрточки), а у H ещё и квадратик — 90°. И это прямые со стрелками, а не отрезки из вершин.",why:"Прямые проходят через середины сторон TS и TR под прямым углом — это серединные перпендикуляры."},
+ {s:"e. Triangle △KLN is a(n) ____ triangle.",ru:"Треугольник KLN — …",o:["right — прямоугольный","obtuse — тупоугольный","isosceles — равнобедренный"],r:2,h:"Вспомни пункт c: KF одновременно медиана и биссектриса.",why:"Раз медиана из K совпала с биссектрисой, у треугольника две равные стороны KL = KN — он равнобедренный."},
+ {s:"f. Point ____ is a common point of perpendicular bisectors.",ru:"Точка … — общая точка серединных перпендикуляров.",o:["O","M","Q","H"],r:2,h:"Где пересекаются прямые со стрелками на втором рисунке?",why:"Серединные перпендикуляры JQ и HQ пересекаются в точке Q."},
+ {s:"g. Line segments ____ are bisectors.",ru:"Отрезки … — биссектрисы.",o:["AE and BD","LG and NP","JR and SH","PG and GF"],r:0,h:"Ищи дужки в углах.",why:"В углах A и B дужки, значит AE и BD делят углы пополам — это биссектрисы."},
+ {s:"h. A line segment LF is congruent to a segment ____.",ru:"Отрезок LF равен отрезку …",o:["KF","FN","LP","MF"],r:1,h:"Посмотри на чёрточки на стороне LN. Одинаковые чёрточки — равные отрезки.",why:"На LF и FN одинаковые тройные чёрточки — F середина LN, значит LF = FN."},
+ {s:"i. Point ____ is a midpoint of segment TR.",ru:"Точка … — середина отрезка TR.",o:["J","Q","H","S"],r:2,h:"Какая точка делит TR на две части с одинаковыми чёрточками?",why:"На TH и HR одинаковые двойные чёрточки — H середина TR."},
+ {s:"j. Measure of ∠KLF is equal to measure of an angle ____.",ru:"Угол KLF равен углу …",o:["∠KNF","∠LKN","∠KFL","∠LMF"],r:0,h:"∠KLF — угол при основании LN, в вершине L. △KLN равнобедренный — у него равны углы при основании.",why:"В равнобедренном треугольнике KLN углы при основании равны: ∠KLF = ∠KNF (то есть ∠KNL)."}
+];
+st.q7=st.q7||{};
+const q7=document.getElementById("q7");
+Q7.forEach((q,i)=>{const d=document.createElement("div");d.className="q7";
+  d.innerHTML=`<div class="stem">${esc(q.s)} <i>${esc(q.ru)}</i></div><div class="opts"></div><div class="fb"></div>`;
+  const box=d.querySelector(".opts"),fb=d.querySelector(".fb");const S=st.q7[i]||(st.q7[i]={a:0});
+  q.o.forEach((o,j)=>{const b=document.createElement("button");b.type="button";b.textContent=o;
+    if(S.ok&&j===q.r){b.classList.add("right")}
+    b.onclick=()=>{if(S.ok)return;
+      if(j===q.r){S.ok=1;save();b.classList.add("right");box.querySelectorAll("button").forEach(x=>x.disabled=true);fb.innerHTML=`<div class="msg ok"><b>Верно.</b> ${esc(q.why)}</div>`;upd()}
+      else{S.a++;save();b.classList.add("wrong");b.disabled=true;fb.innerHTML=`<div class="msg hint"><b>Подсказка:</b> ${esc(q.h)}</div>`+(S.a>=3?`<div class="msg sol">${esc(q.why)}</div>`:"")}};
+    box.appendChild(b)});
+  if(S.ok){box.querySelectorAll("button").forEach(x=>x.disabled=true);fb.innerHTML=`<div class="msg ok"><b>Верно.</b> ${esc(q.why)}</div>`}
+  q7.appendChild(d)});
+
+/* ---------- № 8 ---------- */
+const P8={A:V(150,22),B:V(36,212),C:V(264,212)};P8.E=mid(P8.B,P8.C);P8.D=mid(P8.A,P8.B);P8.M=inter(P8.A,P8.E,P8.C,P8.D);
+const LINES8=["ADB","BEC","CA","AME","CMD"];
+const conn=(x,y)=>LINES8.some(l=>l.includes(x)&&l.includes(y));
+const coll=t=>LINES8.some(l=>[...t].every(c=>l.includes(c)));
+const ALL8=["ABC","ABE","ACD","ACE","ACM","ADM","BCD","CEM"];
+st.f8=st.f8||[];st.a8=st.a8||0;
+function draw8(hl){const{A,B,C,D,E,M}=P8;let s="";
+  if(hl){const pts=[...hl].map(c=>P8[c]);s+=`<polygon points="${pts.map(P2).join(" ")}" fill="var(--hl)" stroke="var(--pen)" stroke-width="2.5"/>`}
+  s+=L(A,B)+L(B,C)+L(C,A)+L(A,E)+L(C,D);
+  s+=ticks(A,D,1)+ticks(D,B,1)+arc(A,B,E,22)+arc(A,E,C,26)+`<path d="M${E.x},${E.y-11} L${E.x+11},${E.y-11} L${E.x+11},${E.y}" fill="none" stroke="var(--mark)" stroke-width="1.5"/>`;
+  s+=[A,B,C,D,E,M].map(p=>dot(p,"var(--ink)",3.5)).join("");
+  s+=T(A,"A",-5,-7,15)+T(B,"B",-12,16,15)+T(C,"C",0,16,15)+T(D,"D",-17,0,15)+T(E,"E",-5,18,15)+T(M,"M",8,4,15);
+  document.getElementById("fig8").innerHTML=`<svg class="f" viewBox="0 0 300 235" role="img" aria-label="Треугольник ABC с медианой CD и биссектрисой-высотой AE, пересекающимися в M">${s}</svg>`;
+  const f=document.getElementById("found8");f.innerHTML=st.f8.map(t=>`<span data-t="${t}">△${t}</span>`).join("")+Array(8-st.f8.length).fill('<span class="empty">?</span>').join("");
+  f.querySelectorAll("[data-t]").forEach(x=>x.onclick=()=>draw8(x.dataset.t));document.getElementById("n8").textContent=st.f8.length;}
+const norm8=s=>s.toUpperCase().replace(/А/g,"A").replace(/В/g,"B").replace(/С/g,"C").replace(/Е/g,"E").replace(/М/g,"M").replace(/[^ABCDEM]/g,"");
+const H8=["Начни с самого большого: весь треугольник ABC. Потом смотри, на какие части его режут AE и CD.","AE делит ABC на две части слева и справа, CD — тоже на две. Каждая такая часть — треугольник. А ещё есть маленькие треугольники вокруг точки M.","Проверь треугольники с вершиной M: какие отрезки от M идут? M соединена с A, E, C и D."];
+function run8(){const inp=document.getElementById("t8"),fb=document.getElementById("fb8");const t=norm8(inp.value);
+  if(t.length!==3||new Set(t).size!==3){fb.innerHTML=`<div class="msg no">Впиши три разные буквы из A, B, C, D, E, M — например ABC.</div>`;return}
+  const k=[...t].sort().join("");
+  if(st.f8.includes(k)){fb.innerHTML=`<div class="msg no">△${k} уже найден. Ищи другие.</div>`;draw8(k);return}
+  if(ALL8.includes(k)){st.f8.push(k);save();inp.value="";draw8(k);
+    fb.innerHTML=st.f8.length===8?`<div class="msg ok"><b>Все 8 треугольников найдены!</b> Перерисуй фигуру в тетрадь и выпиши их.</div>`:`<div class="msg ok"><b>Есть!</b> △${k}. Осталось ${8-st.f8.length}.</div>`;upd();return}
+  st.a8++;save();let why;
+  if(coll(k))why=`Точки ${[...k].join(", ")} лежат на одной прямой — это не треугольник.`;
+  else{const bad=[[0,1],[0,2],[1,2]].map(([a,b])=>[k[a],k[b]]).find(([a,b])=>!conn(a,b));why=bad?`На рисунке нет отрезка ${bad[0]}${bad[1]} — значит такого треугольника нет.`:"Такого треугольника нет на рисунке."}
+  fb.innerHTML=`<div class="msg no">${esc(why)}</div><div class="msg hint"><b>Подсказка:</b> ${esc(H8[Math.min(st.a8,H8.length)-1])}</div>`+(st.a8>=6?`<div class="msg sol">Все треугольники: △ABC, △ABE, △AEC, △ADC, △BDC, △ADM, △AMC, △MEC. Найди их на рисунке сам по одному.</div>`:"")}
+document.getElementById("b8").onclick=run8;document.getElementById("t8").addEventListener("keydown",e=>{if(e.key==="Enter")run8()});
+draw8();
+
+/* ---------- сетка для № 9 и № 10 ---------- */
+const CELL=44,OFF=18;const GX=x=>OFF+x*CELL,GY=y=>OFF+y*CELL;
+function gridS(){let s="";for(let i=0;i<=6;i++)s+=`<line x1="${GX(i)}" y1="${GY(0)}" x2="${GX(i)}" y2="${GY(6)}" stroke="var(--gridline)" stroke-width="1.2"/><line x1="${GX(0)}" y1="${GY(i)}" x2="${GX(6)}" y2="${GY(i)}" stroke="var(--gridline)" stroke-width="1.2"/>`;return s}
+const g=p=>V(GX(p.x),GY(p.y));
+function tapPoint(svg,e){const pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const m=svg.getScreenCTM();if(!m)return null;const q=pt.matrixTransform(m.inverse());
+  const x=Math.round(((q.x-OFF)/CELL)*2)/2,y=Math.round(((q.y-OFF)/CELL)*2)/2;if(x<0||x>6||y<0||y>6)return null;return V(x,y)}
+const same=(a,b)=>Math.abs(a.x-b.x)<1e-9&&Math.abs(a.y-b.y)<1e-9;
+const f1=n=>String(n).replace(".",",");
+
+/* ---------- № 9 ---------- */
+const T9={A:V(1,1),B:V(5,2),C:V(3,5)};
+const SIDES9=[["A","B","C"],["B","C","A"],["C","A","B"]];
+st.m9=st.m9||[];st.a9=st.a9||0;let wrong9=null;
+function draw9(){const svg=document.getElementById("g9");const{A,B,C}=T9;let s=gridS();
+  s+=`<polygon points="${[A,B,C].map(p=>P2(g(p))).join(" ")}" fill="none" stroke="var(--fig)" stroke-width="2.4" stroke-linejoin="round"/>`;
+  st.m9.forEach(i=>{const[a,b,o]=SIDES9[i];const Mi=mid(T9[a],T9[b]);s+=`<line x1="${GX(T9[o].x)}" y1="${GY(T9[o].y)}" x2="${GX(Mi.x)}" y2="${GY(Mi.y)}" stroke="var(--med)" stroke-width="2.2"/>`+ticks(g(T9[a]),g(Mi),i+1)+ticks(g(Mi),g(T9[b]),i+1)+dot(g(Mi),"var(--med)",5)});
+  if(st.m9.length>=2){const G=mul(add(add(A,B),C),1/3);s+=`<circle cx="${GX(G.x)}" cy="${GY(G.y)}" r="9" fill="none" stroke="var(--ok)" stroke-width="2.4"/>`+dot(g(G),"var(--ok)",4.5)+T(g(G),"O",10,-8,14)}
+  if(wrong9)s+=dot(g(wrong9),"var(--red)",5.5);
+  s+=[["A",A],["B",B],["C",C]].map(([n,p])=>dot(g(p),"var(--ink)",4.5)+T(g(p),n,n==="B"?8:-6,n==="C"?18:-8,15)).join("");
+  svg.innerHTML=s}
+function fb9msg(){const n=st.m9.length;if(n>=2)return `<div class="msg ok"><b>Готово!</b> Медианы пересеклись в точке O. ${n<3?"Хочешь — найди и третью середину: третья медиана пройдёт через ту же точку O.":"Все три медианы прошли через одну точку."} В тетради: O на <b>3 клетки</b> правее левого края сетки и примерно на <b>2,7 клетки</b> ниже верхнего — на медиане из C, на 1/3 её длины от середины AB.</div>`;
+  if(n===1)return `<div class="msg ok">Середина найдена — медиана проведена. Найди середину ещё одной стороны.</div>`;return ""}
+document.getElementById("g9").addEventListener("click",e=>{const svg=e.currentTarget,p=tapPoint(svg,e);if(!p)return;const fb=document.getElementById("fb9");
+  const i=SIDES9.findIndex(([a,b])=>same(mid(T9[a],T9[b]),p));
+  if(i>=0){wrong9=null;if(!st.m9.includes(i)){st.m9.push(i);save()}draw9();fb.innerHTML=fb9msg();upd();return}
+  if([T9.A,T9.B,T9.C].some(v=>same(v,p))){fb.innerHTML=`<div class="msg no">Это вершина, а нужна середина стороны.</div>`;return}
+  st.a9++;save();wrong9=p;draw9();
+  let h=`<div class="msg no">Красная точка — не середина стороны.</div><div class="msg hint"><b>Подсказка:</b> возьми сторону AB. От A до B: на 4 клетки вправо и на 1 вниз. Середина — на половине пути: на ${st.a9>=2?"2 клетки вправо и на полклетки вниз от A":"половину каждого числа"}.</div>`;
+  if(st.a9>=3)h+=`<div class="msg sol">Середины сторон: AB — 2 клетки вправо и полклетки вниз от A; BC — 1 влево и 1,5 вниз от B; CA — 1 влево и 2 вверх от C.</div>`;
+  fb.innerHTML=h+fb9msg()});
+draw9();document.getElementById("fb9").innerHTML=fb9msg();
+
+/* ---------- № 10 ---------- */
+const T10={A:V(5,1),B:V(1,3),C:V(3,5)};
+const S10=[["A","B"],["B","C"],["C","A"]];
+st.m10=st.m10||[];st.a10=st.a10||0;let wrong10=null;
+function draw10(){const svg=document.getElementById("g10");const{A,B,C}=T10;let s=gridS();
+  s+=`<polygon points="${[A,B,C].map(p=>P2(g(p))).join(" ")}" fill="none" stroke="var(--fig)" stroke-width="2.4" stroke-linejoin="round"/>`;
+  const ms=st.m10.map(i=>mid(T10[S10[i][0]],T10[S10[i][1]]));
+  for(let a=0;a<ms.length;a++)for(let b=a+1;b<ms.length;b++)s+=`<line x1="${GX(ms[a].x)}" y1="${GY(ms[a].y)}" x2="${GX(ms[b].x)}" y2="${GY(ms[b].y)}" stroke="var(--mid)" stroke-width="2.4"/>`;
+  st.m10.forEach(i=>{const[a,b]=S10[i];const Mi=mid(T10[a],T10[b]);s+=ticks(g(T10[a]),g(Mi),i+1)+ticks(g(Mi),g(T10[b]),i+1)+dot(g(Mi),"var(--mid)",5)});
+  if(wrong10)s+=dot(g(wrong10),"var(--red)",5.5);
+  s+=[["A",A],["B",B],["C",C]].map(([n,p])=>dot(g(p),"var(--ink)",4.5)+T(g(p),n,n==="B"?-14:6,n==="C"?18:-6,15)).join("");
+  svg.innerHTML=s}
+function fb10msg(){const n=st.m10.length;if(n===3)return `<div class="msg ok"><b>Все три средние линии проведены!</b> Они образуют маленький треугольник внутри. Каждая средняя линия параллельна одной стороне и в 2 раза короче её. Перечерти в тетрадь.</div>`;
+  if(n===2)return `<div class="msg ok">Две середины — одна средняя линия уже есть. Найди середину третьей стороны.</div>`;if(n===1)return `<div class="msg ok">Одна середина найдена. Нужно ещё две.</div>`;return ""}
+document.getElementById("g10").addEventListener("click",e=>{const svg=e.currentTarget,p=tapPoint(svg,e);if(!p)return;const fb=document.getElementById("fb10");
+  const i=S10.findIndex(([a,b])=>same(mid(T10[a],T10[b]),p));
+  if(i>=0){wrong10=null;if(!st.m10.includes(i)){st.m10.push(i);save()}draw10();fb.innerHTML=fb10msg();upd();return}
+  if([T10.A,T10.B,T10.C].some(v=>same(v,p))){fb.innerHTML=`<div class="msg no">Это вершина, а нужна середина стороны.</div>`;return}
+  st.a10++;save();wrong10=p;draw10();
+  let h=`<div class="msg no">Красная точка — не середина стороны.</div><div class="msg hint"><b>Подсказка:</b> возьми сторону AB. От A до B — на 4 клетки влево и на 2 вниз. Середина — ${st.a10>=2?"на 2 клетки влево и на 1 вниз от A":"на половине этого пути"}.</div>`;
+  if(st.a10>=3)h+=`<div class="msg sol">Середины: AB — 2 влево и 1 вниз от A; BC — 1 вправо и 1 вниз от B; CA — 1 вправо и 2 вверх от C. Все три попадают в узлы сетки.</div>`;
+  fb.innerHTML=h+fb10msg()});
+draw10();document.getElementById("fb10").innerHTML=fb10msg();
+
+/* ---------- прогресс ---------- */
+function upd(){const d7=Q7.every((_,i)=>st.q7[i]&&st.q7[i].ok),d8=st.f8.length===8,d9=st.m9.length>=2,d10=st.m10.length===3;
+  const n=[d7,d8,d9,d10].filter(Boolean).length;
+  [["ok7",d7,"сделано ✓"],["ok8",d8,"сделано ✓"],["ok9",d9,"сделано ✓"],["ok10",d10,"сделано ✓"]].forEach(([id,d,t])=>document.getElementById(id).textContent=d?t:"");
+  document.getElementById("c8").classList.toggle("done",d8);document.getElementById("c9").classList.toggle("done",d9);document.getElementById("c10").classList.toggle("done",d10);
+  document.getElementById("pt").textContent=`${n} из 4`;document.getElementById("pf").style.width=(n/4*100)+"%"}
+upd();
+document.getElementById("reset").onclick=()=>{try{localStorage.removeItem(KEY)}catch(e){}st={q7:{},f8:[],a8:0,m9:[],a9:0,m10:[],a10:0};
+  q7.innerHTML="";location.hash="";document.getElementById("fb8").innerHTML="";document.getElementById("fb9").innerHTML="";document.getElementById("fb10").innerHTML="";
+  wrong9=wrong10=null;draw8();draw9();draw10();
+  Q7.forEach((q,i)=>{}); // перерисовать № 7
+  rebuild7();upd();window.scrollTo(0,0)};
+function rebuild7(){q7.innerHTML="";Q7.forEach((q,i)=>{const d=document.createElement("div");d.className="q7";
+  d.innerHTML=`<div class="stem">${esc(q.s)} <i>${esc(q.ru)}</i></div><div class="opts"></div><div class="fb"></div>`;
+  const box=d.querySelector(".opts"),fb=d.querySelector(".fb");const S=st.q7[i]||(st.q7[i]={a:0});
+  q.o.forEach((o,j)=>{const b=document.createElement("button");b.type="button";b.textContent=o;
+    b.onclick=()=>{if(S.ok)return;if(j===q.r){S.ok=1;save();b.classList.add("right");box.querySelectorAll("button").forEach(x=>x.disabled=true);fb.innerHTML=`<div class="msg ok"><b>Верно.</b> ${esc(q.why)}</div>`;upd()}
+      else{S.a++;save();b.classList.add("wrong");b.disabled=true;fb.innerHTML=`<div class="msg hint"><b>Подсказка:</b> ${esc(q.h)}</div>`+(S.a>=3?`<div class="msg sol">${esc(q.why)}</div>`:"")}};box.appendChild(b)});
+  q7.appendChild(d)})}
+</script>
+
+</body></html>

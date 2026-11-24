@@ -1,0 +1,441 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>y = mx + n 3.4</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Layout: тетрадь в клетку, одна колонка: 5 шагов объяснения → разминка → домашка с проверкой */
+:root{
+  --paper:#f6f8fc; --grid:rgba(60,90,170,.07); --card:#ffffff; --ink:#1b2236; --muted:#5d6782;
+  --pen:#2546c4; --pen-soft:#e6ebfb; --red:#c4382e; --red-soft:#fbe9e7; --line:#dde3f0;
+  --amber:#a8670f; --amber-soft:#fdf1dc; --ok:#1f8a57; --ok-soft:#e3f4ea;
+  --dom:#2546c4; --dom-soft:#dfe6fb; --ran:#0f8a6a; --ran-soft:#dcf2ea;
+  --display:"Unbounded","Golos Text",system-ui,sans-serif; --body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#11151e; --grid:rgba(140,165,240,.06); --card:#191f2c; --ink:#e7ebf5; --muted:#9aa4bf;
+  --pen:#8aa2ff; --pen-soft:#232d4a; --red:#ff8a7e; --red-soft:#3a2224; --line:#2a3245;
+  --amber:#f0b75a; --amber-soft:#382c17; --ok:#5fd39a; --ok-soft:#1d3329;
+  --dom:#8aa2ff; --dom-soft:#232d4a; --ran:#4fd1a8; --ran-soft:#173229; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#11151e; --grid:rgba(140,165,240,.06); --card:#191f2c; --ink:#e7ebf5; --muted:#9aa4bf;
+  --pen:#8aa2ff; --pen-soft:#232d4a; --red:#ff8a7e; --red-soft:#3a2224; --line:#2a3245;
+  --amber:#f0b75a; --amber-soft:#382c17; --ok:#5fd39a; --ok-soft:#1d3329;
+  --dom:#8aa2ff; --dom-soft:#232d4a; --ran:#4fd1a8; --ran-soft:#173229; color-scheme:dark}
+[hidden]{display:none!important}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px}
+.wrap{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 64px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--pen);font-weight:600}
+h1{font-family:var(--display);font-size:clamp(23px,5vw,32px);line-height:1.15;margin:6px 0 10px;text-wrap:balance}
+h2{font-family:var(--display);font-weight:500;font-size:19px;margin:0 0 12px;text-wrap:balance;display:flex;gap:10px;align-items:baseline}
+h2 span{font-size:12.5px;color:var(--pen);flex:none}
+.lead{color:var(--muted);margin:0;max-width:62ch}
+section{margin-top:34px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px;min-width:0}
+.card>p:first-child{margin-top:0}.card>p:last-child{margin-bottom:0}
+.D{color:var(--dom);font-weight:700}.E{color:var(--ran);font-weight:700}
+.big2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.big2>div{border-radius:10px;padding:12px;min-width:0}
+.big2 .d{background:var(--dom-soft)}.big2 .e{background:var(--ran-soft)}
+.big2 b{font-family:var(--display);font-weight:500;font-size:15px;display:block;margin-bottom:2px}
+.big2 .d b{color:var(--dom)}.big2 .e b{color:var(--ran)}
+@media (max-width:480px){.big2{grid-template-columns:1fr}}
+.rule{border-left:3px solid var(--pen);background:var(--pen-soft);padding:10px 12px;border-radius:0 8px 8px 0;margin:12px 0}
+.pairs{display:flex;flex-wrap:wrap;gap:6px;font-variant-numeric:tabular-nums;font-size:17px;margin:8px 0}
+.pairs span{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:3px 8px}
+.ex{display:grid;gap:4px;margin:8px 0}
+.ex div{padding-left:12px}
+.note{font-size:14px;color:var(--muted)}
+.prog{display:flex;align-items:center;gap:12px;font-size:14px;font-variant-numeric:tabular-nums;margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.track{flex:1;height:8px;background:var(--pen-soft);border-radius:4px;overflow:hidden}
+.fill{height:100%;background:var(--ok);width:0;transition:width .3s}
+.notation{width:100%;border-collapse:collapse;font-size:15px}
+.notation td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.notation td:first-child{font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tbl-wrap{overflow-x:auto}
+/* demo */
+.demo-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.pick{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:6px 12px;border-radius:20px;cursor:pointer}
+.pick[aria-pressed="true"]{background:var(--pen);color:var(--card);border-color:var(--pen)}
+.demo-out{margin-top:6px;font-variant-numeric:tabular-nums}
+/* figures */
+.fig{display:block;width:100%;max-width:300px;height:auto;color:var(--ink)}
+.fig .g{stroke:var(--line);stroke-width:1}
+.fig .ax{stroke:var(--ink);stroke-width:1.4}
+.fig text{fill:var(--muted);font-size:10.5px;font-family:var(--body)}
+.fig .pt{fill:var(--red)}
+.fig .cv{stroke:var(--red);stroke-width:2.2;fill:none}
+.fig .end{fill:var(--red)}
+.fig .bandD{stroke:var(--dom);stroke-width:6;stroke-linecap:round;opacity:.85}
+.fig .bandE{stroke:var(--ran);stroke-width:6;stroke-linecap:round;opacity:.85}
+.fig .tickD{fill:var(--dom)}.fig .tickE{fill:var(--ran)}
+.fig .drop{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3}
+.fig .arD{fill:var(--dom)}.fig .arE{fill:var(--ran)}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:6px 0}
+/* tasks */
+.task{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px;min-width:0}
+.task.done{border-color:var(--ok)}
+.tno{font-family:var(--display);font-size:13px;color:var(--pen);display:block;margin-bottom:4px}
+.task.done .tno::after{content:" ✓";color:var(--ok)}
+.en{font-style:italic;color:var(--muted);font-size:14.5px;margin:0 0 4px}
+.ru{margin:0 0 6px}
+.like{font-size:13.5px;color:var(--muted);margin:0 0 6px}
+.item{border-top:1px dashed var(--line);padding-top:12px;margin-top:12px;min-width:0}
+.ilabel{font-weight:600;margin-bottom:6px}
+.ask{font-weight:600;margin:8px 0 4px;font-variant-numeric:tabular-nums}
+.kinds{display:flex;flex-wrap:wrap;gap:6px}
+.kind{font:inherit;font-size:14px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);padding:5px 10px;border-radius:8px;cursor:pointer;font-variant-numeric:tabular-nums}
+.kind[aria-pressed="true"]{border-color:var(--pen);background:var(--pen-soft);font-weight:600}
+.slot{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px;font-size:17px;font-variant-numeric:tabular-nums}
+.slot input{width:84px}
+.slot input.wide{width:auto;flex:1;min-width:0;max-width:300px}
+.irow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.irow input{flex:1;min-width:0;max-width:280px}
+input.ans{font:inherit;font-size:17px;padding:7px 10px;border:1.5px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);font-variant-numeric:tabular-nums}
+input.ans:focus-visible{outline:2px solid var(--pen);outline-offset:1px}
+.item.good input.ans{border-color:var(--ok);background:var(--ok-soft)}
+.pre{font-weight:600;white-space:nowrap}
+button{font:inherit;font-size:14.5px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:7px 13px;border-radius:8px;cursor:pointer}
+button:hover{border-color:var(--pen)}
+button:focus-visible,.kind:focus-visible,.pick:focus-visible{outline:2px solid var(--pen);outline-offset:2px}
+button.go{background:var(--pen);color:var(--card);border-color:var(--pen);font-weight:600;margin-top:10px}
+.choices{display:grid;gap:6px;margin-top:6px}
+.choices button{text-align:left}
+.choices button.on{border-color:var(--pen);background:var(--pen-soft)}
+.fb{margin-top:8px;font-size:15px}
+.msg{padding:8px 11px;border-radius:8px;margin-top:6px}
+.msg.ok{background:var(--ok-soft)}.msg.ok b{color:var(--ok)}
+.msg.no{background:var(--red-soft)}
+.msg.hint{background:var(--amber-soft)}.msg.hint b{color:var(--amber)}
+.msg.sol{background:var(--pen-soft)}
+.msg.sol ol{margin:4px 0 0;padding-left:20px}
+.foot{margin-top:24px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:14px}
+sup{font-size:.72em;line-height:0}
+@media (prefers-reduced-motion:reduce){.fill{transition:none}}
+</style>
+<style>
+.slider-row{display:flex;align-items:center;gap:10px;margin:6px 0;flex-wrap:wrap}
+.slider-row label{font-weight:700;min-width:22px}
+.slider-row input[type=range]{flex:1;min-width:150px;accent-color:var(--pen)}
+.slider-row output{min-width:44px;font-variant-numeric:tabular-nums;font-weight:600}
+.mval{font-family:var(--display);font-size:21px;margin:4px 0 6px;font-variant-numeric:tabular-nums;color:var(--pen)}
+.fig .ln{stroke:var(--pen);stroke-width:2.6;fill:none}
+.fig .ln2{stroke:var(--muted);stroke-width:1.6;fill:none;stroke-dasharray:5 4}
+.fig .nmark{fill:var(--ran)}
+.vals{border-collapse:collapse;font-variant-numeric:tabular-nums;margin:6px 0}
+.vals th,.vals td{border:1px solid var(--line);padding:0;text-align:center;min-width:54px;height:40px}
+.vals th{background:var(--pen-soft);color:var(--pen);padding:0 8px}
+.vals td.g{font-weight:600;padding:0 8px}
+.vals td.pair{color:var(--muted);padding:0 8px;min-width:76px}
+.vals input.ans{width:64px;border:0;border-radius:0;text-align:center;padding:7px 2px;font-size:16px;background:transparent}
+.vals input.ans.good{background:var(--ok-soft)}
+.vals input.ans.bad{background:var(--red-soft)}
+.plot{display:block;width:100%;max-width:340px;height:auto;touch-action:manipulation;cursor:crosshair;border:1px solid var(--line);border-radius:10px;background:var(--card);user-select:none;-webkit-user-select:none}
+.plot .g{stroke:var(--line);stroke-width:1}
+.plot .ax{stroke:var(--ink);stroke-width:1.4}
+.plot text{fill:var(--muted);font-size:10.5px;font-family:var(--body)}
+.plot .good{fill:var(--ok)}.plot .bad{fill:var(--red)}
+.plot .ln{stroke:var(--pen);stroke-width:2.6}
+.step-h{font-weight:600;margin:10px 0 4px;color:var(--pen);font-size:14.5px}
+.locked{opacity:.45;pointer-events:none}
+.keys{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.keys button{padding:4px 0;width:38px;font-size:15px}
+.ex div b{color:var(--pen)}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Алгебра 7 · тема 3.4 · The function y = mx + n</div>
+  <h1>Линейная функция y = mx + n и домашка № 3, 5, 6</h1>
+  <p class="lead">Пройди 5 коротких шагов, потом разминку. Домашку страница проверяет сама: таблицы, формулы и даже графики, которые ты строишь пальцем на сетке. Решение откроется только после трёх неудачных попыток.</p>
+  <div class="prog"><span>Домашка:</span><div class="track"><div class="fill" id="pf"></div></div><span id="pt">0 из 3</span></div>
+
+  <section>
+    <h2><span>Шаг 1</span>Что такое y = mx + n</h2>
+    <div class="card">
+      <p>Такси: <b>500 тг</b> за посадку и <b>100 тг</b> за каждый километр. За x км заплатишь <b>y = 100x + 500</b>.</p>
+      <div class="ex">
+        <div><b>m = 100</b> — сколько добавляется за каждый шаг x (наклон прямой)</div>
+        <div><b>n = 500</b> — сколько есть сразу, когда x = 0 (где прямая пересекает ось y)</div>
+      </div>
+      <div class="rule">Это как y = mx из прошлой темы, только прямая <b>сдвинута на n</b> вверх или вниз. График — всегда <b>прямая линия</b> (straight line). Поэтому функция называется <b>линейной</b> (linear function).</div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 2</span>Что делают m и n</h2>
+    <div class="card">
+      <div class="mval" id="lv">y = x + 2</div>
+      <div class="slider-row"><label for="sm">m</label><input type="range" id="sm" min="-3" max="3" step="0.5" value="1"><output id="om">1</output></div>
+      <div class="slider-row"><label for="sn">n</label><input type="range" id="sn" min="-5" max="5" step="1" value="2"><output id="on">2</output></div>
+      <div id="lfig"></div>
+      <div class="readout" id="lro"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 3</span>Таблица значений (это № 3)</h2>
+    <div class="card">
+      <p><b>f(x)</b> — это то же самое, что <b>y</b>. Чтобы заполнить таблицу, подставь каждый x в формулу.</p>
+      <div class="ex">
+        <div>f(x) = 2x − 1, x = −2 → y = 2 · (−2) − 1 = −4 − 1 = <b>−5</b> → пара (−2; −5)</div>
+        <div>x = 0 → y = 2 · 0 − 1 = <b>−1</b> → пара (0; −1)</div>
+        <div>x = 3 → y = 2 · 3 − 1 = <b>5</b> → пара (3; 5)</div>
+      </div>
+      <p class="note">Отрицательный x всегда бери в скобки. В столбике (x, y) просто записываешь x и y вместе.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 4</span>Как получить y = … из x + 2y = 3</h2>
+    <div class="card">
+      <p>Иногда формула записана не в виде y = …, а так: <b>2x + y = 5</b> или <b>3x + 6y = 12</b>. Тогда сначала <b>оставь y одного</b> слева.</p>
+      <div class="ex">
+        <div><b>1.</b> Перенеси слагаемое с x вправо и смени ему знак: 3x + 6y = 12 → 6y = 12 − 3x</div>
+        <div><b>2.</b> Раздели <b>каждое</b> слагаемое на число перед y: y = 12 : 6 − 3x : 6 → <b>y = 2 − 0,5x</b></div>
+        <div><b>Осторожно с минусом перед y:</b> x − y = 1 → −y = 1 − x → умножь всё на −1 → y = x − 1</div>
+      </div>
+      <p class="note">По-английски это называется function form — «в виде функции».</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 5</span>Как построить график (это № 5)</h2>
+    <div class="card">
+      <p>Прямую определяют <b>две точки</b>. Значит, достаточно найти две.</p>
+      <div class="ex">
+        <div><b>1.</b> Приведи к виду y = mx + n.</div>
+        <div><b>2.</b> Возьми x = 0: тогда y = n. Это первая точка, она на оси y.</div>
+        <div><b>3.</b> Возьми ещё один удобный x, чтобы y получился целым. Например, для y = 2 − 0,5x бери x = 2 или x = 4.</div>
+        <div><b>4.</b> Отметь обе точки и проведи через них прямую.</div>
+      </div>
+      <p class="note">В тренажёре точку ставят касанием сетки. Тронь точку ещё раз — она исчезнет.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 6</span>Разминка</h2>
+    <p class="lead" style="margin-bottom:12px">Задачи как в домашке, только с другими числами.</p>
+    <div id="warm"></div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 7</span>Домашка: Exercises 3.4, № 3, 5, 6 (с. 146)</h2>
+    <p class="lead" style="margin-bottom:12px">Всё засчитанное перепиши в тетрадь, графики перечерти по клеточкам.</p>
+    <div id="hw"></div>
+  </section>
+
+  <div class="foot"><span>Учебник Algebra 7, с. 144–146</span><button type="button" id="reset">Начать заново</button></div>
+</div>
+
+<script>
+/* ---------- утилиты ---------- */
+const fmt=n=>{if(!isFinite(n))return"—";const r=Math.round(n*1000)/1000;return String(r).replace(".",",").replace("-","−")};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function prep(s){return s.toLowerCase().replace(/х/g,"x").replace(/[−–—]/g,"-").replace(/,/g,".").replace(/[×·•]/g,"*").replace(/[÷:]/g,"/").replace(/²/g,"^2").replace(/³/g,"^3").replace(/\s+/g,"").replace(/^(f\(x\)|y)=/,"").replace(/^x=/,"")}
+function parse(src){
+  const s=prep(src);if(!s)throw 0;const toks=[];let i=0;
+  while(i<s.length){const m=/^(\d+(?:\.\d+)?|\.\d+|x|[-+*/^()])/.exec(s.slice(i));if(!m)throw 0;toks.push(m[1]);i+=m[1].length}
+  let p=0;const peek=()=>toks[p],eat=()=>toks[p++];
+  function expr(){let a=term();while(peek()==="+"||peek()==="-"){const o=eat(),b=term(),l=a;a=o==="+"?x=>l(x)+b(x):x=>l(x)-b(x)}return a}
+  function term(){let a=factor();for(;;){const t=peek();if(t==="*"||t==="/"){eat();const b=factor(),l=a;a=t==="*"?x=>l(x)*b(x):x=>l(x)/b(x)}else if(t!==undefined&&(t==="x"||t==="("||/^[\d.]/.test(t))){const b=power(),l=a;a=x=>l(x)*b(x)}else break}return a}
+  function factor(){if(peek()==="-"){eat();const f=factor();return x=>-f(x)}if(peek()==="+"){eat();return factor()}return power()}
+  function power(){const a=atom();if(peek()==="^"){eat();const b=factor();return x=>Math.pow(a(x),b(x))}return a}
+  function atom(){const t=eat();if(t===undefined)throw 0;if(t==="x")return x=>x;if(t==="("){const e=expr();if(eat()!==")")throw 0;return e}if(/^[\d.]/.test(t)){const v=parseFloat(t);return()=>v}throw 0}
+  const f=expr();if(p!==toks.length)throw 0;return{f,hasX:toks.includes("x")};
+}
+const near=(a,b)=>Math.abs(a-b)<=1e-6*Math.max(1,Math.abs(b));
+function num(s){try{const r=parse(s);if(r.hasX)return NaN;return r.f(0)}catch(e){return NaN}}
+function setOf(s){const m=String(s).replace(/[−–—]/g,"-").match(/-?\d+(?:\.\d+)?/g);return m?[...new Set(m.map(Number))].sort((a,b)=>a-b):null}
+
+/* ---------- графики ---------- */
+function fig(o){
+  const W=280,H=280,pad=16,sx=(W-2*pad)/(o.x1-o.x0),sy=(H-2*pad)/(o.y1-o.y0);
+  const X=x=>pad+(x-o.x0)*sx,Y=y=>H-pad-(y-o.y0)*sy;let s="";
+  for(let x=Math.ceil(o.x0);x<=o.x1;x++)s+=`<line class="g" x1="${X(x)}" y1="${pad}" x2="${X(x)}" y2="${H-pad}"/>`;
+  for(let y=Math.ceil(o.y0);y<=o.y1;y++)s+=`<line class="g" x1="${pad}" y1="${Y(y)}" x2="${W-pad}" y2="${Y(y)}"/>`;
+  s+=`<line class="ax" x1="${pad}" y1="${Y(0)}" x2="${W-pad+4}" y2="${Y(0)}"/><line class="ax" x1="${X(0)}" y1="${H-pad}" x2="${X(0)}" y2="${pad-4}"/>`;
+  s+=`<text x="${W-pad}" y="${Y(0)-5}">x</text><text x="${X(0)+5}" y="${pad+2}">y</text>`;
+  for(let x=Math.ceil(o.x0);x<=o.x1-0.5;x++)if(x&&x%o.step===0)s+=`<text x="${X(x)-(x<0?7:3)}" y="${Y(0)+13}">${fmt(x)}</text>`;
+  for(let y=Math.ceil(o.y0);y<=o.y1-0.5;y++)if(y&&y%o.step===0)s+=`<text x="${X(0)+(y<0?-20:-12)}" y="${Y(y)+4}">${fmt(y)}</text>`;
+  if(o.shadow){const sh=o.shadow;
+    if(sh.dpts){sh.dpts.forEach(x=>s+=`<circle class="tickD" cx="${X(x)}" cy="${Y(0)}" r="5"/>`);sh.epts.forEach(y=>s+=`<circle class="tickE" cx="${X(0)}" cy="${Y(y)}" r="5"/>`);
+      (o.pts||[]).forEach(([x,y])=>s+=`<line class="drop" x1="${X(x)}" y1="${Y(y)}" x2="${X(x)}" y2="${Y(0)}"/><line class="drop" x1="${X(x)}" y1="${Y(y)}" x2="${X(0)}" y2="${Y(y)}"/>`)}
+    if(sh.d){const[a,b]=sh.d;const xa=a===-Infinity?pad:X(a),xb=b===Infinity?W-pad:X(b);s+=`<line class="bandD" x1="${xa}" y1="${Y(0)}" x2="${xb}" y2="${Y(0)}"/>`;
+      if(b===Infinity)s+=`<path class="arD" d="M${W-pad+6},${Y(0)} l-10,-6 v12z"/>`;if(a===-Infinity)s+=`<path class="arD" d="M${pad-6},${Y(0)} l10,-6 v12z"/>`}
+    if(sh.e){const[a,b]=sh.e;const ya=a===-Infinity?H-pad:Y(a),yb=b===Infinity?pad:Y(b);s+=`<line class="bandE" x1="${X(0)}" y1="${ya}" x2="${X(0)}" y2="${yb}"/>`;
+      if(b===Infinity)s+=`<path class="arE" d="M${X(0)},${pad-6} l-6,10 h12z"/>`;if(a===-Infinity)s+=`<path class="arE" d="M${X(0)},${H-pad+6} l-6,-10 h12z"/>`}}
+  (o.pts||[]).forEach(([x,y])=>s+=`<circle class="pt" cx="${X(x)}" cy="${Y(y)}" r="4.5"/>`);
+  if(o.curve){const P=o.curve.map(([x,y])=>[X(x),Y(y)]);let d=`M${P[0][0]},${P[0][1]}`;
+    for(let i=0;i<P.length-1;i++){const p0=P[i-1]||P[i],p1=P[i],p2=P[i+1],p3=P[i+2]||p2;d+=` C${p1[0]+(p2[0]-p0[0])/6},${p1[1]+(p2[1]-p0[1])/6} ${p2[0]-(p3[0]-p1[0])/6},${p2[1]-(p3[1]-p1[1])/6} ${p2[0]},${p2[1]}`}
+    s+=`<path class="cv" d="${d}"/>`;const a=P[P.length-2],b=P[P.length-1],ang=Math.atan2(b[1]-a[1],b[0]-a[0]),L=10;
+    s+=`<path class="end" d="M${b[0]},${b[1]} L${b[0]-L*Math.cos(ang-0.4)},${b[1]-L*Math.sin(ang-0.4)} L${b[0]-L*Math.cos(ang+0.4)},${b[1]-L*Math.sin(ang+0.4)}Z"/><circle class="end" cx="${P[0][0]}" cy="${P[0][1]}" r="4.5"/>`}
+  return `<svg class="fig" viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.label}">${s}</svg>`;
+}
+
+/* ---------- общее: сетка ---------- */
+const R=7,W=300,PAD=14,SC=(W-2*PAD)/(2*R);
+const GX=x=>PAD+(x+R)*SC,GY=y=>W-PAD-(y+R)*SC;
+function gridSvg(){let s="";for(let i=-R;i<=R;i++){s+=`<line class="g" x1="${GX(i)}" y1="${PAD}" x2="${GX(i)}" y2="${W-PAD}"/><line class="g" x1="${PAD}" y1="${GY(i)}" x2="${W-PAD}" y2="${GY(i)}"/>`}
+  s+=`<line class="ax" x1="${PAD}" y1="${GY(0)}" x2="${W-PAD+4}" y2="${GY(0)}"/><line class="ax" x1="${GX(0)}" y1="${W-PAD}" x2="${GX(0)}" y2="${PAD-4}"/>`;
+  s+=`<text x="${W-PAD-2}" y="${GY(0)-5}">x</text><text x="${GX(0)+5}" y="${PAD+4}">y</text>`;
+  for(let i=-6;i<=6;i+=2)if(i){s+=`<text x="${GX(i)-(i<0?7:3)}" y="${GY(0)+13}">${fmt(i)}</text><text x="${GX(0)+(i<0?-20:-12)}" y="${GY(i)+4}">${fmt(i)}</text>`}
+  return s}
+function lineThrough(f){const x1=-R,x2=R;return [x1,f(x1),x2,f(x2)]}
+function clipLine(f){ // обрезаем прямую по окну
+  const pts=[];for(let x=-R;x<=R;x+=0.01){const y=f(x);if(y>=-R&&y<=R)pts.push([x,y])}
+  if(pts.length<2)return"";const a=pts[0],b=pts[pts.length-1];return [a,b]}
+
+/* ---------- шаг 2: ползунки ---------- */
+const sm=document.getElementById("sm"),sn=document.getElementById("sn");
+function fstr(m,n){let s="y = ";if(m===0)return s+fmt(n);s+=m===1?"x":m===-1?"−x":fmt(m)+"x";if(n>0)s+=" + "+fmt(n);if(n<0)s+=" − "+fmt(-n);return s}
+function drawL(){const m=+sm.value,n=+sn.value;document.getElementById("om").textContent=fmt(m);document.getElementById("on").textContent=fmt(n);
+  document.getElementById("lv").textContent=fstr(m,n);
+  let s=gridSvg();const c0=clipLine(x=>m*x);if(c0)s+=`<line class="ln2" x1="${GX(c0[0][0])}" y1="${GY(c0[0][1])}" x2="${GX(c0[1][0])}" y2="${GY(c0[1][1])}"/>`;
+  const c=clipLine(x=>m*x+n);if(c)s+=`<line class="ln" x1="${GX(c[0][0])}" y1="${GY(c[0][1])}" x2="${GX(c[1][0])}" y2="${GY(c[1][1])}"/>`;
+  s+=`<circle class="nmark" cx="${GX(0)}" cy="${GY(n)}" r="5.5"/>`;
+  document.getElementById("lfig").innerHTML=`<svg class="fig" viewBox="0 0 ${W} ${W}" role="img" aria-label="График ${fstr(m,n)}">${s}</svg>`;
+  const t=(m>0?`m = ${fmt(m)} > 0 — прямая <b>поднимается</b> слева направо.`:m<0?`m = ${fmt(m)} < 0 — прямая <b>опускается</b>.`:`m = 0 — прямая <b>горизонтальная</b>: y всегда равен ${fmt(n)}.`)+
+    ` <span style="color:var(--ran);font-weight:700">Зелёная точка</span> (0; ${fmt(n)}) — здесь прямая пересекает ось y, это и есть <b>n</b>. Пунктир — y = ${m===0?"0":m===1?"x":m===-1?"−x":fmt(m)+"x"} без сдвига: n просто поднимает или опускает его.`;
+  document.getElementById("lro").innerHTML=t}
+sm.addEventListener("input",drawL);sn.addEventListener("input",drawL);drawL();
+
+/* ---------- задания ---------- */
+const T=(xs,f)=>xs.map(x=>({x,y:f(x)}));
+const WARM=[
+ {id:"w3",title:"Как № 3",en:"Complete each table of values.",ru:"Заполни таблицы.",items:[
+  {id:"w3a",label:"a. f(x) = x + 2",type:"table",rows:T([-3,-1,0,4],x=>x+2),hints:["Подставь каждый x вместо x в x + 2. Например, x = −3: −3 + 2 = ?","Минус три плюс два — это минус один."],sol:["x = −3 → −1; x = −1 → 1","x = 0 → 2; x = 4 → 6"]},
+  {id:"w3b",label:"b. x + 3y = 6",type:"table",rows:T([-3,0,3,6],x=>(6-x)/3),hints:["Сначала оставь y одного: 3y = 6 − x, потом раздели всё на 3.","Получается y = (6 − x) : 3. Например, x = −3: (6 + 3) : 3 = 3."],sol:["y = (6 − x) : 3","x = −3 → 3; x = 0 → 2; x = 3 → 1; x = 6 → 0"]}]},
+ {id:"w5",title:"Как № 5",en:"Draw the graph of each function.",ru:"Построй график: сначала y = …, потом две точки на сетке.",items:[
+  {id:"w5a",label:"a. y = 2x − 1",type:"graph",fn:x=>2*x-1,hints:["Возьми x = 0: y = 2 · 0 − 1 = −1. Поставь точку (0; −1).","Вторая точка: x = 2 → y = 2 · 2 − 1 = 3. Точка (2; 3)."],sol:["(0; −1) и (2; 3)","Проведи через них прямую"]},
+  {id:"w5b",label:"b. 2x + y = 4",type:"graph",need:true,fn:x=>4-2*x,hints:["Перенеси 2x вправо: y = 4 − 2x. При x = 0 y = ?","x = 0 → y = 4; x = 2 → y = 0."],sol:["y = −2x + 4","Точки (0; 4) и (2; 0)"]}]},
+ {id:"w6",title:"Как № 6",en:"There are 12 pencils in every box. Let x be the number of boxes and y the number of pencils.",ru:"В каждой коробке 12 карандашей. x — коробки, y — карандаши. Запиши уравнение.",items:[
+  {id:"w6a",type:"expr",fn:x=>12*x,inv:x=>x/12,hints:["Сколько карандашей в 2 коробках? В 3? Во сколько раз y больше x?","На каждую коробку 12 карандашей: y = … · x"],sol:["1 коробка — 12, 2 — 24, x коробок — 12 · x","y = 12x"],ok:"y = 12x"}]}
+];
+const HW=[
+ {id:"h3",title:"№ 3",en:"Complete each table of values.",ru:"Заполни таблицы значений.",like:"Как в шаге 3 и разминке «Как № 3». Для d сначала шаг 4.",items:[
+  {id:"h3a",label:"a. f(x) = x + 3",type:"table",rows:T([-1,0,2,3],x=>x+3),hints:["Подставляй каждый x в x + 3. Например, x = −1: −1 + 3 = ?","−1 + 3 = 2. Остальные так же."],sol:["−1 + 3 = 2; 0 + 3 = 3","2 + 3 = 5; 3 + 3 = 6"]},
+  {id:"h3b",label:"b. f(x) = x − 1",type:"table",rows:T([-2,0,1,4],x=>x-1),hints:["x = −2: −2 − 1 = ? Минус и ещё минус — уходим дальше вниз.","−2 − 1 = −3."],sol:["−2 − 1 = −3; 0 − 1 = −1","1 − 1 = 0; 4 − 1 = 3"]},
+  {id:"h3c",label:"c. f(x) = −2x",type:"table",rows:T([-1,0,2,3],x=>-2*x),hints:["x = −1: −2 · (−1). Минус на минус — плюс.","x = 2: −2 · 2 = −4."],sol:["−2 · (−1) = 2; −2 · 0 = 0","−2 · 2 = −4; −2 · 3 = −6"]},
+  {id:"h3d",label:"d. x + 2y = 3",type:"table",rows:T([-2,-1,0,1],x=>(3-x)/2),hints:["Сначала оставь y одного: 2y = 3 − x, значит y = (3 − x) : 2.","x = −2: (3 + 2) : 2 = 5 : 2 = 2,5. Ответы могут быть с запятой."],sol:["y = (3 − x) : 2","x = −2 → 2,5; x = −1 → 2","x = 0 → 1,5; x = 1 → 1"]}]},
+ {id:"h5",title:"№ 5",en:"Draw the graph of each function.",ru:"Построй график каждой функции.",like:"Как в шагах 4–5 и разминке «Как № 5». Для b–e сначала запиши y = …, потом поставь две точки.",items:[
+  {id:"h5a",label:"a. y = −x + 3",type:"graph",fn:x=>3-x,hints:["x = 0 → y = 3. Первая точка (0; 3).","Вторая: x = 3 → y = −3 + 3 = 0. Точка (3; 0)."],sol:["(0; 3) и (3; 0)"]},
+  {id:"h5b",label:"b. 3x + 6y = 12",type:"graph",need:true,fn:x=>2-x/2,hints:["6y = 12 − 3x. Раздели каждое слагаемое на 6.","y = 2 − 0,5x. Бери x = 0 и x = 4, чтобы y был целым."],sol:["y = −0,5x + 2","Точки (0; 2) и (4; 0)"]},
+  {id:"h5c",label:"c. x − y = 4",type:"graph",need:true,fn:x=>x-4,hints:["−y = 4 − x. Теперь умножь всё на −1, чтобы убрать минус у y.","y = x − 4. x = 0 → y = −4; x = 4 → y = 0."],sol:["y = x − 4","Точки (0; −4) и (4; 0)"]},
+  {id:"h5d",label:"d. 2x − 5y = 10",type:"graph",need:true,fn:x=>0.4*x-2,hints:["−5y = 10 − 2x. Раздели каждое слагаемое на −5 (знаки поменяются).","y = 0,4x − 2. Бери x = 0 и x = 5: тогда y целый."],sol:["y = 0,4x − 2","Точки (0; −2) и (5; 0)"]},
+  {id:"h5e",label:"e. 3x − y = 6",type:"graph",need:true,fn:x=>3*x-6,hints:["−y = 6 − 3x, умножь на −1: y = 3x − 6.","x = 2 → y = 0; x = 1 → y = −3."],sol:["y = 3x − 6","Точки (2; 0) и (1; −3) (или (0; −6))"]}]},
+ {id:"h6",title:"№ 6",en:"There are 20 students for every teacher. Let x represent the number of teachers, and let y represent the number of students. Find a linear equation that represents the number of students y to the number of x teacher.",ru:"На каждого учителя 20 учеников. x — учителя, y — ученики. Запиши уравнение.",like:"Как в разминке «Как № 6».",items:[
+  {id:"h6a",type:"expr",fn:x=>20*x,inv:x=>x/20,hints:["Если учитель один — учеников 20. Если двое — сколько? Если x?","На каждого учителя по 20: y = … · x"],sol:["1 учитель — 20, 2 — 40, x учителей — 20 · x","y = 20x"],ok:"y = 20x"}]}
+];
+
+/* ---------- состояние ---------- */
+const KEY="lin34-arsen";let st={};
+try{st=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+const S=id=>st[id]||(st[id]={a:0});
+function hintsBlock(item,a){let h="";for(let k=0;k<Math.min(a,item.hints.length);k++)h+=`<div class="msg hint"><b>Подсказка ${k+1}:</b> ${esc(item.hints[k])}</div>`;
+  if(a>=3)h+=`<div class="msg sol"><b>Решение</b><ol>${item.sol.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>Теперь сделай сам и перепиши в тетрадь.</div>`;
+  else h+=`<div class="note" style="margin-top:6px">Решение откроется после ${3-a} ${3-a===1?"неудачной попытки":"неудачных попыток"}.</div>`;return h}
+function keyRow(inp){const k=document.createElement("div");k.className="keys";["x","−","+","/",","].forEach(c=>{const b=document.createElement("button");b.type="button";b.textContent=c;b.setAttribute("aria-label","Вставить "+c);b.onclick=()=>{const p=inp.selectionStart??inp.value.length;inp.value=inp.value.slice(0,p)+c+inp.value.slice(inp.selectionEnd??p);inp.focus();inp.setSelectionRange(p+c.length,p+c.length)};k.appendChild(b)});return k}
+function mkInput(id,ph,mode){const i=document.createElement("input");i.className="ans";i.id=id;i.autocomplete="off";i.autocapitalize="off";i.spellcheck=false;i.inputMode=mode||"text";if(ph)i.placeholder=ph;return i}
+function checkExpr(val,fn,inv){
+  if(!val.trim())return{r:"empty",msg:"Сначала впиши формулу."};
+  if(/y/i.test(val.replace(/^\s*y\s*=/i,"")))return{r:"empty",msg:"Нужно, чтобы y был один слева: y = … и справа только x и числа."};
+  let r;try{r=parse(val)}catch(e){return{r:"empty",msg:"Не понимаю запись. Пиши, например: −0,5x + 2 или 3x − 6."}}
+  if(!r.hasX)return{r:"no",msg:"В формуле должен быть x."};
+  if([0.7,1.3,2.9,-1.6,-3.1].every(x=>near(r.f(x),fn(x))))return{r:"ok"};
+  if(inv&&[0.7,1.3,2.9].every(x=>near(r.f(x),inv(x))))return{r:"no",msg:"Наоборот: учеников (y) больше, чем учителей (x), значит y = число · x."};
+  const m=r.f(1)-r.f(0),n=r.f(0),tm=fn(1)-fn(0),tn=fn(0);
+  if(near(m,tm)&&!near(n,tn))return{r:"no",msg:"Число перед x верное, а свободное число (n) — нет. Проверь, разделил ли ты его тоже."};
+  if(near(n,tn)&&!near(m,tm))return{r:"no",msg:"Свободное число верное, а число перед x — нет. Проверь знак и деление."};
+  return{r:"no"}}
+
+/* ---------- отрисовка ---------- */
+function renderItem(item,w){
+  if(item.type==="expr"){
+    const row=document.createElement("div");row.className="irow";row.innerHTML=`<span class="pre">y =</span>`;
+    const inp=mkInput("in_"+item.id,"например 5x");if(S(item.id).v)inp.value=S(item.id).v;row.appendChild(inp);
+    const go=document.createElement("button");go.type="button";go.className="go";go.style.marginTop="0";go.textContent="Проверить";row.appendChild(go);
+    w.appendChild(row);w.appendChild(keyRow(inp));const fb=document.createElement("div");fb.className="fb";w.appendChild(fb);
+    if(S(item.id).ok)fb.innerHTML=`<div class="msg ok"><b>Верно!</b> ${esc(item.ok)}.</div>`;
+    const run=()=>{const r=checkExpr(inp.value,item.fn,item.inv);const s=S(item.id);
+      if(r.r==="ok"){s.ok=1;s.v=inp.value;save();fb.innerHTML=`<div class="msg ok"><b>Верно!</b> ${esc(item.ok)}. Перепиши в тетрадь.</div>`}
+      else if(r.r==="empty")fb.innerHTML=`<div class="msg no">${esc(r.msg)}</div>`;
+      else{s.a++;save();fb.innerHTML=`<div class="msg no">${esc(r.msg||"Пока неверно.")}${s.a>1?` (попытка ${s.a})`:""}</div>`+hintsBlock(item,s.a)}
+      w.classList.toggle("good",r.r==="ok");upd()};
+    go.onclick=run;inp.addEventListener("keydown",e=>{if(e.key==="Enter")run()});return}
+  if(item.type==="table"){
+    const s0=S(item.id);s0.c=s0.c||{};
+    const wrap=document.createElement("div");wrap.className="tbl-wrap";const tb=document.createElement("table");tb.className="vals";
+    tb.innerHTML=`<tr><th>x</th><th>y</th><th>(x, y)</th></tr>`;const cells=[];
+    item.rows.forEach((r,i)=>{const tr=document.createElement("tr");tr.innerHTML=`<td class="g">${fmt(r.x)}</td>`;const td=document.createElement("td");
+      const inp=mkInput(`in_${item.id}_${i}`,"","decimal");inp.setAttribute("aria-label",`y при x = ${fmt(r.x)}`);td.appendChild(inp);tr.appendChild(td);
+      const pc=document.createElement("td");pc.className="pair";tr.appendChild(pc);tb.appendChild(tr);
+      if(s0.c[i]){inp.value=fmt(r.y);inp.classList.add("good");pc.textContent=`(${fmt(r.x)}; ${fmt(r.y)})`}cells.push({r,inp,pc,i})});
+    wrap.appendChild(tb);w.appendChild(wrap);
+    const go=document.createElement("button");go.type="button";go.className="go";go.textContent="Проверить таблицу";w.appendChild(go);
+    const fb=document.createElement("div");fb.className="fb";w.appendChild(fb);
+    if(s0.ok)fb.innerHTML=`<div class="msg ok"><b>Вся таблица верна!</b></div>`;
+    go.onclick=()=>{const s=S(item.id);s.c=s.c||{};let any=false,bad=0;
+      cells.forEach(({r,inp,pc,i})=>{if(s.c[i]||!inp.value.trim())return;any=true;let v;try{const p=parse(inp.value);v=p.hasX?NaN:p.f(0)}catch(e){v=NaN}
+        if(near(v,r.y)){s.c[i]=1;inp.classList.remove("bad");inp.classList.add("good");pc.textContent=`(${fmt(r.x)}; ${fmt(r.y)})`}else{inp.classList.add("bad");bad++}});
+      const left=cells.filter(c=>!s.c[c.i]).length;
+      if(!any&&left){fb.innerHTML=`<div class="msg no">Заполни хотя бы одну клетку.</div>`;return}
+      if(!left){s.ok=1;save();fb.innerHTML=`<div class="msg ok"><b>Вся таблица верна!</b> Перепиши в тетрадь вместе со столбиком (x, y).</div>`;w.classList.add("good");upd();return}
+      if(bad){s.a++;save();fb.innerHTML=`<div class="msg no">Красные клетки неверны (${bad}).${s.a>1?` Попытка ${s.a}.`:""}</div>`+hintsBlock(item,s.a)}
+      else{save();fb.innerHTML=`<div class="msg ok">Проверенные клетки верны. Осталось: ${left}.</div>`}upd()};
+    return}
+  if(item.type==="graph"){
+    const s0=S(item.id);let formOK=!item.need||s0.f;
+    if(item.need){
+      w.insertAdjacentHTML("beforeend",`<div class="step-h">1) Запиши в виде y = mx + n</div>`);
+      const row=document.createElement("div");row.className="irow";row.innerHTML=`<span class="pre">y =</span>`;
+      const inp=mkInput("in_"+item.id+"_f","например −0,5x + 2");if(s0.fv)inp.value=s0.fv;row.appendChild(inp);
+      const go=document.createElement("button");go.type="button";go.className="go";go.style.marginTop="0";go.textContent="Проверить";row.appendChild(go);
+      w.appendChild(row);w.appendChild(keyRow(inp));
+      const ffb=document.createElement("div");ffb.className="fb";w.appendChild(ffb);if(s0.f)ffb.innerHTML=`<div class="msg ok"><b>Верно!</b> Теперь поставь две точки.</div>`;
+      const run=()=>{const r=checkExpr(inp.value,item.fn);const s=S(item.id);
+        if(r.r==="ok"){s.f=1;s.fv=inp.value;save();ffb.innerHTML=`<div class="msg ok"><b>Верно!</b> Перепиши в тетрадь и поставь две точки на сетке.</div>`;formOK=true;plotBox.classList.remove("locked")}
+        else if(r.r==="empty")ffb.innerHTML=`<div class="msg no">${esc(r.msg)}</div>`;
+        else{s.fa=(s.fa||0)+1;save();ffb.innerHTML=`<div class="msg no">${esc(r.msg||"Пока неверно.")}</div>`+(s.fa>=1?`<div class="msg hint"><b>Подсказка:</b> ${esc(item.hints[0])}</div>`:"")+(s.fa>=3?`<div class="msg sol"><b>Формула:</b> ${esc(item.sol[0])}</div>`:"")}};
+      go.onclick=run;inp.addEventListener("keydown",e=>{if(e.key==="Enter")run()});
+      w.insertAdjacentHTML("beforeend",`<div class="step-h">2) Поставь на сетке две точки графика</div>`);
+    }else w.insertAdjacentHTML("beforeend",`<div class="step-h">Поставь на сетке две точки графика</div>`);
+    const plotBox=document.createElement("div");if(!formOK)plotBox.classList.add("locked");
+    const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");svg.setAttribute("class","plot");svg.setAttribute("viewBox",`0 0 ${W} ${W}`);svg.setAttribute("role","img");svg.setAttribute("aria-label","Сетка: коснись, чтобы поставить точку");
+    plotBox.appendChild(svg);w.appendChild(plotBox);
+    const fb=document.createElement("div");fb.className="fb";w.appendChild(fb);
+    let pts=s0.ok?(s0.pts||[]):[];
+    const on=p=>near(item.fn(p[0]),p[1]);
+    function draw(){let s=gridSvg();
+      if(pts.length===2&&pts.every(on)){const c=clipLine(item.fn);if(c)s+=`<line class="ln" x1="${GX(c[0][0])}" y1="${GY(c[0][1])}" x2="${GX(c[1][0])}" y2="${GY(c[1][1])}"/>`}
+      pts.forEach(p=>{s+=`<circle class="${on(p)?"good":"bad"}" cx="${GX(p[0])}" cy="${GY(p[1])}" r="6"/><text x="${GX(p[0])+8}" y="${GY(p[1])-8}" style="fill:var(--ink);font-weight:600">(${fmt(p[0])}; ${fmt(p[1])})</text>`});
+      svg.innerHTML=s}
+    draw();if(s0.ok)fb.innerHTML=`<div class="msg ok"><b>График построен верно!</b></div>`;
+    svg.addEventListener("click",e=>{if(!formOK||S(item.id).ok)return;const pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const m=svg.getScreenCTM();if(!m)return;const q=pt.matrixTransform(m.inverse());
+      const x=Math.round((q.x-PAD)/SC-R),y=Math.round((W-PAD-q.y)/SC-R);if(Math.abs(x)>R||Math.abs(y)>R)return;
+      const k=pts.findIndex(p=>p[0]===x&&p[1]===y);if(k>=0){pts.splice(k,1);draw();fb.innerHTML="";return}
+      const s=S(item.id);
+      if(!on([x,y])){s.a++;save();pts=pts.filter(on);pts.push([x,y]);draw();
+        fb.innerHTML=`<div class="msg no">Точка (${fmt(x)}; ${fmt(y)}) не лежит на графике: подставь x = ${fmt(x)} в формулу — y получится другой. Коснись точки, чтобы убрать её.${s.a>1?` Попытка ${s.a}.`:""}</div>`+hintsBlock(item,s.a);return}
+      pts=pts.filter(on);pts.push([x,y]);if(pts.length>2)pts.shift();draw();
+      if(pts.length===2){s.ok=1;s.pts=pts;save();w.classList.add("good");fb.innerHTML=`<div class="msg ok"><b>График построен верно!</b> Через точки (${fmt(pts[0][0])}; ${fmt(pts[0][1])}) и (${fmt(pts[1][0])}; ${fmt(pts[1][1])}) прошла прямая. Перечерти в тетрадь.</div>`;upd()}
+      else fb.innerHTML=`<div class="msg ok">Точка (${fmt(x)}; ${fmt(y)}) лежит на графике. Нужна ещё одна.</div>`});
+  }
+}
+function done(item){const s=st[item.id];return!!(s&&s.ok&&(!item.need||s.f))}
+function renderTask(t,host){
+  const box=document.createElement("div");box.className="task";box.id=t.id;
+  box.innerHTML=`<span class="tno">${t.title}</span><p class="en">${esc(t.en)}</p>${t.ru?`<p class="ru">${esc(t.ru)}</p>`:""}${t.like?`<p class="like">${t.like}</p>`:""}`;
+  t.items.forEach(item=>{const w=document.createElement("div");w.className="item"+(done(item)?" good":"");
+    if(item.label)w.insertAdjacentHTML("beforeend",`<div class="ilabel">${esc(item.label)}</div>`);renderItem(item,w);box.appendChild(w)});
+  host.appendChild(box)}
+const warm=document.getElementById("warm"),hw=document.getElementById("hw");
+function build(){warm.innerHTML="";hw.innerHTML="";WARM.forEach(t=>renderTask(t,warm));HW.forEach(t=>renderTask(t,hw));upd()}
+function upd(){let n=0;HW.concat(WARM).forEach(t=>{const d=t.items.every(done);document.getElementById(t.id).classList.toggle("done",d);if(d&&t.id[0]==="h")n++});
+  document.getElementById("pt").textContent=`${n} из 3`;document.getElementById("pf").style.width=(n/3*100)+"%"}
+document.getElementById("reset").onclick=()=>{st={};save();build();window.scrollTo(0,0)};
+build();
+</script>
+
+</body></html>

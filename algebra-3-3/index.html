@@ -1,0 +1,367 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>y = mx 3.3</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Layout: тетрадь в клетку, одна колонка: 5 шагов объяснения → разминка → домашка с проверкой */
+:root{
+  --paper:#f6f8fc; --grid:rgba(60,90,170,.07); --card:#ffffff; --ink:#1b2236; --muted:#5d6782;
+  --pen:#2546c4; --pen-soft:#e6ebfb; --red:#c4382e; --red-soft:#fbe9e7; --line:#dde3f0;
+  --amber:#a8670f; --amber-soft:#fdf1dc; --ok:#1f8a57; --ok-soft:#e3f4ea;
+  --dom:#2546c4; --dom-soft:#dfe6fb; --ran:#0f8a6a; --ran-soft:#dcf2ea;
+  --display:"Unbounded","Golos Text",system-ui,sans-serif; --body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#11151e; --grid:rgba(140,165,240,.06); --card:#191f2c; --ink:#e7ebf5; --muted:#9aa4bf;
+  --pen:#8aa2ff; --pen-soft:#232d4a; --red:#ff8a7e; --red-soft:#3a2224; --line:#2a3245;
+  --amber:#f0b75a; --amber-soft:#382c17; --ok:#5fd39a; --ok-soft:#1d3329;
+  --dom:#8aa2ff; --dom-soft:#232d4a; --ran:#4fd1a8; --ran-soft:#173229; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#11151e; --grid:rgba(140,165,240,.06); --card:#191f2c; --ink:#e7ebf5; --muted:#9aa4bf;
+  --pen:#8aa2ff; --pen-soft:#232d4a; --red:#ff8a7e; --red-soft:#3a2224; --line:#2a3245;
+  --amber:#f0b75a; --amber-soft:#382c17; --ok:#5fd39a; --ok-soft:#1d3329;
+  --dom:#8aa2ff; --dom-soft:#232d4a; --ran:#4fd1a8; --ran-soft:#173229; color-scheme:dark}
+[hidden]{display:none!important}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px}
+.wrap{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 64px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--pen);font-weight:600}
+h1{font-family:var(--display);font-size:clamp(23px,5vw,32px);line-height:1.15;margin:6px 0 10px;text-wrap:balance}
+h2{font-family:var(--display);font-weight:500;font-size:19px;margin:0 0 12px;text-wrap:balance;display:flex;gap:10px;align-items:baseline}
+h2 span{font-size:12.5px;color:var(--pen);flex:none}
+.lead{color:var(--muted);margin:0;max-width:62ch}
+section{margin-top:34px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px;min-width:0}
+.card>p:first-child{margin-top:0}.card>p:last-child{margin-bottom:0}
+.D{color:var(--dom);font-weight:700}.E{color:var(--ran);font-weight:700}
+.big2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.big2>div{border-radius:10px;padding:12px;min-width:0}
+.big2 .d{background:var(--dom-soft)}.big2 .e{background:var(--ran-soft)}
+.big2 b{font-family:var(--display);font-weight:500;font-size:15px;display:block;margin-bottom:2px}
+.big2 .d b{color:var(--dom)}.big2 .e b{color:var(--ran)}
+@media (max-width:480px){.big2{grid-template-columns:1fr}}
+.rule{border-left:3px solid var(--pen);background:var(--pen-soft);padding:10px 12px;border-radius:0 8px 8px 0;margin:12px 0}
+.pairs{display:flex;flex-wrap:wrap;gap:6px;font-variant-numeric:tabular-nums;font-size:17px;margin:8px 0}
+.pairs span{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:3px 8px}
+.ex{display:grid;gap:4px;margin:8px 0}
+.ex div{padding-left:12px}
+.note{font-size:14px;color:var(--muted)}
+.prog{display:flex;align-items:center;gap:12px;font-size:14px;font-variant-numeric:tabular-nums;margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.track{flex:1;height:8px;background:var(--pen-soft);border-radius:4px;overflow:hidden}
+.fill{height:100%;background:var(--ok);width:0;transition:width .3s}
+.notation{width:100%;border-collapse:collapse;font-size:15px}
+.notation td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.notation td:first-child{font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tbl-wrap{overflow-x:auto}
+/* demo */
+.demo-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.pick{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:6px 12px;border-radius:20px;cursor:pointer}
+.pick[aria-pressed="true"]{background:var(--pen);color:var(--card);border-color:var(--pen)}
+.demo-out{margin-top:6px;font-variant-numeric:tabular-nums}
+/* figures */
+.fig{display:block;width:100%;max-width:300px;height:auto;color:var(--ink)}
+.fig .g{stroke:var(--line);stroke-width:1}
+.fig .ax{stroke:var(--ink);stroke-width:1.4}
+.fig text{fill:var(--muted);font-size:10.5px;font-family:var(--body)}
+.fig .pt{fill:var(--red)}
+.fig .cv{stroke:var(--red);stroke-width:2.2;fill:none}
+.fig .end{fill:var(--red)}
+.fig .bandD{stroke:var(--dom);stroke-width:6;stroke-linecap:round;opacity:.85}
+.fig .bandE{stroke:var(--ran);stroke-width:6;stroke-linecap:round;opacity:.85}
+.fig .tickD{fill:var(--dom)}.fig .tickE{fill:var(--ran)}
+.fig .drop{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3}
+.fig .arD{fill:var(--dom)}.fig .arE{fill:var(--ran)}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:6px 0}
+/* tasks */
+.task{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px;min-width:0}
+.task.done{border-color:var(--ok)}
+.tno{font-family:var(--display);font-size:13px;color:var(--pen);display:block;margin-bottom:4px}
+.task.done .tno::after{content:" ✓";color:var(--ok)}
+.en{font-style:italic;color:var(--muted);font-size:14.5px;margin:0 0 4px}
+.ru{margin:0 0 6px}
+.like{font-size:13.5px;color:var(--muted);margin:0 0 6px}
+.item{border-top:1px dashed var(--line);padding-top:12px;margin-top:12px;min-width:0}
+.ilabel{font-weight:600;margin-bottom:6px}
+.ask{font-weight:600;margin:8px 0 4px;font-variant-numeric:tabular-nums}
+.kinds{display:flex;flex-wrap:wrap;gap:6px}
+.kind{font:inherit;font-size:14px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);padding:5px 10px;border-radius:8px;cursor:pointer;font-variant-numeric:tabular-nums}
+.kind[aria-pressed="true"]{border-color:var(--pen);background:var(--pen-soft);font-weight:600}
+.slot{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px;font-size:17px;font-variant-numeric:tabular-nums}
+.slot input{width:84px}
+.slot input.wide{width:auto;flex:1;min-width:0;max-width:300px}
+.irow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.irow input{flex:1;min-width:0;max-width:280px}
+input.ans{font:inherit;font-size:17px;padding:7px 10px;border:1.5px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);font-variant-numeric:tabular-nums}
+input.ans:focus-visible{outline:2px solid var(--pen);outline-offset:1px}
+.item.good input.ans{border-color:var(--ok);background:var(--ok-soft)}
+.pre{font-weight:600;white-space:nowrap}
+button{font:inherit;font-size:14.5px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:7px 13px;border-radius:8px;cursor:pointer}
+button:hover{border-color:var(--pen)}
+button:focus-visible,.kind:focus-visible,.pick:focus-visible{outline:2px solid var(--pen);outline-offset:2px}
+button.go{background:var(--pen);color:var(--card);border-color:var(--pen);font-weight:600;margin-top:10px}
+.choices{display:grid;gap:6px;margin-top:6px}
+.choices button{text-align:left}
+.choices button.on{border-color:var(--pen);background:var(--pen-soft)}
+.fb{margin-top:8px;font-size:15px}
+.msg{padding:8px 11px;border-radius:8px;margin-top:6px}
+.msg.ok{background:var(--ok-soft)}.msg.ok b{color:var(--ok)}
+.msg.no{background:var(--red-soft)}
+.msg.hint{background:var(--amber-soft)}.msg.hint b{color:var(--amber)}
+.msg.sol{background:var(--pen-soft)}
+.msg.sol ol{margin:4px 0 0;padding-left:20px}
+.foot{margin-top:24px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:14px}
+sup{font-size:.72em;line-height:0}
+@media (prefers-reduced-motion:reduce){.fill{transition:none}}
+</style>
+<style>
+.slider-row{display:flex;align-items:center;gap:10px;margin:8px 0;flex-wrap:wrap}
+.slider-row input[type=range]{flex:1;min-width:160px;accent-color:var(--pen)}
+.mval{font-family:var(--display);font-size:20px;min-width:110px;font-variant-numeric:tabular-nums}
+.fig .ln{stroke:var(--pen);stroke-width:2.6;fill:none}
+.fig .qd{fill:var(--pen-soft)}
+.fig .qt{fill:var(--pen);font-size:13px;font-weight:700;font-family:var(--display)}
+.mini-t{border-collapse:collapse;font-variant-numeric:tabular-nums;margin-top:8px}
+.mini-t th,.mini-t td{border:1px solid var(--line);padding:4px 9px;text-align:center}
+.mini-t th{background:var(--pen-soft);color:var(--pen)}
+.mini-t td.k{color:var(--muted);font-size:13px}
+.big{font-family:var(--display);font-size:22px;text-align:center;margin:8px 0;color:var(--pen)}
+.vals{border-collapse:collapse;font-variant-numeric:tabular-nums;margin:6px 0}
+.vals th,.vals td{border:1px solid var(--line);padding:6px 10px;text-align:center}
+.vals th{background:var(--pen-soft);color:var(--pen)}
+.keys{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.keys button{padding:4px 0;width:38px;font-size:15px}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Алгебра 7 · тема 3.3 · The function y = mx</div>
+  <h1>Прямая пропорциональность y = mx и домашка № 4–6</h1>
+  <p class="lead">Пройди 4 коротких шага, потом разминку. Домашку страница проверяет сама. Если ответ неверный, она даёт подсказку. Решение откроется только после трёх попыток.</p>
+  <div class="prog"><span>Домашка:</span><div class="track"><div class="fill" id="pf"></div></div><span id="pt">0 из 3</span></div>
+
+  <section>
+    <h2><span>Шаг 1</span>Что такое y = mx</h2>
+    <div class="card">
+      <p>Машина едет 80 км в час. За x часов она проедет <b>y = 80x</b> километров. Это и есть функция вида y = mx, здесь m = 80.</p>
+      <table class="mini-t"><tr><th>x, часов</th><td>1</td><td>2</td><td>3</td><td>5</td></tr><tr><th>y, км</th><td>80</td><td>160</td><td>240</td><td>400</td></tr><tr><td class="k">y : x</td><td class="k">80</td><td class="k">80</td><td class="k">80</td><td class="k">80</td></tr></table>
+      <div class="rule"><b>m</b> — это <b>во сколько раз y больше x</b>. Для любой пары y : x одно и то же число m. По-английски: <i>constant of proportionality</i> — коэффициент прямой пропорциональности. А «y is directly proportional to x» — «y прямо пропорционален x».</div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 2</span>График — прямая через начало координат</h2>
+    <div class="card">
+      <p>Двигай ползунок и смотри, как от m зависит прямая.</p>
+      <div class="slider-row"><span class="mval" id="mv">y = 2x</span><input type="range" id="ms" min="-4" max="4" step="0.25" value="2" aria-label="Значение m"></div>
+      <div id="mfig"></div>
+      <div class="readout" id="mro"></div>
+      <div class="rule">Всегда проходит через точку <b>(0; 0)</b>. Если <b>m &gt; 0</b>, прямая идёт вверх и лежит в I и III четвертях. Если <b>m &lt; 0</b>, идёт вниз, II и IV четверти. Чем больше m по модулю, тем круче.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 3</span>Как найти m (это № 4)</h2>
+    <div class="card">
+      <p>Возьми <b>любую точку</b>, кроме (0; 0), и раздели: <span class="big" style="display:block">m = y : x</span></p>
+      <div class="ex">
+        <div><b>По таблице:</b> x = 2, y = −6 → m = −6 : 2 = −3 → <b>y = −3x</b></div>
+        <div><b>По графику:</b> найди точку точно на пересечении клеток, например (4; 2) → m = 2 : 4 = 0,5 → <b>y = 0,5x</b></div>
+        <div><b>Проверка:</b> возьми другую точку. Если m получилось тем же, всё верно.</div>
+      </div>
+      <p class="note">Не бери точку (0; 0): на 0 делить нельзя. И следи за знаком: минус делить на плюс — минус.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 4</span>Найти y или x (это № 5 и 6)</h2>
+    <div class="card">
+      <p><b>Всегда в два хода.</b> Пример: y = 45, когда x = 3.</p>
+      <div class="ex">
+        <div><b>Ход 1. Найди m:</b> m = 45 : 3 = 15, значит y = 15x</div>
+        <div><b>Ход 2a. Найди y, если x = 4:</b> подставь x → y = 15 · 4 = 60</div>
+        <div><b>Ход 2b. Найди x, если y = 300:</b> 300 = 15x → x = 300 : 15 = 20</div>
+      </div>
+      <div class="rule">Знаешь x — <b>умножай</b> на m. Знаешь y — <b>дели</b> на m.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 5</span>Разминка</h2>
+    <p class="lead" style="margin-bottom:12px">Задачи как в домашке, только с другими числами.</p>
+    <div id="warm"></div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 6</span>Домашка: Exercises 3.3, № 4–6 (с. 142)</h2>
+    <p class="lead" style="margin-bottom:12px">Каждый засчитанный ответ перепиши в тетрадь с решением.</p>
+    <div id="hw"></div>
+  </section>
+
+  <div class="foot"><span>Учебник Algebra 7, с. 140–142</span><button type="button" id="reset">Начать заново</button></div>
+</div>
+
+<script>
+/* ---------- утилиты ---------- */
+const fmt=n=>{if(!isFinite(n))return"—";const r=Math.round(n*1000)/1000;return String(r).replace(".",",").replace("-","−")};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function prep(s){return s.toLowerCase().replace(/х/g,"x").replace(/[−–—]/g,"-").replace(/,/g,".").replace(/[×·•]/g,"*").replace(/[÷:]/g,"/").replace(/²/g,"^2").replace(/³/g,"^3").replace(/\s+/g,"").replace(/^(f\(x\)|y)=/,"").replace(/^x=/,"")}
+function parse(src){
+  const s=prep(src);if(!s)throw 0;const toks=[];let i=0;
+  while(i<s.length){const m=/^(\d+(?:\.\d+)?|\.\d+|x|[-+*/^()])/.exec(s.slice(i));if(!m)throw 0;toks.push(m[1]);i+=m[1].length}
+  let p=0;const peek=()=>toks[p],eat=()=>toks[p++];
+  function expr(){let a=term();while(peek()==="+"||peek()==="-"){const o=eat(),b=term(),l=a;a=o==="+"?x=>l(x)+b(x):x=>l(x)-b(x)}return a}
+  function term(){let a=factor();for(;;){const t=peek();if(t==="*"||t==="/"){eat();const b=factor(),l=a;a=t==="*"?x=>l(x)*b(x):x=>l(x)/b(x)}else if(t!==undefined&&(t==="x"||t==="("||/^[\d.]/.test(t))){const b=power(),l=a;a=x=>l(x)*b(x)}else break}return a}
+  function factor(){if(peek()==="-"){eat();const f=factor();return x=>-f(x)}if(peek()==="+"){eat();return factor()}return power()}
+  function power(){const a=atom();if(peek()==="^"){eat();const b=factor();return x=>Math.pow(a(x),b(x))}return a}
+  function atom(){const t=eat();if(t===undefined)throw 0;if(t==="x")return x=>x;if(t==="("){const e=expr();if(eat()!==")")throw 0;return e}if(/^[\d.]/.test(t)){const v=parseFloat(t);return()=>v}throw 0}
+  const f=expr();if(p!==toks.length)throw 0;return{f,hasX:toks.includes("x")};
+}
+const near=(a,b)=>Math.abs(a-b)<=1e-6*Math.max(1,Math.abs(b));
+function num(s){try{const r=parse(s);if(r.hasX)return NaN;return r.f(0)}catch(e){return NaN}}
+function setOf(s){const m=String(s).replace(/[−–—]/g,"-").match(/-?\d+(?:\.\d+)?/g);return m?[...new Set(m.map(Number))].sort((a,b)=>a-b):null}
+
+/* ---------- графики ---------- */
+function fig(o){
+  const W=280,H=280,pad=16,sx=(W-2*pad)/(o.x1-o.x0),sy=(H-2*pad)/(o.y1-o.y0);
+  const X=x=>pad+(x-o.x0)*sx,Y=y=>H-pad-(y-o.y0)*sy;let s="";
+  for(let x=Math.ceil(o.x0);x<=o.x1;x++)s+=`<line class="g" x1="${X(x)}" y1="${pad}" x2="${X(x)}" y2="${H-pad}"/>`;
+  for(let y=Math.ceil(o.y0);y<=o.y1;y++)s+=`<line class="g" x1="${pad}" y1="${Y(y)}" x2="${W-pad}" y2="${Y(y)}"/>`;
+  s+=`<line class="ax" x1="${pad}" y1="${Y(0)}" x2="${W-pad+4}" y2="${Y(0)}"/><line class="ax" x1="${X(0)}" y1="${H-pad}" x2="${X(0)}" y2="${pad-4}"/>`;
+  s+=`<text x="${W-pad}" y="${Y(0)-5}">x</text><text x="${X(0)+5}" y="${pad+2}">y</text>`;
+  for(let x=Math.ceil(o.x0);x<=o.x1-0.5;x++)if(x&&x%o.step===0)s+=`<text x="${X(x)-(x<0?7:3)}" y="${Y(0)+13}">${fmt(x)}</text>`;
+  for(let y=Math.ceil(o.y0);y<=o.y1-0.5;y++)if(y&&y%o.step===0)s+=`<text x="${X(0)+(y<0?-20:-12)}" y="${Y(y)+4}">${fmt(y)}</text>`;
+  if(o.shadow){const sh=o.shadow;
+    if(sh.dpts){sh.dpts.forEach(x=>s+=`<circle class="tickD" cx="${X(x)}" cy="${Y(0)}" r="5"/>`);sh.epts.forEach(y=>s+=`<circle class="tickE" cx="${X(0)}" cy="${Y(y)}" r="5"/>`);
+      (o.pts||[]).forEach(([x,y])=>s+=`<line class="drop" x1="${X(x)}" y1="${Y(y)}" x2="${X(x)}" y2="${Y(0)}"/><line class="drop" x1="${X(x)}" y1="${Y(y)}" x2="${X(0)}" y2="${Y(y)}"/>`)}
+    if(sh.d){const[a,b]=sh.d;const xa=a===-Infinity?pad:X(a),xb=b===Infinity?W-pad:X(b);s+=`<line class="bandD" x1="${xa}" y1="${Y(0)}" x2="${xb}" y2="${Y(0)}"/>`;
+      if(b===Infinity)s+=`<path class="arD" d="M${W-pad+6},${Y(0)} l-10,-6 v12z"/>`;if(a===-Infinity)s+=`<path class="arD" d="M${pad-6},${Y(0)} l10,-6 v12z"/>`}
+    if(sh.e){const[a,b]=sh.e;const ya=a===-Infinity?H-pad:Y(a),yb=b===Infinity?pad:Y(b);s+=`<line class="bandE" x1="${X(0)}" y1="${ya}" x2="${X(0)}" y2="${yb}"/>`;
+      if(b===Infinity)s+=`<path class="arE" d="M${X(0)},${pad-6} l-6,10 h12z"/>`;if(a===-Infinity)s+=`<path class="arE" d="M${X(0)},${H-pad+6} l-6,-10 h12z"/>`}}
+  (o.pts||[]).forEach(([x,y])=>s+=`<circle class="pt" cx="${X(x)}" cy="${Y(y)}" r="4.5"/>`);
+  if(o.curve){const P=o.curve.map(([x,y])=>[X(x),Y(y)]);let d=`M${P[0][0]},${P[0][1]}`;
+    for(let i=0;i<P.length-1;i++){const p0=P[i-1]||P[i],p1=P[i],p2=P[i+1],p3=P[i+2]||p2;d+=` C${p1[0]+(p2[0]-p0[0])/6},${p1[1]+(p2[1]-p0[1])/6} ${p2[0]-(p3[0]-p1[0])/6},${p2[1]-(p3[1]-p1[1])/6} ${p2[0]},${p2[1]}`}
+    s+=`<path class="cv" d="${d}"/>`;const a=P[P.length-2],b=P[P.length-1],ang=Math.atan2(b[1]-a[1],b[0]-a[0]),L=10;
+    s+=`<path class="end" d="M${b[0]},${b[1]} L${b[0]-L*Math.cos(ang-0.4)},${b[1]-L*Math.sin(ang-0.4)} L${b[0]-L*Math.cos(ang+0.4)},${b[1]-L*Math.sin(ang+0.4)}Z"/><circle class="end" cx="${P[0][0]}" cy="${P[0][1]}" r="4.5"/>`}
+  return `<svg class="fig" viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.label}">${s}</svg>`;
+}
+
+/* ---------- ползунок m ---------- */
+function lineFig(m){
+  const o={x0:-6,x1:6,y0:-6,y1:6},W=280,H=280,pad=16,sx=(W-2*pad)/12,sy=(H-2*pad)/12;
+  const X=x=>pad+(x-o.x0)*sx,Y=y=>H-pad-(y-o.y0)*sy;let s="";
+  if(m>0)s+=`<rect class="qd" x="${X(0)}" y="${pad}" width="${X(6)-X(0)}" height="${Y(0)-pad}"/><rect class="qd" x="${pad}" y="${Y(0)}" width="${X(0)-pad}" height="${H-pad-Y(0)}"/>`;
+  if(m<0)s+=`<rect class="qd" x="${pad}" y="${pad}" width="${X(0)-pad}" height="${Y(0)-pad}"/><rect class="qd" x="${X(0)}" y="${Y(0)}" width="${X(6)-X(0)}" height="${H-pad-Y(0)}"/>`;
+  for(let x=-6;x<=6;x++)s+=`<line class="g" x1="${X(x)}" y1="${pad}" x2="${X(x)}" y2="${H-pad}"/>`;
+  for(let y=-6;y<=6;y++)s+=`<line class="g" x1="${pad}" y1="${Y(y)}" x2="${W-pad}" y2="${Y(y)}"/>`;
+  s+=`<line class="ax" x1="${pad}" y1="${Y(0)}" x2="${W-pad+4}" y2="${Y(0)}"/><line class="ax" x1="${X(0)}" y1="${H-pad}" x2="${X(0)}" y2="${pad-4}"/>`;
+  s+=`<text class="qt" x="${X(4.6)}" y="${Y(5.2)}">I</text><text class="qt" x="${X(-5.4)}" y="${Y(5.2)}">II</text><text class="qt" x="${X(-5.4)}" y="${Y(-5.6)}">III</text><text class="qt" x="${X(4.4)}" y="${Y(-5.6)}">IV</text>`;
+  for(let x=-4;x<=4;x+=2)if(x)s+=`<text x="${X(x)-(x<0?7:3)}" y="${Y(0)+13}">${fmt(x)}</text>`;
+  for(let y=-4;y<=4;y+=2)if(y)s+=`<text x="${X(0)+(y<0?-20:-12)}" y="${Y(y)+4}">${fmt(y)}</text>`;
+  // прямая, обрезанная по окну
+  const xs=m===0?6:Math.min(6,6/Math.abs(m));s+=`<line class="ln" x1="${X(-xs)}" y1="${Y(-xs*m)}" x2="${X(xs)}" y2="${Y(xs*m)}"/>`;
+  [-2,-1,1,2].forEach(x=>{const y=m*x;if(Math.abs(y)<=6)s+=`<circle class="pt" cx="${X(x)}" cy="${Y(y)}" r="4"/>`});
+  s+=`<circle cx="${X(0)}" cy="${Y(0)}" r="4.5" fill="var(--ink)"/>`;
+  return `<svg class="fig" viewBox="0 0 ${W} ${H}" role="img" aria-label="График y = ${fmt(m)}x">${s}</svg>`;
+}
+const ms=document.getElementById("ms");
+function drawM(){const m=+ms.value;document.getElementById("mv").textContent=`y = ${m===1?"":m===-1?"−":fmt(m)}x`.replace("y = 0x","y = 0");
+  document.getElementById("mfig").innerHTML=lineFig(m);
+  const tbl=`<table class="mini-t"><tr><th>x</th>${[-2,-1,0,1,2].map(x=>`<td>${fmt(x)}</td>`).join("")}</tr><tr><th>y</th>${[-2,-1,0,1,2].map(x=>`<td>${fmt(m*x)}</td>`).join("")}</tr></table>`;
+  const t=m>0?`m = ${fmt(m)} > 0: прямая идёт <b>вверх</b>, лежит в <b>I и III</b> четвертях.`:m<0?`m = ${fmt(m)} < 0: прямая идёт <b>вниз</b>, лежит во <b>II и IV</b> четвертях.`:`m = 0: получается y = 0 — это сама ось x.`;
+  document.getElementById("mro").innerHTML=t+(m?" Красные точки — из таблицы ниже, умножь каждый x на m:":"")+tbl}
+ms.addEventListener("input",drawM);drawM();
+
+/* ---------- задания ---------- */
+const TBL=(xs,ys)=>`<div class="tbl-wrap"><table class="vals"><tr><th>x</th>${xs.map(x=>`<td>${fmt(x)}</td>`).join("")}</tr><tr><th>y</th>${ys.map(y=>`<td>${fmt(y)}</td>`).join("")}</tr></table></div>`;
+const G={
+ w4a:fig({x0:-5,x1:5,y0:-7,y1:7,step:2,label:"Разминка a: точки на прямой",pts:[[-2,-6],[0,0],[1,3],[2,6]]}),
+ w4b:fig({x0:-6,x1:10,y0:-4,y1:6,step:2,label:"Разминка b: точки на прямой",pts:[[-4,-2],[0,0],[4,2],[8,4]]}),
+ h4a:fig({x0:-5,x1:5,y0:-5,y1:5,step:1,label:"№ 4a: точки (−1; −2), (0; 0), (1; 2), (2; 4)",pts:[[-1,-2],[0,0],[1,2],[2,4]]}),
+ h4b:fig({x0:-6,x1:14,y0:-5,y1:13,step:2,label:"№ 4b: точки (−4; −1), (0; 0), (4; 1), (8; 2), (12; 3)",pts:[[-4,-1],[0,0],[4,1],[8,2],[12,3]]})
+};
+const WARM=[
+ {id:"w1",title:"Как № 4",en:"Use the graph or table to write a directly proportional function.",ru:"По графику или таблице запиши формулу y = mx.",items:[
+  {id:"w1a",label:"a.",fig:"w4a",type:"expr",fn:x=>3*x,hints:["Найди точку точно на клетках, кроме (0; 0). Например, ту, что при x = 1.","m = y : x = 3 : 1."],sol:["Точка (1; 3): m = 3 : 1 = 3","Проверка (2; 6): 6 : 2 = 3 ✓","y = 3x"],ok:"y = 3x"},
+  {id:"w1b",label:"b. (подписи через 2)",fig:"w4b",type:"expr",fn:x=>x/2,hints:["Возьми точку (4; 2). Не перепутай: подписи на осях идут через 2.","m = 2 : 4. Это дробь: 1/2 или 0,5."],sol:["Точка (4; 2): m = 2 : 4 = 0,5","Проверка (8; 4): 4 : 8 = 0,5 ✓","y = 0,5x"],ok:"y = 0,5x"},
+  {id:"w1c",label:"c.",tbl:TBL([-3,-1,0,2,5],[9,3,0,-6,-15]),type:"expr",fn:x=>-3*x,hints:["Возьми пару, например x = 2, y = −6, и раздели y на x.","−6 : 2 = ? Не потеряй минус."],sol:["m = −6 : 2 = −3","Проверка: 9 : (−3) = −3 ✓","y = −3x"],ok:"y = −3x"},
+  {id:"w1d",label:"d.",tbl:TBL([-10,0,0.5,1,5],[2,0,-0.1,-0.2,-1]),type:"expr",fn:x=>-0.2*x,hints:["Удобнее всего пара x = 1: тогда m = y.","x = 1, y = −0,2. Значит m = …"],sol:["m = −0,2 : 1 = −0,2","Проверка: 2 : (−10) = −0,2 ✓","y = −0,2x"],ok:"y = −0,2x"}]},
+ {id:"w2",title:"Как № 5",en:"y is directly proportional to x, and y = 45 when x = 3.",ru:"y прямо пропорционален x, y = 45 при x = 3.",items:[
+  {id:"w2a",label:"a. Find y when x = 4",type:"num",pre:"y =",ans:60,hints:["Сначала найди m: m = 45 : 3.","m = 15. Теперь y = 15 · 4."],sol:["m = 45 : 3 = 15","y = 15 · 4 = 60"],ok:"y = 60"},
+  {id:"w2b",label:"b. Find x when y = 300",type:"num",pre:"x =",ans:20,hints:["m уже знаешь: 15. Запиши 300 = 15x.","Чтобы найти x, раздели: 300 : 15."],sol:["300 = 15x","x = 300 : 15 = 20"],ok:"x = 20"}]},
+ {id:"w3",title:"Как № 6",en:"y is directly proportional to x, and y = −56 when x = 4.",ru:"y = −56 при x = 4. Тут есть минусы!",items:[
+  {id:"w3a",label:"a. Find y when x = −3",type:"num",pre:"y =",ans:42,hints:["m = −56 : 4. Минус на плюс даёт минус.","m = −14. y = −14 · (−3). Минус на минус даёт плюс."],sol:["m = −56 : 4 = −14","y = −14 · (−3) = 42"],ok:"y = 42"},
+  {id:"w3b",label:"b. Find x when y = 210",type:"num",pre:"x =",ans:-15,hints:["210 = −14x.","x = 210 : (−14). Плюс делить на минус — минус."],sol:["210 = −14x","x = 210 : (−14) = −15"],ok:"x = −15"}]}
+];
+const HW=[
+ {id:"h4",title:"№ 4",en:"Use the graph or table to write a directly proportional function that relates y to x.",ru:"По графику или таблице запиши формулу y = mx.",like:"Как в шаге 3 и разминке «Как № 4».",items:[
+  {id:"h4a",label:"a.",fig:"h4a",type:"expr",fn:x=>2*x,hints:["Найди точку при x = 1. Какой у неё y?","m = y : x. Проверь второй точкой (2; 4)."],sol:["Точка (1; 2): m = 2 : 1 = 2","Проверка (2; 4): 4 : 2 = 2 ✓","y = 2x"],ok:"y = 2x"},
+  {id:"h4b",label:"b. (на осях подписи через 2)",fig:"h4b",type:"expr",fn:x=>x/4,hints:["Возьми точку (4; 1) или (8; 2). Внимательно: подписи идут через 2.","m = 1 : 4. Это дробь: 1/4 или 0,25."],sol:["Точка (4; 1): m = 1 : 4 = 0,25","Проверка (8; 2): 2 : 8 = 0,25 ✓","y = 0,25x (или y = x/4)"],ok:"y = 0,25x"},
+  {id:"h4c",label:"c.",tbl:TBL([-5,-2,0,3,4],[25,10,0,-15,-20]),type:"expr",fn:x=>-5*x,hints:["Возьми пару x = 3, y = −15.","−15 : 3 = ? Не потеряй минус."],sol:["m = −15 : 3 = −5","Проверка: 25 : (−5) = −5 ✓","y = −5x"],ok:"y = −5x"},
+  {id:"h4d",label:"d.",tbl:TBL([-5,0,0.4,1,10],[2,0,-0.16,-0.4,-4]),type:"expr",fn:x=>-0.4*x,hints:["Удобнее всего пара x = 1: тогда m = y.","При x = 1 y = −0,4. Проверь: −4 : 10."],sol:["m = −0,4 : 1 = −0,4","Проверка: −4 : 10 = −0,4 ✓","y = −0,4x"],ok:"y = −0,4x"}]},
+ {id:"h5",title:"№ 5",en:"y is directly proportional to x, and y = 64 when x = 2.",ru:"y прямо пропорционален x, y = 64 при x = 2.",like:"Как в шаге 4 и разминке «Как № 5».",items:[
+  {id:"h5a",label:"a. Find y when x = 5",type:"num",pre:"y =",ans:160,hints:["Ход 1: m = 64 : 2.","Ход 2: y = m · 5."],sol:["m = 64 : 2 = 32","y = 32 · 5 = 160"],ok:"y = 160"},
+  {id:"h5b",label:"b. Find x when y = 640",type:"num",pre:"x =",ans:20,hints:["Запиши 640 = 32x.","x = 640 : 32."],sol:["640 = 32x","x = 640 : 32 = 20"],ok:"x = 20"}]},
+ {id:"h6",title:"№ 6",en:"y is directly proportional to x, and y = −216 when x = 2.",ru:"y = −216 при x = 2. Следи за минусами!",like:"Как в разминке «Как № 6».",items:[
+  {id:"h6a",label:"a. Find y when x = −7",type:"num",pre:"y =",ans:756,hints:["m = −216 : 2. Минус на плюс — минус.","y = m · (−7). Минус на минус — плюс."],sol:["m = −216 : 2 = −108","y = −108 · (−7) = 756"],ok:"y = 756"},
+  {id:"h6b",label:"b. Find x when y = 540",type:"num",pre:"x =",ans:-5,hints:["Запиши 540 = −108x.","x = 540 : (−108). Плюс на минус — минус."],sol:["540 = −108x","x = 540 : (−108) = −5"],ok:"x = −5"}]}
+];
+
+/* ---------- состояние и проверка ---------- */
+const KEY="ymx33-arsen";let st={};
+try{st=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+const S=id=>st[id]||(st[id]={a:0});
+function feedback(item,fb,res,extra){
+  const s=S(item.id);
+  if(res==="ok"){s.ok=1;save();fb.innerHTML=`<div class="msg ok"><b>Верно!</b> ${esc(item.ok)}. Перепиши в тетрадь.</div>`;return}
+  if(res==="empty"){fb.innerHTML=`<div class="msg no">${esc(extra||"Сначала впиши ответ.")}</div>`;return}
+  s.a++;save();
+  let h=`<div class="msg no">${extra?esc(extra):"Пока неверно."}${s.a>1?` (попытка ${s.a})`:""}</div>`;
+  for(let k=0;k<Math.min(s.a,item.hints.length);k++)h+=`<div class="msg hint"><b>Подсказка ${k+1}:</b> ${esc(item.hints[k])}</div>`;
+  if(s.a>=3)h+=`<div class="msg sol"><b>Решение</b><ol>${item.sol.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>Теперь впиши ответ сам и перепиши решение в тетрадь.</div>`;
+  else h+=`<div class="note" style="margin-top:6px">Решение откроется после ${3-s.a} ${3-s.a===1?"неудачной попытки":"неудачных попыток"}.</div>`;
+  fb.innerHTML=h;
+}
+function keyRow(inp){const k=document.createElement("div");k.className="keys";["x","−","/",","].forEach(c=>{const b=document.createElement("button");b.type="button";b.textContent=c;b.setAttribute("aria-label","Вставить "+c);b.onclick=()=>{const p=inp.selectionStart??inp.value.length;inp.value=inp.value.slice(0,p)+c+inp.value.slice(inp.selectionEnd??p);inp.focus();inp.setSelectionRange(p+c.length,p+c.length)};k.appendChild(b)});return k}
+function renderTask(t,host){
+  const box=document.createElement("div");box.className="task";box.id=t.id;
+  box.innerHTML=`<span class="tno">${t.title}</span><p class="en">${esc(t.en)}</p>${t.ru?`<p class="ru">${esc(t.ru)}</p>`:""}${t.like?`<p class="like">${t.like}</p>`:""}`;
+  t.items.forEach(item=>{
+    const w=document.createElement("div");w.className="item"+(S(item.id).ok?" good":"");
+    if(item.label)w.insertAdjacentHTML("beforeend",`<div class="ilabel">${esc(item.label)}</div>`);
+    if(item.fig)w.insertAdjacentHTML("beforeend",`<div class="figs">${G[item.fig]}</div>`);
+    if(item.tbl)w.insertAdjacentHTML("beforeend",item.tbl);
+    const row=document.createElement("div");row.className="irow";row.innerHTML=`<span class="pre">${item.pre||"y ="}</span>`;
+    const inp=document.createElement("input");inp.className="ans";inp.id="in_"+item.id;inp.autocomplete="off";inp.autocapitalize="off";inp.spellcheck=false;
+    inp.inputMode=item.type==="num"?"decimal":"text";inp.placeholder=item.type==="expr"?"например 3x":"";inp.setAttribute("aria-label",item.pre||"y =");
+    if(S(item.id).v)inp.value=S(item.id).v;row.appendChild(inp);
+    const go=document.createElement("button");go.type="button";go.className="go";go.style.marginTop="0";go.textContent="Проверить";row.appendChild(go);
+    w.appendChild(row);if(item.type==="expr")w.appendChild(keyRow(inp));
+    const fb=document.createElement("div");fb.className="fb";w.appendChild(fb);
+    if(S(item.id).ok)fb.innerHTML=`<div class="msg ok"><b>Верно!</b> ${esc(item.ok)}.</div>`;
+    const check=()=>{
+      if(!inp.value.trim())return{r:"empty"};
+      let r;try{r=parse(inp.value)}catch(e){return{r:"empty",msg:item.type==="expr"?"Не понимаю запись. Пиши, например: 3x, −0,2x или x/4.":"Впиши число, например −15."}}
+      if(item.type==="expr"){if(!r.hasX)return{r:"no",msg:"Нужна формула с x, например y = 3x. А m — это число перед x."};
+        if(Math.abs(r.f(0))>1e-9)return{r:"no",msg:"График y = mx всегда проходит через (0; 0), поэтому в формуле нет отдельного числа: только m·x."};
+        const ok=[0.7,1.3,2.9,-1.6,-3.1].every(x=>near(r.f(x),item.fn(x)));if(ok)return{r:"ok"};
+        const m=r.f(1),tm=item.fn(1);if(near(m,-tm))return{r:"no",msg:"Почти! Проверь знак m: прямая идёт вверх или вниз?"};
+        if(near(m,1/tm))return{r:"no",msg:"Похоже, ты разделил x на y. А надо наоборот: m = y : x."};return{r:"no"}}
+      if(r.hasX)return{r:"empty",msg:"Тут нужно одно число."};const v=r.f(0);
+      if(near(v,item.ans))return{r:"ok"};if(near(v,-item.ans))return{r:"no",msg:"Число верное, а знак — нет. Проверь минусы."};return{r:"no"}};
+    const run=()=>{const r=check();if(r.r==="ok")S(item.id).v=inp.value;feedback(item,fb,r.r,r.msg);w.classList.toggle("good",r.r==="ok");upd()};
+    go.onclick=run;inp.addEventListener("keydown",e=>{if(e.key==="Enter")run()});
+    box.appendChild(w);
+  });
+  host.appendChild(box);
+}
+const warm=document.getElementById("warm"),hw=document.getElementById("hw");
+function build(){warm.innerHTML="";hw.innerHTML="";WARM.forEach(t=>renderTask(t,warm));HW.forEach(t=>renderTask(t,hw));upd()}
+function upd(){let n=0;
+  HW.concat(WARM).forEach(t=>{const d=t.items.every(i=>st[i.id]&&st[i.id].ok);document.getElementById(t.id).classList.toggle("done",d);if(d&&t.id[0]==="h")n++});
+  document.getElementById("pt").textContent=`${n} из 3`;document.getElementById("pf").style.width=(n/3*100)+"%"}
+document.getElementById("reset").onclick=()=>{st={};save();build();window.scrollTo(0,0)};
+build();
+</script>
+
+</body></html>

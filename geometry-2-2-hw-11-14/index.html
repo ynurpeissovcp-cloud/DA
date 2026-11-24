@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Геометрия 2.2 — № 11–14</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Layout: тетрадь в клетку, одна колонка: памятка → № 7 (выбор) → № 8 (поиск треугольников) → № 9–10 (касания по клеткам) */
+:root{
+  --paper:#f6f8fc; --grid:rgba(60,90,170,.07); --card:#ffffff; --ink:#1b2236; --muted:#5d6782;
+  --pen:#2546c4; --pen-soft:#e6ebfb; --line:#dde3f0; --red:#c4382e; --red-soft:#fbe9e7; --ok:#1f8a57; --ok-soft:#e3f4ea; --amber:#a8670f; --amber-soft:#fdf1dc;
+  --fig:#1597c9; --mark:#d0453a; --med:#d0453a; --mid:#c27a0a; --hl:rgba(37,70,196,.16); --gridline:#cfe6f3;
+  --display:"Unbounded","Golos Text",system-ui,sans-serif; --body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#11151e; --grid:rgba(140,165,240,.06); --card:#191f2c; --ink:#e7ebf5; --muted:#9aa4bf;
+  --pen:#8aa2ff; --pen-soft:#232d4a; --line:#2a3245; --red:#ff8a7e; --red-soft:#3a2224; --ok:#5fd39a; --ok-soft:#1d3329; --amber:#f0b75a; --amber-soft:#382c17;
+  --fig:#5cc4ec; --mark:#ff7b70; --med:#ff7b70; --mid:#f0b75a; --hl:rgba(138,162,255,.22); --gridline:#22384a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#11151e; --grid:rgba(140,165,240,.06); --card:#191f2c; --ink:#e7ebf5; --muted:#9aa4bf;
+  --pen:#8aa2ff; --pen-soft:#232d4a; --line:#2a3245; --red:#ff8a7e; --red-soft:#3a2224; --ok:#5fd39a; --ok-soft:#1d3329; --amber:#f0b75a; --amber-soft:#382c17;
+  --fig:#5cc4ec; --mark:#ff7b70; --med:#ff7b70; --mid:#f0b75a; --hl:rgba(138,162,255,.22); --gridline:#22384a; color-scheme:dark}
+[hidden]{display:none!important}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px}
+.wrap{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 64px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--pen);font-weight:600}
+h1{font-family:var(--display);font-size:clamp(23px,5vw,32px);line-height:1.15;margin:6px 0 10px;text-wrap:balance}
+h2{font-family:var(--display);font-weight:500;font-size:19px;margin:0 0 6px;text-wrap:balance;display:flex;gap:10px;align-items:baseline}
+h2 .ok{font-size:14px;color:var(--ok);font-family:var(--body);font-weight:600}
+.lead{color:var(--muted);margin:0;max-width:62ch}
+section{margin-top:30px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px;min-width:0}
+.card>p:first-child{margin-top:0}.card>p:last-child{margin-bottom:0}
+.card.done{border-color:var(--ok)}
+.en{font-style:italic;color:var(--muted);font-size:14.5px;margin:0 0 4px}
+.ru{margin:0 0 8px}
+.note{font-size:14px;color:var(--muted)}
+.prog{display:flex;align-items:center;gap:12px;font-size:14px;font-variant-numeric:tabular-nums;margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.track{flex:1;height:8px;background:var(--pen-soft);border-radius:4px;overflow:hidden}
+.fill{height:100%;background:var(--ok);width:0;transition:width .3s}
+.memo{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:14.5px}
+.memo div{background:var(--pen-soft);border-radius:8px;padding:8px 10px;min-width:0}
+.memo b{display:block;color:var(--pen)}
+@media (max-width:480px){.memo{grid-template-columns:1fr}}
+svg.f{display:block;width:100%;height:auto}
+.figs7{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin:8px 0}
+.figs7 svg{max-width:320px;margin:0 auto}
+.figs7 svg{border:1px solid var(--line);border-radius:8px;background:var(--card)}
+.q7{border-top:1px dashed var(--line);padding:12px 0 2px}
+.q7 .stem{font-weight:600}
+.q7 .stem i{font-weight:400;color:var(--muted)}
+.opts{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.opts button{font:inherit;font-size:14.5px;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:6px 11px;border-radius:8px;cursor:pointer}
+.opts button.right{background:var(--ok-soft);border-color:var(--ok);font-weight:600}
+.opts button.wrong{background:var(--red-soft);text-decoration:line-through}
+.opts button:disabled{cursor:default}
+.fb{margin-top:8px;font-size:15px}
+.msg{padding:8px 11px;border-radius:8px;margin-top:6px}
+.msg.ok{background:var(--ok-soft)}.msg.ok b{color:var(--ok)}
+.msg.no{background:var(--red-soft)}
+.msg.hint{background:var(--amber-soft)}.msg.hint b{color:var(--amber)}
+.msg.sol{background:var(--pen-soft)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--pen);outline-offset:2px}
+.irow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.irow input{font:inherit;font-size:18px;width:120px;padding:7px 10px;border:1.5px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);text-transform:uppercase;letter-spacing:.06em}
+.go{font:inherit;font-size:14.5px;background:var(--pen);color:var(--card);border:1px solid var(--pen);padding:7px 13px;border-radius:8px;cursor:pointer;font-weight:600}
+.ghost{font:inherit;font-size:14px;background:var(--card);color:var(--ink);border:1px solid var(--line);padding:6px 12px;border-radius:8px;cursor:pointer}
+.found{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.found span{background:var(--ok-soft);color:var(--ink);border-radius:6px;padding:2px 9px;font-weight:600;letter-spacing:.04em;cursor:pointer}
+.found span.empty{background:var(--paper);border:1px dashed var(--line);color:var(--muted);font-weight:400;cursor:default}
+.count{font-variant-numeric:tabular-nums;font-weight:600}
+.tap{display:block;width:100%;max-width:340px;height:auto;touch-action:manipulation;cursor:crosshair;border:1px solid var(--line);border-radius:10px;background:var(--card);user-select:none;-webkit-user-select:none}
+.steps{margin:6px 0 0;padding-left:20px}
+.steps li{margin:3px 0}
+.foot{margin-top:24px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:14px}
+@media (prefers-reduced-motion:reduce){.fill{transition:none}}
+</style>
+</head>
+<body>
+<style>
+body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tap{max-width:360px}
+.ask{margin:10px 0 6px;padding:9px 12px;border-radius:8px;background:var(--pen-soft);font-weight:600}
+.ask small{display:block;font-weight:400;color:var(--muted);font-size:13.5px}
+.rule{font-size:14.5px;color:var(--muted);margin:0 0 6px}
+</style>
+<div class="wrap">
+  <div class="eyebrow">Геометрия 7 · тема 2.2 · Problems № 11–14, с. 67</div>
+  <h1>Построения по клеточкам: № 11–14</h1>
+  <p class="lead">В каждой задаче страница говорит, что отметить, а ты касаешься нужного узла сетки. Можно ставить точку и на середине клетки. Если ошибёшься, будет подсказка, а после трёх ошибок — ответ. В тетради потом построй то же самое карандашом по клеточкам.</p>
+  <div class="prog"><span>Сделано:</span><div class="track"><div class="fill" id="pf"></div></div><span id="pt">0 из 4</span></div>
+  <div id="tasks"></div>
+  <div class="foot"><span>Учебник Geometry 7, с. 67</span><button type="button" class="ghost" id="reset">Начать заново</button></div>
+</div>
+
+<script>
+
+const V=(x,y)=>({x,y}),add=(a,b)=>V(a.x+b.x,a.y+b.y),sub=(a,b)=>V(a.x-b.x,a.y-b.y),mul=(a,k)=>V(a.x*k,a.y*k),mid=(a,b)=>mul(add(a,b),.5);
+const same=(a,b)=>Math.abs(a.x-b.x)<1e-9&&Math.abs(a.y-b.y)<1e-9;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const KEY="geo67-arsen";let st={};try{st=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+
+/* ---------- задачи ---------- */
+const TASKS=[
+ {n:11,en:"Draw intersection point of perpendicular bisectors of sides of the triangle.",ru:"Найди точку пересечения серединных перпендикуляров сторон треугольника.",
+  rule:"Серединный перпендикуляр — прямая через <b>середину стороны</b> под углом 90° к ней. Найди середины двух сторон — страница проведёт перпендикуляры.",
+  w:6,h:6,P:{A:V(1,1),B:V(1,5),C:V(5,5)},
+  steps:[
+   {ask:"Отметь середину любой стороны",sub:"Посчитай клетки между вершинами и раздели пополам.",acc:[["AB",V(1,3)],["BC",V(3,5)],["AC",V(3,3)]],need:2,
+    hints:["Середина стороны AB: A и B стоят на одной вертикали, между ними 4 клетки. Половина — 2.","Середина AC: от A до C — 4 клетки вправо и 4 вниз. Половина пути — 2 вправо и 2 вниз от A."],
+    sol:"Середины: AB — 2 клетки ниже A; BC — 2 клетки правее B; AC — 2 вправо и 2 вниз от A."}],
+  final:"Перпендикуляры пересеклись в точке O — ровно на <b>середине стороны AC</b>. Треугольник прямоугольный (угол B = 90°), а у прямоугольного треугольника эта точка всегда лежит на середине гипотенузы."},
+ {n:12,en:"Draw the angle bisector of given angle in the figure.",ru:"Проведи биссектрису данного угла.",
+  rule:"Биссектриса делит угол <b>пополам</b>. Посчитай клетки по лучам: один идёт на 1 клетку влево и 3 вверх, другой — на 3 влево и 1 вниз. Это прямой угол 90°, значит биссектриса делит его на два по 45°.",
+  w:6,h:6,P:{V:V(5,4)},rays:[V(-1,-3),V(-3,1)],
+  steps:[
+   {ask:"Отметь любую точку на биссектрисе (не вершину)",sub:"Страница проведёт луч из вершины через твою точку.",acc:[0.5,1,1.5,2,2.5].map(k=>["bis",add(V(5,4),mul(V(-2,-1),k))]),need:1,
+    hints:["Способ по клеткам: отступи от вершины по обоим лучам одинаково — на один «шаг» луча: 1 влево и 3 вверх, и 3 влево и 1 вниз. Соедини эти две точки.","Середина отрезка между этими двумя точками лежит на биссектрисе. Она на 2 клетки левее и 1 клетку выше вершины."],
+    sol:"Точка на 2 клетки левее и 1 выше вершины. Биссектриса идёт из вершины так: 2 влево — 1 вверх, ещё 2 влево — ещё 1 вверх."}],
+  final:"Биссектриса проведена: каждый следующий её узел — на 2 клетки левее и на 1 выше. Она делит прямой угол на два угла по 45°. В тетради отметь две точки на одинаковом расстоянии от вершины на лучах, соедини их, и через середину проведи луч из вершины."},
+ {n:13,en:"Draw the intersection points of altitudes of triangle in the figure.",ru:"Найди точку пересечения высот треугольника.",
+  rule:"Высота опускается из вершины на противоположную сторону <b>под прямым углом</b>. Отмечай, куда она падает — страница проведёт высоту.",
+  w:6,h:8,P:{A:V(2,1),B:V(5,4),C:V(2,7)},
+  steps:[
+   {ask:"Высота из B: отметь, куда она падает на сторону AC",sub:"AC вертикальная, значит высота из B — горизонтальная.",acc:[["hB",V(2,4)]],need:1,from:"B",
+    hints:["Сторона AC стоит вертикально. Перпендикуляр к вертикали — горизонталь.","Иди из B строго влево до стороны AC."],sol:"Высота из B падает на AC в точку на 3 клетки левее B."},
+   {ask:"Высота из A: отметь, куда она падает на сторону BC",sub:"Подумай, какой угол в вершине B.",acc:[["hA",V(5,4)]],need:1,from:"A",
+    hints:["Посмотри на угол B: AB идёт на 3 клетки вправо и 3 вниз, BC — на 3 влево и 3 вниз. Такие стороны перпендикулярны.","Раз AB ⊥ BC, сторона AB сама и есть высота из A. Куда она падает на BC?"],sol:"Угол B прямой, поэтому высота из A — это сама сторона AB, и она падает в точку B."}],
+  final:"Все высоты пересеклись в <b>вершине B</b>. Треугольник прямоугольный (угол B = 90°), а в прямоугольном треугольнике высоты всегда пересекаются в вершине прямого угла."},
+ {n:14,en:"Find intersection point of altitudes of triangle, given in a 1 cm square grid.",ru:"Найди точку пересечения высот. Треугольник тупоугольный — стороны придётся продлить.",
+  rule:"У тупоугольного треугольника высоты из острых углов падают на <b>продолжение</b> стороны, а точка их пересечения оказывается <b>снаружи</b>. Сетка тут длиннее, чем в учебнике: в тетради тоже продолжай линии вниз.",
+  w:7,h:12,P:{A:V(0,2),B:V(3,5),C:V(6,5)},
+  steps:[
+   {ask:"Высота из A: отметь, куда она падает на прямую BC",sub:"BC горизонтальная. Продли её влево за точку B.",acc:[["hA",V(0,5)]],need:1,from:"A",ext:[V(3,5),V(0,5)],
+    hints:["BC горизонтальная, значит высота из A — вертикальная, идёт строго вниз.","Иди из A строго вниз до уровня BC (продолжения BC)."],sol:"Высота из A падает строго вниз, на 3 клетки ниже A, на продолжение BC."},
+   {ask:"Высота из C: отметь, куда она падает на прямую AB",sub:"AB идёт по диагонали клеток (1 вправо — 1 вниз). Продли её за B.",acc:[["hC",V(4.5,6.5)]],need:1,from:"C",ext:[V(3,5),V(5,7)],
+    hints:["AB идёт по диагонали «вправо-вниз». Перпендикуляр к ней — диагональ «влево-вниз».","Из C иди по диагонали: 1 влево — 1 вниз, пока не встретишь продолжение AB. Это случится на середине клетки."],sol:"Из C на 1,5 клетки влево и на 1,5 вниз — там высота встречает продолжение AB."}],
+  final:"Продлили высоты — они пересеклись в точке H <b>далеко снаружи</b> треугольника, внизу. Третья высота (из B) тоже проходит через H. Так всегда у тупоугольного треугольника."}
+];
+
+/* ---------- рисование ---------- */
+const CELL=40,OFF=16;const X=x=>OFF+x*CELL,Y=y=>OFF+y*CELL,G=p=>V(X(p.x),Y(p.y));
+const pp=p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`;
+const ln=(a,b,col,w=2.4,dash="")=>`<line x1="${X(a.x)}" y1="${Y(a.y)}" x2="${X(b.x)}" y2="${Y(b.y)}" stroke="${col}" stroke-width="${w}" stroke-linecap="round" ${dash?`stroke-dasharray="${dash}"`:""}/>`;
+const dt=(p,col,r=5)=>`<circle cx="${X(p.x)}" cy="${Y(p.y)}" r="${r}" fill="${col}"/>`;
+const tx=(p,t,dx,dy,col="var(--ink)")=>`<text x="${X(p.x)+dx}" y="${Y(p.y)+dy}" fill="${col}" font-size="15" font-weight="700" font-family="var(--body)">${t}</text>`;
+function fullLine(P,d,w,h){const ts=[];const lim=(p0,dv,lo,hi)=>{if(Math.abs(dv)<1e-9)return;ts.push((lo-p0)/dv,(hi-p0)/dv)};lim(P.x,d.x,0,w);lim(P.y,d.y,0,h);
+  let t0=-1e9,t1=1e9;if(Math.abs(d.x)>1e-9){const a=(0-P.x)/d.x,b=(w-P.x)/d.x;t0=Math.max(t0,Math.min(a,b));t1=Math.min(t1,Math.max(a,b))}
+  if(Math.abs(d.y)>1e-9){const a=(0-P.y)/d.y,b=(h-P.y)/d.y;t0=Math.max(t0,Math.min(a,b));t1=Math.min(t1,Math.max(a,b))}return[add(P,mul(d,t0)),add(P,mul(d,t1))]}
+function rightMark(F,d1,d2,col){const n=v=>{const l=Math.hypot(v.x,v.y);return V(v.x/l,v.y/l)};const a=add(G(F),mul(n(d1),10)),b=add(G(F),mul(n(d2),10)),c=add(a,mul(n(d2),10));return `<path d="M${pp(a)} L${pp(c)} L${pp(b)}" fill="none" stroke="${col}" stroke-width="1.6"/>`}
+
+function draw(t,S){const{w,h,P}=t;let s="";
+  for(let i=0;i<=w;i++)s+=`<line x1="${X(i)}" y1="${Y(0)}" x2="${X(i)}" y2="${Y(h)}" stroke="var(--gridline)" stroke-width="1.2"/>`;
+  for(let j=0;j<=h;j++)s+=`<line x1="${X(0)}" y1="${Y(j)}" x2="${X(w)}" y2="${Y(j)}" stroke="var(--gridline)" stroke-width="1.2"/>`;
+  const found=S.found||[];const done=S.ok;
+  if(t.n===11){const{A,B,C}=P;
+    const pb={AB:[V(1,3),V(1,0)],BC:[V(3,5),V(0,1)],AC:[V(3,3),V(1,-1)]};
+    const show=done?["AB","BC","AC"]:found;show.forEach(k=>{const[m,d]=pb[k];const[a,b]=fullLine(m,d,w,h);s+=ln(a,b,"var(--mid)",2.2)+dt(m,"var(--mid)",5)});
+    s+=`<polygon points="${[A,B,C].map(p=>pp(G(p))).join(" ")}" fill="none" stroke="var(--fig)" stroke-width="2.4" stroke-linejoin="round"/>`;
+    if(done)s+=`<circle cx="${X(3)}" cy="${Y(3)}" r="9" fill="none" stroke="var(--ok)" stroke-width="2.5"/>`+dt(V(3,3),"var(--ok)",4.5)+tx(V(3,3),"O",10,-8,"var(--ok)");
+    s+=rightMark(B,V(0,-1),V(1,0),"var(--muted)");
+    s+=dt(A,"var(--ink)",4.5)+dt(B,"var(--ink)",4.5)+dt(C,"var(--ink)",4.5)+tx(A,"A",-16,-4)+tx(B,"B",-16,16)+tx(C,"C",6,16)}
+  if(t.n===12){const Vv=P.V;const r1=add(Vv,mul(t.rays[0],1.2)),r2=add(Vv,mul(t.rays[1],1.4));
+    s+=ln(Vv,r1,"var(--fig)")+ln(Vv,r2,"var(--fig)");
+    if(done){const e=fullLine(Vv,V(-2,-1),w,h);const far=e.find(p=>p.x<Vv.x)||e[0];s+=ln(Vv,far,"var(--mid)",2.6);
+}
+    s+=dt(Vv,"var(--ink)",4.5);}
+  if(t.n===13||t.n===14){const{A,B,C}=P;
+    (t.steps.slice(0,S.step||0).concat(done?t.steps:[])).forEach(stp=>{const F=stp.acc[0][1],Fr=P[stp.from];if(stp.ext)s+=ln(stp.ext[0],stp.ext[1],"var(--muted)",1.6,"5 4");if(!same(F,Fr))s+=ln(Fr,F,"var(--pen)",2.4)+dt(F,"var(--pen)",4.5)});
+    s+=`<polygon points="${[A,B,C].map(p=>pp(G(p))).join(" ")}" fill="none" stroke="var(--fig)" stroke-width="2.4" stroke-linejoin="round"/>`;
+    if(done&&t.n===13){s+=`<circle cx="${X(B.x)}" cy="${Y(B.y)}" r="10" fill="none" stroke="var(--ok)" stroke-width="2.5"/>`+rightMark(B,V(-1,-1),V(-1,1),"var(--ok)")}
+    if(done&&t.n===14){const H=V(0,11);s+=ln(V(0,5),H,"var(--pen)",1.8,"6 4")+ln(V(4.5,6.5),H,"var(--pen)",1.8,"6 4")+ln(B,H,"var(--pen)",1.6,"2 4");
+      s+=`<circle cx="${X(H.x)}" cy="${Y(H.y)}" r="9" fill="none" stroke="var(--ok)" stroke-width="2.5"/>`+dt(H,"var(--ok)",4.5)+tx(H,"H",10,-6,"var(--ok)")}
+    s+=dt(A,"var(--ink)",4.5)+dt(B,"var(--ink)",4.5)+dt(C,"var(--ink)",4.5);
+    if(t.n===13)s+=tx(A,"A",-16,-2)+tx(B,"B",8,5)+tx(C,"C",-16,14);else s+=tx(A,"A",6,-6)+tx(B,"B",-4,-10)+tx(C,"C",6,-8)}
+  if(S.wrong)s+=dt(S.wrong,"var(--red)",5.5);
+  return s}
+
+/* ---------- логика ---------- */
+const VAR={"--alt":"#2546c4"};
+function render(){const host=document.getElementById("tasks");host.innerHTML="";
+  TASKS.forEach(t=>{const S=st[t.n]||(st[t.n]={step:0,found:[],a:0});
+    const sec=document.createElement("section");sec.innerHTML=`<h2>№ ${t.n} <span class="ok" id="ok${t.n}"></span></h2><p class="en">${esc(t.en)}</p><p class="ru">${esc(t.ru)}</p>`;
+    const card=document.createElement("div");card.className="card"+(S.ok?" done":"");card.innerHTML=`<p class="rule">${t.rule}</p><div class="ask" id="ask${t.n}"></div>`;
+    const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");svg.setAttribute("class","tap");svg.setAttribute("viewBox",`0 0 ${t.w*CELL+2*OFF} ${t.h*CELL+2*OFF}`);svg.setAttribute("role","img");svg.setAttribute("aria-label",`Сетка к задаче ${t.n}, коснись узла`);
+    card.appendChild(svg);const fb=document.createElement("div");fb.className="fb";card.appendChild(fb);sec.appendChild(card);host.appendChild(sec);
+    function paint(){svg.innerHTML=draw(t,S);const a=document.getElementById("ask"+t.n);
+      if(S.ok){a.innerHTML=`Готово ✓`;fb.innerHTML=`<div class="msg ok"><b>Верно!</b> ${t.final}</div>`;card.classList.add("done")}
+      else{const stp=t.steps[S.step];a.innerHTML=`${esc(stp.ask)}${stp.need>1?` (нужно ${stp.need}, найдено ${S.found.length})`:""}<small>${esc(stp.sub)}</small>`}}
+    paint();
+    svg.addEventListener("click",e=>{if(S.ok)return;const pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const m=svg.getScreenCTM();if(!m)return;const q=pt.matrixTransform(m.inverse());
+      const p=V(Math.round((q.x-OFF)/CELL*2)/2,Math.round((q.y-OFF)/CELL*2)/2);if(p.x<0||p.y<0||p.x>t.w||p.y>t.h)return;
+      const stp=t.steps[S.step];const hit=stp.acc.find(([k,P])=>same(P,p));
+      if(hit){S.wrong=null;S.a=0;
+        if(stp.need>1){if(!S.found.includes(hit[0]))S.found.push(hit[0]);if(S.found.length<stp.need){save();paint();fb.innerHTML=`<div class="msg ok">Верно — перпендикуляр проведён. Найди середину ещё одной стороны.</div>`;return}}
+        S.step++;if(S.step>=t.steps.length)S.ok=1;save();paint();if(!S.ok)fb.innerHTML=`<div class="msg ok">Верно! Дальше следующий шаг.</div>`;upd();return}
+      if(Object.values(t.P).some(v=>same(v,p))&&!(t.n===13&&S.step===1)){fb.innerHTML=`<div class="msg no">Это вершина, а нужна другая точка.</div>`;return}
+      S.a++;S.wrong=p;save();paint();
+      let h=`<div class="msg no">Красная точка не подходит.${S.a>1?` Попытка ${S.a}.`:""}</div>`;
+      for(let k=0;k<Math.min(S.a,stp.hints.length);k++)h+=`<div class="msg hint"><b>Подсказка ${k+1}:</b> ${esc(stp.hints[k])}</div>`;
+      if(S.a>=3)h+=`<div class="msg sol"><b>Ответ:</b> ${esc(stp.sol)}</div>`;fb.innerHTML=h});
+  });upd()}
+function upd(){const n=TASKS.filter(t=>st[t.n]&&st[t.n].ok).length;TASKS.forEach(t=>{const e=document.getElementById("ok"+t.n);if(e)e.textContent=st[t.n]&&st[t.n].ok?"сделано ✓":""});
+  document.getElementById("pt").textContent=`${n} из 4`;document.getElementById("pf").style.width=(n/4*100)+"%"}
+document.getElementById("reset").onclick=()=>{st={};save();render();window.scrollTo(0,0)};
+render();
+</script>
+</body>
+</html>

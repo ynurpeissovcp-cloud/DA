@@ -1,0 +1,398 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Функции 3.1 — домашка</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Layout: тетрадь в клетку, одна колонка: машина-функция → примеры → разминка → домашка с проверкой */
+:root{
+  --paper:#f6f8fc; --grid:rgba(60,90,170,.07); --card:#ffffff; --ink:#1b2236; --muted:#5d6782;
+  --pen:#2546c4; --pen-soft:#e6ebfb; --red:#c4382e; --red-soft:#fbe9e7; --line:#dde3f0;
+  --amber:#a8670f; --amber-soft:#fdf1dc; --ok:#1f8a57; --ok-soft:#e3f4ea;
+  --display:"Unbounded","Golos Text",system-ui,sans-serif; --body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#11151e; --grid:rgba(140,165,240,.06); --card:#191f2c; --ink:#e7ebf5; --muted:#9aa4bf;
+  --pen:#8aa2ff; --pen-soft:#232d4a; --red:#ff8a7e; --red-soft:#3a2224; --line:#2a3245;
+  --amber:#f0b75a; --amber-soft:#382c17; --ok:#5fd39a; --ok-soft:#1d3329; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#11151e; --grid:rgba(140,165,240,.06); --card:#191f2c; --ink:#e7ebf5; --muted:#9aa4bf;
+  --pen:#8aa2ff; --pen-soft:#232d4a; --red:#ff8a7e; --red-soft:#3a2224; --line:#2a3245;
+  --amber:#f0b75a; --amber-soft:#382c17; --ok:#5fd39a; --ok-soft:#1d3329; color-scheme:dark}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px}
+.wrap{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 64px}
+h1{font-family:var(--display);font-size:clamp(23px,5vw,32px);line-height:1.15;margin:6px 0 10px;text-wrap:balance}
+h2{font-family:var(--display);font-weight:500;font-size:19px;margin:0 0 12px;text-wrap:balance;display:flex;gap:10px;align-items:baseline}
+h2 span{font-size:12.5px;color:var(--pen)}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--pen);font-weight:600}
+.lead{color:var(--muted);margin:0;max-width:62ch}
+section{margin-top:34px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.card>p:first-child{margin-top:0}.card>p:last-child{margin-bottom:0}
+.rule{border-left:3px solid var(--pen);background:var(--pen-soft);padding:10px 12px;border-radius:0 8px 8px 0;margin:12px 0}
+.prog{display:flex;align-items:center;gap:12px;font-size:14px;font-variant-numeric:tabular-nums;margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.track{flex:1;height:8px;background:var(--pen-soft);border-radius:4px;overflow:hidden}
+.fill{height:100%;background:var(--ok);width:0;transition:width .3s}
+.mono{font-variant-numeric:tabular-nums}
+/* machine */
+.machine{display:grid;gap:10px}
+.mrow{display:flex;flex-wrap:wrap;gap:6px}
+.pick{font:inherit;font-size:14.5px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:6px 12px;border-radius:20px;cursor:pointer}
+.pick[aria-pressed="true"]{background:var(--pen);color:var(--card);border-color:var(--pen)}
+.flow{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:stretch}
+.box{border:2px solid var(--ink);border-radius:10px;padding:10px 12px;text-align:center;display:grid;place-items:center;min-width:84px}
+.box small{display:block;color:var(--muted);font-size:12px}
+.box b{font-family:var(--display);font-size:22px;font-weight:500}
+.gear{border:2px dashed var(--pen);border-radius:10px;padding:8px 12px;background:var(--pen-soft);font-size:14.5px;min-width:0}
+.gear div{margin:2px 0}
+.step{display:flex;align-items:center;gap:8px;justify-content:center}
+.step button{width:40px;height:40px;font-size:20px;padding:0}
+@media (max-width:520px){.flow{grid-template-columns:1fr}.flow .arrow{display:none}}
+/* vocab */
+.vocab{width:100%;border-collapse:collapse;font-size:15px;table-layout:fixed}
+.vocab col.c1{width:42%}.vocab col.c2{width:16%}
+.vocab td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.vocab td:first-child{font-weight:600}
+.vocab td:last-child{color:var(--muted)}
+.tbl-wrap{overflow-x:auto}
+/* tasks */
+.task{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
+.task.done{border-color:var(--ok)}
+.thead{display:block;margin-bottom:6px}
+.thead .tno{display:block;margin-bottom:4px}
+.tno{font-family:var(--display);font-size:13px;color:var(--pen);flex:none}
+.task.done .tno::after{content:" ✓";color:var(--ok)}
+.en{font-style:italic;color:var(--muted);font-size:14.5px;margin:0 0 4px}
+.ru{margin:0 0 10px}
+.like{font-size:13.5px;color:var(--muted);margin:0 0 10px}
+.item{border-top:1px dashed var(--line);padding-top:12px;margin-top:12px}
+.item:first-of-type{border-top:0;margin-top:0;padding-top:4px}
+.ilabel{font-weight:600;margin-bottom:6px}
+.irow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.irow input{flex:1;min-width:0;max-width:280px}
+input.ans{font:inherit;font-size:17px;padding:8px 10px;border:1.5px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);font-variant-numeric:tabular-nums}
+input.ans:focus-visible{outline:2px solid var(--pen);outline-offset:1px}
+input.ans.good{border-color:var(--ok);background:var(--ok-soft)}
+input.ans.bad{border-color:var(--red);background:var(--red-soft)}
+.pre{font-weight:600;white-space:nowrap}
+button{font:inherit;font-size:14.5px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:7px 13px;border-radius:8px;cursor:pointer}
+button:hover{border-color:var(--pen)}
+button:focus-visible{outline:2px solid var(--pen);outline-offset:2px}
+button.go{background:var(--pen);color:var(--card);border-color:var(--pen);font-weight:600}
+.keys{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.keys button{padding:4px 0;width:38px;font-size:15px}
+.fb{margin-top:8px;font-size:15px}
+.fb .msg{padding:8px 11px;border-radius:8px;margin-top:6px}
+.msg.ok{background:var(--ok-soft);color:var(--ink)}
+.msg.ok b{color:var(--ok)}
+.msg.no{background:var(--red-soft)}
+.msg.hint{background:var(--amber-soft)}
+.msg.hint b{color:var(--amber)}
+.msg.sol{background:var(--pen-soft)}
+.msg.sol ol{margin:4px 0 0;padding-left:20px}
+table.vals{border-collapse:collapse;margin:6px 0;font-variant-numeric:tabular-nums}
+table.vals th,table.vals td{border:1px solid var(--line);padding:0;text-align:center;min-width:58px;height:42px}
+table.vals th{background:var(--pen-soft);color:var(--pen);font-family:var(--display);font-weight:500;width:36px;min-width:36px}
+table.vals td.given{font-weight:600}
+table.vals input.ans{width:58px;border:0;border-radius:0;text-align:center;padding:8px 2px;font-size:16px;background:transparent}
+table.vals input.ans.good{background:var(--ok-soft)}
+table.vals input.ans.bad{background:var(--red-soft)}
+.plot{display:block;width:100%;max-width:380px;height:auto;margin-top:10px;color:var(--ink)}
+.plot .ax{stroke:var(--muted);stroke-width:1.2}
+.plot .gr{stroke:var(--line);stroke-width:1}
+.plot text{fill:var(--muted);font-size:11px;font-family:var(--body)}
+.plot circle{fill:var(--pen)}
+.plot path{stroke:var(--pen);stroke-width:2;fill:none}
+.quiz{display:grid;gap:10px}
+.qrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ex{display:grid;gap:4px;margin:8px 0}
+.ex div{padding-left:12px}
+.note{font-size:14px;color:var(--muted)}
+.foot{margin-top:24px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:14px}
+sup{font-size:.72em;line-height:0}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.88em;line-height:1.2;margin:0 .1em}
+.fr>span:first-child{border-bottom:1.3px solid currentColor;padding:0 .2em}
+@media (prefers-reduced-motion:reduce){.fill{transition:none}}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Алгебра 7 · тема 3.1 · Introduction to function</div>
+  <h1>Что такое функция и как делать домашку 1–4</h1>
+  <p class="lead">Сначала разберись с машиной-функцией и примерами, потом сделай разминку. Домашку страница проверяет сама. Если ответ неверный, она даёт подсказку. Решение открывается только после трёх попыток.</p>
+  <div class="prog"><span>Домашка:</span><div class="track"><div class="fill" id="pf"></div></div><span id="pt" class="mono">0 из 4</span></div>
+
+  <section>
+    <h2><span>Шаг 1</span>Функция — это машина</h2>
+    <div class="card">
+      <p>В машину кладут число <b>x</b>. Машина делает с ним одно и то же действие — это <b>правило</b>. На выходе получается число, его пишут <b>f(x)</b> или <b>y</b>.</p>
+      <p>Запись <b>f(3)</b> читается «эф от трёх». Она значит: положи в машину 3 и посмотри, что выйдет.</p>
+      <div class="machine">
+        <div class="mrow" id="rules"></div>
+        <div class="flow">
+          <div class="box"><div><small>кладём x</small><div class="step"><button type="button" id="dec" aria-label="Уменьшить x">−</button><b id="xin" class="mono">3</b><button type="button" id="inc" aria-label="Увеличить x">+</button></div></div></div>
+          <div class="gear" id="gear"></div>
+          <div class="box"><div><small>получаем</small><b id="xout" class="mono">3</b></div></div>
+        </div>
+      </div>
+      <p class="note">Нажимай «+» и «−», меняй правило и смотри, что делает машина.</p>
+      <div class="rule">Главное: каждому x функция даёт <b>ровно один</b> ответ. Если одному x соответствуют два разных y, это не функция.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 2</span>Английские слова из задач</h2>
+    <div class="card tbl-wrap">
+      <table class="vocab"><colgroup><col class="c1"><col class="c2"><col></colgroup><tbody>
+        <tr><td>a number</td><td>x</td><td>число</td></tr>
+        <tr><td>multiply by 3</td><td>3x</td><td>умножь на 3</td></tr>
+        <tr><td>add 4</td><td>+ 4</td><td>прибавь 4</td></tr>
+        <tr><td>subtract 4</td><td>− 4</td><td>вычти 4</td></tr>
+        <tr><td>divide by two</td><td>x/2</td><td>раздели на 2</td></tr>
+        <tr><td>square the number</td><td>x²</td><td>возведи в квадрат (x·x)</td></tr>
+        <tr><td>its cube</td><td>x³</td><td>его куб (x·x·x)</td></tr>
+        <tr><td>twice the number</td><td>2x</td><td>удвоенное число</td></tr>
+        <tr><td>three times …</td><td>3·…</td><td>утроенное …</td></tr>
+        <tr><td>then</td><td></td><td>затем, потом</td></tr>
+        <tr><td>complete the table of values</td><td></td><td>заполни таблицу значений</td></tr>
+        <tr><td>find x, if …</td><td></td><td>найди x, если …</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 3</span>Четыре примера (не из домашки)</h2>
+    <div class="card">
+      <p><b>1. Слова → формула.</b> «Square the number, then add 1».</p>
+      <div class="ex"><div>square the number → x²</div><div>then add 1 → + 1</div><div><b>f(x) = x² + 1</b></div></div>
+    </div>
+    <div class="card">
+      <p><b>2. Найти y по x.</b> f(x) = 3x², найди f(−2).</p>
+      <div class="ex"><div>Вместо x пишем (−2), обязательно в скобках:</div><div>f(−2) = 3·(−2)² = 3·4 = <b>12</b></div><div class="note">Сначала степень, потом умножение. (−2)² = 4, минус исчезает.</div></div>
+    </div>
+    <div class="card">
+      <p><b>3. Найти x по y.</b> y = <span class="fr"><span>12</span><span>x</span></span>, y = 4. Найди x.</p>
+      <div class="ex"><div>12 : x = 4. Какое число подходит? Делим наоборот: x = 12 : 4 = <b>3</b></div><div>Проверка: 12 : 3 = 4 ✓</div></div>
+    </div>
+    <div class="card">
+      <p><b>4. Найти x, если известен ответ функции.</b> f(x) = 4x + 1, f(x) = 9.</p>
+      <div class="ex"><div>Значит 4x + 1 = 9 — обычное уравнение</div><div>4x = 9 − 1 = 8</div><div>x = 8 : 4 = <b>2</b></div><div>Проверка: 4·2 + 1 = 9 ✓</div></div>
+    </div>
+    <div class="card quiz" id="fnquiz">
+      <p style="margin:0"><b>Проверь себя: функция или нет?</b> (Practice 1 из учебника)</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 4</span>Разминка</h2>
+    <p class="lead" style="margin-bottom:12px">Задачи такие же, как в домашке, только с другими числами. Реши их, и домашка пойдёт легко.</p>
+    <div id="warm"></div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 5</span>Домашка: Exercises 3.1, № 1–4</h2>
+    <p class="lead" style="margin-bottom:12px">Каждый ответ, который страница отметила зелёным, перепиши в тетрадь вместе с решением.</p>
+    <div id="hw"></div>
+  </section>
+
+  <div class="foot"><span>Учебник Algebra 7, с. 130–134</span><button type="button" id="reset">Начать заново</button></div>
+</div>
+
+<script>
+/* ---------- форматирование ---------- */
+function fmt(n){if(!isFinite(n))return"—";let r=Math.round(n*10000)/10000;return String(r).replace(".",",").replace("-","−")}
+function par(n){return n<0?"("+fmt(n)+")":fmt(n)}
+function rich(s){return s.replace(/\^\{([^}]*)\}/g,"<sup>$1</sup>").replace(/\[\[(.+?)\|(.+?)\]\]/g,'<span class="fr"><span>$1</span><span>$2</span></span>')}
+
+/* ---------- разбор записи ученика ---------- */
+function prep(s){
+  s=s.toLowerCase().replace(/х/g,"x").replace(/[−–—]/g,"-").replace(/,/g,".").replace(/[×·•]/g,"*").replace(/[÷:]/g,"/").replace(/²/g,"^2").replace(/³/g,"^3").replace(/\s+/g,"");
+  s=s.replace(/^(f\(x\)|y)=/,"");s=s.replace(/^x=/,"");return s;
+}
+function parse(src){
+  const s=prep(src);if(!s)throw 0;
+  const toks=[];let i=0;
+  while(i<s.length){const m=/^(\d+(?:\.\d+)?|\.\d+|x|[-+*/^()])/.exec(s.slice(i));if(!m)throw 0;toks.push(m[1]);i+=m[1].length}
+  let p=0;const peek=()=>toks[p],eat=()=>toks[p++];
+  function expr(){let a=term();while(peek()==="+"||peek()==="-"){const o=eat(),b=term(),l=a;a=o==="+"?x=>l(x)+b(x):x=>l(x)-b(x)}return a}
+  function term(){let a=factor();for(;;){const t=peek();if(t==="*"||t==="/"){eat();const b=factor(),l=a;a=t==="*"?x=>l(x)*b(x):x=>l(x)/b(x)}else if(t!==undefined&&(t==="x"||t==="("||/^[\d.]/.test(t))){const b=power(),l=a;a=x=>l(x)*b(x)}else break}return a}
+  function factor(){if(peek()==="-"){eat();const f=factor();return x=>-f(x)}if(peek()==="+"){eat();return factor()}return power()}
+  function power(){const a=atom();if(peek()==="^"){eat();const b=factor();return x=>Math.pow(a(x),b(x))}return a}
+  function atom(){const t=eat();if(t===undefined)throw 0;if(t==="x")return x=>x;if(t==="("){const e=expr();if(eat()!==")")throw 0;return e}if(/^[\d.]/.test(t)){const v=parseFloat(t);return()=>v}throw 0}
+  const f=expr();if(p!==toks.length)throw 0;return{f,hasX:toks.includes("x")};
+}
+const near=(a,b)=>Math.abs(a-b)<=1e-6*Math.max(1,Math.abs(b));
+function check(item,val){
+  let r;try{r=parse(val)}catch(e){return"parse"}
+  if(item.kind==="expr"){return[0.7,1.3,2.9,-1.6,-3.1].every(x=>near(r.f(x),item.fn(x)))?"ok":"no"}
+  if(r.hasX)return"parse";return near(r.f(0),item.ans)?"ok":"no";
+}
+
+/* ---------- состояние ---------- */
+const KEY="func31-arsen";let st={};
+try{st=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+
+/* ---------- машина ---------- */
+const RULES=[
+ {name:"2x − 3",steps:x=>[`умножь на 2: 2·${par(x)} = ${fmt(2*x)}`,`вычти 3: ${fmt(2*x)} − 3 = ${fmt(2*x-3)}`],v:x=>2*x-3},
+ {name:"x²",steps:x=>[`умножь число само на себя: ${par(x)}·${par(x)} = ${fmt(x*x)}`],v:x=>x*x},
+ {name:"12 / x",steps:x=>x===0?["на 0 делить нельзя"]:[`раздели 12 на x: 12 : ${par(x)} = ${fmt(12/x)}`],v:x=>x===0?NaN:12/x}
+];
+let ri=0,mx=3;
+const rulesEl=document.getElementById("rules");
+RULES.forEach((r,i)=>{const b=document.createElement("button");b.type="button";b.className="pick";b.textContent="f(x) = "+r.name;b.onclick=()=>{ri=i;drawM()};rulesEl.appendChild(b)});
+function drawM(){
+  [...rulesEl.children].forEach((b,i)=>b.setAttribute("aria-pressed",i===ri));
+  const r=RULES[ri];document.getElementById("xin").textContent=fmt(mx);
+  const out=r.v(mx);document.getElementById("xout").textContent=isNaN(out)?"нет":fmt(out);
+  document.getElementById("gear").innerHTML=`<div><b>правило f(x) = ${r.name}</b></div>`+r.steps(mx).map(s=>`<div>→ ${s}</div>`).join("")+(isNaN(out)?`<div>у функции нет значения при x = 0</div>`:`<div>значит <b>f(${fmt(mx)}) = ${fmt(out)}</b></div>`);
+}
+document.getElementById("dec").onclick=()=>{if(mx>-6){mx--;drawM()}};
+document.getElementById("inc").onclick=()=>{if(mx<6){mx++;drawM()}};
+drawM();
+
+/* ---------- функция или нет ---------- */
+const FQ=[
+ {q:"a) {(0, 3), (0, 4), (1, 7), (2, 5), (3, 9)}",yes:false,why:"У x = 0 два разных ответа: 3 и 4. Одному x — два y, значит это <b>не функция</b>."},
+ {q:"b) {(−3, 1), (−2, −1), (0, 2), (1, 3), (2, 1)}",yes:true,why:"Все x разные, у каждого один ответ. Это <b>функция</b>. То, что y = 1 встречается два раза, не мешает."}
+];
+const fq=document.getElementById("fnquiz");
+FQ.forEach(q=>{const d=document.createElement("div");d.innerHTML=`<div class="qrow"><span class="mono">${q.q}</span></div><div class="qrow" style="margin-top:6px"><button type="button" data-a="1">Функция</button><button type="button" data-a="0">Не функция</button></div><div class="fb"></div>`;
+ d.querySelectorAll("button").forEach(b=>b.onclick=()=>{const right=(b.dataset.a==="1")===q.yes;d.querySelector(".fb").innerHTML=`<div class="msg ${right?"ok":"no"}">${right?"<b>Верно.</b> ":"Нет. "}${q.why}</div>`});fq.appendChild(d)});
+
+/* ---------- задания ---------- */
+const sq=v=>`${par(v)}² = ${fmt(v*v)}`;
+const WARM=[
+ {id:"w1",title:"Как № 1",en:"Multiply by 5, then subtract 1.",ru:"Умножь на 5, затем вычти 1. Запиши формулой.",items:[
+  {id:"w1a",kind:"expr",pre:"f(x) =",fn:x=>5*x-1,keys:1,hints:["Multiply by 5 → 5x.","Then subtract 1 → отними 1 от того, что получилось."],sol:["5x","5x − 1"],ok:"f(x) = 5x − 1"}]},
+ {id:"w2",title:"Как № 2",en:"Given y = 12/x. Find y if x = −3, and x if y = 6.",ru:"Дано y = 12 : x.",items:[
+  {id:"w2a",label:"x = −3, найди y",kind:"num",pre:"y =",ans:-4,hints:["y = 12 : (−3).","Плюс делить на минус — получится минус."],sol:["12 : (−3) = −4"],ok:"y = −4"},
+  {id:"w2b",label:"y = 6, найди x",kind:"num",pre:"x =",ans:2,hints:["12 : x = 6. Какое число подставить вместо x?","Делим наоборот: x = 12 : 6."],sol:["x = 12 : 6 = 2","Проверка: 12 : 2 = 6 ✓"],ok:"x = 2"}]},
+ {id:"w3",title:"Как № 3",en:"Given f(x) = 3x². Find f(−2) and f(4).",ru:"",items:[
+  {id:"w3a",label:"f(−2)",kind:"num",pre:"f(−2) =",ans:12,hints:["Подставь: 3·(−2)².","(−2)² = 4. Теперь умножь на 3."],sol:["(−2)² = 4","3·4 = 12"],ok:"f(−2) = 12"},
+  {id:"w3b",label:"f(4)",kind:"num",pre:"f(4) =",ans:48,hints:["Подставь: 3·4².","4² = 16. Теперь умножь на 3."],sol:["4² = 16","3·16 = 48"],ok:"f(4) = 48"}]},
+ {id:"w4",title:"Как № 4",en:"f(x) = 3x − 1. Find x, if f(x) = 11.",ru:"",items:[
+  {id:"w4a",kind:"num",pre:"x =",ans:4,hints:["Запиши уравнение: 3x − 1 = 11.","3x = 11 + 1 = 12. Теперь раздели на 3."],sol:["3x − 1 = 11","3x = 12","x = 4","Проверка: 3·4 − 1 = 11 ✓"],ok:"x = 4"}]}
+];
+const T2X=[-6,null,null,36,0.5,null,4,72],T2Y=[null,1,9,null,null,-72,null,null];
+const HW=[
+ {id:"h1",title:"№ 1",en:"Express the following rules in an algebraic notation.",ru:"Запиши правила формулой.",like:"Как в примере 1 и разминке «Как № 1».",items:[
+  {id:"h1a",label:"a. Multiply by 3, then add 4.",kind:"expr",pre:"f(x) =",fn:x=>3*x+4,keys:1,hints:["Multiply by 3 — умножь на 3. Как это записать с x?","Then add 4 — затем прибавь 4."],sol:["multiply by 3 → 3x","then add 4 → + 4","f(x) = 3x + 4"],ok:"f(x) = 3x + 4"},
+  {id:"h1b",label:"b. Square the number then subtract twice the number.",kind:"expr",pre:"f(x) =",fn:x=>x*x-2*x,keys:1,hints:["Square the number — возведи число в квадрат: x². Пиши x^2 или нажми кнопку ².","Twice the number — удвоенное число, 2x. Subtract — его нужно вычесть."],sol:["square the number → x²","subtract twice the number → − 2x","f(x) = x² − 2x"],ok:"f(x) = x² − 2x"},
+  {id:"h1c",label:"c. Divide a number by two, then add three times its cube.",kind:"expr",pre:"f(x) =",fn:x=>x/2+3*x*x*x,keys:1,hints:["Divide a number by two — раздели число на 2: x/2.","Its cube — его куб, x³. Three times its cube — утроенный куб: 3x³. Add — прибавь."],sol:["divide by two → x/2","three times its cube → 3x³","f(x) = x/2 + 3x³"],ok:"f(x) = x/2 + 3x³"}]},
+ {id:"h2",title:"№ 2",en:"Given the function y = 18/x. Complete each table of values.",ru:"Дана функция y = 18 : x. Заполни таблицу.",like:"Как в примере 3 и разминке «Как № 2». Где известен x — дели 18 на x. Где известен y — дели 18 на y.",table:"t2"},
+ {id:"h3",title:"№ 3",en:"Given the function f(x) = 2x². Complete each table of values.",ru:"Дана функция f(x) = 2x². Заполни таблицу.",like:"Как в примере 2 и разминке «Как № 3». Сначала квадрат, потом умножить на 2.",table:"t3"},
+ {id:"h4",title:"№ 4",en:"The function f is defined as follows: f(x) = 2x + 5. Find x, if f(x) = 13.",ru:"f(x) = 2x + 5. Найди x, если f(x) = 13.",like:"Как в примере 4 и разминке «Как № 4».",items:[
+  {id:"h4a",kind:"num",pre:"x =",ans:4,hints:["f(x) = 13 значит 2x + 5 = 13. Это уравнение.","Перенеси 5: 2x = 13 − 5. Сколько получилось? Теперь раздели на 2."],sol:["2x + 5 = 13","2x = 13 − 5 = 8","x = 8 : 2 = 4","Проверка: 2·4 + 5 = 13 ✓"],ok:"x = 4"}]}
+];
+/* таблица № 2 */
+const T2=[[-9,-2]];
+T2X.forEach((x,i)=>{const y=T2Y[i];
+ if(x!==null)T2.push({x,ask:"y",item:{id:"t2_"+i,kind:"num",ans:18/x,hints:[`x = ${fmt(x)}. Считай y = 18 : ${par(x)}.`,x<0?"Плюс делить на минус — ответ с минусом.":x<1?`Делить на ${fmt(x)} — это то же, что умножить на ${fmt(1/x)}.`:"Можно ответить дробью или десятичной: 1/4 или 0,25."],sol:[`18 : ${par(x)} = ${fmt(18/x)}`],ok:`при x = ${fmt(x)}: y = ${fmt(18/x)}`}});
+ else T2.push({y,ask:"x",item:{id:"t2_"+i,kind:"num",ans:18/y,hints:[`Известен y = ${fmt(y)}. Нужен x: 18 : x = ${fmt(y)}.`,`Делим наоборот: x = 18 : ${par(y)}.`],sol:[`x = 18 : ${par(y)} = ${fmt(18/y)}`,`Проверка: 18 : ${par(18/y)} = ${fmt(y)} ✓`],ok:`при y = ${fmt(y)}: x = ${fmt(18/y)}`}});
+});
+/* таблица № 3 */
+const T3=[-3,-2,-1,0,1,2,3,4].map((x,i)=>({x,ask:"y",item:{id:"t3_"+i,kind:"num",ans:2*x*x,hints:[`Подставь x = ${fmt(x)}: y = 2·${par(x)}².`,`${sq(x)}. Теперь умножь на 2.`],sol:[sq(x),`2·${fmt(x*x)} = ${fmt(2*x*x)}`],ok:`при x = ${fmt(x)}: y = ${fmt(2*x*x)}`}}));
+
+const ALL={};const taskOf={};
+function attemptsFb(item,res,fbEl){
+  const s=st[item.id]||(st[item.id]={a:0});
+  if(res==="ok"){s.ok=1;save();fbEl.innerHTML=`<div class="msg ok"><b>Верно!</b> ${item.ok}</div>`;return}
+  if(res==="parse"){fbEl.innerHTML=`<div class="msg no">Не понимаю запись. ${item.kind==="expr"?"Пиши, например: 3x+4 или x^2-2x. Дробь — через /.":"Впиши число, например −4, 0,25 или 1/4."}</div>`;return}
+  s.a++;save();
+  let h=`<div class="msg no">Пока неверно${s.a>1?` (попытка ${s.a})`:""}.</div>`;
+  const shown=Math.min(s.a,item.hints.length);
+  for(let k=0;k<shown;k++)h+=`<div class="msg hint"><b>Подсказка ${k+1}:</b> ${rich(item.hints[k])}</div>`;
+  if(s.a>=3)h+=`<div class="msg sol"><b>Решение</b><ol>${item.sol.map(x=>`<li>${x}</li>`).join("")}</ol>Теперь впиши ответ сам и перепиши решение в тетрадь.</div>`;
+  else h+=`<div class="note" style="margin-top:6px">Решение откроется после ${3-s.a} ${3-s.a===1?"неудачной попытки":"неудачных попыток"}.</div>`;
+  fbEl.innerHTML=h;
+}
+function keyRow(inp){const k=document.createElement("div");k.className="keys";["x","²","³","/","(",")","+","−"].forEach(c=>{const b=document.createElement("button");b.type="button";b.textContent=c;b.setAttribute("aria-label","Вставить "+c);b.onclick=()=>{const p=inp.selectionStart??inp.value.length;inp.value=inp.value.slice(0,p)+c+inp.value.slice(inp.selectionEnd??p);inp.focus();inp.setSelectionRange(p+c.length,p+c.length)};k.appendChild(b)});return k}
+function mkInput(item,extraCls){
+  const i=document.createElement("input");i.className="ans"+(extraCls||"");i.id="in_"+item.id;i.autocomplete="off";i.autocapitalize="off";i.spellcheck=false;i.inputMode="text";
+  i.setAttribute("aria-label",item.label||item.pre||"ответ");
+  const s=st[item.id];if(s&&s.ok){i.value=s.v||"";i.classList.add("good")}
+  return i;
+}
+function renderTask(t,host){
+  const box=document.createElement("div");box.className="task";box.id=t.id;
+  box.innerHTML=`<div class="thead"><span class="tno">${t.title}</span><div style="min-width:0"><p class="en">${rich(t.en)}</p>${t.ru?`<p class="ru">${rich(t.ru)}</p>`:""}</div></div>${t.like?`<p class="like">${t.like}</p>`:""}`;
+  const ids=[];
+  if(t.items)t.items.forEach(item=>{
+    ids.push(item.id);ALL[item.id]=item;
+    const w=document.createElement("div");w.className="item";
+    if(item.label)w.insertAdjacentHTML("beforeend",`<div class="ilabel">${rich(item.label)}</div>`);
+    const row=document.createElement("div");row.className="irow";
+    row.insertAdjacentHTML("beforeend",`<span class="pre">${item.pre}</span>`);
+    const inp=mkInput(item);row.appendChild(inp);
+    const b=document.createElement("button");b.type="button";b.className="go";b.textContent="Проверить";row.appendChild(b);
+    w.appendChild(row);if(item.keys)w.appendChild(keyRow(inp));
+    const fb=document.createElement("div");fb.className="fb";w.appendChild(fb);
+    if(st[item.id]&&st[item.id].ok)fb.innerHTML=`<div class="msg ok"><b>Верно!</b> ${item.ok}</div>`;
+    const go=()=>{if(!inp.value.trim()){fb.innerHTML=`<div class="msg no">Сначала впиши ответ.</div>`;return}const r=check(item,inp.value);inp.classList.toggle("good",r==="ok");inp.classList.toggle("bad",r==="no");if(r==="ok"){(st[item.id]||(st[item.id]={a:0})).v=inp.value}attemptsFb(item,r,fb);upd()};
+    b.onclick=go;inp.addEventListener("keydown",e=>{if(e.key==="Enter")go()});
+    box.appendChild(w);
+  });
+  if(t.table){
+    const data=t.table==="t2"?T2:T3;
+    const wrap=document.createElement("div");wrap.className="tbl-wrap";
+    const tb=document.createElement("table");tb.className="vals";
+    const rx=document.createElement("tr"),ry=document.createElement("tr");rx.innerHTML="<th>x</th>";ry.innerHTML="<th>y</th>";
+    const cells=[];
+    data.forEach(c=>{
+      if(Array.isArray(c)){rx.insertAdjacentHTML("beforeend",`<td class="given">${fmt(c[0])}</td>`);ry.insertAdjacentHTML("beforeend",`<td class="given">${fmt(c[1])}</td>`);return}
+      ids.push(c.item.id);ALL[c.item.id]=c.item;
+      const inp=mkInput(c.item);inp.setAttribute("aria-label",c.ask==="y"?`y при x = ${fmt(c.x)}`:`x при y = ${fmt(c.y)}`);cells.push({c,inp});
+      const tdx=document.createElement("td"),tdy=document.createElement("td");
+      if(c.ask==="y"){tdx.className="given";tdx.textContent=fmt(c.x);tdy.appendChild(inp)}else{tdy.className="given";tdy.textContent=fmt(c.y);tdx.appendChild(inp)}
+      rx.appendChild(tdx);ry.appendChild(tdy);
+    });
+    tb.appendChild(rx);tb.appendChild(ry);wrap.appendChild(tb);box.appendChild(wrap);
+    if(t.table==="t2")box.insertAdjacentHTML("beforeend",`<p class="note">Первый столбик уже заполнен в учебнике: 18 : (−9) = −2. Дроби можно писать как 1/4 или 0,25.</p>`);
+    const b=document.createElement("button");b.type="button";b.className="go";b.textContent="Проверить таблицу";b.style.marginTop="8px";box.appendChild(b);
+    const fb=document.createElement("div");fb.className="fb";box.appendChild(fb);
+    let plot=null;if(t.table==="t3"){plot=document.createElementNS("http://www.w3.org/2000/svg","svg");plot.setAttribute("class","plot");plot.setAttribute("viewBox","0 0 320 230");plot.setAttribute("role","img");plot.setAttribute("aria-label","Точки графика y = 2x²");box.appendChild(plot);drawPlot(plot)}
+    b.onclick=()=>{
+      let html="",any=false;
+      cells.forEach(({c,inp})=>{
+        if(st[c.item.id]&&st[c.item.id].ok)return;
+        if(!inp.value.trim())return;any=true;
+        const r=check(c.item,inp.value);inp.classList.toggle("good",r==="ok");inp.classList.toggle("bad",r==="no");
+        if(r==="ok"){const s=st[c.item.id]||(st[c.item.id]={a:0});s.ok=1;s.v=inp.value;save();return}
+        const tmp=document.createElement("div");attemptsFb(c.item,r,tmp);
+        html+=`<div style="margin-top:10px"><b>${c.ask==="y"?`Клетка x = ${fmt(c.x)}`:`Клетка y = ${fmt(c.y)}`}</b>${tmp.innerHTML}</div>`;
+      });
+      const left=cells.filter(({c})=>!(st[c.item.id]&&st[c.item.id].ok)).length;
+      if(!any&&left)html=`<div class="msg no">Заполни хотя бы одну клетку.</div>`;
+      else if(!left)html=`<div class="msg ok"><b>Вся таблица верна!</b>${t.table==="t3"?" Посмотри на точки: это график y = 2x², он называется парабола. Им вы займётесь в теме 3.8.":" Заметь: чем больше x, тем меньше y."}</div>`;
+      else if(!html)html=`<div class="msg ok">Все проверенные клетки верны. Осталось заполнить: ${left}.</div>`;
+      fb.innerHTML=html;if(plot)drawPlot(plot);upd();
+    };
+    if(cells.every(({c})=>st[c.item.id]&&st[c.item.id].ok))fb.innerHTML=`<div class="msg ok"><b>Вся таблица верна!</b></div>`;
+  }
+  taskOf[t.id]=ids;host.appendChild(box);
+}
+function drawPlot(svg){
+  const X=x=>40+(x+3)*36,Y=y=>200-y*5.6;
+  let g="";for(let x=-3;x<=4;x++)g+=`<line class="gr" x1="${X(x)}" y1="${Y(0)}" x2="${X(x)}" y2="${Y(32)}"/><text x="${X(x)-4}" y="${Y(0)+16}">${fmt(x)}</text>`;
+  for(let y=8;y<=32;y+=8)g+=`<line class="gr" x1="${X(-3)}" y1="${Y(y)}" x2="${X(4)}" y2="${Y(y)}"/><text x="${X(-3)-24}" y="${Y(y)+4}">${y}</text>`;
+  g+=`<line class="ax" x1="${X(-3)}" y1="${Y(0)}" x2="${X(4)}" y2="${Y(0)}"/><line class="ax" x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(32)}"/><text x="${X(4)+6}" y="${Y(0)+4}">x</text><text x="${X(0)+6}" y="${Y(32)+4}">y</text>`;
+  const pts=T3.filter(c=>st[c.item.id]&&st[c.item.id].ok);
+  if(pts.length===T3.length){let d="";for(let k=0;k<=70;k++){const x=-3+k*0.1;d+=(k?"L":"M")+X(x).toFixed(1)+","+Y(2*x*x).toFixed(1)}g+=`<path d="${d}"/>`}
+  pts.forEach(c=>g+=`<circle cx="${X(c.x)}" cy="${Y(2*c.x*c.x)}" r="4.5"/>`);
+  if(!pts.length)g+=`<text x="${X(-2.6)}" y="${Y(26)}">Здесь появятся точки, когда заполнишь клетки</text>`;
+  svg.innerHTML=g;
+}
+const warm=document.getElementById("warm"),hw=document.getElementById("hw");
+WARM.forEach(t=>renderTask(t,warm));HW.forEach(t=>renderTask(t,hw));
+function upd(){
+  let n=0;HW.forEach(t=>{const done=taskOf[t.id].every(id=>st[id]&&st[id].ok);document.getElementById(t.id).classList.toggle("done",done);if(done)n++});
+  WARM.forEach(t=>document.getElementById(t.id).classList.toggle("done",taskOf[t.id].every(id=>st[id]&&st[id].ok)));
+  document.getElementById("pt").textContent=`${n} из 4`;document.getElementById("pf").style.width=(n/4*100)+"%";
+}
+document.getElementById("reset").onclick=()=>{st={};save();warm.innerHTML="";hw.innerHTML="";WARM.forEach(t=>renderTask(t,warm));HW.forEach(t=>renderTask(t,hw));upd();window.scrollTo(0,0)};
+upd();
+</script>
+
+</body></html>
