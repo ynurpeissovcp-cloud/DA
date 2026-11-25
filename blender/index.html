@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Тренажёр Blender: фигуры и оси X, Y, Z</title>
+<style>
+:root{
+  --bg:#1d1d1f; --panel:#2a2a2d; --panel2:#333338; --text:#e9e9ec; --muted:#a3a3ab;
+  --accent:#e87d0d; --x:#ff4d5e; --y:#7ccf3a; --z:#3f8cff; --ok:#4fc27a; --bad:#ff6b6b;
+  --r:12px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{padding:18px 16px 8px;max-width:820px;margin:0 auto}
+h1{font-size:1.35rem;margin:0 0 4px}
+header p{margin:0;color:var(--muted);font-size:.92rem}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid #3a3a40}
+nav .in{max-width:820px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:10px 12px;scrollbar-width:none}
+nav button{flex:0 0 auto;border:1px solid #44444b;background:var(--panel);color:var(--text);padding:8px 12px;border-radius:999px;font-size:.9rem;cursor:pointer}
+nav button.on{background:var(--accent);border-color:var(--accent);color:#111;font-weight:600}
+main{max-width:820px;margin:0 auto;padding:14px 12px 60px}
+section{display:none}
+section.on{display:block}
+h2{font-size:1.15rem;margin:8px 0 12px}
+h3{font-size:1rem;margin:18px 0 8px}
+.card{background:var(--panel);border-radius:var(--r);padding:14px 14px;margin:0 0 12px}
+.muted{color:var(--muted)}
+kbd{display:inline-block;background:#45454c;border:1px solid #5a5a62;border-bottom-width:3px;border-radius:6px;padding:0 7px;font:600 .88em ui-monospace,Consolas,monospace;color:#fff;white-space:nowrap}
+.x{color:var(--x);font-weight:700}.y{color:var(--y);font-weight:700}.z{color:var(--z);font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:.95rem}
+td{padding:8px 6px;border-top:1px solid #3d3d44;vertical-align:top}
+td:first-child{white-space:nowrap;width:1%}
+.tip{border-left:4px solid var(--accent);background:#2f2a24;padding:10px 12px;border-radius:8px;margin:10px 0;font-size:.95rem}
+.warn{border-left:4px solid var(--bad);background:#33262a;padding:10px 12px;border-radius:8px;margin:10px 0;font-size:.95rem}
+.steps{list-style:none;padding:0;margin:0}
+.steps li{display:flex;gap:10px;background:var(--panel);border-radius:var(--r);padding:12px;margin-bottom:10px;align-items:flex-start}
+.steps input{width:24px;height:24px;flex:0 0 auto;margin-top:2px;accent-color:var(--ok)}
+.steps li.done{opacity:.6}
+.steps li.done b{text-decoration:line-through}
+.btn{border:0;background:var(--accent);color:#111;font-weight:700;padding:11px 16px;border-radius:10px;font-size:.98rem;cursor:pointer}
+.btn.sec{background:var(--panel2);color:var(--text);border:1px solid #4a4a52;font-weight:600}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.mission{font-size:1.15rem;font-weight:600;margin:4px 0 10px}
+.coords{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px}
+.coords span{background:var(--panel2);padding:4px 10px;border-radius:8px;font:600 1rem ui-monospace,Consolas,monospace}
+.hint{display:none;background:var(--panel2);border-radius:10px;padding:10px 12px;margin-top:10px}
+.hint.on{display:block}
+.hint ol{margin:4px 0 0;padding-left:20px}
+.stat{font-size:.9rem;color:var(--muted)}
+.opt{display:block;width:100%;text-align:left;background:var(--panel2);color:var(--text);border:1px solid #47474e;border-radius:10px;padding:11px 12px;margin:8px 0;font-size:.97rem;cursor:pointer}
+.opt.right{border-color:var(--ok);background:#20392a}
+.opt.wrong{border-color:var(--bad);background:#3e2428}
+.expl{display:none;margin-top:8px;font-size:.95rem}
+.expl.on{display:block}
+.bar{height:6px;background:#3a3a40;border-radius:6px;overflow:hidden;margin:6px 0 12px}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+pre{background:#141416;border:1px solid #3a3a40;border-radius:10px;padding:12px;overflow-x:auto;font:13px/1.45 ui-monospace,Consolas,monospace;color:#d8d8de;margin:8px 0}
+.en{background:#22262e;border-radius:10px;padding:12px;font-size:1rem}
+.en .blank{border-bottom:2px dashed var(--accent);padding:0 4px;color:var(--accent)}
+.vocab td:first-child{font-weight:600}
+svg{display:block;margin:0 auto;max-width:260px;width:100%}
+.big{font-size:1.6rem;font-weight:800}
+</style>
+</head>
+<body>
+<header>
+  <h1>Тренажёр Blender для Арсена</h1>
+  <p>Информатика: добавить 2 разные фигуры, расставить их по осям X, Y, Z, сохранить файл и написать 3–4 предложения на английском.</p>
+</header>
+<nav><div class="in" id="tabs">
+  <button data-t="basics" class="on">1. Основы</button>
+  <button data-t="task">2. Задание по шагам</button>
+  <button data-t="drill">3. Тренировка</button>
+  <button data-t="quiz">4. Тест</button>
+  <button data-t="text">5. Текст (English)</button>
+  <button data-t="check">6. Самопроверка</button>
+</div></nav>
+
+<main>
+<!-- ================= 1. ОСНОВЫ ================= -->
+<section id="basics" class="on">
+  <h2>Что нужно понять за 5 минут</h2>
+
+  <div class="card">
+    <h3 style="margin-top:0">Три оси — это три направления</h3>
+    <svg viewBox="0 0 240 200" aria-label="Оси X, Y, Z">
+      <line x1="110" y1="120" x2="210" y2="155" stroke="#ff4d5e" stroke-width="5"/>
+      <polygon points="214,157 198,158 204,146" fill="#ff4d5e"/>
+      <text x="200" y="182" fill="#ff4d5e" font-size="20" font-weight="700">X</text>
+      <line x1="110" y1="120" x2="175" y2="80" stroke="#7ccf3a" stroke-width="5"/>
+      <polygon points="180,77 166,79 172,90" fill="#7ccf3a"/>
+      <text x="184" y="74" fill="#7ccf3a" font-size="20" font-weight="700">Y</text>
+      <line x1="110" y1="120" x2="110" y2="22" stroke="#3f8cff" stroke-width="5"/>
+      <polygon points="110,14 103,28 117,28" fill="#3f8cff"/>
+      <text x="120" y="24" fill="#3f8cff" font-size="20" font-weight="700">Z</text>
+      <circle cx="110" cy="120" r="6" fill="#fff"/>
+      <text x="38" y="142" fill="#ccc" font-size="13">центр 0, 0, 0</text>
+    </svg>
+    <table>
+      <tr><td><span class="x">X</span> — красная</td><td>вправо / влево</td></tr>
+      <tr><td><span class="y">Y</span> — зелёная</td><td>вперёд / назад (вглубь)</td></tr>
+      <tr><td><span class="z">Z</span> — синяя</td><td>вверх / вниз. В Blender <b>Z — это высота</b>.</td></tr>
+    </table>
+    <p class="muted" style="margin-bottom:0">Позиция объекта записывается тремя числами: <b>X, Y, Z</b>. Например (2, 0, 1) — на 2 вправо, по глубине в центре, на 1 вверх.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">Главные клавиши</h3>
+    <table>
+      <tr><td><kbd>Shift</kbd>+<kbd>A</kbd></td><td><b>Add</b> — добавить фигуру (Mesh → Cube, UV Sphere, Cylinder, Cone, Torus…)</td></tr>
+      <tr><td><kbd>G</kbd></td><td><b>Grab / Move</b> — двигать объект</td></tr>
+      <tr><td><kbd>G</kbd> <kbd>X</kbd></td><td>двигать <b>только по оси X</b> (так же <kbd>G</kbd> <kbd>Y</kbd>, <kbd>G</kbd> <kbd>Z</kbd>)</td></tr>
+      <tr><td><kbd>G</kbd> <kbd>Z</kbd> <kbd>2</kbd> <kbd>Enter</kbd></td><td>сдвинуть ровно на 2 вверх</td></tr>
+      <tr><td><kbd>N</kbd></td><td>боковая панель: вкладка <b>Item → Location X, Y, Z</b> — вписать точные числа</td></tr>
+      <tr><td><kbd>R</kbd></td><td><b>Rotate</b> — повернуть (<kbd>R</kbd> <kbd>Z</kbd> <kbd>4</kbd><kbd>5</kbd> = на 45° вокруг Z)</td></tr>
+      <tr><td><kbd>S</kbd></td><td><b>Scale</b> — изменить размер (<kbd>S</kbd> <kbd>2</kbd> = в 2 раза больше)</td></tr>
+      <tr><td><kbd>Alt</kbd>+<kbd>G</kbd></td><td>вернуть объект в центр (0, 0, 0)</td></tr>
+      <tr><td><kbd>X</kbd> или <kbd>Delete</kbd></td><td>удалить выделенный объект</td></tr>
+      <tr><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td><td>отменить последнее действие</td></tr>
+      <tr><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td><td><b>Save</b> — сохранить файл (.blend)</td></tr>
+      <tr><td><kbd>Esc</kbd> / правая кнопка</td><td>отменить начатое движение</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">Как смотреть на сцену</h3>
+    <table>
+      <tr><td>Колёсико мыши</td><td>приблизить / отдалить</td></tr>
+      <tr><td>Зажать колёсико и вести</td><td>вращать вид вокруг сцены</td></tr>
+      <tr><td><kbd>Shift</kbd> + зажать колёсико</td><td>сдвинуть вид</td></tr>
+      <tr><td>Кружки X, Y, Z справа сверху</td><td>клик — вид точно спереди/сбоку/сверху (удобно на ноутбуке без цифровой клавиатуры)</td></tr>
+      <tr><td><kbd>Num 1</kbd> / <kbd>Num 3</kbd> / <kbd>Num 7</kbd></td><td>вид спереди / справа / сверху</td></tr>
+    </table>
+  </div>
+
+  <div class="warn"><b>Частая ошибка:</b> клавиши работают, только если мышка находится <b>над окном с 3D-сценой</b>. Если мышка над другой панелью — ничего не произойдёт.</div>
+  <div class="tip"><b>Важно:</b> <kbd>G</kbd> <kbd>X</kbd> <kbd>3</kbd> сдвигает <b>на</b> 3, а не <b>в точку</b> 3. Чтобы поставить объект точно в X = 3, проще открыть панель <kbd>N</kbd> и вписать 3 в поле Location X.</div>
+</section>
+
+<!-- ================= 2. ЗАДАНИЕ ================= -->
+<section id="task">
+  <h2>Домашнее задание по шагам</h2>
+  <p class="muted">Ставь галочки по ходу работы. Галочки сохраняются в этом браузере.</p>
+  <ul class="steps" id="steps">
+    <li><input type="checkbox"><div><b>Открой Blender.</b> Нажми на любое место сцены, чтобы закрыть заставку. На сцене уже есть куб (Cube), камера и лампа.</div></li>
+    <li><input type="checkbox"><div><b>Фигура 1 — куб уже есть.</b> Кликни по нему левой кнопкой — появится оранжевая обводка, значит он выделен.</div></li>
+    <li><input type="checkbox"><div><b>Поставь куб по осям.</b> Нажми <kbd>N</kbd>, справа откроется панель. Вкладка <b>Item</b> → <b>Location</b>. Впиши: X = <b>-2</b>, Y = <b>0</b>, Z = <b>1</b> (каждый раз Enter). Куб уедет влево и поднимется.</div></li>
+    <li><input type="checkbox"><div><b>Добавь фигуру 2.</b> Мышку над сценой → <kbd>Shift</kbd>+<kbd>A</kbd> → <b>Mesh</b> → <b>UV Sphere</b> (шар). Шар появится в центре.</div></li>
+    <li><input type="checkbox"><div><b>Поставь шар по осям.</b> В панели Location впиши: X = <b>2</b>, Y = <b>1</b>, Z = <b>1</b>.</div></li>
+    <li><input type="checkbox"><div><b>По желанию — фигура 3.</b> <kbd>Shift</kbd>+<kbd>A</kbd> → Mesh → <b>Cone</b> (конус). Подвинь клавишами: <kbd>G</kbd> <kbd>Y</kbd> <kbd>-</kbd><kbd>3</kbd> <kbd>Enter</kbd> (на 3 назад по Y).</div></li>
+    <li><input type="checkbox"><div><b>Проверь со всех сторон.</b> Покрути вид колёсиком, нажми кружки X, Y, Z в правом верхнем углу. Фигуры не должны проваливаться друг в друга.</div></li>
+    <li><input type="checkbox"><div><b>Сохрани.</b> <kbd>Ctrl</kbd>+<kbd>S</kbd> → откроется окно выбора папки → внизу впиши имя, например <code>Arsen_3D_project.blend</code> → кнопка <b>Save</b>. Запомни папку!</div></li>
+    <li><input type="checkbox"><div><b>Запиши свои числа.</b> Какие фигуры и какие координаты X, Y, Z у каждой — пригодится для текста (вкладка 5).</div></li>
+    <li><input type="checkbox"><div><b>Напиши 3–4 предложения на английском</b> о том, какие инструменты использовал (вкладка 5).</div></li>
+  </ul>
+  <div class="tip">Числа в задании — пример. Можно поставить свои, главное, чтобы фигуры были <b>разные</b> и стояли в <b>разных местах</b>, а ты мог объяснить, что делал.</div>
+  <button class="btn sec" id="resetSteps">Сбросить галочки</button>
+</section>
+
+<!-- ================= 3. ТРЕНИРОВКА ================= -->
+<section id="drill">
+  <h2>Тренировка: делай в Blender, пока не станет «на автомате»</h2>
+  <p class="muted">Нажми «Новое задание», выполни его в Blender и отметь. Сначала пробуй сам, подсказку открывай только если застрял.</p>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <span class="stat" id="drillStat">Выполнено: 0</span>
+      <label class="stat"><input type="checkbox" id="hardMode"> только клавишами (без панели N)</label>
+    </div>
+    <div class="mission" id="mText">Нажми «Новое задание».</div>
+    <div class="coords" id="mCoords"></div>
+    <div class="row">
+      <button class="btn" id="newM">Новое задание</button>
+      <button class="btn sec" id="hintM">Подсказка</button>
+      <button class="btn sec" id="doneM">✓ Сделал</button>
+    </div>
+    <div class="hint" id="mHint"></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">Цель</h3>
+    <p style="margin:0">Сделать подряд <b>10 заданий без подсказки</b>. Тогда на уроке всё получится без раздумий. Потом включи режим «только клавишами» — это уровень повыше.</p>
+  </div>
+</section>
+
+<!-- ================= 4. ТЕСТ ================= -->
+<section id="quiz">
+  <h2>Тест: проверь себя</h2>
+  <div class="card" id="quizBox"></div>
+</section>
+
+<!-- ================= 5. ТЕКСТ ================= -->
+<section id="text">
+  <h2>3–4 предложения на английском</h2>
+  <p class="muted">Учитель просит объяснить, <b>какими инструментами</b> ты пользовался. Подставь свои фигуры и свои числа.</p>
+
+  <div class="card">
+    <h3 style="margin-top:0">Шаблон (заполни пропуски)</h3>
+    <div class="en">
+      In this project I used Blender, a 3D graphics editor.
+      I added two different shapes with <b>Shift + A</b>: a <span class="blank">фигура 1</span> and a <span class="blank">фигура 2</span>.
+      I moved them with the <b>Move tool (G)</b> and typed exact positions in the <b>Location</b> panel: the <span class="blank">фигура 1</span> is at X = <span class="blank">_</span>, Y = <span class="blank">_</span>, Z = <span class="blank">_</span>, and the <span class="blank">фигура 2</span> is at X = <span class="blank">_</span>, Y = <span class="blank">_</span>, Z = <span class="blank">_</span>.
+      Finally, I saved my work as a .blend file with <b>Ctrl + S</b>.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">Пример (с другими фигурами — не списывай, а напиши про свои)</h3>
+    <div class="en">
+      In this project I used Blender, a 3D graphics editor. I added two different shapes with Shift + A: a cone and a torus. I moved them with the Move tool (G) and typed exact positions in the Location panel: the cone is at X = 3, Y = 0, Z = 1, and the torus is at X = -3, Y = 2, Z = 0. Finally, I saved my work as a .blend file with Ctrl + S.
+    </div>
+    <p class="muted" style="margin-bottom:0">Перевод: В этом проекте я использовал Blender — 3D-редактор. Я добавил две разные фигуры через Shift + A: конус и тор. Я двигал их инструментом Move (G) и вписывал точные координаты в панели Location… В конце я сохранил работу как файл .blend через Ctrl + S.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">Слова, которые пригодятся</h3>
+    <table class="vocab">
+      <tr><td>shape</td><td>фигура</td></tr>
+      <tr><td>cube / sphere / cylinder / cone / torus</td><td>куб / шар / цилиндр / конус / тор («бублик»)</td></tr>
+      <tr><td>axis (мн. axes)</td><td>ось (оси)</td></tr>
+      <tr><td>position / location</td><td>положение / координаты</td></tr>
+      <tr><td>to add / to move / to rotate / to scale</td><td>добавить / переместить / повернуть / изменить размер</td></tr>
+      <tr><td>tool</td><td>инструмент</td></tr>
+      <tr><td>to save the file</td><td>сохранить файл</td></tr>
+      <tr><td>above / next to / behind</td><td>над / рядом с / за</td></tr>
+    </table>
+  </div>
+  <div class="tip">Если нужно 4-е предложение «поинтереснее», можно добавить: <i>I also used the Rotate tool (R) and the Scale tool (S) to change the shapes.</i> — но только если ты правда это делал.</div>
+</section>
+
+<!-- ================= 6. ПРОВЕРКА ================= -->
+<section id="check">
+  <h2>Самопроверка прямо в Blender</h2>
+  <p class="muted">Небольшой скрипт сам проверит работу: сколько фигур, разные ли они, где стоят и сохранён ли файл.</p>
+  <ol class="card" style="padding-left:32px">
+    <li>Вверху Blender открой вкладку <b>Scripting</b>.</li>
+    <li>В большом окне посередине нажми <b>+ New</b>.</li>
+    <li>Скопируй код ниже и вставь (<kbd>Ctrl</kbd>+<kbd>V</kbd>).</li>
+    <li>Нажми кнопку ▶ (<b>Run Script</b>) или <kbd>Alt</kbd>+<kbd>P</kbd> — появится окошко с результатом.</li>
+    <li>Вернись на вкладку <b>Layout</b>, чтобы продолжить работу.</li>
+  </ol>
+  <div class="row"><button class="btn" id="copyCode">Скопировать код</button><span class="stat" id="copyMsg"></span></div>
+<pre id="code">import bpy
+
+objs = [o for o in bpy.context.scene.objects if o.type == 'MESH']
+names = {"Cube":"Куб","Sphere":"Шар","Icosphere":"Икосфера","Cylinder":"Цилиндр",
+         "Cone":"Конус","Torus":"Тор","Plane":"Плоскость","Suzanne":"Обезьянка",
+         "Circle":"Круг","Grid":"Сетка"}
+lines = []
+kinds = set()
+places = set()
+for o in objs:
+    base = o.data.name.split('.')[0]
+    kinds.add(base)
+    x, y, z = o.location
+    places.add((round(x, 2), round(y, 2), round(z, 2)))
+    lines.append(f"{names.get(base, base)}:  X={x:.2f}   Y={y:.2f}   Z={z:.2f}")
+
+def mark(ok):
+    return "OK  " if ok else "НЕТ "
+
+lines.append("")
+lines.append(mark(len(objs) >= 2) + f"Фигур на сцене: {len(objs)} (нужно 2+)")
+lines.append(mark(len(kinds) >= 2) + f"Разных видов фигур: {len(kinds)} (нужно 2+)")
+lines.append(mark(len(places) == len(objs) and len(objs) > 0) + "Все фигуры стоят в разных местах")
+saved = bool(bpy.data.filepath) and not bpy.data.is_dirty
+lines.append(mark(saved) + ("Файл сохранён: " + bpy.path.basename(bpy.data.filepath)
+                             if saved else "Файл не сохранён или есть изменения - нажми Ctrl+S"))
+
+def draw(self, context):
+    for t in lines:
+        self.layout.label(text=t)
+
+bpy.context.window_manager.popup_menu(draw, title="Проверка задания", icon='INFO')
+print("\n".join(lines))
+</pre>
+  <div class="tip">Если везде <b>OK</b> — домашнее задание в Blender выполнено. Останется только текст.</div>
+</section>
+</main>
+
+<script>
+(function(){
+  var store = {
+    get:function(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.parse(v);}catch(e){return d;}},
+    set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+  };
+
+  /* --- tabs --- */
+  var tabs=document.querySelectorAll('#tabs button');
+  function show(id){
+    tabs.forEach(function(b){b.classList.toggle('on',b.dataset.t===id);});
+    document.querySelectorAll('section').forEach(function(s){s.classList.toggle('on',s.id===id);});
+    window.scrollTo(0,0);
+  }
+  tabs.forEach(function(b){b.addEventListener('click',function(){show(b.dataset.t);});});
+
+  /* --- steps --- */
+  var boxes=document.querySelectorAll('#steps input');
+  var saved=store.get('bt_steps',[]);
+  boxes.forEach(function(b,i){
+    b.checked=!!saved[i]; b.parentNode.classList.toggle('done',b.checked);
+    b.addEventListener('change',function(){
+      b.parentNode.classList.toggle('done',b.checked);
+      store.set('bt_steps',Array.prototype.map.call(boxes,function(x){return x.checked;}));
+    });
+  });
+  document.getElementById('resetSteps').onclick=function(){
+    boxes.forEach(function(b){b.checked=false;b.parentNode.classList.remove('done');});
+    store.set('bt_steps',[]);
+  };
+
+  /* --- drill --- */
+  var shapes=[
+    ['Cube','куб'],['UV Sphere','шар'],['Cylinder','цилиндр'],['Cone','конус'],
+    ['Torus','тор («бублик»)'],['Ico Sphere','икосферу'],['Monkey','обезьянку Suzanne']
+  ];
+  var axes=[['X','x','вправо (+) / влево (−)'],['Y','y','вперёд/назад'],['Z','z','вверх (+) / вниз (−)']];
+  function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+  function pick(a){return a[rnd(0,a.length-1)];}
+  function nz(a,b){var v=0;while(v===0)v=rnd(a,b);return v;}
+  function k(s){return s.split(' ').map(function(x){return '<kbd>'+x+'</kbd>';}).join(' ');}
+  var done=store.get('bt_drill',0);
+  var stat=document.getElementById('drillStat');
+  function upd(){stat.textContent='Выполнено: '+done;}
+  upd();
+  var mText=document.getElementById('mText'),mCoords=document.getElementById('mCoords'),mHint=document.getElementById('mHint');
+  var hasMission=false;
+
+  function newMission(){
+    var hard=document.getElementById('hardMode').checked;
+    var type=rnd(0,9);
+    var html='',coords='',hint='';
+    if(type<=4){ // add & place
+      var s=pick(shapes),x=rnd(-4,4),y=rnd(-4,4),z=rnd(0,3);
+      html='Добавь <b>'+s[1]+'</b> и поставь его в точку:';
+      coords='<span class="x">X = '+x+'</span><span class="y">Y = '+y+'</span><span class="z">Z = '+z+'</span>';
+      if(!hard){
+        hint='<ol><li>Мышка над сценой → '+k('Shift')+'+'+k('A')+' → Mesh → <b>'+s[0]+'</b></li>'+
+             '<li>'+k('N')+' → вкладка Item → Location</li>'+
+             '<li>Впиши X = '+x+', Y = '+y+', Z = '+z+' (после каждого — Enter)</li></ol>';
+      }else{
+        var seq=[];
+        if(x!==0)seq.push(k('G')+' '+k('X')+' '+k(String(x).split('').join(' '))+' '+k('Enter'));
+        if(y!==0)seq.push(k('G')+' '+k('Y')+' '+k(String(y).split('').join(' '))+' '+k('Enter'));
+        if(z!==0)seq.push(k('G')+' '+k('Z')+' '+k(String(z).split('').join(' '))+' '+k('Enter'));
+        hint='<ol><li>'+k('Shift')+'+'+k('A')+' → Mesh → <b>'+s[0]+'</b> (появится в центре 0,0,0)</li>'+
+             seq.map(function(q){return '<li>'+q+'</li>';}).join('')+
+             '<li>Проверь в панели '+k('N')+', что числа совпали</li></ol>';
+      }
+    }else if(type<=6){ // move by
+      var a=pick(axes),d=nz(-3,3);
+      html='Выдели любую фигуру и сдвинь её <b>на '+Math.abs(d)+'</b> по оси <span class="'+a[1]+'">'+a[0]+'</span> '+(d>0?'в плюс':'в минус')+'.';
+      hint='<ol><li>Клик по фигуре (оранжевая обводка)</li><li>'+k('G')+' '+k(a[0])+' '+k(String(d).split('').join(' '))+' '+k('Enter')+'</li><li>Смотри: в панели N число Location '+a[0]+' изменилось на '+d+'</li></ol>';
+    }else if(type===7){ // rotate
+      var a2=pick(axes),deg=pick([30,45,90,180]);
+      html='Поверни выделенную фигуру на <b>'+deg+'°</b> вокруг оси <span class="'+a2[1]+'">'+a2[0]+'</span>.';
+      hint='<ol><li>Клик по фигуре</li><li>'+k('R')+' '+k(a2[0])+' '+k(String(deg).split('').join(' '))+' '+k('Enter')+'</li><li>В панели N смотри строку Rotation</li></ol>';
+    }else if(type===8){ // scale
+      var f=pick(['2','0.5','1.5','3']);
+      html='Измени размер выделенной фигуры: <b>×'+f+'</b>.';
+      hint='<ol><li>Клик по фигуре</li><li>'+k('S')+' '+k(f.split('').join(' '))+' '+k('Enter')+'</li><li>В панели N смотри строку Scale</li></ol>';
+    }else{ // reset & delete
+      html='Верни выделенную фигуру в центр (0, 0, 0), а потом <b>удали</b> её. Затем отмени удаление.';
+      hint='<ol><li>Клик по фигуре → '+k('Alt')+'+'+k('G')+' (вернётся в центр)</li><li>'+k('X')+' → Delete (удалить)</li><li>'+k('Ctrl')+'+'+k('Z')+' (вернуть обратно)</li></ol>';
+    }
+    mText.innerHTML=html; mCoords.innerHTML=coords;
+    mHint.innerHTML=hint||'<p style="margin:0">Это режим «только клавишами» — попробуй сам 🙂</p>';
+    mHint.classList.remove('on'); hasMission=true;
+  }
+  document.getElementById('newM').onclick=newMission;
+  document.getElementById('hintM').onclick=function(){if(hasMission)mHint.classList.toggle('on');};
+  document.getElementById('doneM').onclick=function(){
+    if(!hasMission)return;
+    done++;store.set('bt_drill',done);upd();newMission();
+  };
+
+  /* --- quiz --- */
+  var Q=[
+    ['Какая клавиша добавляет новую фигуру?',['Shift + A','Ctrl + A','G','Tab'],0,'Shift + A открывает меню Add → Mesh, там все фигуры.'],
+    ['Какая ось в Blender отвечает за высоту (вверх-вниз)?',['X','Y','Z','Никакая'],2,'В Blender Z — вертикальная ось, синяя.'],
+    ['Какого цвета ось X?',['Синяя','Красная','Зелёная','Жёлтая'],1,'X — красная, Y — зелёная, Z — синяя. Запомни: RGB = XYZ.'],
+    ['Как сдвинуть объект только по оси Y?',['S, затем Y','R, затем Y','G, затем Y','Y, затем G'],2,'G — переместить, потом буква оси ограничивает движение этой осью.'],
+    ['Что сделает G, Z, 2, Enter?',['Поставит объект в точку Z = 2','Поднимет объект на 2 вверх','Увеличит объект в 2 раза','Повернёт на 2°'],1,'G Z 2 сдвигает НА 2 от текущего места. Чтобы поставить ТОЧНО в Z = 2, впиши число в панели N.'],
+    ['Где вписать точные координаты X, Y, Z?',['Панель N → Item → Location','Меню File','Shift + A','Вкладка Scripting'],0,'N открывает боковую панель, во вкладке Item есть Location X, Y, Z.'],
+    ['Как сохранить файл?',['Ctrl + Z','Ctrl + S','Shift + S','Alt + F4'],1,'Ctrl + S — Save. В первый раз Blender спросит папку и имя файла.'],
+    ['Какое расширение у файла Blender?',['.docx','.png','.blend','.3d'],2,'Проект сохраняется в файл .blend.'],
+    ['Ты нажал G, а объект не двигается. Самая частая причина?',['Сломался Blender','Мышка не над окном 3D-сцены или объект не выделен','Нужно перезагрузить компьютер','Нет интернета'],1,'Клавиши работают, только когда курсор над 3D-сценой и объект выделен (оранжевая обводка).'],
+    ['Что делает Ctrl + Z?',['Двигает по Z','Отменяет последнее действие','Удаляет объект','Сохраняет'],1,'Ctrl + Z — Undo, отмена.'],
+    ['Какая клавиша поворачивает объект?',['R','S','G','N'],0,'R — Rotate (поворот). S — Scale, G — Grab/Move.'],
+    ['Фигура стоит в точке (3, 0, 1). Где она относительно центра?',['3 влево, 1 вниз','3 вправо, 1 вверх','3 вверх, 1 вправо','3 назад, 1 вперёд'],1,'X = 3 — вправо на 3, Y = 0 — по глубине в центре, Z = 1 — на 1 выше.'],
+    ['Как по-английски «фигура»?',['figure-tool','shape','form-file','axis'],1,'Shape — фигура. Axis — ось.'],
+    ['Какая клавиша меняет размер объекта?',['R','G','S','A'],2,'S — Scale (масштаб).']
+  ];
+  var box=document.getElementById('quizBox'),order,qi,score,answered;
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function startQuiz(){order=shuffle(Q.map(function(_,i){return i;}));qi=0;score=0;renderQ();}
+  function renderQ(){
+    if(qi>=order.length){
+      var best=store.get('bt_best',0); if(score>best){best=score;store.set('bt_best',best);}
+      box.innerHTML='<div class="big">'+score+' / '+order.length+'</div><p>'+(score===order.length?'Отлично! Всё знаешь.':score>=order.length*0.75?'Хорошо! Повтори ошибки и пройди ещё раз.':'Повтори вкладку «Основы» и попробуй снова.')+'</p><p class="stat">Лучший результат: '+best+' / '+order.length+'</p><button class="btn" id="again">Пройти ещё раз</button>';
+      document.getElementById('again').onclick=startQuiz; return;
+    }
+    var q=Q[order[qi]];answered=false;
+    var opts=shuffle(q[1].map(function(t,i){return {t:t,i:i};}));
+    box.innerHTML='<div class="stat">Вопрос '+(qi+1)+' из '+order.length+' · верно: '+score+'</div><div class="bar"><i style="width:'+(qi/order.length*100)+'%"></i></div>'+
+      '<div class="mission">'+q[0]+'</div>'+
+      opts.map(function(o){return '<button class="opt" data-i="'+o.i+'">'+o.t+'</button>';}).join('')+
+      '<div class="expl" id="expl"></div><div class="row" style="margin-top:10px"><button class="btn" id="nextQ" style="display:none">Дальше →</button></div>';
+    box.querySelectorAll('.opt').forEach(function(b){
+      b.onclick=function(){
+        if(answered)return; answered=true;
+        var right=+b.dataset.i===q[2];
+        if(right)score++;
+        box.querySelectorAll('.opt').forEach(function(x){if(+x.dataset.i===q[2])x.classList.add('right');});
+        if(!right)b.classList.add('wrong');
+        var e=document.getElementById('expl');e.innerHTML='<b>'+(right?'Верно!':'Не совсем.')+'</b> '+q[3];e.classList.add('on');
+        var n=document.getElementById('nextQ');n.style.display='';n.onclick=function(){qi++;renderQ();};
+      };
+    });
+  }
+  startQuiz();
+
+  /* --- copy --- */
+  document.getElementById('copyCode').onclick=function(){
+    var txt=document.getElementById('code').textContent,msg=document.getElementById('copyMsg');
+    function fallback(){
+      var r=document.createRange();r.selectNodeContents(document.getElementById('code'));
+      var s=window.getSelection();s.removeAllRanges();s.addRange(r);
+      msg.textContent='Код выделен — нажми Ctrl+C';
+    }
+    try{
+      navigator.clipboard.writeText(txt).then(function(){msg.textContent='Скопировано ✓';},fallback);
+    }catch(e){fallback();}
+  };
+})();
+</script>
+</body>
+</html>
