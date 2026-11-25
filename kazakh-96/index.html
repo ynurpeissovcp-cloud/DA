@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Жидебай — казахский с. 96</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Казахский 7 · с. 94–96: слова, текст с переводом, пересказ. Бирюза и золото — как купола кешена */
+:root{
+  --bg:#f2f6f7; --card:#ffffff; --ink:#15232a; --muted:#56707a; --line:#d6e2e6;
+  --pen:#0b7a86; --pen-soft:#dff1f3; --gold:#c8912a; --gold-soft:#fbf1dc; --ok:#14834f; --ok-soft:#ddf3e7; --bad:#c4382e; --bad-soft:#fbe6e3;
+  --display:"Unbounded","Golos Text",system-ui,sans-serif; --body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0f171b; --card:#18242a; --ink:#e6eff2; --muted:#93acb5; --line:#28383f;
+  --pen:#4fc4d0; --pen-soft:#163238; --gold:#e8b65a; --gold-soft:#36291a; --ok:#5fd39a; --ok-soft:#183126; --bad:#ff8a7e; --bad-soft:#3a2224; color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 var(--body);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.wrap{max-width:600px;margin:0 auto;padding:16px max(14px,env(safe-area-inset-left,0px)) 40px max(14px,env(safe-area-inset-right,0px))}
+.top{font-size:13px;color:var(--muted)}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(22px,6vw,28px);line-height:1.15;margin:4px 0 6px}
+.lead{color:var(--muted);margin:0 0 14px}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0}
+.tab{font:inherit;font-size:15px;font-weight:600;padding:10px 4px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.tab small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+.tab[aria-selected="true"]{border-color:var(--pen);background:var(--pen-soft)}
+.tab.done small{color:var(--ok);font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:12px}
+h2{font-family:var(--display);font-weight:500;font-size:18px;margin:0 0 8px}
+.note{font-size:14px;color:var(--muted)}
+.btn{font:inherit;font-size:16px;font-weight:600;padding:11px 16px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.btn.main{background:var(--pen);border-color:var(--pen);color:var(--card)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+button:focus-visible{outline:3px solid var(--pen);outline-offset:2px}
+/* flashcard */
+.flash{min-height:170px;border-radius:16px;border:2px solid var(--pen);background:var(--pen-soft);display:grid;place-items:center;text-align:center;padding:16px;cursor:pointer;user-select:none}
+.flash .kz{font-family:var(--display);font-size:26px;color:var(--pen)}
+.flash .ru{font-size:22px;font-weight:600}
+.flash .ex{font-size:14px;color:var(--muted);margin-top:8px}
+.flash.back{border-color:var(--gold);background:var(--gold-soft)}
+.counter{text-align:center;font-size:14px;color:var(--muted);margin-top:6px}
+/* quiz */
+.q{font-size:20px;font-weight:600;margin:6px 0 10px}
+.q b{font-family:var(--display);font-weight:500;color:var(--pen)}
+.opts{display:grid;gap:8px}
+.opts button{font:inherit;font-size:17px;text-align:left;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.opts button.right{border-color:var(--ok);background:var(--ok-soft);font-weight:700}
+.opts button.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.fb{margin-top:10px;border-radius:12px;padding:10px 12px;font-size:16px}
+.fb.ok{background:var(--ok-soft)}.fb.no{background:var(--bad-soft)}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:4px 0 10px}
+.bar i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
+/* text */
+.para{margin:0 0 12px}
+.sent{cursor:pointer;border-radius:6px;padding:1px 2px}
+.sent:hover{background:var(--pen-soft)}
+.sent.open{background:var(--gold-soft)}
+.tr{display:block;font-size:15px;color:var(--muted);border-left:3px solid var(--gold);padding:2px 0 2px 8px;margin:4px 0 6px}
+.w{color:var(--pen);font-weight:700}
+.src{font-size:13px;color:var(--muted);font-style:italic}
+/* retell */
+ol.ret{padding-left:22px;margin:6px 0}
+ol.ret li{margin:6px 0}
+ol.ret .ru{display:block;font-size:15px;color:var(--muted)}
+.pool,.built{display:grid;gap:6px}
+.pool button,.built div{font:inherit;font-size:16px;text-align:left;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.built div{background:var(--ok-soft);border-color:var(--ok);cursor:default}
+.built div b{color:var(--ok);margin-right:6px}
+.pool button.shake{border-color:var(--bad);background:var(--bad-soft)}
+.gap{display:inline-block;min-width:80px;border-bottom:2px solid var(--pen);text-align:center;color:var(--pen);font-weight:700}
+.say{font-size:19px;font-weight:600;margin:6px 0}
+.reveal{font-family:var(--display);font-size:19px;color:var(--pen);margin:8px 0;line-height:1.35}
+.big{font-family:var(--display);font-size:20px;color:var(--pen)}
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.steps button{font:inherit;font-size:14px;padding:6px 11px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.steps button[aria-pressed="true"]{background:var(--pen);color:var(--card);border-color:var(--pen)}
+.steps button.done{border-color:var(--ok)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">Қазақ тілі · 7 класс · 5-тақырып · с. 94–96</div>
+  <h1>Жидебай-Бөрілі: слова и пересказ</h1>
+  <p class="lead">Задание: <b>жаңа сөздер жаттау</b> (выучить новые слова) и <b>96-бет 5-тапсырма — оқу, мазмұндау</b> (прочитать текст и пересказать). Иди по вкладкам слева направо.</p>
+  <div class="tabs" role="tablist">
+    <button type="button" class="tab" data-t="0" role="tab">1. Сөздер<small>слова</small></button>
+    <button type="button" class="tab" data-t="1" role="tab">2. Мәтін<small>текст</small></button>
+    <button type="button" class="tab" data-t="2" role="tab">3. Мазмұндау<small>пересказ</small></button>
+  </div>
+  <div id="pane"></div>
+</div>
+
+<script>
+{
+/* ---------- данные ---------- */
+const WORDS=[
+ ["киелі жер","священное место","Қазақстанда киелі жерлер көп. — В Казахстане много священных мест."],
+ ["нысан","объект","Киелі нысандар — священные объекты."],
+ ["әулие","святой (человек)","Әулие адамдар өмір сүрген жерлер. — Места, где жили святые люди."],
+ ["тарихи оқиға","историческое событие","Бұл жерде тарихи оқиғалар болған. — Здесь были исторические события."],
+ ["тұлға","личность (выдающийся человек)","Абай — ұлы тұлға. — Абай — великая личность."],
+ ["жерленген","похоронен","Абай мен Шәкәрім осында жерленген. — Абай и Шакарим похоронены здесь."],
+ ["мұнара","башня","Кешенде екі мұнара бар. — В комплексе две башни."],
+ ["кешен","комплекс (зданий)","Тарихи-мәдени кешен. — Историко-культурный комплекс."]
+];
+const EXTRA=[["кесене","мавзолей"],["сәулетші","архитектор"],["мерейтой","юбилей"],["ойшыл-ақын","поэт-мыслитель"],["зират","могила"],["мұражай","музей"],["мешіт","мечеть"],["шақырым","километр"],["биіктік","высота"],["салынды","построен"]];
+const TEXT=[
+ [["«Қазақстанның киелі жерлерінің географиясы» энциклопедиясына Абайдың туған жері Жидебайдағы «Жидебай-Бөрілі» тарихи-мәдени кешені енді.","В энциклопедию «География священных мест Казахстана» вошёл историко-культурный комплекс «Жидебай-Бөрілі» в Жидебае, на родине Абая."],
+  ["Кешен қазақтың ұлы ойшыл-ақыны Абай Құнанбайұлының 150 жылдық мерейтойына орай ашылды.","Комплекс открыли к 150-летнему юбилею великого казахского поэта-мыслителя Абая Кунанбаева."],
+  ["Ол жерге Абайдың інісі, ақын, философ, тарихшы Шәкәрім Құдайбердіұлы да жерленген.","Там же похоронен младший родственник Абая — поэт, философ, историк Шакарим Кудайбердиев."],
+  ["Абай мен Шәкәрімнің зираты бір платформада орналасқан.","Могилы Абая и Шакарима находятся на одной платформе."],
+  ["Олардың арақашықтығы 140 метр.","Расстояние между ними — 140 метров."],
+  ["Сондықтан кешен «Абай-Шәкәрім тарихи-мемориалдық кесенесі» деп те аталады.","Поэтому комплекс называют ещё историко-мемориальным мавзолеем «Абай-Шакарим»."],
+  ["Жобаны атақты сәулетші Бек Ибраев бастаған сәулетшілердің шығармашылық тобы жасады.","Проект сделала творческая группа архитекторов во главе с известным архитектором Беком Ибраевым."],
+  ["Кешен 1993-1996 жылдар аралығында салынды.","Комплекс построили в 1993–1996 годах."],
+  ["Кешен Семей қаласынан 180 шақырым жерде орналасқан.","Комплекс находится в 180 километрах от города Семей."]],
+ [["Кесененің ұзындығы 200 метр, көлденеңі 60 метр.","Длина мавзолея — 200 метров, ширина — 60 метров."],
+  ["Екі мұнара бар.","Там две башни."],
+  ["Бірінші — Абай мұнарасы. Биіктігі 38,5 метр.","Первая — башня Абая. Её высота 38,5 метра."],
+  ["Екіншісі — Шәкәрім мұнарасы. Оның биіктігі 35 метр.","Вторая — башня Шакарима. Её высота 35 метров."],
+  ["Сонымен қатар кешенде «Орталық Азиядағы жазба мәдениет тарихы» мұражай орны, келетін адамдарға арналған қонақжай, амфитеатр, мешіт салынды.","Ещё в комплексе построили музей «История письменной культуры Центральной Азии», гостиницу для приезжих, амфитеатр и мечеть."],
+  ["Мешіттің төрт күмбезі бар.","У мечети четыре купола."]],
+ [["Жалпы композиция төрт бұрыштық мұнарамен аяқталады.","По углам всю композицию завершают четыре башни."],
+  ["Мұнаралардың арнайы бөлмесінде дұға оқылып, рәсімдер орындалады.","В особой комнате башен читают молитвы и проводят обряды."],
+  ["Биіктен қарағанда кешен алып кемеге ұқсайды.","Если смотреть сверху, комплекс похож на огромный корабль."]],
+ [["Жидебайда мемориалдық кешеннен 500 метрдей жерде Абайдың мұражай-үйі орналасқан.","В Жидебае, примерно в 500 метрах от мемориала, находится дом-музей Абая."],
+  ["Жидебай — Абайдың әкесі Құнанбай әулетінің мекендеген қыстауы.","Жидебай — зимовье, где жила семья отца Абая, Кунанбая."],
+  ["Мұражай Абай өмір сүрген кездегідей сақталған.","Музей сохранили таким, каким он был при жизни Абая."],
+  ["Мұражайда Абай қолданған заттар өз орнында тұр.","Вещи, которыми пользовался Абай, стоят в музее на своих местах."],
+  ["Ақын өмірінің соңғы он жылы осы Жидебайда өткен.","Последние десять лет жизни поэта прошли здесь, в Жидебае."],
+  ["Осы жерде 70-тен аса өлең, Лермонтов, Крыловтан 25-26 аударма, 27 қара сөзін жазған және 2 ән шығарған.","Здесь он написал больше 70 стихов, 25–26 переводов из Лермонтова и Крылова, 27 «Слов назидания» и сочинил 2 песни."]],
+ [["«Абай-Шәкәрім» мемориалдық кешені – сәулет пен тарихтың бірегей объектісі, ол Қазақстанның рухани киелі жері болып табылады.","Мемориальный комплекс «Абай-Шакарим» — уникальный памятник архитектуры и истории, духовное священное место Казахстана."],
+  ["Сонымен қатар әлемдегі ең үлкен космостық құрылыс. Жер бетінде мұндай ауқымды ескерткіш-зират жоқ екен.","Говорят, на земле нет больше такого огромного памятника-захоронения."]]
+];
+const RET=[
+ ["Абайдың туған жері — Жидебай.","Родина Абая — Жидебай."],
+ ["Жидебайда «Жидебай-Бөрілі» тарихи-мәдени кешені бар.","В Жидебае есть историко-культурный комплекс «Жидебай-Бөрілі»."],
+ ["Кешен Абайдың 150 жылдық мерейтойына орай ашылды.","Комплекс открыли к 150-летнему юбилею Абая."],
+ ["Онда Абай мен Шәкәрім жерленген.","Там похоронены Абай и Шакарим."],
+ ["Сондықтан кешен «Абай-Шәкәрім» кесенесі деп те аталады.","Поэтому комплекс называют ещё мавзолеем «Абай-Шакарим»."],
+ ["Кешенді сәулетші Бек Ибраев жасады.","Комплекс создал архитектор Бек Ибраев."],
+ ["Ол 1993–1996 жылдары салынды.","Его построили в 1993–1996 годах."],
+ ["Кешен Семей қаласынан 180 шақырым жерде орналасқан.","Комплекс находится в 180 км от Семея."],
+ ["Онда екі мұнара бар: Абай мұнарасы және Шәкәрім мұнарасы.","Там две башни: башня Абая и башня Шакарима."],
+ ["Сонымен қатар мұражай, қонақжай, амфитеатр және мешіт бар.","Ещё там есть музей, гостиница, амфитеатр и мечеть."],
+ ["Бұл — Қазақстанның киелі жері.","Это священное место Казахстана."]
+];
+const GAPS=[
+ {s:"Абайдың туған жері — ___.",a:"Жидебай",o:["Жидебай","Семей","Алматы","Бөрілі"],ru:"Родина Абая — Жидебай."},
+ {s:"Кешен Абайдың 150 жылдық ___ орай ашылды.",a:"мерейтойына",o:["мерейтойына","мұнарасына","мешітіне","зиратына"],ru:"…к 150-летнему юбилею Абая."},
+ {s:"Онда Абай мен Шәкәрім ___.",a:"жерленген",o:["жерленген","салынды","орналасқан","жасады"],ru:"Там похоронены Абай и Шакарим."},
+ {s:"Кешенді ___ Бек Ибраев жасады.",a:"сәулетші",o:["сәулетші","ақын","тарихшы","әулие"],ru:"Комплекс создал архитектор Бек Ибраев."},
+ {s:"Кешен Семей қаласынан 180 ___ жерде орналасқан.",a:"шақырым",o:["шақырым","метр","жыл","мұнара"],ru:"…в 180 километрах от Семея."},
+ {s:"Онда екі ___ бар.",a:"мұнара",o:["мұнара","мешіт","кешен","нысан"],ru:"Там две башни."},
+ {s:"Бұл — Қазақстанның ___ жері.",a:"киелі",o:["киелі","тарихи","үлкен","туған"],ru:"Это священное место Казахстана."}
+];
+const NUMS=[
+ {q:"Кешен Абайдың неше жылдық мерейтойына ашылды?",ru:"К какому юбилею Абая открыли комплекс?",a:"150",o:["100","150","180","200"]},
+ {q:"Кешен қай жылдары салынды?",ru:"В какие годы построили комплекс?",a:"1993–1996",o:["1993–1996","1845–1904","2000–2004","1990–1991"]},
+ {q:"Кешен Семейден неше шақырым жерде?",ru:"Сколько километров от Семея?",a:"180",o:["18","140","180","500"]},
+ {q:"Кешенде неше мұнара бар?",ru:"Сколько башен (главных) в комплексе?",a:"2",o:["1","2","3","5"]}
+];
+
+/* ---------- состояние ---------- */
+const KEY="kz96-arsen";let S={tab:0,done:{}};try{const v=JSON.parse(localStorage.getItem(KEY)||"null");if(v&&v.done)S=v}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pane=document.getElementById("pane"),tabs=[...document.querySelectorAll(".tab")];
+function setTab(t){S.tab=t;save();tabs.forEach((b,i)=>{b.setAttribute("aria-selected",i===t);b.classList.toggle("done",!!S.done["t"+i]);b.querySelector("small").textContent=S.done["t"+i]?"✓ сделано":["слова","текст","пересказ"][i]});
+  [words,text,retell][t]();window.scrollTo(0,0)}
+tabs.forEach((b,i)=>b.onclick=()=>setTab(i));
+function markDone(k){S.done[k]=1;save();tabs.forEach((b,i)=>{b.classList.toggle("done",!!S.done["t"+i]);if(S.done["t"+i])b.querySelector("small").textContent="✓ сделано"})}
+
+/* ---------- 1. слова ---------- */
+function words(){
+  pane.innerHTML=`<div class="card"><h2>Шаг 1. Посмотри карточки</h2><p class="note" style="margin-top:0">Это 8 новых слов из рамки «Жаңа сөздер» на с. 94. Нажми на карточку — она перевернётся. Скажи слово вслух.</p>
+   <div class="flash" id="fl" role="button" tabindex="0" aria-label="Карточка, нажми чтобы перевернуть"></div><div class="counter" id="fc"></div>
+   <div class="row" style="justify-content:space-between"><button type="button" class="btn" id="fp">← Назад</button><button type="button" class="btn main" id="fn">Дальше →</button></div></div>
+   <div class="card"><h2>Ещё слова из текста</h2><p class="note" style="margin-top:0">Пригодятся для пересказа.</p><div id="ex"></div></div>
+   <div class="card"><h2>Шаг 2. Проверь себя</h2><p class="note" style="margin-top:0">16 вопросов: казахское слово → русский, и наоборот. Ошибки повторяются в конце, пока не ответишь всё верно.</p><button type="button" class="btn main" id="qs">Начать проверку</button><div id="qz"></div></div>`;
+  let i=0,back=false;const fl=document.getElementById("fl");
+  const draw=()=>{const w=WORDS[i];fl.className="flash"+(back?" back":"");fl.innerHTML=back?`<div><div class="ru">${esc(w[1])}</div><div class="ex">${esc(w[2])}</div></div>`:`<div><div class="kz">${esc(w[0])}</div><div class="ex">нажми, чтобы увидеть перевод</div></div>`;document.getElementById("fc").textContent=`${i+1} из ${WORDS.length}`};
+  fl.onclick=()=>{back=!back;draw()};fl.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();back=!back;draw()}};
+  document.getElementById("fn").onclick=()=>{i=(i+1)%WORDS.length;back=false;draw()};
+  document.getElementById("fp").onclick=()=>{i=(i-1+WORDS.length)%WORDS.length;back=false;draw()};draw();
+  document.getElementById("ex").innerHTML=EXTRA.map(([k,r])=>`<div style="display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding:6px 0"><b style="color:var(--pen)">${esc(k)}</b><span>${esc(r)}</span></div>`).join("");
+  document.getElementById("qs").onclick=startQuiz;
+}
+function startQuiz(){
+  let Q=shuffle(WORDS.map((w,k)=>({k,dir:0})).concat(WORDS.map((w,k)=>({k,dir:1})))),total=Q.length,right=0;
+  const qz=document.getElementById("qz");document.getElementById("qs").hidden=true;
+  function show(){if(!Q.length){qz.innerHTML=`<div class="fb ok"><b>Отлично! Все 16 верно.</b> Слова выучены. Переходи к вкладке «Мәтін».</div><div class="row"><button type="button" class="btn main" id="go2">К тексту →</button><button type="button" class="btn" id="again">Ещё раз</button></div>`;markDone("t0");document.getElementById("go2").onclick=()=>setTab(1);document.getElementById("again").onclick=startQuiz;return}
+    const c=Q[0],w=WORDS[c.k];const ask=c.dir?w[1]:w[0],ans=c.dir?w[0]:w[1];
+    const others=shuffle(WORDS.filter((_,j)=>j!==c.k)).slice(0,3).map(x=>c.dir?x[0]:x[1]);const opts=shuffle([ans,...others]);
+    qz.innerHTML=`<div class="bar"><i style="width:${right/total*100}%"></i></div><div class="q">${c.dir?"Как по-казахски:":"Что значит:"} <b>${esc(ask)}</b>?</div><div class="opts"></div><div id="qf"></div>`;
+    const box=qz.querySelector(".opts");let tried=false;
+    opts.forEach(o=>{const b=document.createElement("button");b.type="button";b.textContent=o;b.onclick=()=>{if(b.disabled)return;
+      if(o===ans){b.classList.add("right");box.querySelectorAll("button").forEach(x=>x.disabled=true);Q.shift();if(!tried)right++;else Q.push(c);
+        document.getElementById("qf").innerHTML=`<div class="fb ok">Верно: <b>${esc(w[0])}</b> — ${esc(w[1])}</div>`;setTimeout(show,900)}
+      else{tried=true;b.classList.add("wrong");b.disabled=true;document.getElementById("qf").innerHTML=`<div class="fb no">Нет. Подумай ещё — это слово вернётся в конце.</div>`}};box.appendChild(b)})}
+  show();
+}
+
+/* ---------- 2. текст ---------- */
+const HL=["киелі","нысан","әулие","тарихи","тұлға","жерленген","мұнара","кешен","Кешен"];
+function hl(s){let r=esc(s);HL.forEach(w=>{r=r.replace(new RegExp("("+w+"[а-яәіңғүұқөһ]*)","g"),'<span class="w">$1</span>')});return r}
+function text(){
+  let n=0;pane.innerHTML=`<div class="card"><h2>Абайдың «Жидебай-Бөрілі» тарихи-мәдени кешені</h2><p class="note" style="margin-top:0">Читай по-казахски. Не понял предложение — нажми на него, появится перевод. <span class="w">Синим</span> выделены новые слова.</p>
+   <div class="row" style="margin-top:0;margin-bottom:10px"><button type="button" class="btn" id="all">Показать весь перевод</button></div>
+   <div id="tx">${TEXT.map(p=>`<p class="para">${p.map(([k,r])=>`<span class="sent" data-i="${n++}" role="button" tabindex="0">${hl(k)}</span> <span class="tr" hidden>${esc(r)}</span>`).join(" ")}</p>`).join("")}</div>
+   <div class="src">(ҚР Ұлттық мұражайының сайтынан алынды)</div></div>
+   <div class="card"><h2>Прочитал?</h2><p class="note" style="margin-top:0">Прочитай текст вслух один раз целиком. Потом переходи к пересказу — там будет короткий простой вариант.</p><button type="button" class="btn main" id="go3">Прочитал, к пересказу →</button></div>`;
+  const tog=el=>{const t=el.nextElementSibling;t.hidden=!t.hidden;el.classList.toggle("open",!t.hidden)};
+  pane.querySelectorAll(".sent").forEach(el=>{el.onclick=()=>tog(el);el.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();tog(el)}}});
+  let allOn=false;document.getElementById("all").onclick=e=>{allOn=!allOn;pane.querySelectorAll(".sent").forEach(el=>{el.nextElementSibling.hidden=!allOn;el.classList.toggle("open",allOn)});e.target.textContent=allOn?"Спрятать перевод":"Показать весь перевод"};
+  document.getElementById("go3").onclick=()=>{markDone("t1");setTab(2)};
+}
+
+/* ---------- 3. пересказ ---------- */
+let rstep=0;
+function retell(){
+  const names=["Прочитай","По порядку","Вставь слово","Цифры","Расскажи сам"];
+  pane.innerHTML=`<div class="card"><h2>Мазмұндау — пересказ</h2><p class="note" style="margin-top:0">Не нужно учить весь длинный текст. Учи этот короткий пересказ из 11 предложений — его хватит. Пять упражнений по порядку:</p><div class="steps" id="st"></div><div id="rp"></div></div>`;
+  const st=document.getElementById("st");names.forEach((n,i)=>{const b=document.createElement("button");b.type="button";b.textContent=(i+1)+". "+n;b.setAttribute("aria-pressed",i===rstep);if(S.done["r"+i])b.classList.add("done");b.onclick=()=>{rstep=i;retell()};st.appendChild(b)});
+  [r0,r1,r2,r3,r4][rstep](document.getElementById("rp"));
+}
+const nextR=()=>{markDone("r"+rstep);if(rstep<4){rstep++;retell();window.scrollTo(0,0)}};
+function r0(el){let ru=true;el.innerHTML=`<p style="margin:4px 0">Прочитай вслух 3 раза. Сначала с переводом, потом без.</p><button type="button" class="btn" id="tg">Спрятать перевод</button><ol class="ret" id="rl"></ol><button type="button" class="btn main" id="nx">Прочитал 3 раза →</button>`;
+  const draw=()=>{document.getElementById("rl").innerHTML=RET.map(([k,r])=>`<li>${hl(k)}${ru?`<span class="ru">${esc(r)}</span>`:""}</li>`).join("")};draw();
+  document.getElementById("tg").onclick=e=>{ru=!ru;e.target.textContent=ru?"Спрятать перевод":"Показать перевод";draw()};document.getElementById("nx").onclick=nextR}
+function r1(el){let pos=0;const order=shuffle(RET.map((_,i)=>i));
+  el.innerHTML=`<p style="margin:4px 0">Нажимай предложения <b>по порядку</b> — от первого к последнему.</p><div class="built" id="bu"></div><p class="note" id="hint">Какое предложение первое?</p><div class="pool" id="po"></div><div id="rf"></div>`;
+  const po=document.getElementById("po"),bu=document.getElementById("bu");
+  order.forEach(i=>{const b=document.createElement("button");b.type="button";b.textContent=RET[i][0];b.onclick=()=>{
+    if(i===pos){b.remove();bu.insertAdjacentHTML("beforeend",`<div><b>${pos+1}.</b>${esc(RET[i][0])}</div>`);pos++;document.getElementById("hint").textContent=pos<RET.length?"Что дальше? Подсказка по-русски: "+RET[pos][1]:"";
+      if(pos===RET.length){document.getElementById("rf").innerHTML=`<div class="fb ok"><b>Всё по порядку!</b></div><div class="row"><button type="button" class="btn main" id="nx">Дальше →</button></div>`;document.getElementById("nx").onclick=nextR}}
+    else{b.classList.add("shake");setTimeout(()=>b.classList.remove("shake"),600);document.getElementById("hint").textContent="Не это. Подсказка: "+RET[pos][1]}};po.appendChild(b)})}
+function r2(el){let i=0,ok=0;const Q=shuffle(GAPS);
+  function show(){if(i>=Q.length){el.innerHTML=`<div class="fb ok"><b>Готово: ${ok} из ${Q.length} с первого раза.</b></div><div class="row"><button type="button" class="btn main" id="nx">Дальше →</button><button type="button" class="btn" id="ag">Ещё раз</button></div>`;document.getElementById("nx").onclick=nextR;document.getElementById("ag").onclick=()=>r2(el);return}
+    const g=Q[i];let tried=false;el.innerHTML=`<div class="bar"><i style="width:${i/Q.length*100}%"></i></div><p class="say">${esc(g.s).replace("___",'<span class="gap">?</span>')}</p><p class="note">${esc(g.ru)}</p><div class="opts"></div><div id="gf"></div>`;
+    const box=el.querySelector(".opts");shuffle(g.o).forEach(o=>{const b=document.createElement("button");b.type="button";b.textContent=o;b.onclick=()=>{if(b.disabled)return;
+      if(o===g.a){b.classList.add("right");box.querySelectorAll("button").forEach(x=>x.disabled=true);if(!tried)ok++;el.querySelector(".gap").textContent=g.a;i++;setTimeout(show,900)}
+      else{tried=true;b.classList.add("wrong");b.disabled=true;document.getElementById("gf").innerHTML=`<div class="fb no">Нет. Посмотри на перевод под предложением.</div>`}};box.appendChild(b)})}
+  show()}
+function r3(el){let i=0;
+  function show(){if(i>=NUMS.length){el.innerHTML=`<div class="fb ok"><b>Цифры запомнил!</b> 150 жыл · 1993–1996 · 180 шақырым · 2 мұнара.</div><div class="row"><button type="button" class="btn main" id="nx">Дальше →</button></div>`;document.getElementById("nx").onclick=nextR;return}
+    const q=NUMS[i];el.innerHTML=`<p class="say">${esc(q.q)}</p><p class="note">${esc(q.ru)}</p><div class="opts"></div><div id="nf"></div>`;const box=el.querySelector(".opts");
+    q.o.forEach(o=>{const b=document.createElement("button");b.type="button";b.textContent=o;b.onclick=()=>{if(b.disabled)return;if(o===q.a){b.classList.add("right");box.querySelectorAll("button").forEach(x=>x.disabled=true);i++;setTimeout(show,800)}else{b.classList.add("wrong");b.disabled=true;document.getElementById("nf").innerHTML=`<div class="fb no">Нет. Вспомни пересказ (упражнение 1).</div>`}};box.appendChild(b)})}
+  show()}
+function r4(el){let i=0,known=0;
+  function show(){if(i>=RET.length){el.innerHTML=`<div class="fb ${known>=9?"ok":"no"}"><b>Сам вспомнил ${known} из ${RET.length}.</b> ${known>=9?"Можешь пересказывать! Теперь расскажи всё подряд вслух, не глядя.":"Повтори упражнение 1 и попробуй ещё раз."}</div><div class="row"><button type="button" class="btn" id="ag">Ещё раз</button></div>`;if(known>=9)markDone("t2"),markDone("r4");document.getElementById("ag").onclick=()=>r4(el);return}
+    el.innerHTML=`<div class="bar"><i style="width:${i/RET.length*100}%"></i></div><p class="note" style="margin:0">Предложение ${i+1} из ${RET.length}. Скажи вслух по-казахски, потом проверь.</p><p class="say">${esc(RET[i][1])}</p><div class="reveal" id="rv" hidden>${hl(RET[i][0])}</div><div class="row"><button type="button" class="btn main" id="sh">Показать</button></div>`;
+    document.getElementById("sh").onclick=()=>{document.getElementById("rv").hidden=false;el.querySelector(".row").innerHTML=`<button type="button" class="btn main" id="y">Знал ✓</button><button type="button" class="btn" id="n">Не знал</button>`;
+      document.getElementById("y").onclick=()=>{known++;i++;show()};document.getElementById("n").onclick=()=>{i++;show()}}}
+  show()}
+
+setTab(S.tab||0);
+}
+</script>
+</body>
+</html>
