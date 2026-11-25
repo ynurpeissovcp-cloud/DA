@@ -1,0 +1,255 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Домашка: Отырар</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: one narrow phone-first column; steps go top to bottom: task → words → crossword → notebook */
+:root{
+  --bg:#f6f3ee; --paper:#ffffff; --ink:#2a2118; --muted:#7a6a58; --line:#e6dccd;
+  --accent:#b5651d; --accent-soft:#f8e9d8; --sun:#e0a800; --sun-soft:#fff3cf;
+  --ok:#1f8a4c; --ok-soft:#e3f5ea; --bad:#c2410c; --bad-soft:#fdebe1; --kz:#8a4a12;
+  --f-display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --f-body:"Nunito","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1a1511; --paper:#241d17; --ink:#f1e8dc; --muted:#b3a28d; --line:#3d3226;
+  --accent:#f0a35a; --accent-soft:#3b2a1a; --sun:#f5c63a; --sun-soft:#3a3214;
+  --ok:#5fd28f; --ok-soft:#173a26; --bad:#ff9a6b; --bad-soft:#40241a; --kz:#f6b979; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1a1511; --paper:#241d17; --ink:#f1e8dc; --muted:#b3a28d; --line:#3d3226;
+  --accent:#f0a35a; --accent-soft:#3b2a1a; --sun:#f5c63a; --sun-soft:#3a3214;
+  --ok:#5fd28f; --ok-soft:#173a26; --bad:#ff9a6b; --bad-soft:#40241a; --kz:#f6b979; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.wrap{max-width:680px;margin:0 auto;padding-block:20px 60px;display:flex;flex-direction:column;gap:16px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800}
+h1{font-family:var(--f-display);font-size:clamp(24px,6.5vw,34px);line-height:1.15;margin:4px 0 6px;text-wrap:balance}
+h2{font-family:var(--f-display);font-size:20px;margin:10px 0 0;line-height:1.25;text-wrap:balance}
+h3{font-size:18px;margin:0;font-weight:800}
+p{margin:0}
+.lead{color:var(--muted)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.tip{background:var(--sun-soft);border:1px solid var(--sun);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.kz{color:var(--kz);font-weight:800}
+.ru{color:var(--muted)}
+.step{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.step b{width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--paper);display:grid;place-items:center;font-size:13px;letter-spacing:0}
+.btn{font:inherit;font-weight:800;border-radius:12px;border:1.5px solid var(--ink);background:var(--ink);color:var(--bg);padding:10px 14px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.small{padding:7px 12px;font-size:15px}
+.btn:focus-visible,input:focus-visible,.word:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+/* words */
+.words{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.word{border:1.5px solid var(--line);background:var(--paper);border-radius:12px;padding:12px;text-align:center;cursor:pointer;font:inherit;color:var(--ink);min-height:92px;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.word .w{font-family:var(--f-display);font-size:18px;color:var(--kz)}
+.word .t{font-size:14px;color:var(--muted)}
+.word.open{background:var(--sun-soft);border-color:var(--sun)}
+.word.open .t{color:var(--ink);font-weight:800}
+.word .m{font-size:13px;color:var(--muted);display:none}
+.word.open .m{display:block}
+/* crossword */
+.xwrap{overflow-x:auto}
+.xw{display:grid;grid-template-columns:repeat(7,40px);grid-auto-rows:40px;gap:3px;width:max-content;margin-inline:auto}
+.xc{position:relative;border:1.5px solid var(--ok);background:var(--paper);display:grid;place-items:center;font-weight:800;font-size:19px;color:var(--ink)}
+.xc.key{background:var(--sun-soft);border-color:var(--sun)}
+.xc.done{color:var(--ok)}
+.xc i{position:absolute;top:1px;left:3px;font-size:10px;font-style:normal;color:var(--muted)}
+.clue{border-top:1px dashed var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.clue:first-of-type{border-top:0;padding-top:0}
+.cq{font-weight:800}
+.cq .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:6px;background:var(--accent-soft);color:var(--accent);margin-right:6px;font-size:14px}
+input[type=text]{font:inherit;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:9px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);width:170px;max-width:100%}
+input.good{border-color:var(--ok);background:var(--ok-soft)}
+input.badv{border-color:var(--bad);background:var(--bad-soft)}
+.hint{background:var(--accent-soft);border-radius:10px;padding:9px 12px;font-size:16px}
+.hint b{color:var(--accent)}
+.msg{font-weight:800;font-size:15px}
+.msg.ok{color:var(--ok)} .msg.no{color:var(--bad)}
+.final{display:none}
+.final.show{display:flex}
+.big{font-family:var(--f-display);font-size:30px;color:var(--ok);letter-spacing:.06em}
+.note{font-weight:700;line-height:1.7;background:var(--bg);border:1px dashed var(--line);border-radius:10px;padding:12px 14px}
+.progress{font-size:14px;color:var(--muted);font-weight:700}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Қазақ тілі · 7 сынып · 4-тақырып · 72-бет</div>
+    <h1>Домашка: Отырар</h1>
+    <p class="lead">Арсен, здесь нет готовых ответов. Ты решаешь сам, а если застрял, жми «Подсказка». Каждая следующая подсказка ближе к ответу.</p>
+  </header>
+
+  <div class="tip">
+    <p><b>Что задали:</b></p>
+    <p><span class="kz">жаңа сөздер жаттау</span> — выучить новые слова (они в синей рамке «Жаңа сөздер» на стр. 72)</p>
+    <p><span class="kz">72-бет 2-тапсырма жазбаша орындау</span> — письменно сделать задание 2 на стр. 72. Это кроссворд (<span class="kz">сөзжұмбақ</span>).</p>
+  </div>
+
+  <!-- STEP 1 -->
+  <span class="step"><b>1</b> Сначала слова</span>
+  <div class="card">
+    <h3>7 новых слов</h3>
+    <p class="ru">Попробуй сам угадать, что значит слово, потом нажми на карточку и проверь. Внизу будет подсказка, как запомнить.</p>
+    <div class="words" id="words"></div>
+    <div class="row"><button class="btn small" id="testBtn">Проверить себя</button><span class="progress" id="testInfo"></span></div>
+    <div id="test" hidden>
+      <p class="cq" id="tq"></p>
+      <div class="row" id="topts" style="margin-top:8px"></div>
+      <p class="msg" id="tmsg" style="margin-top:8px"></p>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <span class="step"><b>2</b> Кроссворд</span>
+  <div class="card">
+    <p><b>Что сказано в задании:</b> <span class="kz">Сөзжұмбақты шешсең, ортадағы бір бағанда орта ғасырдағы рухани орталық болған қаланың аты шығады.</span></p>
+    <p class="ru">По-русски: решишь кроссворд, и в средней колонке (она жёлтая) появится название города, который в Средние века был духовным центром.</p>
+    <div class="xwrap"><div class="xw" id="xw"></div></div>
+    <p class="ru" style="font-size:15px">Нет казахских букв на телефоне? Пиши <b>К</b> вместо <b>Қ</b>, <b>И</b> вместо <b>І</b>. Проверка всё равно засчитает.</p>
+    <p class="progress" id="xprog"></p>
+  </div>
+  <div class="card" id="clues"></div>
+
+  <!-- FINAL -->
+  <div class="card final" id="final">
+    <span class="step"><b>3</b> Готово! Пишем в тетрадь</span>
+    <p>В жёлтой колонке получилось:</p>
+    <div class="big" id="city"></div>
+    <p>Это город из урока: <span class="kz">«Отырар — өркениет ордасы»</span> (Отырар — центр цивилизации). Здесь родился учёный <b>әл-Фараби</b>.</p>
+    <p><b>Перепиши в тетрадь</b> (сетку лучше нарисовать как в учебнике и вписать буквы):</p>
+    <div class="note kz" id="noteText"></div>
+    <p class="ru">Последняя строчка значит: «Ответ: Отырар — город, который в Средние века был духовным центром».</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+
+  /* ---------- words ---------- */
+  var W=[
+    ['билік','власть','«Би» у казахов — судья и правитель. У кого билік, тот и правит.'],
+    ['монша','баня','Похоже на «мойся». В монше моются.'],
+    ['кәріз','водопровод, канал для воды под землёй','В Средней Азии так называли подземные каналы, по которым шла вода в город.'],
+    ['қирау','разрушиться','Похоже на «крах»: всё рухнуло.'],
+    ['ойрандау','разгромить, разорить','«Ой, всё разгромили!» Сделали ойран — устроили погром.'],
+    ['діни','религиозный','От слова «дін» — религия. Діни орындар — мечети, медресе.'],
+    ['рух','дух','Почти как русское «дух». Отсюда «рухани» — духовный.']
+  ];
+  var wb=document.getElementById('words');
+  wb.innerHTML=W.map(function(w,i){return '<button class="word" data-i="'+i+'"><span class="w">'+esc(w[0])+'</span><span class="t">?</span><span class="m">'+esc(w[2])+'</span></button>'}).join('');
+  [].forEach.call(wb.querySelectorAll('.word'),function(b){b.onclick=function(){
+    var w=W[+b.dataset.i];var open=b.classList.toggle('open');b.querySelector('.t').textContent=open?w[1]:'?';
+  }});
+
+  var order=[],ti=0,score=0;
+  function nextT(){
+    var box=document.getElementById('test');
+    if(ti>=order.length){document.getElementById('tq').textContent='Итог: '+score+' из '+W.length+(score===W.length?'. Все слова знаешь!':'. Посмотри ещё раз карточки и попробуй снова.');
+      document.getElementById('topts').innerHTML='';document.getElementById('tmsg').textContent='';return}
+    var w=W[order[ti]];
+    document.getElementById('tq').innerHTML='Что значит <span class="kz">«'+esc(w[0])+'»</span>?';
+    var opts=shuffle([order[ti]].concat(shuffle(W.map(function(_,k){return k}).filter(function(k){return k!==order[ti]})).slice(0,2)));
+    var to=document.getElementById('topts');
+    to.innerHTML=opts.map(function(k){return '<button class="btn ghost small" data-k="'+k+'">'+esc(W[k][1])+'</button>'}).join('');
+    document.getElementById('tmsg').textContent='';document.getElementById('tmsg').className='msg';
+    document.getElementById('testInfo').textContent='Слово '+(ti+1)+' из '+W.length;
+    [].forEach.call(to.querySelectorAll('button'),function(b){b.onclick=function(){
+      var ok=+b.dataset.k===order[ti];var m=document.getElementById('tmsg');
+      [].forEach.call(to.querySelectorAll('button'),function(x){x.disabled=true});
+      if(ok){score++;m.textContent='Верно!';m.className='msg ok'}else{m.textContent='Нет, «'+w[0]+'» — это '+w[1]+'.';m.className='msg no'}
+      setTimeout(function(){ti++;nextT()},1100);
+    }});
+  }
+  document.getElementById('testBtn').onclick=function(){order=shuffle(W.map(function(_,k){return k}));ti=0;score=0;document.getElementById('test').hidden=false;this.textContent='Начать заново';nextT()};
+
+  /* ---------- crossword ---------- */
+  // start column, answer, clue (kz), clue translation, hints
+  var C=[
+    [2,'ОТАН','Ең қасиетті сөз','Самое святое слово',[
+      'Подумай: что для человека самое дорогое и святое? То, что защищают солдаты, то, где ты родился.',
+      'По-русски это «Родина». Вспомни выражение «Отан қорғау» — защищать Родину.',
+      '4 буквы, начинается на О: О _ _ Н']],
+    [0,'КІТАП','Ең құнды сыйлық','Самый ценный подарок',[
+      'Открой текст на стр. 73. Там написано, что купцы дарили правителю Отырара что-то как «ең құнды сыйлық».',
+      'Этого очень много в библиотеке. Твой учебник — тоже это.',
+      '5 букв, начинается на К: К _ Т _ П']],
+    [0,'ОҚЫРМАН','Кітапханада отыратын адам','Человек, который сидит в библиотеке',[
+      'Кто сидит в библиотеке? Не тот, кто там работает, а тот, кто приходит читать.',
+      'Глагол «оқу» — читать. «Оқушы» — ученик. А человек, который читает книги, — это ...',
+      '7 букв: О Қ _ Р _ А Н']],
+    [1,'АРЫС','Отырарға жақын өзен','Река рядом с Отыраром',[
+      'Отырар стоял там, где одна река впадает в Сырдарию. Сырдария не подходит: нужно всего 4 буквы.',
+      'Так же называется город в Туркестанской области, недалеко от Шымкента.',
+      '4 буквы: А _ Ы _']],
+    [1,'ФАРАБ','Отырардың көне атауы','Древнее название Отырара',[
+      'Открой стр. 73, первый абзац: «Алғаш рет Отырар және ... атаулары IX ғасырда кездеседі».',
+      'Великий учёный әл-Фараби родился в этом городе. Его имя как раз от названия города.',
+      '5 букв: Ф _ Р _ Б']],
+    [1,'ОРДА','«Мекен», «үй» сөзінің синонимі','Синоним слов «место жительства», «дом»',[
+      'Посмотри на название урока на стр. 72: «Отырар — өркениет ...сы».',
+      'Так называли ставку хана, его главный дом и центр. Например, «Ақ Орда», «Алтын Орда».',
+      '4 буквы: О _ Д А']]
+  ];
+  var KEY=2, solved=C.map(function(){return false}), hintsUsed=C.map(function(){return 0});
+  function norm(s){return s.toUpperCase().replace(/\s+/g,'').replace(/Ё/g,'Е').replace(/[Iİ]/g,'І').replace(/И/g,'І').replace(/К/g,'Қ').replace(/Ң/g,'Н').replace(/Н/g,'Н')}
+  function normAns(s){return s.replace(/К/g,'Қ')}
+  function drawGrid(){
+    var h='';
+    C.forEach(function(r,ri){for(var c=0;c<7;c++){var k=c-r[0];
+      if(k>=0&&k<r[1].length){h+='<div class="xc'+(c===KEY?' key':'')+(solved[ri]?' done':'')+'">'+(c===KEY?'<i>'+(ri+1)+'</i>':'')+(solved[ri]?r[1][k]:'')+'</div>'}
+      else h+='<div></div>'}});
+    document.getElementById('xw').innerHTML=h;
+    var n=solved.filter(Boolean).length;
+    document.getElementById('xprog').textContent='Решено: '+n+' из '+C.length;
+    if(n===C.length)finish();
+  }
+  var cl=document.getElementById('clues');
+  cl.innerHTML=C.map(function(r,i){return '<div class="clue" id="c'+i+'">'+
+    '<p class="cq"><span class="n">'+(i+1)+'</span><span class="kz">'+esc(r[2])+'</span></p>'+
+    '<p class="ru">'+esc(r[3])+' · '+r[1].length+' букв'+(r[1].length===4?'ы':'')+'</p>'+
+    '<div class="row"><input type="text" id="in'+i+'" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="'+(r[1].length+2)+'" aria-label="Ответ '+(i+1)+'">'+
+    '<button class="btn small" data-c="'+i+'">Проверить</button><button class="btn ghost small" data-h="'+i+'">Подсказка</button></div>'+
+    '<div id="h'+i+'" style="display:flex;flex-direction:column;gap:6px"></div><p class="msg" id="m'+i+'"></p></div>'}).join('');
+  function check(i){
+    var inp=document.getElementById('in'+i),m=document.getElementById('m'+i),r=C[i];
+    var v=normAns(norm(inp.value)), a=normAns(norm(r[1]));
+    if(!v){m.textContent='Сначала впиши слово.';m.className='msg no';return}
+    if(v===a){solved[i]=true;inp.classList.remove('badv');inp.classList.add('good');inp.value=r[1];inp.disabled=true;
+      m.textContent='Верно! '+r[1]+' — '+['Родина','книга','читатель','река Арыс','Фараб','орда, ставка'][i]+'.';m.className='msg ok';
+      var b=document.querySelector('[data-c="'+i+'"]');b.disabled=true;drawGrid()}
+    else{inp.classList.add('badv');
+      m.textContent=v.length!==a.length?'Не то. Посчитай буквы: нужно '+a.length+', а у тебя '+v.length+'.':'Почти по длине, но не то слово. Возьми подсказку.';m.className='msg no'}
+  }
+  function hint(i){
+    var r=C[i],n=hintsUsed[i],box=document.getElementById('h'+i);
+    if(solved[i])return;
+    if(n<r[4].length){box.insertAdjacentHTML('beforeend','<div class="hint"><b>Подсказка '+(n+1)+':</b> '+esc(r[4][n])+'</div>');hintsUsed[i]++;
+      if(hintsUsed[i]===r[4].length)document.querySelector('[data-h="'+i+'"]').textContent='Сдаюсь, покажи'}
+    else{box.insertAdjacentHTML('beforeend','<div class="hint"><b>Ответ:</b> '+esc(r[1])+'. Впиши его сам и нажми «Проверить».</div>');
+      document.querySelector('[data-h="'+i+'"]').disabled=true}
+  }
+  [].forEach.call(cl.querySelectorAll('[data-c]'),function(b){b.onclick=function(){check(+b.dataset.c)}});
+  [].forEach.call(cl.querySelectorAll('[data-h]'),function(b){b.onclick=function(){hint(+b.dataset.h)}});
+  [].forEach.call(cl.querySelectorAll('input'),function(inp,i){inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();check(i)}});
+    inp.addEventListener('input',function(){inp.classList.remove('badv');document.getElementById('m'+i).textContent=''})});
+  var finished=false;
+  function finish(){
+    if(finished)return;finished=true;
+    var city=C.map(function(r){return r[1][KEY-r[0]]}).join('');
+    document.getElementById('city').textContent=city;
+    document.getElementById('noteText').innerHTML='2-тапсырма. Сөзжұмбақ.<br>'+C.map(function(r,i){var w=r[1];return (i+1)+'. '+w[0]+w.slice(1).toLowerCase()}).join('<br>')+
+      '<br>Жауабы: '+city[0]+city.slice(1).toLowerCase()+' — орта ғасырдағы рухани орталық болған қала.';
+    var f=document.getElementById('final');f.classList.add('show');
+    setTimeout(function(){f.scrollIntoView({behavior:'smooth',block:'start'})},300);
+  }
+  drawGrid();
+})();
+</script>
+
+</body></html>

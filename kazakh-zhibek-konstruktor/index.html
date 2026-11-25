@@ -1,0 +1,244 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Жібек жолы: конструктор</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: one narrow phone-first column; steps go top to bottom: task → words → crossword → notebook */
+:root{
+  --bg:#f6f3ee; --paper:#ffffff; --ink:#2a2118; --muted:#7a6a58; --line:#e6dccd;
+  --accent:#b5651d; --accent-soft:#f8e9d8; --sun:#e0a800; --sun-soft:#fff3cf;
+  --ok:#1f8a4c; --ok-soft:#e3f5ea; --bad:#c2410c; --bad-soft:#fdebe1; --kz:#8a4a12;
+  --f-display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --f-body:"Nunito","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1a1511; --paper:#241d17; --ink:#f1e8dc; --muted:#b3a28d; --line:#3d3226;
+  --accent:#f0a35a; --accent-soft:#3b2a1a; --sun:#f5c63a; --sun-soft:#3a3214;
+  --ok:#5fd28f; --ok-soft:#173a26; --bad:#ff9a6b; --bad-soft:#40241a; --kz:#f6b979; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1a1511; --paper:#241d17; --ink:#f1e8dc; --muted:#b3a28d; --line:#3d3226;
+  --accent:#f0a35a; --accent-soft:#3b2a1a; --sun:#f5c63a; --sun-soft:#3a3214;
+  --ok:#5fd28f; --ok-soft:#173a26; --bad:#ff9a6b; --bad-soft:#40241a; --kz:#f6b979; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.wrap{max-width:680px;margin:0 auto;padding-block:20px 60px;display:flex;flex-direction:column;gap:16px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800}
+h1{font-family:var(--f-display);font-size:clamp(24px,6.5vw,34px);line-height:1.15;margin:4px 0 6px;text-wrap:balance}
+h2{font-family:var(--f-display);font-size:20px;margin:10px 0 0;line-height:1.25;text-wrap:balance}
+h3{font-size:18px;margin:0;font-weight:800}
+p{margin:0}
+.lead{color:var(--muted)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.tip{background:var(--sun-soft);border:1px solid var(--sun);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.kz{color:var(--kz);font-weight:800}
+.ru{color:var(--muted)}
+.step{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.step b{width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--paper);display:grid;place-items:center;font-size:13px;letter-spacing:0}
+.btn{font:inherit;font-weight:800;border-radius:12px;border:1.5px solid var(--ink);background:var(--ink);color:var(--bg);padding:10px 14px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.small{padding:7px 12px;font-size:15px}
+.btn:focus-visible,input:focus-visible,.word:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+/* words */
+.words{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.word{border:1.5px solid var(--line);background:var(--paper);border-radius:12px;padding:12px;text-align:center;cursor:pointer;font:inherit;color:var(--ink);min-height:92px;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.word .w{font-family:var(--f-display);font-size:18px;color:var(--kz)}
+.word .t{font-size:14px;color:var(--muted)}
+.word.open{background:var(--sun-soft);border-color:var(--sun)}
+.word.open .t{color:var(--ink);font-weight:800}
+.word .m{font-size:13px;color:var(--muted);display:none}
+.word.open .m{display:block}
+/* crossword */
+.xwrap{overflow-x:auto}
+.xw{display:grid;grid-template-columns:repeat(7,40px);grid-auto-rows:40px;gap:3px;width:max-content;margin-inline:auto}
+.xc{position:relative;border:1.5px solid var(--ok);background:var(--paper);display:grid;place-items:center;font-weight:800;font-size:19px;color:var(--ink)}
+.xc.key{background:var(--sun-soft);border-color:var(--sun)}
+.xc.done{color:var(--ok)}
+.xc i{position:absolute;top:1px;left:3px;font-size:10px;font-style:normal;color:var(--muted)}
+.clue{border-top:1px dashed var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.clue:first-of-type{border-top:0;padding-top:0}
+.cq{font-weight:800}
+.cq .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:6px;background:var(--accent-soft);color:var(--accent);margin-right:6px;font-size:14px}
+input[type=text]{font:inherit;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:9px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);width:170px;max-width:100%}
+input.good{border-color:var(--ok);background:var(--ok-soft)}
+input.badv{border-color:var(--bad);background:var(--bad-soft)}
+.hint{background:var(--accent-soft);border-radius:10px;padding:9px 12px;font-size:16px}
+.hint b{color:var(--accent)}
+.msg{font-weight:800;font-size:15px}
+.msg.ok{color:var(--ok)} .msg.no{color:var(--bad)}
+.final{display:none}
+.final.show{display:flex}
+.big{font-family:var(--f-display);font-size:30px;color:var(--ok);letter-spacing:.06em}
+.note{font-weight:700;line-height:1.7;background:var(--bg);border:1px dashed var(--line);border-radius:10px;padding:12px 14px}
+.progress{font-size:14px;color:var(--muted);font-weight:700}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+<style>
+.sent{border:1.5px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--paper)}
+.sent.in{border-color:var(--ok);background:var(--ok-soft)}
+.sent.off{opacity:.55}
+.sk{font-size:18px;font-weight:700;line-height:1.6;color:var(--ink)}
+.slot{display:inline-block;min-width:64px;border-bottom:2.5px dashed var(--accent);color:var(--accent);font-weight:800;padding:0 4px;text-align:center}
+.slot.filled{border-bottom-style:solid;border-color:var(--ok);color:var(--ok)}
+.sr{font-size:14px;color:var(--muted)}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opt{font:inherit;font-size:15px;font-weight:800;padding:8px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--bg);color:var(--kz);cursor:pointer;text-align:left}
+.opt small{display:block;font-size:12px;font-weight:600;color:var(--muted)}
+.opt.sel{border-color:var(--ok);background:var(--ok);color:var(--paper)}
+.opt.sel small{color:var(--paper);opacity:.85}
+.opt:focus-visible,.tog:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.tog{align-self:flex-start;font:inherit;font-size:13px;font-weight:800;padding:4px 10px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.stephead{display:flex;flex-direction:column;gap:2px}
+.checks{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.checks li{display:flex;gap:8px;align-items:flex-start}
+.checks .mark{flex:0 0 22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;background:var(--line);color:var(--muted)}
+.checks li.on .mark{background:var(--ok);color:var(--paper)}
+.wc{font-family:var(--f-display);font-size:28px}
+.wc.ok{color:var(--ok)} .wc.low{color:var(--accent)} .wc.high{color:var(--bad)}
+.newwords{display:flex;flex-wrap:wrap;gap:6px}
+.nw{font-size:13px;font-weight:800;padding:3px 9px;border-radius:999px;background:var(--line);color:var(--muted)}
+.nw.on{background:var(--ok-soft);color:var(--ok)}
+.sticky{position:sticky;bottom:env(safe-area-inset-bottom,0px);z-index:3;background:var(--paper);border:1.5px solid var(--ink);border-radius:14px;padding:10px 14px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;box-shadow:0 6px 20px rgba(0,0,0,.12)}
+.sticky .lbl{font-size:13px;color:var(--muted);font-weight:700;line-height:1.2}
+.letter{white-space:pre-wrap;font-weight:600;line-height:1.7;background:var(--bg);border:1px dashed var(--line);border-radius:10px;padding:12px 14px;min-height:60px}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Қазақ тілі · 7 сынып · 77-бет · 7-тапсырма</div>
+    <h1>Письмо монеты: собери сам</h1>
+    <p class="lead">Арсен, нажимай слова, которые больше нравятся. Предложение попадёт в письмо, когда все пропуски заполнены. Все варианты правильные, выбирай любой.</p>
+  </header>
+
+  <div class="tip">
+    <p><b>Задание:</b> <span class="kz">Көне қалалардың орнынан табылған күміс ақшаның атынан қазіргі ұрпаққа хат жаз.</span></p>
+    <p>Напиши письмо людям сегодня от имени серебряной монеты, которую нашли на месте древнего города. Нужно <b>80–100 слов</b>, новые слова урока, прилагательные, сравнения и метафора. Внизу счётчик: следи, чтобы цифра стала зелёной.</p>
+    <p class="ru">Слишком много слов? Нажми «Убрать» у лишнего предложения.</p>
+  </div>
+
+  <div id="steps" style="display:flex;flex-direction:column;gap:16px"></div>
+
+  <div class="sticky">
+    <div><div class="wc" id="wc">0</div><div class="lbl">слов<br>нужно 80–100</div></div>
+    <div style="flex:1;min-width:180px"><div class="lbl" style="margin-bottom:4px">Новые слова в письме:</div><div class="newwords" id="nwBar"></div></div>
+  </div>
+
+  <span class="step"><b>✓</b> Готовое письмо</span>
+  <div class="card">
+    <ul class="checks" id="checks"></ul>
+    <div class="letter kz" id="letter"></div>
+    <div class="row"><button class="btn small" id="copyBtn">Скопировать</button><span class="progress" id="copyMsg"></span></div>
+    <details class="reveal"><summary style="cursor:pointer;font-weight:800;color:var(--accent)">Перевод на русский</summary><div class="letter" id="letterRu" style="margin-top:8px"></div></details>
+    <p class="ru">В тетрадь: сверху <span class="kz">7-тапсырма.</span>, ниже письмо. Обращение — с отдельной строки, подпись — в конце.</p>
+    <div class="row"><button class="btn ghost small" id="clearBtn">Начать заново</button><span class="progress" id="clearMsg"></span></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  var store={get:function(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+  // k/r: kazakh and russian templates; numbers = slot index; o: options per slot [kz, ru]
+  var STEPS=[
+    {t:'Обращение',q:'К кому пишем?',s:[
+      {k:[0,' ',1,'!'],r:[0,' ',1,'!'],o:[[['Қымбатты','Дорогое'],['Құрметті','Уважаемое']],[['қазіргі ұрпақ','нынешнее поколение'],['болашақ ұрпақ','будущее поколение']]]}]},
+    {t:'Кто я',q:'Монета представляется: какая она и где её сделали.',s:[
+      {k:['Мен — ',0,' күміс ақшамын.'],r:['Я — ',0,' серебряная монета.'],o:[[['көне','старинная'],['ежелгі','древняя']]]},
+      {k:['Мені ',0,' қаласындағы ұстаханада шебер жасады.'],r:['Меня сделал мастер в мастерской города ',0,'.'],o:[[['Отырар','Отырар'],['Тараз','Тараз'],['Сауран','Сауран'],['Түркістан','Туркестан']]]},
+      {k:['Ол таудан күміс өндіріп, мені ',0,' етіп құйды.'],r:['Он добыл серебро в горах и отлил меня ',0,'.'],o:[[['дөңгелек','круглой'],['жұқа','тонкой'],['әдемі','красивой']]]},
+      {k:['Мен ',0,' жарқырайтынмын.'],r:['Я сияла, как ',0,'.'],o:[[['айдай','луна'],['күндей','солнце'],['жұлдыздай','звезда']]]}]},
+    {t:'Моё путешествие',q:'Как монета путешествовала по Шёлковому пути.',s:[
+      {k:['Мен Ұлы Жібек жолымен ',0,' сапар шектім.'],r:['Я совершила ',0,' путешествие по Великому Шёлковому пути.'],o:[[['ұзақ','долгое'],['алыс','далёкое']]]},
+      {k:['Бұл сауда жолы — ',0,'.'],r:['Этот торговый путь — ',0,'.'],o:[[['Шығыс пен Батыстың алтын көпірі','золотой мост между Востоком и Западом'],['елдерді байланыстырған жібек жіп','шёлковая нить, связавшая страны']]]},
+      {k:['Ол ',0,' Еуропаға дейін созылып жатты.'],r:['Он тянулся от ',0,' до Европы.'],o:[[['Қытайдан','Китая'],['Шығыстан','Востока']]]},
+      {k:['Керуендер ',0,' тасымалдады.'],r:['Караваны перевозили ',0,'.'],o:[[['қытай жібегін','китайский шёлк'],['парсы кілемдерін','персидские ковры'],['қымбат асыл тастарды','дорогие драгоценные камни']]]},
+      {k:['Саудагерлер мені ',0,' беріп жүрді.'],r:['Торговцы передавали меня ',0,'.'],o:[[['қолдан қолға','из рук в руки'],['қаладан қалаға','из города в город']]]}]},
+    {t:'Беда',q:'Что случилось с городом и с монетой.',s:[
+      {k:['Бір күні ',0,' жау қаланы қоршады.'],r:['Однажды ',0,' враг окружил город.'],o:[[['қатыгез','жестокий'],['күшті','сильный']]]},
+      {k:['Кейбір наразы адамдардың опасыздығынан ',0,'.'],r:['Из-за предательства некоторых недовольных людей ',0,'.'],o:[[['қала қақпасы ашылды','открылись ворота города'],['жау қалаға кірді','враг вошёл в город']]]},
+      {k:['Әдемі қала ',0,', мен жерге түсіп қалдым.'],r:['Красивый город ',0,', а я упала на землю.'],o:[[['қирап','разрушился'],['ойрандалып','был разгромлен']]]},
+      {k:['Жер астында ',0,' қараңғы болды.'],r:['Под землёй было темно, как ',0,'.'],o:[[['түндей','ночью'],['үңгірдей','в пещере']]]}]},
+    {t:'Как меня нашли',q:'Сколько монета пролежала и где она сейчас.',s:[
+      {k:['Ғасырлар бойы мен ',0,' жаттым.'],r:['Веками я лежала ',0,'.'],o:[[['үнсіз','молча'],['жалғыз','одна']]]},
+      {k:['Кейін ',0,' мені тауып алды.'],r:['Потом меня нашли ',0,'.'],o:[[['жас археологтар','молодые археологи'],['ғалымдар','учёные']]]},
+      {k:['Қазір мен ',0,' тұрмын.'],r:['Сейчас я нахожусь ',0,'.'],o:[[['тарихи мұражайда','в историческом музее'],['Отырар мұражайында','в музее Отырара']]]}]},
+    {t:'Что хочу сказать вам',q:'Главная мысль письма.',s:[
+      {k:['Ұлы Жібек жолы — ата-бабаларымыздың ',0,' жетістігі.'],r:['Великий Шёлковый путь — ',0,' достижение наших предков.'],o:[[['ұлы','великое'],['үлкен','большое']]]},
+      {k:['Мен сияқты ',0,' заттар да бай тарихты сақтайды.'],r:['Даже ',0,' вещи, как я, хранят богатую историю.'],o:[[['кішкентай','маленькие'],['көне','старинные']]]},
+      {k:[0,', достар!'],r:[0,', друзья!'],o:[[['Тарихты ұмытпаңдар','Не забывайте историю'],['Өткенді құрметтеңдер','Уважайте прошлое']]]}]},
+    {t:'Подпись',q:'Попрощайся.',s:[
+      {k:['Сәлеммен, ',0,'.'],r:['С приветом, ',0,'.'],o:[[['көне күміс ақша','старинная серебряная монета'],['ежелгі күміс теңге','древняя серебряная монета']]]}]}
+  ];
+  // state: sel[step][sent] = array of chosen option indexes (or null); off[step][sent] = bool
+  var saved=store.get('silk2')||{};
+  var sel=STEPS.map(function(st,i){return st.s.map(function(se,j){var v=saved.sel&&saved.sel[i]&&saved.sel[i][j];return v&&v.length===se.o.length?v:se.o.map(function(){return null})})});
+  var off=STEPS.map(function(st,i){return st.s.map(function(se,j){return !!(saved.off&&saved.off[i]&&saved.off[i][j])})});
+
+  function filled(i,j){return sel[i][j].every(function(x){return x!==null})}
+  function render(tpl,i,j,lang,html){var se=STEPS[i].s[j];return tpl.map(function(p){
+    if(typeof p==='number'){var c=sel[i][j][p];var txt=c===null?'…':se.o[p][c][lang];return html?'<span class="slot'+(c===null?'':' filled')+'">'+esc(txt)+'</span>':txt}
+    return html?esc(p):p}).join('')}
+
+  var root=document.getElementById('steps');
+  function draw(){
+    root.innerHTML=STEPS.map(function(st,i){return '<div class="card"><div class="stephead"><span class="step"><b>'+(i+1)+'</b> '+esc(st.t)+'</span><p class="ru">'+esc(st.q)+'</p></div>'+
+      st.s.map(function(se,j){var f=filled(i,j),o=off[i][j];
+        return '<div class="sent'+(f&&!o?' in':'')+(o?' off':'')+'">'+
+          '<div class="sk kz" style="color:var(--ink)">'+render(se.k,i,j,0,true)+'</div>'+
+          '<div class="sr">'+render(se.r,i,j,1,true)+'</div>'+
+          se.o.map(function(opts,s){return '<div class="opts">'+opts.map(function(op,n){return '<button class="opt'+(sel[i][j][s]===n?' sel':'')+'" data-a="'+i+','+j+','+s+','+n+'">'+esc(op[0])+'<small>'+esc(op[1])+'</small></button>'}).join('')+'</div>'}).join('')+
+          (f?'<button class="tog" data-t="'+i+','+j+'">'+(o?'Вернуть в письмо':'Убрать из письма')+'</button>':'')+
+        '</div>'}).join('')+'</div>'}).join('');
+  }
+  root.addEventListener('click',function(e){
+    var b=e.target.closest('[data-a],[data-t]');if(!b)return;
+    var y=window.scrollY;
+    if(b.dataset.a){var a=b.dataset.a.split(',').map(Number);sel[a[0]][a[1]][a[2]]=a[3];off[a[0]][a[1]]=false}
+    else{var t=b.dataset.t.split(',').map(Number);off[t[0]][t[1]]=!off[t[0]][t[1]]}
+    draw();update();window.scrollTo(0,y);
+  });
+
+  var NEW=[['сауда жолы','сауда\\s*жол'],['қоршау','қорша'],['наразы','наразы'],['опасыздық','опасыз'],['ұстахана','ұстахана'],['тасымалдау','тасымал'],['өндіру','өндір'],['жетістік','жетісті'],['созылу','созыл']];
+  var nwBar=document.getElementById('nwBar');
+  nwBar.innerHTML=NEW.map(function(w,i){return '<span class="nw" id="nw'+i+'">'+esc(w[0])+'</span>'}).join('');
+  var ADJ=['көне','ежелгі','күміс','дөңгелек','жұқа','әдемі','ұзақ','алыс','алтын','қымбат','асыл','қатыгез','күшті','наразы','қараңғы','тарихи','ұлы','үлкен','кішкентай','бай','жас','қытай','парсы'];
+  function build(lang){return STEPS.map(function(st,i){return st.s.map(function(se,j){return filled(i,j)&&!off[i][j]?render(lang?se.r:se.k,i,j,lang,false):''}).filter(Boolean).join(' ')}).filter(Boolean).join('\n')}
+  function update(){
+    store.set('silk2',{sel:sel,off:off});
+    var kz=build(0),ru=build(1);
+    document.getElementById('letter').textContent=kz||'Нажимай слова выше — здесь соберётся письмо.';
+    document.getElementById('letterRu').textContent=ru||'—';
+    var n=(kz.match(/[А-Яа-яЁёӘәҒғҚқҢңӨөҰұҮүҺһІі]+(?:-[А-Яа-яЁёӘәҒғҚқҢңӨөҰұҮүҺһІі]+)*/g)||[]).length;
+    var wc=document.getElementById('wc');wc.textContent=n;wc.className='wc '+(n<80?'low':n>100?'high':'ok');
+    var low=kz.toLowerCase(),used=0;
+    NEW.forEach(function(w,i){var on=new RegExp(w[1]).test(low);document.getElementById('nw'+i).classList.toggle('on',on);if(on)used++});
+    var words=low.split(/[^а-яёәғқңөұүһі-]+/);
+    var adj=ADJ.filter(function(a){return words.indexOf(a)>=0});
+    var ten=['айдай','күндей','жұлдыздай','түндей','үңгірдей','сияқты'].filter(function(x){return words.indexOf(x)>=0});
+    var meta=/алтын көпірі|жібек жіп/.test(low);
+    var C=[
+      [n>=80&&n<=100,'Объём: '+n+' слов'+(n<80?'. Добавь ещё предложения, нужно хотя бы 80.':n>100?'. Многовато: лишних '+(n-100)+' сл. Нажми «Убрать из письма» у пары предложений, которые меньше нравятся.':'. Отлично!')],
+      [used>=5,'Новые слова урока: '+used+' из 9'+(used>=5?'.':'. Выбери ещё предложения с зелёными словами снизу.')],
+      [adj.length>=6,'Прилагательные (сын есім): '+adj.length+(adj.length?' — '+adj.join(', '):'')+'.'],
+      [ten.length>0,ten.length?'Сравнение (теңеу) есть: '+ten.join(', ')+'.':'Сравнения пока нет. Выбери «айдай», «түндей» или предложение с «сияқты».'],
+      [meta,meta?'Метафора есть: Шёлковый путь — «мост» или «нить».':'Метафоры пока нет. Добавь предложение «Бұл сауда жолы — ...».']
+    ];
+    document.getElementById('checks').innerHTML=C.map(function(c){return '<li class="'+(c[0]?'on':'')+'"><span class="mark">'+(c[0]?'✓':'·')+'</span><span>'+esc(c[1])+'</span></li>'}).join('');
+  }
+  document.getElementById('copyBtn').onclick=function(){var el=document.getElementById('letter'),m=document.getElementById('copyMsg');
+    function sel2(){var r=document.createRange();r.selectNodeContents(el);var s=window.getSelection();s.removeAllRanges();s.addRange(r);m.textContent='Текст выделен, скопируй вручную'}
+    try{navigator.clipboard.writeText(el.textContent).then(function(){m.textContent='Скопировано'},sel2)}catch(e){sel2()}};
+  var armed=false;
+  document.getElementById('clearBtn').onclick=function(){var m=document.getElementById('clearMsg');
+    if(!armed){armed=true;this.textContent='Точно? Нажми ещё раз';return}
+    armed=false;this.textContent='Начать заново';
+    sel=STEPS.map(function(st){return st.s.map(function(se){return se.o.map(function(){return null})})});
+    off=STEPS.map(function(st){return st.s.map(function(){return false})});draw();update();m.textContent='Всё очищено';window.scrollTo(0,0)};
+  draw();update();
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,393 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>СОЧ Geometry 7</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;700;800&family=Caveat:wght@600;700&display=swap">
+<style>
+/* Layout: school notebook page in squares — red margin line, ink-blue headings, cards = sticky notes for rules, trainer = worksheet */
+:root{
+  --paper:#f6f8fb; --grid:#dfe7f2; --card:#ffffff; --ink:#1d3f8f; --text:#1c2230; --muted:#5b6578;
+  --red:#d2405a; --good:#1f8a4c; --goodbg:#e6f5ec; --badbg:#fdecef; --line:#d5dceb; --hl:#fff4c2;
+  --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#121722; --grid:#1c2433; --card:#19202e; --ink:#93b3ff; --text:#e6eaf2; --muted:#9aa4b8;
+  --red:#ff7d90; --good:#5fd394; --goodbg:#16301f; --badbg:#3a1c23; --line:#2b3446; --hl:#3a3415; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#121722; --grid:#1c2433; --card:#19202e; --ink:#93b3ff; --text:#e6eaf2; --muted:#9aa4b8;
+  --red:#ff7d90; --good:#5fd394; --goodbg:#16301f; --badbg:#3a1c23; --line:#2b3446; --hl:#3a3415; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--text);font-family:var(--f-body);font-size:16px;line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;}
+.wrap{max-width:860px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance;color:var(--ink);margin:0}
+h1{font-size:clamp(28px,6vw,40px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:24px;font-weight:800;margin-top:44px;padding-bottom:6px;border-bottom:2px solid var(--red)}
+h3{font-size:17px;font-weight:700}
+.hand{font-family:var(--f-hand);color:var(--red);font-size:22px;line-height:1.1}
+.lead{color:var(--muted);max-width:62ch;margin:8px 0 0}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+nav.toc a{color:var(--ink);text-decoration:none;border:1.5px solid var(--ink);border-radius:999px;padding:4px 12px;font-weight:500;font-size:14px;background:var(--card)}
+nav.toc a:hover,nav.toc a:focus-visible{background:var(--ink);color:var(--card);outline:none}
+.plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:20px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
+.step b{color:var(--red);font-family:var(--f-hand);font-size:26px;margin-right:6px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,370px),1fr));gap:14px;margin-top:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0;display:flex;flex-direction:column;gap:8px}
+.card p{margin:0}
+.card ul{margin:0;padding-left:20px}
+.rule{background:var(--hl);border-radius:6px;padding:6px 10px;font-weight:700}
+.en{font-weight:700;color:var(--ink)}
+.ru{color:var(--muted)}
+.fig{display:flex;justify-content:center}
+.fig svg{max-width:100%;height:auto}
+svg .s{stroke:var(--ink);stroke-width:2;fill:none}
+svg .s2{stroke:var(--red);stroke-width:2;fill:none}
+svg .d{fill:var(--ink)}
+svg text{fill:var(--text);font:600 13px var(--f-body)}
+svg .tr{fill:var(--red)}
+.trap{border-left:4px solid var(--red);background:var(--badbg);padding:8px 12px;border-radius:0 8px 8px 0}
+.algo{background:var(--card);border:2px dashed var(--ink);border-radius:12px;padding:14px 18px;margin-top:16px}
+.algo ol{margin:6px 0 0;padding-left:22px}
+/* trainer */
+.score{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.bar{flex:1 1 160px;height:10px;background:var(--grid);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--good);transition:width .3s}
+.q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:12px;display:flex;flex-direction:column;gap:10px}
+.q.ok{border-color:var(--good);background:var(--goodbg)}
+.q.bad{border-color:var(--red)}
+.qh{display:flex;gap:10px;align-items:baseline}
+.qn{font-family:var(--f-hand);font-size:24px;color:var(--red);min-width:28px}
+.qt{min-width:0}
+.qt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+input[type=text]{font:inherit;width:120px;padding:6px 10px;border:1.5px solid var(--line);border-radius:8px;background:var(--paper);color:var(--text)}
+input[type=text]:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
+button{font:inherit;font-weight:500;cursor:pointer;border-radius:8px;padding:6px 12px;border:1.5px solid var(--ink);background:var(--ink);color:var(--card)}
+button.ghost{background:transparent;color:var(--ink)}
+button.opt{background:var(--card);color:var(--text);border-color:var(--line)}
+button.opt.right{border-color:var(--good);background:var(--goodbg)}
+button.opt.wrong{border-color:var(--red);background:var(--badbg)}
+button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.msg{font-weight:700}
+.msg.ok{color:var(--good)} .msg.bad{color:var(--red)}
+.sol{border-top:1px dashed var(--line);padding-top:8px;color:var(--text)}
+.hint{color:var(--muted);font-style:italic}
+.tablewrap{overflow-x:auto;margin-top:14px;background:var(--card);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:15px}
+th,td{text-align:left;padding:7px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--ink);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+td:first-child{font-weight:700;color:var(--ink);white-space:nowrap}
+footer{margin-top:40px;color:var(--muted);font-size:14px}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+
+<div class="wrap">
+  <div class="wrap">
+  <div class="hand">Geometry 7 · СОЧ за 1 четверть</div>
+  <h1>Готовимся к СОЧ по геометрии</h1>
+  <p class="lead">Вся глава 1 и раздел 2.1 учебника на одной странице. Задания в СОЧ будут на английском, поэтому правила объяснены по-русски, а термины даны так, как в учебнике.</p>
+  <nav class="toc" aria-label="Разделы">
+    <a href="#s11">1.1 Основы</a>
+    <a href="#s12">1.2 Равные фигуры</a>
+    <a href="#s13">1.3 Доказательства</a>
+    <a href="#s14">1.4 Углы</a>
+    <a href="#s21">2.1 Треугольники</a>
+    <a href="#train">Тренажёр</a>
+    <a href="#words">Словарик</a>
+  </nav>
+  <div class="plan">
+    <div class="step"><b>1</b>Прочитай карточки. Жёлтая строка — главное правило, его надо знать наизусть. ~15 минут.</div>
+    <div class="step"><b>2</b>Реши тренажёр в тетради, ответ впиши и нажми «Проверить». Сначала без подсказок.</div>
+    <div class="step"><b>3</b>Где ошибся — открой решение, вернись к карточке и перереши задачу завтра ещё раз.</div>
+  </div>
+
+  <!-- ============ 1.1 ============ -->
+  <h2 id="s11">1.1 Основные понятия, аксиомы</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Точка, прямая, плоскость</h3>
+      <p><span class="en">Point</span> — нет размера, только положение. <span class="en">Line</span> — бесконечна в обе стороны. <span class="en">Plane</span> — плоская поверхность без края. Это неопределяемые понятия.</p>
+      <p><span class="en">Collinear</span> — точки на одной прямой. <span class="en">Coplanar</span> — точки в одной плоскости.</p>
+      <p><span class="en">Half-plane</span> — часть плоскости по одну сторону от прямой.</p>
+    </div>
+
+    <div class="card">
+      <h3>Аксиомы · <span class="en">axioms</span></h3>
+      <ul>
+        <li>Через <b>две точки</b> проходит ровно <b>одна прямая</b>.</li>
+        <li>Две прямые пересекаются ровно в <b>одной точке</b>.</li>
+        <li>Из трёх точек на прямой только <b>одна</b> лежит между двумя другими.</li>
+        <li>Если B между A и C, то AB + BC = AC.</li>
+      </ul>
+      <p class="rule">Axiom — без доказательства. Theorem — доказывают.</p>
+    </div>
+
+    <div class="card">
+      <h3>Отрезок · <span class="en">line segment</span></h3>
+      <div class="fig"><svg viewBox="0 0 260 60" width="260"><line class="s" x1="20" y1="35" x2="240" y2="35"/><circle class="d" cx="20" cy="35" r="4"/><circle class="d" cx="100" cy="35" r="4"/><circle class="d" cx="240" cy="35" r="4"/><text x="14" y="22">A</text><text x="95" y="22">B</text><text x="234" y="22">C</text></svg></div>
+      <p class="rule">B между A и C: AB + BC = AC</p>
+      <p><span class="en">Midpoint</span> <span class="ru">(середина)</span>: AM = MB = AB : 2.</p>
+      <p>Если про порядок точек ничего не сказано, бывает два ответа. KM = 15, ML = 7: KL = 15 + 7 = 22 (наибольший) или 15 − 7 = 8 (наименьший).</p>
+    </div>
+
+    <div class="card">
+      <h3>Луч · <span class="en">ray</span></h3>
+      <div class="fig"><svg viewBox="0 0 260 50" width="260"><line class="s" x1="20" y1="28" x2="240" y2="28"/><path class="s" d="M232 22 L242 28 L232 34"/><path class="s" d="M28 22 L18 28 L28 34"/><circle class="d" cx="130" cy="28" r="4"/><circle class="d" cx="60" cy="28" r="3.5"/><circle class="d" cx="200" cy="28" r="3.5"/><text x="125" y="18">O</text><text x="55" y="18">M</text><text x="195" y="18">N</text></svg></div>
+      <p>Луч начинается в точке и уходит бесконечно в одну сторону. Луч AB: начало A, первой пишется вершина.</p>
+      <p><span class="en">Opposite rays</span> <span class="ru">(противоположные лучи)</span> — общее начало O, вместе образуют прямую. Тогда MN = OM + ON.</p>
+    </div>
+
+    <div class="card">
+      <h3>Считаем отрезки и лучи</h3>
+      <p class="rule">n точек на прямой → n(n − 1) : 2 отрезков</p>
+      <p>4 точки: 4·3 : 2 = 6 отрезков (AB, AC, AD, BC, BD, CD).</p>
+      <p class="rule">n точек на прямой → 2(n − 1) лучей</p>
+      <p>4 точки: крайние A и D дают по 1 лучу (AB и DC), средние B и C — по 2 (BA, BC, CB, CD). Итого 6.</p>
+    </div>
+
+    <div class="card">
+      <h3>Виды углов</h3>
+      <ul>
+        <li><span class="en">acute</span> <span class="ru">острый</span> — меньше 90°</li>
+        <li><span class="en">right</span> <span class="ru">прямой</span> — ровно 90° (квадратик)</li>
+        <li><span class="en">obtuse</span> <span class="ru">тупой</span> — больше 90°, меньше 180°</li>
+        <li><span class="en">straight</span> <span class="ru">развёрнутый</span> — ровно 180°</li>
+      </ul>
+      <p>Угол называют тремя буквами, вершина в середине: ∠ABC, вершина B. <span class="en">Angle bisector</span> делит угол пополам.</p>
+    </div>
+  </div>
+
+  <!-- ============ 1.2 ============ -->
+  <h2 id="s12">1.2 Равные фигуры · <span style="font-weight:500">congruence</span></h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Что такое congruent</h3>
+      <p><span class="en">Congruent figures</span> — одинаковая форма и размер. Одну можно наложить на другую: сдвинуть (<span class="en">slide</span>), повернуть (<span class="en">turn</span>), отразить (<span class="en">flip</span>). Знак ≅.</p>
+      <p class="rule">У равных фигур равны все соответствующие стороны и углы → равны и периметры</p>
+      <p class="trap">Квадрат и ромб со сторонами 6 НЕ равны: стороны те же, а углы разные.</p>
+    </div>
+    <div class="card">
+      <h3>Порядок букв решает всё</h3>
+      <div class="fig"><svg viewBox="0 0 300 70" width="300"><text x="10" y="28" style="font-size:22px">Δ</text><text x="30" y="28" style="font-size:22px">A B C</text><text x="112" y="28" style="font-size:22px">≅ Δ</text><text x="160" y="28" style="font-size:22px">D E F</text><path class="s2" d="M38 36 Q100 66 166 36"/><path class="s2" d="M60 36 Q122 60 188 36"/><path class="s2" d="M82 36 Q144 54 210 36"/></svg></div>
+      <p>ΔABC ≅ ΔDEF: A↔D, B↔E, C↔F.</p>
+      <p>Стороны: AB = DE, BC = EF, AC = DF.<br>Углы: ∠A = ∠D, ∠B = ∠E, ∠C = ∠F.</p>
+      <p>Задача: ΔABC ≅ ΔEFD, AB = 11, BC = 10, EF + ED = 19. Тогда EF = AB = 11, ED = 8, FD = BC = 10, P = 29.</p>
+    </div>
+  </div>
+
+  <!-- ============ 1.3 ============ -->
+  <h2 id="s13">1.3 Методы доказательства</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Прямое · <span class="en">direct proof</span></h3>
+      <p>Идём от условия (<span class="en">given</span>) к выводу шаг за шагом. Записывают в две колонки: <span class="en">Statements</span> (что утверждаем) | <span class="en">Reasons</span> (почему: given, аксиома, определение, подстановка).</p>
+    </div>
+    <div class="card">
+      <h3>От противного · <span class="en">proof by contradiction</span></h3>
+      <ol style="margin:0;padding-left:20px">
+        <li><span class="en">Assume</span> — предполагаем, что утверждение <b>неверно</b>.</li>
+        <li>Рассуждаем и приходим к <span class="en">contradiction</span> (противоречию).</li>
+        <li>Значит, предположение ложно, утверждение верно.</li>
+      </ol>
+      <p>Пример: AB = 5, AC = 3, BC = 8. Пусть C между A и B. Тогда AB = AC + CB = 11, а не 5. Противоречие → C не между A и B.</p>
+      <p class="rule">Indirect proof начинается со слов «Assume that … is false»</p>
+    </div>
+  </div>
+
+  <!-- ============ 1.4 ============ -->
+  <h2 id="s14">1.4 Смежные и вертикальные углы</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Смежные · <span class="en">adjacent supplementary</span></h3>
+      <div class="fig"><svg viewBox="0 0 260 110" width="260"><line class="s" x1="15" y1="90" x2="245" y2="90"/><line class="s" x1="130" y1="90" x2="185" y2="15"/><path class="s2" d="M108 90 A22 22 0 0 1 143 72"/><path class="s2" d="M150 90 A20 20 0 0 0 142 74"/><text class="tr" x="88" y="74">x</text><text class="tr" x="160" y="80">y</text><circle class="d" cx="130" cy="90" r="3.5"/></svg></div>
+      <p class="rule">Вместе образуют прямую → сумма 180°</p>
+      <p>Ещё называют <span class="en">linear pair</span>. <span class="en">Adjacent</span> — общая вершина и общая сторона.</p>
+    </div>
+    <div class="card">
+      <h3>До прямого · <span class="en">adjacent complementary</span></h3>
+      <div class="fig"><svg viewBox="0 0 220 110" width="220"><line class="s" x1="40" y1="95" x2="200" y2="95"/><line class="s" x1="40" y1="95" x2="40" y2="10"/><line class="s" x1="40" y1="95" x2="150" y2="25"/><rect class="s2" x="40" y="83" width="12" height="12"/><text class="tr" x="58" y="58">x</text><text class="tr" x="96" y="88">y</text></svg></div>
+      <p class="rule">Вместе образуют прямой угол → сумма 90°</p>
+    </div>
+    <div class="card">
+      <h3>Вертикальные · <span class="en">vertical angles</span></h3>
+      <div class="fig"><svg viewBox="0 0 240 120" width="240"><line class="s" x1="20" y1="25" x2="220" y2="95"/><line class="s" x1="20" y1="95" x2="220" y2="25"/><text class="tr" x="113" y="40">1</text><text class="tr" x="160" y="64">2</text><text class="tr" x="113" y="92">3</text><text class="tr" x="68" y="64">4</text></svg></div>
+      <p class="rule">Вертикальные углы равны: ∠1 = ∠3, ∠2 = ∠4</p>
+      <p>Соседние (∠1 и ∠2) в сумме 180°. Углы вокруг точки — всего 360°.</p>
+    </div>
+    <div class="card">
+      <h3>Перпендикуляр · <span class="en">perpendicular</span></h3>
+      <p>Прямые, пересекающиеся под 90°, пишут a ⊥ b. Тогда все четыре угла по 90°.</p>
+      <p>Два одинаковых смежных угла — всегда по 90°.</p>
+    </div>
+  </div>
+
+  <div class="algo">
+    <h3>Как решать любую задачу «Find x» на углы</h3>
+    <ol>
+      <li>Определи, какие это углы: смежные, до прямого или вертикальные.</li>
+      <li>Составь уравнение: смежные → <b>сумма = 180</b>; до прямого → <b>сумма = 90</b>; вертикальные → <b>равны</b>.</li>
+      <li>Реши. Пример: 3x + 25 и 4x + 15 смежные → 7x + 40 = 180 → x = 20.</li>
+      <li>Если спрашивают <b>угол</b>, подставь x обратно: 3·20 + 25 = 85°.</li>
+    </ol>
+    <p style="margin:8px 0 0"><b>Отношение 2 : 3</b> → углы 2k и 3k: 5k = 180, k = 36, углы 72° и 108°.<br><b>Разность 36°</b> у углов до прямого → x + (x − 36) = 90, x = 63°.</p>
+  </div>
+
+  <!-- ============ 2.1 ============ -->
+  <h2 id="s21">2.1 Треугольник и его виды</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Элементы</h3>
+      <p>ΔABC: стороны AB, BC, AC; вершины (<span class="en">vertices</span>) A, B, C; углы ∠A, ∠B, ∠C.</p>
+      <p class="rule">Периметр P = AB + BC + AC</p>
+      <p>Пример из учебника: AC = 12 и на 7 меньше BC → BC = 19; AB = 60% от AC = 7.2. P = 12 + 19 + 7.2 = 38.2 см.</p>
+    </div>
+    <div class="card">
+      <h3>По сторонам</h3>
+      <ul>
+        <li><span class="en">scalene</span> <span class="ru">разносторонний</span> — все стороны разные</li>
+        <li><span class="en">isosceles</span> <span class="ru">равнобедренный</span> — хотя бы две равны</li>
+        <li><span class="en">equilateral</span> <span class="ru">равносторонний</span> — все три равны</li>
+      </ul>
+      <p>У равнобедренного: <span class="en">legs</span> — равные стороны, <span class="en">base</span> — основание, <span class="en">vertex angle</span> — угол между legs, <span class="en">base angles</span> — углы при основании (они равны).</p>
+    </div>
+    <div class="card">
+      <h3>По углам</h3>
+      <ul>
+        <li><span class="en">acute triangle</span> — все углы острые</li>
+        <li><span class="en">right triangle</span> — есть угол 90°</li>
+        <li><span class="en">obtuse triangle</span> — есть тупой угол</li>
+      </ul>
+      <p>В прямоугольном: <span class="en">legs</span> — катеты (у прямого угла), <span class="en">hypotenuse</span> — гипотенуза (против прямого угла).</p>
+      <p class="hand" style="font-size:20px">сумма углов треугольника = 180°</p>
+    </div>
+    <div class="card">
+      <h3>Задачи с x в сторонах</h3>
+      <p class="rule">Isosceles → приравняй две равные стороны. Equilateral → приравняй все.</p>
+      <p>Стороны 3x, x + 10, 6x − 15, равносторонний: 3x = x + 10 → x = 5. Проверка: 15, 15, 15 ✓.</p>
+      <p><b>Последовательные числа</b>: стороны n, n + 1, n + 2. P = 24 → 3n + 3 = 24 → 7, 8, 9.</p>
+    </div>
+  </div>
+
+  <!-- ============ TRAINER ============ -->
+  <h2 id="train">Тренажёр</h2>
+  <p class="lead">Задачи как в учебнике и в СОЧ, по порядку разделов. Дроби пиши через точку или запятую, единицы (°, cm) не нужны.</p>
+  <div class="score" role="status">
+    <span><b id="sc">0</b> из <b id="tot">0</b> решено верно</span>
+    <div class="bar" aria-hidden="true"><i id="barfill"></i></div>
+    <button class="ghost" id="reset" type="button">Начать заново</button>
+  </div>
+  <div id="qs"></div>
+
+  <!-- ============ WORDS ============ -->
+  <h2 id="words">Словарик EN → RU</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>English</th><th>По-русски</th><th>Запомнить</th></tr></thead>
+    <tbody>
+      <tr><td>point / line / plane</td><td>точка / прямая / плоскость</td><td>неопределяемые</td></tr>
+      <tr><td>collinear / coplanar</td><td>на одной прямой / в одной плоскости</td><td></td></tr>
+      <tr><td>line segment</td><td>отрезок</td><td>AB + BC = AC</td></tr>
+      <tr><td>midpoint</td><td>середина</td><td>делит пополам</td></tr>
+      <tr><td>ray / opposite rays</td><td>луч / противоположные лучи</td><td>вместе — прямая</td></tr>
+      <tr><td>half-plane</td><td>полуплоскость</td><td></td></tr>
+      <tr><td>axiom (postulate) / theorem</td><td>аксиома / теорема</td><td>без доказательства / с доказательством</td></tr>
+      <tr><td>congruent</td><td>равный</td><td>≅</td></tr>
+      <tr><td>corresponding sides / angles</td><td>соответственные стороны / углы</td><td>по порядку букв</td></tr>
+      <tr><td>direct proof</td><td>прямое доказательство</td><td>statements | reasons</td></tr>
+      <tr><td>proof by contradiction</td><td>доказательство от противного</td><td>assume … is false</td></tr>
+      <tr><td>assume / given</td><td>предположим / дано</td><td></td></tr>
+      <tr><td>acute / right / obtuse / straight</td><td>острый / прямой / тупой / развёрнутый</td><td>&lt;90 / 90 / &gt;90 / 180</td></tr>
+      <tr><td>adjacent</td><td>соседние (общая сторона)</td><td></td></tr>
+      <tr><td>adjacent supplementary</td><td>смежные</td><td>сумма 180°</td></tr>
+      <tr><td>adjacent complementary</td><td>дополняют до прямого</td><td>сумма 90°</td></tr>
+      <tr><td>vertical angles</td><td>вертикальные углы</td><td>равны</td></tr>
+      <tr><td>perpendicular</td><td>перпендикулярный</td><td>90°, ⊥</td></tr>
+      <tr><td>angle bisector</td><td>биссектриса угла</td><td>делит угол пополам</td></tr>
+      <tr><td>scalene / isosceles / equilateral</td><td>разносторонний / равнобедренный / равносторонний</td><td>0 / 2 / 3 равные стороны</td></tr>
+      <tr><td>legs / base</td><td>боковые стороны / основание</td><td>в равнобедренном</td></tr>
+      <tr><td>legs / hypotenuse</td><td>катеты / гипотенуза</td><td>в прямоугольном</td></tr>
+      <tr><td>vertex / vertices</td><td>вершина / вершины</td><td></td></tr>
+      <tr><td>perimeter</td><td>периметр</td><td>сумма сторон</td></tr>
+    </tbody>
+  </table></div>
+
+  <footer>По учебнику «Geometry, Grade 7» (Astana-kitap, 2022): глава 1 (разделы 1.1–1.4) и раздел 2.1.</footer>
+</div>
+
+<script>
+const Q = [
+ {t:"1.1 Отрезки",q:"Points A, B, C lie on a line, B is between A and C. AB = 7 cm, AC = 19 cm. Find BC.",a:12,h:"AB + BC = AC",s:"7 + BC = 19 → BC = 12 cm."},
+ {t:"1.1 Отрезки",q:"O is the midpoint of segment KL. OL = 7 cm. Find KL.",a:14,h:"Середина делит отрезок пополам.",s:"KL = 2 · 7 = 14 cm."},
+ {t:"1.1 Отрезки",q:"A, B, C are collinear and B is between A and C. AB = 3x − 1, BC = 2x + 3, AC = 12. Find x.",a:2,h:"AB + BC = AC.",s:"3x − 1 + 2x + 3 = 12 → 5x + 2 = 12 → x = 2."},
+ {t:"1.1 Лучи",q:"Points M and N lie on opposite rays with common endpoint O. OM = 9 cm, MN = 24 cm. Find ON.",a:15,h:"O лежит между M и N.",s:"MN = OM + ON → 24 = 9 + ON → ON = 15 cm."},
+ {t:"1.1 Середина",q:"M is the midpoint of KL. KM = 8a − 6 and ML = 3(2a − 1) + 5. Find a.",a:4,h:"KM = ML.",s:"8a − 6 = 6a − 3 + 5 → 8a − 6 = 6a + 2 → 2a = 8 → a = 4."},
+ {t:"1.1 Отрезки",q:"K, M, L are on the same line. KM = 15 cm, ML = 7 cm. Find the largest possible KL.",a:22,h:"Когда M между K и L.",s:"KL = 15 + 7 = 22 cm. Наименьшее: 15 − 7 = 8 cm."},
+ {t:"1.1 Счёт",q:"Points A, B, C, D lie on a line. How many segments are there?",a:6,h:"AB, AC, …",s:"AB, AC, AD, BC, BD, CD — 6. Формула: 4·3 : 2 = 6."},
+ {t:"1.1 Теория",q:"Which statement is a theorem (not an axiom)?",opts:["Through any two points there is exactly one line","Vertical angles are congruent","If two lines intersect, they intersect at exactly one point"],a:1,s:"«Вертикальные углы равны» доказывают — это теорема. Остальные два — аксиомы."},
+ {t:"1.2 Равенство",q:"ΔPRS ≅ ΔKLM. Which side is congruent to PR?",opts:["KM","LM","KL"],a:2,s:"P↔K, R↔L, значит PR = KL."},
+ {t:"1.2 Равенство",q:"ΔABC ≅ ΔPQK. AB = 6 cm, BC = 7 cm, AC = 8 cm. Find QK.",a:7,h:"B↔Q, C↔K.",s:"QK соответствует BC, значит QK = 7 cm."},
+ {t:"1.2 Равенство",q:"ΔABC ≅ ΔEFD. AB = 11 cm, BC = 10 cm, EF + ED = 19 cm. Find P(ΔEFD).",a:29,h:"EF = AB, FD = BC.",s:"EF = 11 → ED = 19 − 11 = 8. FD = BC = 10. P = 11 + 8 + 10 = 29 cm."},
+ {t:"1.2 Равенство",q:"ΔABC ≅ ΔKMN. AC = 5m − 25 and KN = 11 − m. Find m.",a:6,h:"AC соответствует KN.",s:"5m − 25 = 11 − m → 6m = 36 → m = 6."},
+ {t:"1.3 Доказательства",q:"In an indirect proof (proof by contradiction), the first step is to…",opts:["prove the statement directly","assume the statement is false","draw a two-column table"],a:1,s:"Сначала предполагаем, что утверждение неверно, и ищем противоречие."},
+ {t:"1.3 Доказательства",q:"A, B, C are collinear. AB = 5 cm, AC = 3 cm, BC = 8 cm. Which point lies between the other two?",opts:["A","B","C"],a:0,s:"BA + AC = 5 + 3 = 8 = BC, значит A между B и C. Для C: 3 + 8 ≠ 5, для B: 5 + 8 ≠ 3."},
+ {t:"1.4 Смежные",q:"Find the adjacent supplementary angle of 108°.",a:72,h:"Сумма 180°.",s:"180 − 108 = 72°."},
+ {t:"1.4 Find x",q:"Two adjacent supplementary angles are (3x + 25)° and (4x + 15)°. Find x.",a:20,h:"Сумма = 180.",s:"7x + 40 = 180 → x = 20."},
+ {t:"1.4 Find x",q:"Two vertical angles are (50 + 2x)° and (x + 75)°. Find x.",a:25,h:"Вертикальные равны.",s:"50 + 2x = x + 75 → x = 25."},
+ {t:"1.4 Find x",q:"Two adjacent complementary angles are (2x − 5)° and (3x + 10)°. Find x.",a:17,h:"Сумма = 90.",s:"5x + 5 = 90 → x = 17."},
+ {t:"1.4 Отношение",q:"The ratio of two adjacent supplementary angles is 2 : 3. Find the larger angle.",a:108,h:"2k + 3k = 180.",s:"k = 36, углы 72° и 108°."},
+ {t:"1.4 Разность",q:"The difference between two adjacent complementary angles is 36°. Find the larger angle.",a:63,h:"x + (x − 36) = 90.",s:"2x = 126 → x = 63°."},
+ {t:"1.4 Пересечение",q:"Two lines intersect. The sum of three of the angles is 240°. Find the smallest angle.",a:60,h:"Все четыре угла = 360°.",s:"Четвёртый угол 120°, вертикальный к нему 120°, два других по 60°."},
+ {t:"1.4 Теория",q:"True or False: the sum of the angles around a point is 180°.",opts:["True","False"],a:1,s:"False: вокруг точки 360°. 180° — у смежных углов."},
+ {t:"2.1 Периметр",q:"An isosceles triangle has base 8 cm and legs 5 cm. Find its perimeter.",a:18,h:"P = 2·leg + base.",s:"5 + 5 + 8 = 18 cm."},
+ {t:"2.1 Периметр",q:"In scalene ΔABC, AC = 12 cm, which is 7 cm less than BC. AB is 60% of AC. Find the perimeter.",a:38.2,h:"BC = 12 + 7, AB = 0.6 · 12.",s:"BC = 19, AB = 7.2, P = 12 + 19 + 7.2 = 38.2 cm."},
+ {t:"2.1 Периметр",q:"In ΔKMN, KN = 18 cm, KM is 4/3 of KN and KM = MN. Find P(ΔKMN).",a:66,h:"KM = 18 · 4 : 3.",s:"KM = 24, MN = 24, P = 24 + 24 + 18 = 66 cm."},
+ {t:"2.1 Equilateral",q:"The sides of a triangle are 3x, x + 10 and 6x − 15. Which x makes it equilateral?",a:5,h:"Приравняй 3x = x + 10 и проверь третью.",s:"3x = x + 10 → x = 5. Стороны 15, 15, 15 ✓."},
+ {t:"2.1 Isosceles",q:"An isosceles triangle has legs 3x + 1 and 5x − 4, and base 2x + 11. Find the base.",a:16,h:"Сначала найди x из равенства legs.",s:"3x + 1 = 5x − 4 → x = 2.5. Base = 2·2.5 + 11 = 16 (legs по 8.5)."},
+ {t:"2.1 Последовательные",q:"The sides of a scalene triangle are consecutive natural numbers, perimeter 24 cm. Find the longest side.",a:9,h:"n + (n+1) + (n+2) = 24.",s:"3n + 3 = 24 → n = 7. Стороны 7, 8, 9."},
+ {t:"2.1 Виды",q:"A triangle has angles 45°, 110° and 25°. What type is it?",opts:["acute triangle","right triangle","obtuse triangle"],a:2,s:"Есть угол 110° > 90° → obtuse."},
+ {t:"2.1 Виды",q:"A triangle has sides 3, 4 and 5. What type is it according to its sides?",opts:["scalene","isosceles","equilateral"],a:0,s:"Все стороны разные → scalene."},
+ {t:"2.1 Виды",q:"In a right triangle, the side opposite the right angle is called…",opts:["a leg","the base","the hypotenuse"],a:2,s:"Против прямого угла — hypotenuse, стороны у прямого угла — legs."},
+];
+const KEY="soch-geo7-v2";
+let st={};
+try{st=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){st={}}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const box=document.getElementById("qs");
+document.getElementById("tot").textContent=Q.length;
+function upd(){const n=Object.values(st).filter(v=>v==="ok").length;document.getElementById("sc").textContent=n;document.getElementById("barfill").style.width=(n/Q.length*100)+"%";}
+function render(){
+ box.innerHTML="";
+ Q.forEach((it,i)=>{
+  const d=document.createElement("div");d.className="q";d.id="q"+i;
+  d.innerHTML=`<div class="qh"><span class="qn">${i+1}</span><div class="qt"><span class="tag">${it.t}</span><div>${it.q}</div></div></div>`;
+  const row=document.createElement("div");row.className="row";
+  const msg=document.createElement("span");msg.className="msg";
+  const sol=document.createElement("div");sol.className="sol";sol.hidden=true;sol.innerHTML="<b>Решение:</b> "+it.s;
+  const hint=document.createElement("div");hint.className="hint";hint.hidden=true;hint.textContent="Подсказка: "+(it.h||"");
+  const mark=(ok)=>{d.classList.toggle("ok",ok);d.classList.toggle("bad",!ok);msg.className="msg "+(ok?"ok":"bad");msg.textContent=ok?"Верно!":"Пока нет, попробуй ещё";if(ok)sol.hidden=false;if(st[i]!=="ok"){st[i]=ok?"ok":"bad";save();upd();}};
+  if(it.opts){
+   it.opts.forEach((o,k)=>{const b=document.createElement("button");b.type="button";b.className="opt";b.textContent=o;
+    b.onclick=()=>{row.querySelectorAll(".opt").forEach(x=>x.classList.remove("right","wrong"));b.classList.add(k===it.a?"right":"wrong");mark(k===it.a);};row.appendChild(b);});
+  }else{
+   const inp=document.createElement("input");inp.type="text";inp.id="in"+i;inp.inputMode="decimal";inp.placeholder="ответ";inp.setAttribute("aria-label","Ответ к задаче "+(i+1));
+   const chk=document.createElement("button");chk.type="button";chk.textContent="Проверить";
+   const go=()=>{const v=parseFloat(inp.value.replace(",",".").replace(/[^0-9.\-]/g,""));if(isNaN(v)){msg.className="msg bad";msg.textContent="Впиши число";return;}mark(Math.abs(v-it.a)<0.01);};
+   chk.onclick=go;inp.addEventListener("keydown",e=>{if(e.key==="Enter")go();});
+   const hb=document.createElement("button");hb.type="button";hb.className="ghost";hb.textContent="Подсказка";hb.onclick=()=>{hint.hidden=!hint.hidden;};
+   row.append(inp,chk,hb);
+  }
+  const sb=document.createElement("button");sb.type="button";sb.className="ghost";sb.textContent="Решение";sb.onclick=()=>{sol.hidden=!sol.hidden;};
+  row.append(sb,msg);
+  d.append(row,hint,sol);
+  if(st[i]==="ok"){d.classList.add("ok");msg.className="msg ok";msg.textContent="Решено";}
+  box.appendChild(d);
+ });
+ upd();
+}
+document.getElementById("reset").onclick=()=>{st={};save();render();};
+render();
+</script>
+
+</body></html>

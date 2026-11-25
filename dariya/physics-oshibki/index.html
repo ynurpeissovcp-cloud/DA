@@ -1,0 +1,192 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Дария: работа над ошибками</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap">
+<style>
+/* Layout: one narrow column, one card at a time — like a page of the test with teacher's red-pen notes */
+:root{
+  --paper:#f6f7fb; --card:#ffffff; --ink:#1d2a5c; --muted:#5f6787; --line:#dfe2ee;
+  --pen:#2547c9; --red:#d42c2c; --ok:#1d8a4e; --okbg:#e6f5ec; --badbg:#fcebeb; --soft:#eef1fb;
+  --body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#12152a; --card:#1b1f38; --ink:#e7eaf8; --muted:#a2a8c7; --line:#2d3356;
+  --pen:#7f9bff; --red:#ff7a7a; --ok:#5fd394; --okbg:#173426; --badbg:#3a1d24; --soft:#232847; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#12152a; --card:#1b1f38; --ink:#e7eaf8; --muted:#a2a8c7; --line:#2d3356;
+  --pen:#7f9bff; --red:#ff7a7a; --ok:#5fd394; --okbg:#173426; --badbg:#3a1d24; --soft:#232847; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:560px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font-size:1.5rem;margin:0 0 4px;text-wrap:balance}
+.sub{color:var(--muted);margin:0 0 18px;font-size:.95rem}
+.hand{font-family:var(--hand);color:var(--red);font-size:1.5rem;line-height:1}
+.scores{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.score{flex:1 1 140px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.score b{font-family:var(--hand);color:var(--red);font-size:1.9rem;font-weight:700}
+.score span{display:block;color:var(--muted);font-size:.85rem}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.chip{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 14px;font:inherit;font-size:.95rem;cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--pen);color:var(--pen);font-weight:600}
+.btn{display:block;width:100%;border:0;border-radius:12px;padding:14px;font:inherit;font-weight:600;font-size:1.05rem;cursor:pointer;background:var(--pen);color:#fff}
+.btn.ghost{background:var(--soft);color:var(--pen)}
+.btn:focus-visible,.opt:focus-visible,.chip:focus-visible{outline:3px solid var(--pen);outline-offset:2px}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin:4px 0 14px}
+.bar i{display:block;height:100%;background:var(--pen);transition:width .3s}
+.top{display:flex;justify-content:space-between;align-items:center;font-size:.9rem;color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.tag{display:inline-block;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.q{font-size:1.08rem;font-weight:600;margin:0 0 14px}
+.opts{display:grid;gap:10px}
+.opt{text-align:left;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:12px 14px;font:inherit;cursor:pointer;min-height:48px}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.wrong{border-color:var(--red);background:var(--badbg)}
+.opt:disabled{cursor:default}
+.exp{margin-top:14px;border-top:1px dashed var(--line);padding-top:12px}
+.verdict{font-family:var(--hand);font-size:1.7rem;line-height:1.1;margin-bottom:6px}
+.verdict.ok{color:var(--ok)} .verdict.no{color:var(--red)}
+.exp p{margin:6px 0}
+.was{background:var(--badbg);border-radius:8px;padding:8px 10px;font-size:.93rem}
+.f{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600;color:var(--pen)}
+.next{margin-top:14px}
+.cheat{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px 14px}
+.cheat summary{cursor:pointer;padding:10px 0;font-weight:600}
+.cheat ul{margin:0 0 12px;padding-left:18px}
+.cheat li{margin:4px 0}
+.end{text-align:center}
+.big{font-family:var(--hand);font-size:3.4rem;color:var(--red);line-height:1}
+.stack{display:grid;gap:10px;margin-top:16px}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+
+<div class="wrap">
+  <section id="start">
+    <h1>Работа над ошибками</h1>
+    <p class="sub">Задачи из твоих СОЧ по физике и СОР по астрономии, где были ошибки. После каждого ответа — разбор решения.</p>
+    <div class="scores">
+      <div class="score"><b>13/30</b><span>Физика, СОЧ</span></div>
+      <div class="score"><b>6/20</b><span>Астрономия, СОР 2</span></div>
+    </div>
+    <div class="chips" role="group" aria-label="Что повторять">
+      <button class="chip" id="f-all" aria-pressed="true" data-f="all">Всё</button>
+      <button class="chip" id="f-ph" aria-pressed="false" data-f="ph">Физика</button>
+      <button class="chip" id="f-as" aria-pressed="false" data-f="as">Астрономия</button>
+    </div>
+    <button class="btn" id="go">Начать</button>
+    <details class="cheat">
+      <summary>Шпаргалка: формулы из этих работ</summary>
+      <ul>
+        <li>Путь — сложить все отрезки; перемещение — прямая от старта до финиша (Пифагор)</li>
+        <li><span class="f">a = (v − v₀) / t</span>, <span class="f">s = (v₀ + v)/2 · t</span></li>
+        <li>Вверх: <span class="f">t = v/g</span>, <span class="f">h = v²/(2g)</span></li>
+        <li>Круг: <span class="f">ω = 2π/T</span>, <span class="f">v = ωR</span>, <span class="f">a = v²/R</span></li>
+        <li>Путь по графику v(t) = площадь под графиком</li>
+        <li>Горизонтальный бросок: <span class="f">t = √(2h/g)</span>, <span class="f">v₀ = s/t</span>, <span class="f">v_y = gt</span></li>
+        <li>Звёздные величины: разница 5 = в 100 раз; меньше m — ярче</li>
+        <li>Параллакс: <span class="f">d = 1/p</span> (p только в секундах ″)</li>
+        <li>Кеплер: <span class="f">T² = a³</span> (годы и а.е.)</li>
+        <li>Время: 15° = 1 ч, 1° = 4 мин, 1′ = 4 с, 1″ = 1/15 с</li>
+        <li>UTC = местное время минус пояс (UTC+5 → вычесть 5)</li>
+        <li>Кульминация к югу от зенита: <span class="f">φ = 90° − h + δ</span></li>
+      </ul>
+    </details>
+  </section>
+
+  <section id="quiz" hidden>
+    <div class="top"><span id="pos">1 / 1</span><span id="pts">Верно: 0</span></div>
+    <div class="bar"><i id="barI" style="width:0"></i></div>
+    <div class="card">
+      <span class="tag" id="tag"></span>
+      <p class="q" id="q"></p>
+      <div class="opts" id="opts"></div>
+      <div class="exp" id="exp" hidden></div>
+      <button class="btn next" id="next" hidden>Дальше</button>
+    </div>
+  </section>
+
+  <section id="end" class="end" hidden>
+    <div class="card">
+      <p class="sub" style="margin:0">Результат</p>
+      <div class="big" id="res">0/0</div>
+      <p id="msg"></p>
+      <div class="stack">
+        <button class="btn" id="redo">Повторить ошибки</button>
+        <button class="btn ghost" id="again">Пройти всё заново</button>
+        <button class="btn ghost" id="home">В начало</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const Q=[
+{s:"ph",t:"Физика · Task 1a",q:"A boat sails 9 km north, then 12 km east. Distance travelled and magnitude of displacement?",o:["21 km и 15 km","3 km и 3 km","21 km и 21 km","15 km и 21 km"],e:"<p>Путь — всё, что проплыла: <span class='f'>9 + 12 = 21 km</span>.</p><p>Перемещение — прямая от старта до финиша. Север и восток под прямым углом → Пифагор: <span class='f'>√(9² + 12²) = √225 = 15 km</span>.</p>",w:"Было: 12 − 9 = 3. Вычитать можно, только если движение в противоположные стороны."},
+{s:"ph",t:"Физика · Task 1b",q:"Choose two vector quantities: mass, force, time, velocity, speed.",o:["force и velocity","time и speed","mass и force","speed и velocity"],e:"<p>Вектор — у величины есть направление. Сила тянет куда-то, velocity — скорость с направлением.</p><p>Speed — только число (модуль), без направления. Масса и время — тоже просто числа.</p>",w:"Было: time и speed — обе без направления."},
+{s:"ph",t:"Физика · Task 2b",q:"A train speeds up uniformly from 10 m/s to 30 m/s in 20 s. Distance travelled?",o:["400 m","600 m","200 m","800 m"],e:"<p><span class='f'>s = (v₀ + v)/2 · t = (10 + 30)/2 · 20 = 400 m</span></p><p>Или: <span class='f'>s = v₀t + at²/2 = 200 + 200 = 400 m</span>.</p>",w:"Ответ 400 был верный, но без формулы его не засчитали полностью. Всегда пиши формулу!"},
+{s:"ph",t:"Физика · Task 3b",q:"A ball is thrown vertically upward at 20 m/s (g = 10). Maximum height?",o:["20 m","200 m","40 m","10 m"],e:"<p><span class='f'>h = v²/(2g) = 400/20 = 20 m</span></p><p>Или через время t = 2 s: <span class='f'>h = gt²/2 = 10·2²/2 = 10·4/2 = 20 m</span>.</p>",w:"Было: (10·2)²:2 = 200. В квадрат возводится только t, а не g·t."},
+{s:"ph",t:"Физика · Task 4d",q:"A car moves around a circular track. Direction of its velocity at any point?",o:["По касательной к окружности","К центру окружности","От центра","Вдоль радиуса"],e:"<p>Скорость всегда направлена <b>по касательной</b> к окружности. К центру направлено ускорение (центростремительное), а не скорость.</p>",w:"Пункт (d) был пропущен."},
+{s:"ph",t:"Физика · Task 5b",q:"Star A has m = +3, star B has m = −2. How many times brighter is B?",o:["100","5","2,5","500"],e:"<p>Разница: <span class='f'>3 − (−2) = 5</span> звёздных величин.</p><p>Правило: разница в 5 величин = ровно <b>в 100 раз</b> ярче. (1 величина ≈ в 2,5 раза.)</p>",w:"Пункт (b) не был решён."},
+{s:"ph",t:"Физика · Task 5c",q:"A video call starts at 20:00 Astana time (UTC+5). What is the time in UTC?",o:["15:00","01:00","20:00","00:00"],e:"<p>UTC+5 значит: Астана <b>впереди</b> UTC на 5 часов. Чтобы получить UTC — вычитаем: <span class='f'>20:00 − 5 = 15:00</span>.</p>",w:"Было: 20 + 5 = 01:00. Прибавлять — неверно, надо вычитать."},
+{s:"ph",t:"Физика · Task 5d",q:"Where does the extension of Earth's axis meet the celestial sphere?",o:["В полюсах мира (celestial poles)","В зените и надире","В точках равноденствия","На небесном экваторе"],e:"<p>Ось Земли, продолженная до небесной сферы, упирается в <b>северный и южный полюсы мира</b> (north and south celestial poles). Рядом с северным — Полярная звезда.</p>",w:"Пункт (d) был пропущен."},
+{s:"ph",t:"Физика · Task 6a",q:"The parallax of a star is 0.2″. Distance in parsecs?",o:["5 pc","0,2 pc","2 pc","50 pc"],e:"<p><span class='f'>d = 1/p = 1/0,2 = 5 pc</span></p>",w:"Task 6 был пустой — эту формулу надо выучить."},
+{s:"ph",t:"Физика · Task 6b",q:"A planet orbits the Sun with a period of 8 years. Mean distance from the Sun?",o:["4 AU","2 AU","8 AU","64 AU"],e:"<p>Третий закон Кеплера: <span class='f'>T² = a³</span>.</p><p><span class='f'>8² = 64 = a³</span> → <span class='f'>a = ∛64 = 4 AU</span> (4·4·4 = 64).</p>",w:"Task 6 был пустой."},
+{s:"ph",t:"Физика · Task 6c / Астрономия Q5",q:"State Kepler's third law.",o:["The square of a planet's orbital period is proportional to the cube of its mean distance from the Sun","Planets move in ellipses with the Sun at one focus","A line from the Sun to a planet sweeps equal areas in equal times","The farther the planet, the shorter its year"],e:"<p>Квадрат периода обращения пропорционален кубу среднего расстояния: <span class='f'>T² = a³</span>.</p><p>Первый вариант-ловушка — это 1-й закон (эллипсы), второй — 2-й закон (равные площади).</p>",w:"В СОР вместо закона было написано про высоту Полярной звезды — это другая тема."},
+{s:"as",t:"Астрономия · Q5",q:"Which planet has the longer year — the nearer or the farther one?",o:["The farther one","The nearer one","They are equal"],e:"<p>Из <span class='f'>T² = a³</span>: чем больше a (расстояние), тем больше T (год). Дальняя планета — длиннее год. Пример: Земля 1 год, Юпитер (5 AU) ≈ 12 лет.</p>",w:"Вторая часть Q5 не была отвечена."},
+{s:"ph",t:"Физика · Task 7b",q:"Cart: 0–6 s speeds up from 0 to 12 m/s, 6–10 s constant 12 m/s, 10–14 s slows to 0. Total distance?",o:["108 m","168 m","144 m","120 m"],e:"<p>Путь = площадь под графиком v(t):</p><p>0–6 s — <b>треугольник</b>: <span class='f'>½·6·12 = 36</span><br>6–10 s — прямоугольник: <span class='f'>4·12 = 48</span><br>10–14 s — треугольник: <span class='f'>½·4·12 = 24</span></p><p>Итого: <span class='f'>36 + 48 + 24 = 108 m</span>.</p>",w:"Было: 72 + 48 + 48. Первый и третий участки — треугольники (скорость растёт с нуля), у них площадь = ½·основание·высота."},
+{s:"ph",t:"Физика · Task 8a",q:"A ball is thrown horizontally from a 20 m tower (g = 10). Time of flight?",o:["2 s","4 s","1 s","20 s"],e:"<p>По вертикали — свободное падение: <span class='f'>h = gt²/2</span> → <span class='f'>t = √(2h/g) = √(2·20/10) = √4 = 2 s</span>.</p>",w:"Было: 20 : 10 = 2. Ответ совпал случайно. Для 45 m правильно √9 = 3 s, а 45:10 = 4,5 — уже ошибка."},
+{s:"ph",t:"Физика · Task 8b",q:"The ball lands 40 m from the tower after 2 s. Initial speed?",o:["20 m/s","40 m/s","10 m/s","80 m/s"],e:"<p>По горизонтали скорость не меняется: <span class='f'>v₀ = s/t = 40/2 = 20 m/s</span>.</p>",w:"Пункт (b) не решён."},
+{s:"ph",t:"Физика · Task 8c",q:"Speed of the ball just before landing (v₀ = 20 m/s, t = 2 s)?",o:["≈ 28 m/s","40 m/s","20 m/s","60 m/s"],e:"<p>Вертикальная скорость: <span class='f'>v_y = gt = 10·2 = 20 m/s</span>. Горизонтальная: <span class='f'>v_x = 20 m/s</span>.</p><p>Складываем по Пифагору: <span class='f'>v = √(20² + 20²) = √800 ≈ 28,3 m/s</span>.</p>",w:"Пункт (c) не решён."},
+{s:"ph",t:"Физика · Task 8d",q:"Angle between the velocity and the horizontal at landing?",o:["45°","30°","60°","90°"],e:"<p><span class='f'>tg α = v_y / v_x = 20/20 = 1</span> → <span class='f'>α = 45°</span>.</p>",w:"Пункт (d) не решён."},
+{s:"as",t:"Астрономия · Q2",q:"UTC is the local time at:",o:["Greenwich","New York","Moscow","Astana"],e:"<p>UTC — время нулевого меридиана (0° долготы), который проходит через <b>Гринвич</b> (Лондон).</p>",w:"Было выбрано: New York."},
+{s:"as",t:"Астрономия · Q3a",q:"True or false: the altitude of Polaris is approximately equal to the latitude of the observer.",o:["True","False"],e:"<p><b>True.</b> На полюсе (90°) Полярная в зените, на экваторе (0°) — у горизонта. В Алматы (≈43°) она на высоте ≈43°.</p>",w:"Q3 — 0 баллов."},
+{s:"as",t:"Астрономия · Q3b",q:"True or false: a star with m = −1 is fainter than a star with m = +1.",o:["False","True"],e:"<p><b>False.</b> Чем <b>меньше</b> звёздная величина, тем звезда <b>ярче</b>. −1 меньше, чем +1, значит она ярче.</p>",w:"Q3 — 0 баллов."},
+{s:"as",t:"Астрономия · Q3c",q:"True or false: 1 AU is the mean distance between the Earth and the Sun.",o:["True","False"],e:"<p><b>True.</b> 1 астрономическая единица ≈ 150 млн км — среднее расстояние Земля–Солнце.</p>",w:"Q3 — 0 баллов."},
+{s:"as",t:"Астрономия · Q6",q:"Convert 31°45′30″ to hours, minutes and seconds.",o:["2 h 07 min 02 s","2 h 14 min 05 s","2 h 04 min 30 s","31 h 45 min 30 s"],e:"<p>Правило: 15° = 1 ч, 1° = 4 мин, 1′ = 4 с, 1″ = 1/15 с.</p><p><span class='f'>31° · 4 = 124 мин = 2 ч 04 мин</span><br><span class='f'>45′ · 4 = 180 с = 3 мин</span><br><span class='f'>30″ : 15 = 2 с</span></p><p>Итого: <span class='f'>2 ч 07 мин 02 с</span>.</p>",w:"Было: 134 мин 5 с. 180 секунд — это 3 минуты, их надо добавить к минутам; 30″:15 = 2 с, а не 450."},
+{s:"as",t:"Астрономия · Q7",q:"A planet has an orbital period of 125 years. Semi-major axis in AU?",o:["25 AU","5 AU","125 AU","15 625 AU"],e:"<p><span class='f'>T² = a³</span> работает прямо в годах и а.е. — <b>не переводи в секунды!</b></p><p><span class='f'>125² = 15 625 = a³</span> → <span class='f'>a = ∛15 625 = 25 AU</span>.</p><p>Хитрость: 125 = 5³, значит T² = 5⁶ = (5²)³ → a = 25.</p>",w:"Было: перевод 125 лет в секунды. Не нужно."},
+{s:"as",t:"Астрономия · Q8",q:"A star has a parallax of 0.005′ (arcminutes!). Distance in parsecs?",o:["≈ 3,3 pc","200 pc","0,3 pc","12 000 pc"],e:"<p>Формула <span class='f'>d = 1/p</span> работает только с <b>секундами</b> (″).</p><p>Переводим: <span class='f'>0,005′ · 60 = 0,3″</span>. Тогда <span class='f'>d = 1/0,3 ≈ 3,3 pc</span>.</p>",w:"Было: 1/0,005 = 200 — забыла перевести минуты в секунды."},
+{s:"as",t:"Астрономия · Q9",q:"A plane leaves Astana (UTC+6) at 22:00 local time and lands in Aktobe (UTC+5) at 23:15 local time. Flight duration?",o:["2 h 15 min","1 h 15 min","0 h 15 min","3 h 15 min"],e:"<p>Переводим оба времени в UTC:</p><p>Вылет: <span class='f'>22:00 − 6 = 16:00 UTC</span><br>Посадка: <span class='f'>23:15 − 5 = 18:15 UTC</span></p><p>Полёт: <span class='f'>18:15 − 16:00 = 2 ч 15 мин</span>.</p>",w:"Было: 1:15 и 00:15 — разницу поясов учла не в ту сторону."},
+{s:"as",t:"Астрономия · Q10",q:"A star with δ = +12°30′ culminates at an altitude h = 51°30′. Latitude of the observer?",o:["51°","39°","64°","25°"],e:"<p>Формула: <span class='f'>h = 90° − φ + δ</span> → <span class='f'>φ = 90° − h + δ</span>.</p><p><span class='f'>51°30′ − 12°30′ = 39°</span> (минуты сократились)<br><span class='f'>φ = 90° − 39° = 51°</span></p>",w:"Начало было правильным! Запуталась при переводе в минуты. Градусы и минуты считай отдельно — минуты тут сокращаются."}
+];
+const $=id=>document.getElementById(id);
+let filter="all",list=[],i=0,good=0,wrong=[];
+function shuffle(a){a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]]}return a}
+function show(id){["start","quiz","end"].forEach(s=>$(s).hidden=s!==id);window.scrollTo(0,0)}
+function begin(items){list=items;i=0;good=0;wrong=[];show("quiz");render()}
+function render(){
+  const it=list[i];
+  $("pos").textContent=(i+1)+" / "+list.length;
+  $("pts").textContent="Верно: "+good;
+  $("barI").style.width=(i/list.length*100)+"%";
+  $("tag").textContent=it.t;$("q").textContent=it.q;
+  $("exp").hidden=true;$("next").hidden=true;
+  const box=$("opts");box.innerHTML="";
+  shuffle(it.o.map((o,k)=>({o,k}))).forEach(x=>{
+    const b=document.createElement("button");b.className="opt";b.textContent=x.o;
+    b.onclick=()=>pick(b,x.k===0);b.dataset.ok=x.k===0?"1":"";box.appendChild(b)});
+}
+function pick(btn,ok){
+  const it=list[i];
+  [...$("opts").children].forEach(b=>{b.disabled=true;if(b.dataset.ok)b.classList.add("right")});
+  if(!ok){btn.classList.add("wrong");wrong.push(it)}else good++;
+  $("pts").textContent="Верно: "+good;
+  $("exp").innerHTML=`<div class="verdict ${ok?"ok":"no"}">${ok?"Верно!":"Не совсем"}</div>${it.e}<p class="was">✎ ${it.w}</p>`;
+  $("exp").hidden=false;
+  $("next").textContent=i===list.length-1?"Результат":"Дальше";
+  $("next").hidden=false;$("next").focus();
+}
+$("next").onclick=()=>{i++;if(i<list.length)render();else finish()};
+function finish(){
+  show("end");$("res").textContent=good+"/"+list.length;
+  const p=good/list.length;
+  $("msg").textContent=p===1?"Все ошибки исправлены. Отлично!":p>=.7?"Хорошо! Пройди ошибки ещё раз — закрепить.":"Прочитай разборы и пройди ошибки ещё раз.";
+  $("redo").hidden=!wrong.length;
+}
+$("redo").onclick=()=>begin(shuffle(wrong));
+$("again").onclick=()=>begin(Q.filter(q=>filter==="all"||q.s===filter));
+$("home").onclick=()=>show("start");
+document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{filter=c.dataset.f;document.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x===c?"true":"false"))});
+$("go").onclick=()=>begin(Q.filter(q=>filter==="all"||q.s===filter));
+</script>
+
+</body></html>

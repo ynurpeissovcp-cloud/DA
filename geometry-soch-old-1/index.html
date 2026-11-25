@@ -1,0 +1,337 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>СОЧ по геометрии 7</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;700&family=Unbounded:wght@500;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: одна колонка-тетрадь, три раздела: шпаргалка → рецепты задач → пробный СОЧ */
+:root{
+  --bg:#F5F7FB; --paper:#FFFFFF; --ink:#18202E; --muted:#5A6476; --line:#DCE2EC;
+  --accent:#2C55C8; --mark:#FFE27A; --ok:#1E8A55; --okbg:#E3F4EA;
+  --display:"Unbounded",system-ui,sans-serif; --body:"Golos Text",system-ui,-apple-system,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#11151D; --paper:#191F2A; --ink:#E7EBF3; --muted:#9AA4B6; --line:#2A3242;
+  --accent:#8EA8FF; --mark:#6B5A12; --ok:#5FD39A; --okbg:#173225; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11151D; --paper:#191F2A; --ink:#E7EBF3; --muted:#9AA4B6; --line:#2A3242;
+  --accent:#8EA8FF; --mark:#6B5A12; --ok:#5FD39A; --okbg:#173225; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:760px;margin:0 auto;padding-block:32px 64px;display:flex;flex-direction:column;gap:40px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(26px,6vw,38px);line-height:1.15;margin:0;text-wrap:balance}
+h2{font-family:var(--display);font-weight:500;font-size:22px;margin:0 0 6px;text-wrap:balance}
+h3{font-size:17px;margin:0}
+p{margin:0}
+.lead{color:var(--muted);max-width:62ch}
+.en{font-family:var(--mono);font-size:.82em;color:var(--accent);white-space:nowrap}
+mark{background:var(--mark);color:inherit;padding:0 3px;border-radius:2px}
+nav{display:flex;flex-wrap:wrap;gap:8px}
+nav a{color:var(--accent);text-decoration:none;border:1px solid var(--line);padding:6px 12px;border-radius:999px;background:var(--paper);font-weight:500}
+nav a:focus-visible,summary:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.plan div{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px}
+.plan b{display:block;font-family:var(--display);font-weight:500;font-size:14px;color:var(--accent);margin-bottom:4px}
+section{display:flex;flex-direction:column;gap:16px}
+.topic{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.topic .tag{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+dl{margin:0;display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+dt{font-weight:700}
+dd{margin:0 0 4px;color:var(--ink)}
+.rule{border-left:3px solid var(--accent);padding:6px 12px;background:color-mix(in srgb,var(--accent) 7%,transparent);border-radius:0 6px 6px 0}
+.formula{font-family:var(--mono);font-size:15px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 12px;overflow-x:auto;white-space:pre}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.fig{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;color:var(--muted);text-align:center}
+.fig svg{width:100%;max-width:170px;height:auto}
+.fig svg .l{stroke:var(--ink);stroke-width:2;fill:none}
+.fig svg .a{stroke:var(--accent);stroke-width:2;fill:none}
+.fig svg text{fill:var(--ink);font:600 13px var(--body)}
+.fig svg .t2{fill:var(--accent)}
+.recipe{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.recipe h3 span{color:var(--accent)}
+.task{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.task.done{border-color:var(--ok)}
+.thead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.num{font-family:var(--display);font-weight:500;color:var(--accent);font-size:14px}
+.pts{font-size:13px;color:var(--muted)}
+details summary{cursor:pointer;color:var(--accent);font-weight:500;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"▸ ";}
+details[open] summary::before{content:"▾ ";}
+.ans{margin-top:8px;padding:10px 12px;background:var(--okbg);border-radius:8px;display:flex;flex-direction:column;gap:6px}
+.ans .formula{background:var(--paper)}
+.check{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--muted)}
+.check input{width:18px;height:18px;accent-color:var(--ok)}
+.score{position:sticky;top:env(safe-area-inset-top,0px);z-index:2;background:var(--bg);padding:10px 0;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line)}
+.bar{flex:1;height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+.score b{font-variant-numeric:tabular-nums;min-width:4ch;text-align:right}
+table{border-collapse:collapse;width:100%;font-size:15px}
+td,th{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:var(--bg);font-weight:500}
+.tbl{overflow-x:auto}
+footer{color:var(--muted);font-size:14px}
+</style>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:14px">
+    <h1>СОЧ по геометрии: главы 1–2</h1>
+    <p class="lead">Темы 1.1–1.4 и 2.1: точки и прямые, отрезки, углы, равные фигуры, доказательства, смежные и вертикальные углы, виды треугольников. В скобках даны английские термины, как в учебнике.</p>
+    <nav><a href="#cheat">1. Шпаргалка</a><a href="#recipes">2. Как решать</a><a href="#test">3. Пробный СОЧ</a></nav>
+    <div class="plan">
+      <div><b>Шаг 1 · 20 мин</b>Прочитать шпаргалку. Выделенное жёлтым выучить наизусть.</div>
+      <div><b>Шаг 2 · 20 мин</b>Разобрать 6 рецептов. Почти все задачи СОЧ сводятся к ним.</div>
+      <div><b>Шаг 3 · 40 мин</b>Решить пробный СОЧ на бумаге, потом проверить ответы. Ошибки решить ещё раз.</div>
+    </div>
+  </header>
+
+  <!-- ===== 1. ШПАРГАЛКА ===== -->
+  <section id="cheat">
+    <h2>1. Шпаргалка</h2>
+
+    <div class="topic">
+      <span class="tag">1.1 · Основные понятия</span>
+      <dl>
+        <dt>Точка, прямая, плоскость <span class="en">point, line, plane</span></dt>
+        <dd>Неопределяемые понятия. Точка не имеет размера. Прямая бесконечна в обе стороны. Плоскость плоская, без толщины, бесконечна.</dd>
+        <dt>Отрезок <span class="en">line segment</span></dt>
+        <dd>Часть прямой с <mark>двумя концами</mark>. Имеет длину.</dd>
+        <dt>Луч <span class="en">ray</span></dt>
+        <dd>Часть прямой с <mark>одним концом</mark>, идёт бесконечно в одну сторону. Луч AB начинается в A.</dd>
+        <dt>Коллинеарные точки <span class="en">collinear</span></dt>
+        <dd>Лежат на одной прямой. Компланарные <span class="en">coplanar</span> лежат в одной плоскости.</dd>
+        <dt>Полуплоскость <span class="en">half plane</span></dt>
+        <dd>Прямая делит плоскость на две полуплоскости. Сама прямая ни в одну не входит.</dd>
+        <dt>Угол <span class="en">angle</span></dt>
+        <dd>Два луча из одной точки (вершины, <span class="en">vertex</span>). Обозначение ∠ABC: вершина всегда <mark>в середине</mark>.</dd>
+        <dt>Параллельные прямые <span class="en">parallel, ∥</span></dt>
+        <dd>Лежат в одной плоскости и не пересекаются.</dd>
+      </dl>
+      <div class="rule"><b>Аксиома</b> <span class="en">axiom / postulate</span> принимается без доказательства. <b>Теорема</b> <span class="en">theorem</span> доказывается.</div>
+    </div>
+
+    <div class="topic">
+      <span class="tag">Аксиомы, которые спрашивают чаще всего</span>
+      <dl>
+        <dt>Через две точки</dt><dd>проходит ровно одна прямая.</dd>
+        <dt>Из трёх точек на прямой</dt><dd>только одна лежит между двумя другими.</dd>
+        <dt>Две пересекающиеся прямые</dt><dd>имеют ровно одну общую точку.</dd>
+        <dt>Длина отрезка</dt><dd>всегда больше нуля. Если B между A и C:</dd>
+      </dl>
+      <div class="formula">AB + BC = AC</div>
+      <dl>
+        <dt>Мера угла</dt><dd>от 0° до 180°. Если луч OB внутри ∠AOC:</dd>
+      </dl>
+      <div class="formula">∠AOB + ∠BOC = ∠AOC</div>
+      <dl>
+        <dt>Параллельность</dt><dd>через точку вне прямой проходит <mark>только одна</mark> прямая, параллельная данной.</dd>
+      </dl>
+    </div>
+
+    <div class="topic">
+      <span class="tag">1.2 · Равные фигуры</span>
+      <dl>
+        <dt>Равные (конгруэнтные) фигуры <span class="en">congruent, ≅</span></dt>
+        <dd>Одинаковая форма и размер. Совпадают при наложении (сдвиг, поворот, отражение).</dd>
+        <dt>ΔABC ≅ ΔKMN</dt>
+        <dd>Порядок букв важен: A↔K, B↔M, C↔N. Значит <mark>AB = KM, BC = MN, AC = KN</mark>, ∠A = ∠K, ∠B = ∠M, ∠C = ∠N. Периметры тоже равны.</dd>
+      </dl>
+    </div>
+
+    <div class="topic">
+      <span class="tag">1.3 · Доказательства</span>
+      <dl>
+        <dt>Условное утверждение <span class="en">if–then</span></dt>
+        <dd>После «если» стоит <b>условие</b> <span class="en">hypothesis</span>, после «то» стоит <b>заключение</b> <span class="en">conclusion</span>.</dd>
+        <dt>Прямое доказательство <span class="en">direct proof</span></dt>
+        <dd>Цепочка шагов от данных к выводу, у каждого шага есть причина.</dd>
+        <dt>От противного <span class="en">proof by contradiction</span></dt>
+        <dd>1) Предположить обратное. 2) Получить противоречие. 3) Значит, утверждение верно.</dd>
+      </dl>
+    </div>
+
+    <div class="topic">
+      <span class="tag">1.4 · Смежные и вертикальные углы</span>
+      <div class="figs">
+        <div class="fig">
+          <svg viewBox="0 0 170 100" aria-label="Смежные углы">
+            <line class="l" x1="10" y1="80" x2="160" y2="80"/><line class="l" x1="85" y1="80" x2="125" y2="15"/>
+            <path class="a" d="M110 80 A25 25 0 0 0 98 59"/><path class="a" d="M98 59 A25 25 0 0 0 60 80"/>
+            <text x="112" y="70">1</text><text x="68" y="68">2</text>
+          </svg>
+          <span><b>Смежные</b> <span class="en">linear pair</span><br>∠1 + ∠2 = 180°</span>
+        </div>
+        <div class="fig">
+          <svg viewBox="0 0 170 100" aria-label="Дополнительные углы">
+            <line class="l" x1="40" y1="90" x2="40" y2="10"/><line class="l" x1="40" y1="90" x2="160" y2="90"/><line class="l" x1="40" y1="90" x2="130" y2="25"/>
+            <path class="a" d="M40 62 A28 28 0 0 0 63 74"/><path class="a" d="M63 74 A28 28 0 0 0 68 90"/>
+            <text x="46" y="55">1</text><text x="74" y="84">2</text>
+          </svg>
+          <span><b>Смежные дополнительные</b> <span class="en">complementary</span><br>∠1 + ∠2 = 90°</span>
+        </div>
+        <div class="fig">
+          <svg viewBox="0 0 170 100" aria-label="Вертикальные углы">
+            <line class="l" x1="15" y1="85" x2="155" y2="15"/><line class="l" x1="15" y1="15" x2="155" y2="85"/>
+            <text x="78" y="30">1</text><text class="t2" x="120" y="55">2</text><text x="78" y="80">3</text><text class="t2" x="36" y="55">4</text>
+          </svg>
+          <span><b>Вертикальные</b> <span class="en">vertical</span><br>∠1 = ∠3, ∠2 = ∠4</span>
+        </div>
+      </div>
+      <div class="rule">Запомнить: <b>c</b>omplementary = <b>90°</b> (раньше в алфавите, меньше число), <b>s</b>upplementary = <b>180°</b>. Все 4 угла при пересечении двух прямых дают 360°. Перпендикулярные прямые <span class="en">⊥</span> пересекаются под 90°.</div>
+    </div>
+
+    <div class="topic">
+      <span class="tag">2.1 · Виды треугольников</span>
+      <div class="tbl"><table>
+        <tr><th>По сторонам</th><th>По углам</th></tr>
+        <tr><td><b>Разносторонний</b> <span class="en">scalene</span>: все стороны разные</td><td><b>Остроугольный</b> <span class="en">acute</span>: все углы &lt; 90°</td></tr>
+        <tr><td><b>Равнобедренный</b> <span class="en">isosceles</span>: две стороны равны (боковые, <span class="en">legs</span>), третья основание <span class="en">base</span>. Углы при основании равны</td><td><b>Прямоугольный</b> <span class="en">right</span>: есть угол 90°. Катеты <span class="en">legs</span>, гипотенуза <span class="en">hypotenuse</span> напротив прямого угла</td></tr>
+        <tr><td><b>Равносторонний</b> <span class="en">equilateral</span>: все три стороны равны, все углы по 60°</td><td><b>Тупоугольный</b> <span class="en">obtuse</span>: есть угол &gt; 90°</td></tr>
+      </table></div>
+      <div class="rule">Периметр <span class="en">perimeter</span> = сумма трёх сторон. Сумма углов треугольника = 180°.</div>
+    </div>
+  </section>
+
+  <!-- ===== 2. РЕЦЕПТЫ ===== -->
+  <section id="recipes">
+    <h2>2. Как решать: 6 рецептов</h2>
+    <p class="lead">Почти любая задача СОЧ: найти, что чему равно, составить уравнение, решить его, подставить x обратно.</p>
+
+    <div class="recipe">
+      <h3><span>А.</span> Отрезки на прямой</h3>
+      <p>B между A и C → пишем <b>AB + BC = AC</b> и подставляем выражения.</p>
+      <div class="formula">AB=4x−2, BC=3x+1, AC=20
+(4x−2)+(3x+1)=20 → 7x=21 → x=3</div>
+    </div>
+
+    <div class="recipe">
+      <h3><span>Б.</span> Середина отрезка <span class="en">midpoint</span></h3>
+      <p>M середина KL → две половинки равны: <b>KM = ML</b>, а весь отрезок KL = 2·KM.</p>
+      <div class="formula">KM=8a−6, ML=3(2a−1)+5 = 6a+2
+8a−6 = 6a+2 → a=4,  KL = 2·26 = 52</div>
+    </div>
+
+    <div class="recipe">
+      <h3><span>В.</span> Смежные / дополнительные углы</h3>
+      <p>Смежные: сумма <b>180°</b>. Дополнительные: сумма <b>90°</b>. Если дано отношение 1 : 5, углы равны x и 5x.</p>
+      <div class="formula">Отношение 1:5, сумма 90° → x+5x=90 → x=15°
+Углы: 15° и 75°</div>
+    </div>
+
+    <div class="recipe">
+      <h3><span>Г.</span> Вертикальные углы</h3>
+      <p>Вертикальные <b>равны</b> → приравниваем выражения. Соседний угол = 180° − найденный.</p>
+      <div class="formula">50° = 2x−10° → x=30°</div>
+      <p>«Сумма двух углов при пересечении прямых = 270°». Два смежных дают только 180°, значит это вертикальные: каждый 135°, а два других по 45°.</p>
+    </div>
+
+    <div class="recipe">
+      <h3><span>Д.</span> Равные треугольники</h3>
+      <p>Выписать пары по порядку букв, затем подставить числа.</p>
+      <div class="formula">ΔABC ≅ ΔEFD: AB=EF, BC=FD, AC=ED</div>
+    </div>
+
+    <div class="recipe">
+      <h3><span>Е.</span> Виды треугольников с x</h3>
+      <p>Равнобедренный: приравнять две стороны (проверить <b>все три пары</b>). Равносторонний: все три равны. Последовательные числа: n, n+1, n+2; чётные: n, n+2, n+4.</p>
+      <div class="formula">Стороны — последовательные числа, P=24:
+n+(n+1)+(n+2)=24 → 3n=21 → 7, 8, 9</div>
+    </div>
+  </section>
+
+  <!-- ===== 3. ПРОБНЫЙ СОЧ ===== -->
+  <section id="test">
+    <h2>3. Пробный СОЧ</h2>
+    <p class="lead">Решить на бумаге, потом открыть ответ. Отмечайте галочкой задачи, которые получились.</p>
+    <div class="score"><span>Решено</span><div class="bar"><i id="barfill"></i></div><b id="scoretxt">0/12</b></div>
+
+    <div class="task"><div class="thead"><span class="num">Задание 1</span><span class="pts">теория</span></div>
+      <p>Верно или неверно? a) Аксиому нужно доказывать. b) Через две точки проходит ровно одна прямая. c) У луча два конца.</p>
+      <details><summary>Ответ</summary><div class="ans"><p>a) неверно, аксиома без доказательства; b) верно (это аксиома); c) неверно, у луча один конец.</p></div></details>
+      <label class="check"><input type="checkbox" id="t1"> Получилось</label></div>
+
+    <div class="task"><div class="thead"><span class="num">Задание 2</span><span class="pts">рецепт А</span></div>
+      <p>A, B, C лежат на одной прямой, B между A и C. AB = 2x + 3, BC = x + 6, AC = 24. Найдите x, AB и BC.</p>
+      <details><summary>Ответ</summary><div class="ans"><div class="formula">2x+3 + x+6 = 24 → 3x = 15 → x = 5</div><p>AB = 13, BC = 11.</p></div></details>
+      <label class="check"><input type="checkbox" id="t2"> Получилось</label></div>
+
+    <div class="task"><div class="thead"><span class="num">Задание 3</span><span class="pts">рецепт Б</span></div>
+      <p>M — середина отрезка KL. KM = 3a + 4, ML = 5a − 6. Найдите a и длину KL.</p>
+      <details><summary>Ответ</summary><div class="ans"><div class="formula">3a+4 = 5a−6 → 2a = 10 → a = 5</div><p>KM = 19, KL = 38.</p></div></details>
+      <label class="check"><input type="checkbox" id="t3"> Получилось</label></div>
+
+    <div class="task"><div class="thead"><span class="num">Задание 4</span><span class="pts">рецепт В</span></div>
+      <p>∠1 и ∠2 смежные. ∠1 = 3x + 20°, ∠2 = 2x + 10°. Найдите оба угла.</p>
+      <details><summary>Ответ</summary><div class="ans"><div class="formula">5x + 30 = 180 → x = 30</div><p>∠1 = 110°, ∠2 = 70°.</p></div></details>
+      <label class="check"><input type="checkbox" id="t4"> Получилось</label></div>
+
+    <div class="task"><div class="thead"><span class="num">Задание 5</span><span class="pts">рецепт В</span></div>
+      <p>Отношение двух смежных дополнительных углов (complementary) 2 : 3. Найдите углы.</p>
+      <details><summary>Ответ</summary><div class="ans"><div class="formula">2x + 3x = 90 → x = 18</div><p>36° и 54°.</p></div></details>
+      <label class="check"><input type="checkbox" id="t5"> Получилось</label></div>
+
+    <div class="task"><div class="thead"><span class="num">Задание 6</span><span class="pts">рецепт Г</span></div>
+      <p>При пересечении двух прямых вертикальные углы равны 4x − 10° и 2x + 30°. Найдите x и все четыре угла.</p>
+      <details><summary>Ответ</summary><div class="ans"><div class="formula">4x−10 = 2x+30 → x = 20</div><p>Углы: 70°, 110°, 70°, 110°.</p></div></details>
+      <label class="check"><input type="checkbox" id="t6"> Получилось</label></div>
+
+    <div class="task"><div class="thead"><span class="num">Задание 7</span><span class="pts">рецепт Г</span></div>
+      <p>Сумма двух углов, образованных при пересечении двух прямых, равна 220°. Найдите все углы.</p>
+      <details><summary>Ответ</summary><div class="ans"><p>220° больше 180°, значит углы вертикальные: по 110°. Два других: 180° − 110° = 70°.</p></div></details>
+      <label class="check"><input type="checkbox" id="t7"> Получилось</label></div>
+
+    <div class="task"><div class="thead"><span class="num">Задание 8</span><span class="pts">угол и его дополнение</span></div>
+      <p>Угол на 30° меньше, чем удвоенный дополнительный к нему угол (complement). Найдите оба угла.</p>
+      <details><summary>Ответ</summary><div class="ans"><div class="formula">x = 2(90 − x) − 30 → 3x = 150 → x = 50</div><p>50° и 40°.</p></div></details>
+      <label class="check"><input type="checkbox" id="t8"> Получилось</label></div>
+
+    <div class="task"><div class="thead"><span class="num">Задание 9</span><span class="pts">рецепт Д</span></div>
+      <p>ΔABC ≅ ΔKMN. AB = 7 см, BC = 9 см, периметр ΔABC = 25 см. Найдите KN. Какой угол равен ∠M?</p>
+      <details><summary>Ответ</summary><div class="ans"><p>KN = AC = 25 − 7 − 9 = 9 см. ∠M = ∠B (B на втором месте, M на втором месте).</p></div></details>
+      <label class="check"><input type="checkbox" id="t9"> Получилось</label></div>
+
+    <div class="task"><div class="thead"><span class="num">Задание 10</span><span class="pts">рецепт Е</span></div>
+      <p>Стороны треугольника: 2x + 3, x + 8 и 4x − 3. Первые две равны. Найдите стороны, периметр и вид треугольника по сторонам.</p>
+      <details><summary>Ответ</summary><div class="ans"><div class="formula">2x+3 = x+8 → x = 5</div><p>Стороны 13, 13, 17. P = 43. Равнобедренный.</p></div></details>
+      <label class="check"><input type="checkbox" id="t10"> Получилось</label></div>
+
+    <div class="task"><div class="thead"><span class="num">Задание 11</span><span class="pts">классификация</span></div>
+      <p>Углы треугольника 30°, 50°, 100°. Какой он по углам? А треугольник с углами 45°, 45°, 90°?</p>
+      <details><summary>Ответ</summary><div class="ans"><p>Первый тупоугольный (100° &gt; 90°). Второй прямоугольный и равнобедренный.</p></div></details>
+      <label class="check"><input type="checkbox" id="t11"> Получилось</label></div>
+
+    <div class="task"><div class="thead"><span class="num">Задание 12</span><span class="pts">доказательство</span></div>
+      <p>a) Выделите условие и заключение: «Если угол прямой, то он равен 90°».<br>b) A, B, C на одной прямой, AB = 6 см, AC = 4 см, BC = 11 см. Докажите методом от противного, что C не лежит между A и B.</p>
+      <details><summary>Ответ</summary><div class="ans"><p>a) Условие: угол прямой. Заключение: он равен 90°.</p><p>b) 1) Предположим, C лежит между A и B. 2) Тогда AC + CB = AB, то есть 4 + 11 = 15, а AB = 6. 3) 15 ≠ 6, противоречие. Значит, C не лежит между A и B.</p></div></details>
+      <label class="check"><input type="checkbox" id="t12"> Получилось</label></div>
+  </section>
+
+  <footer>Если ошибка в задании: найти похожий рецепт в разделе 2, перерешать, потом сделать похожую задачу из учебника (раздел Problems после каждой темы).</footer>
+</div>
+
+<script>
+(function(){
+  var boxes=[].slice.call(document.querySelectorAll('.check input'));
+  var KEY='soch-geom-done';
+  var saved={};
+  try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){saved={}}
+  function update(){
+    var n=0;
+    boxes.forEach(function(b){ if(b.checked)n++; b.closest('.task').classList.toggle('done',b.checked); });
+    document.getElementById('scoretxt').textContent=n+'/'+boxes.length;
+    document.getElementById('barfill').style.width=(n/boxes.length*100)+'%';
+  }
+  boxes.forEach(function(b){
+    if(saved[b.id])b.checked=true;
+    b.addEventListener('change',function(){
+      saved[b.id]=b.checked;
+      try{localStorage.setItem(KEY,JSON.stringify(saved))}catch(e){}
+      update();
+    });
+  });
+  update();
+})();
+</script>
+
+</body></html>

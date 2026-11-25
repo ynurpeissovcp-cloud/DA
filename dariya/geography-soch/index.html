@@ -1,0 +1,122 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>СОЧ: география Казахстана</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,600;7..72,700&family=Golos+Text:wght@400;500;600&display=swap">
+<style>
+/* Layout: one narrow column, a question card at a time, contour-line motif in the header */
+:root{
+  --bg:#f3f1ea; --surface:#fbfaf6; --fg:#24261f; --muted:#6a6c5f; --line:#d9d6c8;
+  --accent:#2f6b4f; --accent-soft:#e2ede5; --ochre:#b5822f;
+  --good:#2f7a4a; --good-bg:#e3f1e7; --bad:#b24a37; --bad-bg:#f7e4df;
+  --display:"Literata",Georgia,serif; --body:"Golos Text",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#171a16; --surface:#20241f; --fg:#e8e7df; --muted:#9c9e90; --line:#363b33;
+  --accent:#7cc39c; --accent-soft:#25362c; --ochre:#d9a858;
+  --good:#7cc39c; --good-bg:#1f3427; --bad:#ec8f7c; --bad-bg:#3b2420; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#171a16; --surface:#20241f; --fg:#e8e7df; --muted:#9c9e90; --line:#363b33;
+  --accent:#7cc39c; --accent-soft:#25362c; --ochre:#d9a858;
+  --good:#7cc39c; --good-bg:#1f3427; --bad:#ec8f7c; --bad-bg:#3b2420; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 48px}
+.wrap{max-width:620px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+header{position:relative;padding-block:8px 4px}
+header svg{position:absolute;inset:0;width:100%;height:100%;opacity:.5;pointer-events:none}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ochre);font-weight:600}
+h1{font-family:var(--display);font-size:clamp(26px,6vw,34px);line-height:1.15;margin:6px 0 4px;text-wrap:balance;position:relative}
+.sub{color:var(--muted);margin:0;position:relative}
+.bar{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.track{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.fill{height:100%;background:var(--accent);width:0;transition:width .3s}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 20px;display:flex;flex-direction:column;gap:16px}
+.topic{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.q{font-family:var(--display);font-size:21px;line-height:1.3;margin:0;text-wrap:balance}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{font:inherit;text-align:left;padding:13px 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);cursor:pointer;display:flex;gap:12px;align-items:flex-start}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:focus-visible,.btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.opt .k{font-weight:600;color:var(--muted);min-width:1.2em}
+.opt.ok{border-color:var(--good);background:var(--good-bg)}
+.opt.no{border-color:var(--bad);background:var(--bad-bg)}
+.opt:disabled{cursor:default}
+.fb{padding:12px 14px;border-radius:10px;font-size:15px}
+.fb.ok{background:var(--good-bg)} .fb.no{background:var(--bad-bg)}
+.fb b{display:block;margin-bottom:2px}
+.fb.ok b{color:var(--good)} .fb.no b{color:var(--bad)}
+.btn{font:inherit;font-weight:600;padding:12px 20px;border:0;border-radius:10px;background:var(--accent);color:var(--surface);cursor:pointer;align-self:flex-start}
+.score{font-family:var(--display);font-size:56px;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums}
+.grade{font-size:18px;font-weight:600}
+.review{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.review li{font-size:14px;padding:10px 12px;border-radius:8px;background:var(--bad-bg)}
+.review li span{color:var(--muted);display:block}
+@media (prefers-reduced-motion:reduce){.fill{transition:none}}
+</style>
+
+<div class="wrap">
+  <header>
+    <svg viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true">
+      <g fill="none" stroke="var(--line)" stroke-width="1.2">
+        <path d="M380 110 C420 60,500 40,600 50"/><path d="M420 120 C450 80,520 70,600 78"/>
+        <path d="M340 100 C390 30,480 10,600 20"/><path d="M300 120 C360 50,470 -5,600 -8"/>
+      </g>
+    </svg>
+    <div class="eyebrow">СОЧ · 8 класс</div>
+    <h1>Физическая география Казахстана</h1>
+    <p class="sub">Леса, ДЗЗ, рельеф, тектоника и полезные ископаемые. 15 вопросов.</p>
+  </header>
+  <div class="bar"><div class="track"><div class="fill" id="fill"></div></div><span id="count">1 / 15</span></div>
+  <main id="app"></main>
+</div>
+
+<script>
+const Q=[
+["Леса","Какие леса занимают наибольшую площадь в Казахстане?",["Саксауловые леса","Горные еловые леса","Ленточные боры","Берёзовые колки"],"Саксаул растёт на огромных площадях пустынь юга: Кызылкум, Мойынкум, Прибалхашье."],
+["Леса","Где расположены ленточные сосновые боры?",["В Прииртышье","Вдоль Сырдарьи","В Заилийском Алатау","На Устюрте"],"Ленточные боры тянутся полосами по пескам вдоль Иртыша (Павлодарская и Абайская области)."],
+["Леса","Какое дерево образует хвойные леса Заилийского Алатау?",["Ель Шренка","Сосна обыкновенная","Лиственница","Туранга"],"Ель Шренка (тянь-шаньская) — главная порода гор юго-востока. Туранга растёт в тугаях."],
+["ДЗЗ","Что такое ДЗЗ?",["Получение информации о поверхности Земли на расстоянии","Измерение глубины морей эхолотом","Бурение скважин для разведки","Составление карт по описаниям путешественников"],"Дистанционное зондирование Земли — съёмка со спутников, самолётов, БПЛА без контакта с объектом."],
+["ДЗЗ","Какой вид съёмки работает ночью и через облака?",["Радиолокационная","Оптическая","Фотографическая аэросъёмка","Съёмка в видимом спектре"],"Радар — активный метод: сам посылает сигнал, поэтому не зависит от света и облачности."],
+["Рельеф","Где находится самая высокая точка Казахстана?",["Хан-Тенгри, Тянь-Шань","Белуха, Алтай","Пик Талгар, Заилийский Алатау","Аксоран, Сарыарка"],"Хан-Тенгри (около 7010 м). Белуха — 4506 м, Талгар — около 4979 м, Аксоран — 1565 м."],
+["Рельеф","Где находится самая низкая точка Казахстана (−132 м)?",["Впадина Карагие, Мангышлак","Озеро Балхаш","Тургайская ложбина","Аральское море"],"Впадина Карагие на полуострове Мангышлак — −132 м."],
+["Тектоника","Почему Тянь-Шань и Алтай называют возрождёнными горами?",["Древние разрушенные горы снова подняты альпийскими движениями","Они образовались только в кайнозое","Они вулканического происхождения","Их восстановили после землетрясения"],"Палеозойские горы разрушились в мезозое, а в кайнозое альпийская складчатость подняла их заново."],
+["Тектоника","Какая тектоническая структура лежит в основе Казахского мелкосопочника?",["Казахский щит (палеозойские складчатые структуры)","Туранская плита","Восточно-Европейская платформа","Альпийская складчатость"],"Сарыарка — остатки древних каледонских и герцинских гор, разрушенных и выровненных."],
+["Тектоника","В какую эру сформировалась большая часть гор и рудных месторождений Казахстана?",["Палеозой","Архей","Мезозой","Кайнозой"],"Каледонская и герцинская складчатости палеозоя создали основные горы и рудные залежи."],
+["Полезные ископаемые","Какая закономерность размещения полезных ископаемых верна?",["Рудные — в складчатых областях, осадочные — в платформенных впадинах","Нефть и газ — в горах","Уголь — только в пустынях","Металлы — во впадинах платформ"],"Руды связаны с магматизмом складчатых областей, а нефть, газ, уголь и соли — с осадочными толщами впадин."],
+["Полезные ископаемые","В Прикаспийской впадине главные полезные ископаемые —",["Нефть и газ","Медь и цинк","Хром и никель","Золото"],"Тенгиз, Кашаган, Карачаганак — крупнейшие нефтегазовые месторождения."],
+["Полезные ископаемые","Где добывают хромовые руды?",["Мугоджары (Кемпирсай)","Экибастуз","Каратау","Тенгиз"],"Кемпирсайская группа месторождений у Мугоджар. Экибастуз — уголь, Каратау — фосфориты."],
+["Полезные ископаемые","Рудный Алтай знаменит запасами…",["Полиметаллов (свинец, цинк, медь)","Нефти","Фосфоритов","Поваренной соли"],"Отсюда и название — Рудный Алтай, главный район цветной металлургии."],
+["Использование ресурсов","Что из перечисленного — рациональное использование минеральных ресурсов?",["Комплексная переработка руды и рекультивация земель","Увеличение отвалов","Экспорт только необработанного сырья","Добыча без учёта запасов"],"Извлечение всех полезных компонентов и восстановление нарушенных земель снижает ущерб природе."]
+];
+const L=["А","Б","В","Г"];
+let i=0,score=0,wrong=[],order=[];
+const app=document.getElementById("app"),fill=document.getElementById("fill"),count=document.getElementById("count");
+const shuffle=a=>{a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]]}return a};
+function show(){
+  const [t,q,opts,ex]=Q[i];order=shuffle(opts.map((o,n)=>n));
+  fill.style.width=(i/Q.length*100)+"%";count.textContent=(i+1)+" / "+Q.length;
+  app.innerHTML=`<section class="card"><div class="topic">${t}</div><h2 class="q">${q}</h2>
+  <div class="opts">${order.map((n,k)=>`<button class="opt" id="o${k}" data-n="${n}"><span class="k">${L[k]}</span><span>${opts[n]}</span></button>`).join("")}</div>
+  <div id="after"></div></section>`;
+  app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(b));
+}
+function answer(b){
+  const [t,q,opts,ex]=Q[i],ok=b.dataset.n==="0";
+  app.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(x.dataset.n==="0")x.classList.add("ok")});
+  if(ok)score++;else{b.classList.add("no");wrong.push([q,opts[0]])}
+  const last=i===Q.length-1;
+  document.getElementById("after").innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${ok?"Верно!":"Неверно"}</b>${ex}</div>
+  <button class="btn" id="next" style="margin-top:14px">${last?"Посмотреть результат":"Следующий вопрос"}</button>`;
+  const n=document.getElementById("next");n.onclick=()=>{last?result():(i++,show())};n.focus();
+}
+function result(){
+  fill.style.width="100%";count.textContent="Готово";
+  const p=score/Q.length,g=p>=.85?"Отлично, к СОЧ готова!":p>=.65?"Хорошо, повтори ошибки ниже.":"Стоит ещё раз пройтись по конспекту.";
+  app.innerHTML=`<section class="card"><div class="topic">Результат</div><div class="score">${score} / ${Q.length}</div><div class="grade">${g}</div>
+  ${wrong.length?`<div class="topic">Ошибки — правильные ответы</div><ul class="review">${wrong.map(w=>`<li><span>${w[0]}</span>${w[1]}</li>`).join("")}</ul>`:""}
+  <button class="btn" id="again">Пройти ещё раз</button></section>`;
+  document.getElementById("again").onclick=()=>{i=0;score=0;wrong=[];show();window.scrollTo(0,0)};
+}
+show();
+</script>
+
+</body></html>

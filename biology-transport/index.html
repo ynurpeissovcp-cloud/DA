@@ -1,0 +1,709 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Транспорт веществ: SAU 1</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one narrow notebook column; each topic 5.1–5.5 has its own colour, diagrams drawn from the same tokens */
+:root{
+  --bg:#EEF3EF; --surface:#FFFFFF; --ink:#13241B; --muted:#5A6B61; --line:#D5E0D8;
+  --accent:#23744A; --accent-ink:#FFFFFF; --accent-soft:#DCEFE3;
+  --ok:#1F8A52; --ok-bg:#E1F4E8; --bad:#BF3B34; --bad-bg:#FBE6E4;
+  --t1:#23744A; --t2:#8A5A2B; --t3:#7A6A12; --t4:#1F6FA8; --t5:#B23A4A;
+  --t1s:#DCEFE3; --t2s:#F1E6DA; --t3s:#F2EED2; --t4s:#DDEBF6; --t5s:#F7E0E3;
+  --water:#2F7FC1; --sugar:#D9822B;
+  --cork:#6B4A2E; --phloem:#B58457; --camb:#2FA35F; --sap:#E9CF9E; --heart:#B98E58;
+  --display:"Unbounded","Manrope",system-ui,sans-serif;
+  --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0E1612; --surface:#16211B; --ink:#E5EEE8; --muted:#94A69B; --line:#2A3A31;
+  --accent:#6CC08E; --accent-ink:#0E1612; --accent-soft:#1E3327;
+  --ok:#6CC08E; --ok-bg:#183326; --bad:#F08A80; --bad-bg:#3A1F1C;
+  --t1:#6CC08E; --t2:#D9A574; --t3:#D8C35A; --t4:#6FB3E6; --t5:#F08A98;
+  --t1s:#1E3327; --t2s:#33261B; --t3s:#302C17; --t4s:#1B2E3D; --t5s:#3A1F25;
+  --water:#6FB3E6; --sugar:#F0A65A;
+  --cork:#8A6644; --phloem:#B88C62; --camb:#5FD08E; --sap:#6E5A3A; --heart:#4E3B26; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0E1612; --surface:#16211B; --ink:#E5EEE8; --muted:#94A69B; --line:#2A3A31;
+  --accent:#6CC08E; --accent-ink:#0E1612; --accent-soft:#1E3327;
+  --ok:#6CC08E; --ok-bg:#183326; --bad:#F08A80; --bad-bg:#3A1F1C;
+  --t1:#6CC08E; --t2:#D9A574; --t3:#D8C35A; --t4:#6FB3E6; --t5:#F08A98;
+  --t1s:#1E3327; --t2s:#33261B; --t3s:#302C17; --t4s:#1B2E3D; --t5s:#3A1F25;
+  --water:#6FB3E6; --sugar:#F0A65A;
+  --cork:#8A6644; --phloem:#B88C62; --camb:#5FD08E; --sap:#6E5A3A; --heart:#4E3B26; color-scheme:dark }
+
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:10;background:var(--bg)}
+.wrap{max-width:660px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.2}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.muted{color:var(--muted)}
+.ru{color:var(--muted);font-size:.92em}
+body.hide-ru .ru{display:none}
+
+.top{position:sticky;top:env(safe-area-inset-top, 0px);z-index:5;background:var(--bg);padding-block:12px 10px;display:flex;align-items:center;gap:10px}
+.top .brand{font-family:var(--display);font-weight:700;font-size:15px;flex:1;min-width:0}
+.tbtn{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;white-space:nowrap}
+.tbtn[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+
+.hero{padding-block:18px 6px;display:grid;gap:10px}
+.hero h1{font-size:clamp(24px,6.4vw,34px)}
+.hero p{margin:0;max-width:60ch}
+.section-label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:26px 0 10px}
+.topics{display:grid;gap:10px}
+.tp{display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:center;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;width:100%}
+.num{border-radius:12px;display:grid;place-items:center;font-family:var(--display);font-weight:700}
+.tp .num{width:52px;height:44px;font-size:16px}
+.tp .t{min-width:0}
+.tp .t b{display:block;font-size:15px}
+.tp .t span{font-size:13px}
+.tp .st{font-size:12px;font-weight:700;text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.big{display:flex;flex-direction:column;gap:2px;width:100%;text-align:left;border:0;border-radius:14px;padding:16px 18px;background:var(--accent);color:var(--accent-ink)}
+.big b{font-family:var(--display);font-size:17px}
+.big span{font-size:14px;opacity:.9}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.sec{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:12px 14px;text-align:left;font-weight:600;font-size:14px}
+.sec small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.sec:disabled{opacity:.5;cursor:default}
+.tip{margin-top:22px;border-left:3px solid var(--accent);padding:4px 0 4px 14px;font-size:14px}
+
+/* lesson */
+.lesson{display:grid;gap:14px;margin-top:6px}
+.lhead{display:flex;gap:12px;align-items:center;padding-block:12px 4px}
+.lhead .num{width:56px;height:56px;font-size:18px;flex:none}
+.lhead h1{font-size:clamp(20px,5.4vw,26px)}
+.lhead .q{font-size:14px;margin-top:4px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;min-width:0}
+.card h3{font-size:15px;margin-bottom:8px}
+.card p{margin:0 0 10px}
+.card p:last-child{margin-bottom:0}
+.card ul,.card ol{margin:6px 0 0;padding-left:20px;display:grid;gap:6px}
+.term{font-weight:700}
+.remember{border-radius:16px;padding:14px 18px;font-size:15px}
+.remember b.h{display:block;font-family:var(--display);font-size:13px;letter-spacing:.04em;margin-bottom:6px}
+.remember ul{margin:0;padding-left:20px;display:grid;gap:5px}
+.fig{overflow-x:auto}
+.fig svg{display:block;width:100%;height:auto;max-width:520px;margin:0 auto}
+.fig svg text{fill:var(--ink);font-family:var(--body);font-size:13px}
+.fig svg text.s{fill:var(--muted);font-size:11.5px}
+.fig svg .ld{stroke:var(--muted);stroke-width:1}
+.figcap{font-size:12.5px;color:var(--muted);text-align:center;margin-top:6px}
+.cmp{width:100%;border-collapse:collapse;font-size:14.5px}
+.cmp th,.cmp td{border-top:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+.cmp th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-top:0}
+.tbl{overflow-x:auto}
+.hearts{display:grid;gap:8px}
+.hrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;font-size:14.5px}
+.hbox{display:flex;gap:4px}
+.hbox i{font-style:normal;width:30px;height:30px;border-radius:7px;display:grid;place-items:center;font-size:12px;font-weight:700}
+.hbox .a{background:var(--t5s);color:var(--t5)}
+.hbox .v{background:var(--t5);color:var(--surface)}
+.lnav{display:flex;gap:10px;flex-wrap:wrap}
+
+/* quiz */
+.bar{height:6px;background:var(--line);border-radius:99px;overflow:hidden;flex:1}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.counter{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--muted)}
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:8px;display:grid;gap:14px}
+.tag{display:inline-flex;font-size:12px;font-weight:700;border-radius:99px;padding:3px 10px;width:max-content;max-width:100%}
+.qtext{font-size:19px;font-weight:700;line-height:1.35}
+.qtext .ru{display:block;font-weight:500;font-size:15px;margin-top:6px}
+.hint{font-size:13px;font-weight:600;color:var(--accent)}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:12px 14px}
+.opt .mk{flex:none;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-size:13px;font-weight:700;margin-top:1px}
+.opt.multi .mk{border-radius:6px}
+.opt .ot{min-width:0}
+.opt .ot b{font-weight:600;display:block}
+.opt .ot .ru{display:block;font-size:13.5px}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.sel .mk{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.opt.right .mk{background:var(--ok);border-color:var(--ok);color:var(--accent-ink)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt.wrong .mk{background:var(--bad);border-color:var(--bad);color:var(--surface)}
+.opt:disabled{cursor:default}
+.slots{display:grid;gap:6px;counter-reset:s}
+.slot{display:flex;gap:10px;align-items:center;border:1.5px dashed var(--line);border-radius:10px;padding:9px 12px;min-height:44px;font-weight:600;text-align:left;background:transparent;width:100%}
+.slot::before{counter-increment:s;content:counter(s);flex:none;width:22px;height:22px;border-radius:50%;background:var(--line);display:grid;place-items:center;font-size:12px;font-weight:700}
+.slot.filled{border-style:solid;border-color:var(--accent);background:var(--accent-soft)}
+.slot.right{border-color:var(--ok);background:var(--ok-bg)}
+.slot.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.pool{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--surface);border-radius:99px;padding:7px 13px;font-weight:600;font-size:14px;text-align:left}
+.chip .ru{font-weight:500}
+.chip:disabled{opacity:.35}
+.chip.sel{border-color:var(--accent);background:var(--accent-soft);opacity:1}
+.chip.right{border-color:var(--ok);background:var(--ok-bg);opacity:1}
+.chip.wrong{border-color:var(--bad);background:var(--bad-bg);opacity:1}
+.mrow{display:grid;gap:8px;padding:12px 0;border-top:1px solid var(--line)}
+.mrow:first-child{border-top:0;padding-top:0}
+.mrow .ml{font-weight:700}
+.fb{border-radius:12px;padding:12px 14px;font-size:15px}
+.fb.ok{background:var(--ok-bg)} .fb.no{background:var(--bad-bg)}
+.fb b.v{display:block;font-family:var(--display);font-size:15px;margin-bottom:4px}
+.fb.ok b.v{color:var(--ok)} .fb.no b.v{color:var(--bad)}
+.fb .pg{display:block;font-size:12px;color:var(--muted);margin-top:6px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.main{flex:1;border:0;border-radius:12px;padding:14px;font-weight:700;background:var(--accent);color:var(--accent-ink);font-size:16px;min-width:160px}
+.main:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:14px 16px;font-weight:600}
+
+.score{text-align:center;padding-block:24px 8px;display:grid;gap:6px}
+.score .n{font-family:var(--display);font-size:56px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.score .n small{font-size:24px;color:var(--muted)}
+.breakdown{display:grid;gap:8px;margin-top:16px}
+.brow{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;font-size:14px}
+.brow .bar{grid-column:1/-1}
+.mist{display:grid;gap:8px}
+.mi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px}
+.mi b{display:block}
+.mi .ans{color:var(--ok);font-weight:600;margin-top:4px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <button class="tbtn" id="homeBtn" hidden>← Меню</button>
+    <div class="brand" id="brand">Chapter 5 · Transport</div>
+    <div class="bar" id="topBar" hidden><i id="topFill"></i></div>
+    <span class="counter" id="topCount" hidden></span>
+    <button class="tbtn" id="ruBtn" aria-pressed="true" title="Показывать перевод на русский">RU</button>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <h1>Арсен, разбираемся с транспортом веществ</h1>
+      <p>Глава 5 «Transport», учебник Biology 7, стр. 70–87. Пять тем к SAU 1. В каждой теме сначала простое объяснение со схемой, потом 10–12 вопросов, чтобы проверить, всё ли понятно.</p>
+    </section>
+    <div class="section-label">Учим по порядку</div>
+    <div class="topics" id="topics"></div>
+    <div class="section-label">Когда все темы пройдены</div>
+    <button class="big" id="startFinal"><b>Итоговый тест SAU 1</b><span>25 вопросов, по 5 из каждой темы</span></button>
+    <div class="row2">
+      <button class="sec" id="startAll">Все вопросы<small id="allCount"></small></button>
+      <button class="sec" id="startMist">Работа над ошибками<small id="mistCount"></small></button>
+    </div>
+    <p class="tip">Темы связаны: 5.2 и 5.3 объясняют, где в стебле и корне находятся xylem и phloem, а 5.4 объясняет, как они устроены. Лучше идти по порядку.</p>
+  </main>
+
+  <main id="lesson" hidden></main>
+  <main id="quiz" hidden><article class="qcard" id="qcard"></article></main>
+  <main id="result" hidden></main>
+</div>
+
+<script>
+const T={
+ 1:{n:"5.1",en:"Importance of nutrient transport",ru:"Зачем нужен транспорт веществ",pg:"стр. 72–73"},
+ 2:{n:"5.2",en:"Internal structure of stem",ru:"Внутреннее строение стебля",pg:"стр. 74–75"},
+ 3:{n:"5.3",en:"Internal structure of root",ru:"Внутреннее строение корня",pg:"стр. 76–77"},
+ 4:{n:"5.4",en:"Xylem and phloem",ru:"Ксилема и флоэма",pg:"стр. 78–79"},
+ 5:{n:"5.5",en:"Circulatory system",ru:"Кровеносная система",pg:"стр. 80–81"}
+};
+const tv=c=>`var(--t${c})`, ts=c=>`var(--t${c}s)`;
+
+/* ---------- lessons ---------- */
+const TRUNK=`<div class="fig"><svg viewBox="0 0 380 230" role="img" aria-label="Срез ствола дерева">
+<circle cx="112" cy="115" r="104" fill="var(--cork)"/>
+<circle cx="112" cy="115" r="94" fill="var(--phloem)"/>
+<circle cx="112" cy="115" r="86" fill="var(--sap)"/>
+<circle cx="112" cy="115" r="86" fill="none" stroke="var(--camb)" stroke-width="3"/>
+<circle cx="112" cy="115" r="72" fill="none" stroke="var(--heart)" stroke-width="1" opacity=".6"/>
+<circle cx="112" cy="115" r="62" fill="none" stroke="var(--heart)" stroke-width="1" opacity=".6"/>
+<circle cx="112" cy="115" r="48" fill="var(--heart)"/>
+<circle cx="112" cy="115" r="36" fill="none" stroke="var(--cork)" stroke-width="1" opacity=".35"/>
+<circle cx="112" cy="115" r="22" fill="none" stroke="var(--cork)" stroke-width="1" opacity=".35"/>
+<g class="ld"><line x1="211" y1="100" x2="246" y2="28"/><line x1="203" y1="108" x2="246" y2="72"/><line x1="198" y1="115" x2="246" y2="116"/><line x1="180" y1="122" x2="246" y2="160"/><line x1="140" y1="128" x2="246" y2="204"/></g>
+<circle cx="211" cy="100" r="2.5" fill="var(--ink)"/><circle cx="203" cy="108" r="2.5" fill="var(--ink)"/><circle cx="198" cy="115" r="2.5" fill="var(--ink)"/><circle cx="180" cy="122" r="2.5" fill="var(--ink)"/><circle cx="140" cy="128" r="2.5" fill="var(--ink)"/>
+<text x="252" y="26" font-weight="700">Cork</text><text class="s" x="252" y="41">пробка</text>
+<text x="252" y="70" font-weight="700">Phloem (bark)</text><text class="s" x="252" y="85">флоэма, луб</text>
+<text x="252" y="114" font-weight="700">Cambium</text><text class="s" x="252" y="129">камбий</text>
+<text x="252" y="158" font-weight="700">Sapwood</text><text class="s" x="252" y="173">заболонь, молодая xylem</text>
+<text x="252" y="202" font-weight="700">Heartwood</text><text class="s" x="252" y="217">ядро, старая xylem</text>
+</svg><div class="figcap">Срез ствола: снаружи внутрь. Тонкие кольца в древесине — годичные кольца.</div></div>`;
+
+const ROOT=`<div class="fig"><svg viewBox="0 0 380 300" role="img" aria-label="Зоны корня">
+<rect x="96" y="6" width="44" height="246" rx="6" fill="var(--t3s)" stroke="var(--t3)" stroke-width="1.5"/>
+<rect x="110" y="6" width="16" height="190" fill="var(--t3)" opacity=".35"/>
+<g stroke="var(--t3)" stroke-width="1.5" stroke-linecap="round">
+<line x1="96" y1="92" x2="70" y2="84"/><line x1="96" y1="104" x2="66" y2="104"/><line x1="96" y1="116" x2="70" y2="124"/><line x1="96" y1="128" x2="72" y2="136"/><line x1="96" y1="98" x2="76" y2="92"/>
+<line x1="140" y1="92" x2="166" y2="84"/><line x1="140" y1="104" x2="170" y2="104"/><line x1="140" y1="116" x2="166" y2="124"/><line x1="140" y1="128" x2="164" y2="136"/><line x1="140" y1="98" x2="160" y2="92"/></g>
+<path d="M92 236 Q118 300 144 236 Z" fill="var(--t3)"/>
+<g stroke="var(--line)" stroke-dasharray="3 3"><line x1="40" y1="76" x2="200" y2="76"/><line x1="40" y1="146" x2="200" y2="146"/><line x1="40" y1="196" x2="200" y2="196"/><line x1="40" y1="236" x2="200" y2="236"/></g>
+<g class="ld"><line x1="142" y1="40" x2="214" y2="40"/><line x1="170" y1="110" x2="214" y2="110"/><line x1="142" y1="170" x2="214" y2="170"/><line x1="142" y1="216" x2="214" y2="216"/><line x1="134" y1="258" x2="214" y2="262"/></g>
+<text x="220" y="38" font-weight="700">Zone of conduction</text><text class="s" x="220" y="53">зона проведения</text>
+<text x="220" y="108" font-weight="700">Zone of maturation</text><text class="s" x="220" y="123">зона всасывания, root hairs</text>
+<text x="220" y="168" font-weight="700">Zone of elongation</text><text class="s" x="220" y="183">зона роста (растяжения)</text>
+<text x="220" y="214" font-weight="700">Zone of cell division</text><text class="s" x="220" y="229">зона деления</text>
+<text x="220" y="260" font-weight="700">Root cap</text><text class="s" x="220" y="275">корневой чехлик</text>
+<text class="s" x="96" y="292">кончик корня ↓</text>
+</svg><div class="figcap">Зоны корня снизу вверх: от кончика к стеблю. Тёмная полоса в центре — vascular cylinder.</div></div>`;
+
+const XP=`<div class="fig"><svg viewBox="0 0 380 250" role="img" aria-label="Ксилема и флоэма">
+<defs><marker id="au" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--water)"/></marker>
+<marker id="ad" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--sugar)"/></marker></defs>
+<text x="190" y="20" text-anchor="middle" font-weight="700">Leaves · листья</text><text class="s" x="190" y="35" text-anchor="middle">photosynthesis → sugar</text>
+<rect x="96" y="48" width="56" height="160" rx="8" fill="none" stroke="var(--water)" stroke-width="2"/>
+<rect x="228" y="48" width="56" height="160" rx="8" fill="none" stroke="var(--sugar)" stroke-width="2"/>
+<line x1="124" y1="196" x2="124" y2="62" stroke="var(--water)" stroke-width="4" marker-end="url(#au)"/>
+<line x1="256" y1="62" x2="256" y2="196" stroke="var(--sugar)" stroke-width="4" marker-end="url(#ad)"/>
+<text x="124" y="228" text-anchor="middle" font-weight="700" style="fill:var(--water)">XYLEM</text><text class="s" x="124" y="243" text-anchor="middle">water + minerals ↑</text>
+<text x="256" y="228" text-anchor="middle" font-weight="700" style="fill:var(--sugar)">PHLOEM</text><text class="s" x="256" y="243" text-anchor="middle">sugar → fruits, roots</text>
+<text x="20" y="132" font-weight="700">Roots</text><text class="s" x="20" y="147">корни</text>
+</svg><div class="figcap">Xylem несёт воду вверх от корней. Phloem несёт сахар из листьев к плодам и корням.</div></div>`;
+
+const L={
+1:`<div class="card"><h3>Что такое nutrients</h3>
+<p><span class="term">Nutrients</span> (питательные вещества): protein (белки), fat (жиры), carbohydrates (углеводы), vitamins, minerals, water и oxygen.</p>
+<p>Они нужны для <b>energy</b> (энергии), <b>growth</b> (роста), <b>repair</b> (восстановления) и <b>reproduction</b> (размножения). Каждая клетка тела должна их получить.</p></div>
+<div class="card"><h3>Кому нужна транспортная система</h3>
+<p><b>Unicellular</b> (одноклеточным) она не нужна: клетка одна и сама берёт всё из окружающей среды прямо через поверхность.</p>
+<p><b>Multicellular</b> (многоклеточным) нужна: многие клетки находятся далеко от поверхности, и вещества дошли бы до них слишком медленно. Поэтому у растений и животных есть свои транспортные системы.</p></div>
+<div class="card"><h3>У растений</h3>
+<ol><li><b>Roots</b> (корни) всасывают water и minerals из почвы.</li>
+<li>По <b>stem</b> (стеблю) вода поднимается к <b>leaves</b> (листьям).</li>
+<li>Листья делают сахар при <b>photosynthesis</b> и отправляют его по стеблю к <b>fruits</b> (плодам) и <b>roots</b>.</li></ol>
+<p style="margin-top:10px">Стебель ещё <b>supports</b> (держит растение) и <b>connects</b> (соединяет) листья с корнями. У <b>mosses</b> (мхов) транспортной системы нет.</p></div>
+<div class="card"><h3>У животных</h3>
+<p>Вещества переносит жидкость тела. У vertebrates (позвоночных) это <b>blood</b> (кровь). Она течёт по <b>blood vessels</b> (сосудам), а качает её <b>heart</b> (сердце).</p>
+<p><b>Circulatory system</b> = heart + blood + blood vessels.</p></div>
+<div class="card"><h3>Опыт и интересное</h3>
+<p>Поставь белый цветок в воду с пищевым красителем. Через несколько часов лепестки окрасятся. Значит, вода с красителем поднялась по стеблю.</p>
+<p><b>Hydroponics</b> (гидропоника) — растения растут в воде с питательными веществами, без почвы. Так экономят воду и землю.</p></div>`,
+2:`<div class="card"><h3>Из чего состоит ствол дерева</h3><p>Woody stem (одревесневший стебель) состоит из слоёв. Запоминай снаружи внутрь:</p>${TRUNK}</div>
+<div class="card"><h3>Cambium: благодаря ему дерево толстеет</h3>
+<p><b>Cambium</b> — тонкое кольцо всего из <b>одного слоя клеток</b>. Каждый год его клетки делятся и образуют новую <b>xylem</b> (внутрь) и новую <b>phloem</b> (наружу).</p>
+<p>Поэтому cambium отвечает за <b>growth in width</b> (рост в толщину), а не в длину.</p>
+<p>Каждый год появляется новое <b>annual ring</b> (годичное кольцо). Посчитай кольца и узнаешь <b>возраст дерева</b>. Широкое кольцо — хороший год, узкое — плохой.</p></div>
+<div class="card"><h3>Sapwood и heartwood: это всё xylem</h3>
+<p><b>Sapwood</b> (заболонь) — молодая xylem, которая образовалась недавно. Она <b>проводит воду и минералы</b>.</p>
+<p><b>Heartwood</b> (ядро) — старая xylem в центре. Со временем она <b>перестаёт проводить воду</b>.</p>
+<p>Поэтому дерево может жить даже с повреждённой серединой. Секвойя Wawona прожила 88 лет после того, как через ствол прорубили проход.</p></div>
+<div class="card"><h3>Bark и cork: защита и сахар</h3>
+<p><b>Bark</b> (кора) = <b>phloem + cork</b>.</p>
+<p>Сахар идёт только по <b>молодой phloem</b> рядом с cambium.</p>
+<p>В клетках <b>cork</b> (пробки) копится <b>wax</b> (воск), поэтому пробка не пропускает воду и воздух. Она защищает стебель от потери воды, повреждений, насекомых и животных. Чтобы живые клетки внутри могли дышать, в пробке есть <b>lenticels</b> (чечевички).</p></div>
+<div class="card"><h3>Лабораторная работа №4</h3>
+<p>Стебель сельдерея (celery) ставят в воду с красителем, потом делают срез и смотрят под лупой и микроскопом. Окрашиваются трубочки xylem: по ним вода поднялась вверх.</p></div>`,
+3:`<div class="card"><h3>Зачем растению корень</h3>
+<ul><li><b>Holds</b> the plant in the soil — держит растение в почве.</li>
+<li><b>Absorbs</b> water and minerals — всасывает воду и минералы.</li>
+<li><b>Stores</b> nutrients — запасает питательные вещества. Такие корни называют <b>root crops</b> (корнеплоды): морковь, свёкла.</li></ul></div>
+<div class="card"><h3>Зоны корня (снизу вверх)</h3>${ROOT}
+<ol style="margin-top:12px"><li><b>Root cap</b> — чехлик. Закрывает и защищает кончик, когда корень пробивается сквозь почву.</li>
+<li><b>Zone of cell division</b> — клетки <b>meristem</b> (образовательной ткани) постоянно делятся. Здесь появляются новые клетки.</li>
+<li><b>Zone of elongation</b> — клетки растягиваются, корень растёт <b>в длину</b>.</li>
+<li><b>Zone of maturation</b> — здесь <b>root hairs</b> (корневые волоски). Они всасывают воду и минералы.</li>
+<li><b>Zone of conduction</b> — проводит воду с растворёнными веществами вверх, к стеблю.</li></ol></div>
+<div class="card"><h3>Слои корня (снаружи к центру)</h3>
+<ol><li><b>Epidermis</b> — наружный слой, покрывает и защищает корень. Из его клеток вырастают <b>root hairs</b>. Они увеличивают поверхность всасывания.</li>
+<li><b>Cortex</b> — между epidermis и центром. Передаёт воду и соли от корневых волосков внутрь и запасает питательные вещества.</li>
+<li><b>Endoderm</b> — внешний слой центрального цилиндра. Вода проходит через него внутрь.</li>
+<li><b>Vascular cylinder</b> (vascular bundle) — центр корня, здесь <b>xylem и phloem</b>.</li></ol>
+<p style="margin-top:10px">Путь воды: почва → root hairs → cortex → endoderm → xylem → вверх по стеблю.</p></div>
+<div class="card"><h3>Интересное</h3><p>У некоторых растений есть <b>air roots</b> (воздушные корни), они растут над землёй. Корни дерева Boscia в Африке уходят на 70 м вглубь.</p></div>`,
+4:`<div class="card"><h3>Vascular tissue = xylem + phloem</h3>
+<p><b>Vascular tissue</b> (проводящая ткань) переносит воду, минералы и питательные вещества. У растений она из двух частей: xylem и phloem.</p>${XP}</div>
+<div class="card"><h3>Xylem (ксилема): вода вверх</h3>
+<p>Несёт <b>water and minerals</b> от <b>roots</b> к <b>leaves and fruits</b>. Состоит из двух видов клеток:</p>
+<ul><li><b>Tracheids</b> (трахеиды) — длинные тонкие клетки с <b>заострёнными концами</b>. Вода переходит из клетки в клетку через <b>pits</b> (поры).</li>
+<li><b>Vessels</b> (сосуды) — <b>широкие, короткие</b>, с тонкими стенками, хорошо пропускают воду.</li></ul>
+<p style="margin-top:10px">Как вода поднимается вверх против силы тяжести? Её молекулы прилипают к стенкам xylem (adhesion) и тянут за собой другие молекулы (cohesion). Это из главы 4.</p></div>
+<div class="card"><h3>Phloem (флоэма): сахар из листьев</h3>
+<p>Несёт вещества, которые сделали листья при photosynthesis, в основном сахар <b>sucrose</b> (сахарозу), к <b>fruits and roots</b>. Тоже из двух видов клеток:</p>
+<ul><li><b>Sieve tube elements</b> (ситовидные трубки) — длинные клетки, по ним идут <b>carbohydrates</b>, в том числе sucrose.</li>
+<li><b>Companion cells</b> (клетки-спутницы) — помогают ситовидным трубкам и тоже переносят сахар. Работают в паре с ними.</li></ul></div>
+<div class="card"><h3>Как не перепутать</h3>
+<table class="cmp"><tr><th></th><th>Xylem</th><th>Phloem</th></tr>
+<tr><td><b>Что несёт</b></td><td>water, minerals</td><td>sugar (sucrose)</td></tr>
+<tr><td><b>Куда</b></td><td>roots → leaves</td><td>leaves → fruits, roots</td></tr>
+<tr><td><b>Клетки</b></td><td>tracheids, vessels</td><td>sieve tubes, companion cells</td></tr></table>
+<p style="margin-top:10px">Подсказка: <b>Ph</b>loem → «<b>f</b>ood», еда, то есть сахар. Xylem → вода.</p></div>`,
+5:`<div class="card"><h3>Circulatory system</h3>
+<p>Состоит из <b>heart</b> (сердце), <b>blood</b> (кровь) и <b>blood vessels</b> (сосуды). Бывает двух видов:</p>
+<div class="tbl"><table class="cmp"><tr><th></th><th>Open · незамкнутая</th><th>Closed · замкнутая</th></tr>
+<tr><td><b>Как</b></td><td>кровь выливается в <b>body cavity</b> (полость тела) и свободно течёт во все стороны</td><td>кровь всё время течёт <b>внутри сосудов</b></td></tr>
+<tr><td><b>У кого</b></td><td><b>Mollusca</b>: snail (улитка)<br><b>Arthropoda</b>: bee, crayfish, spider, cockroach, crab</td><td><b>Annelida</b>: earthworm<br><b>Vertebrates</b>: все позвоночные<br>и <b>octopus, squid</b></td></tr></table></div>
+<p style="margin-top:10px">Ловушка: octopus и squid — моллюски, но система у них <b>closed</b>.</p></div>
+<div class="card"><h3>Дождевой червь (Annelida)</h3>
+<p>Система <b>closed</b>. Два главных сосуда: <b>dorsal vessel</b> (спинной) несёт кровь вперёд, <b>ventral vessel</b> (брюшной) несёт назад. Вместо сердца работают <b>5 aortic arches</b> (кольцевых сосудов), они качают кровь.</p></div>
+<div class="card"><h3>Сердце позвоночных</h3>
+<p>Части сердца: <b>atrium</b> (предсердие, A) и <b>ventricle</b> (желудочек, V).</p>
+<div class="hearts">
+<div class="hrow"><span><b>Fish</b> · рыбы — 2 части</span><span class="hbox"><i class="a">A</i><i class="v">V</i></span></div>
+<div class="hrow"><span><b>Amphibians</b> · земноводные — 3 части</span><span class="hbox"><i class="a">A</i><i class="a">A</i><i class="v">V</i></span></div>
+<div class="hrow"><span><b>Reptiles</b> · пресмыкающиеся — 3 части<br><span class="muted" style="font-size:13px">кроме крокодила: у него 4</span></span><span class="hbox"><i class="a">A</i><i class="a">A</i><i class="v">V</i></span></div>
+<div class="hrow"><span><b>Birds, mammals</b> · птицы, млекопитающие — 4 части</span><span class="hbox"><i class="a">A</i><i class="a">A</i><i class="v">V</i><i class="v">V</i></span></div></div></div>
+<div class="card"><h3>Два круга кровообращения</h3>
+<ul><li><b>Pulmonary circulation</b> (малый круг): из <b>right ventricle</b> (правого желудочка) в <b>lungs</b> (лёгкие) и обратно к сердцу.</li>
+<li><b>Systemic circulation</b> (большой круг): из <b>left ventricle</b> (левого желудочка) ко всем <b>organs and tissues</b> и обратно.</li></ul>
+<p style="margin-top:10px">Запоминалка: <b>P</b>ulmonary — <b>P</b>равый, к лёгким.</p></div>
+<div class="card"><h3>Три вида сосудов</h3>
+<ul><li><b>Arteries</b> (артерии) — <b>от сердца</b> к телу.</li>
+<li><b>Veins</b> (вены) — <b>к сердцу</b> от тела.</li>
+<li><b>Capillaries</b> (капилляры) — самые <b>маленькие</b> сосуды, соединяют артерии и вены.</li></ul>
+<p style="margin-top:10px">Кровообращение открыл <b>William Harvey</b> в <b>1628</b> году.</p></div>`
+};
+const REM={
+1:["Unicellular не нужна транспортная система, multicellular нужна.","Растение: roots → stem → leaves (вода); leaves → fruits, roots (сахар).","Circulatory system = heart + blood + vessels."],
+2:["Снаружи внутрь: cork → phloem → cambium → sapwood → heartwood.","Cambium = рост в ширину и годичные кольца.","Sapwood проводит воду, heartwood уже нет. Bark = phloem + cork."],
+3:["Снизу вверх: root cap → division → elongation → maturation → conduction.","Root hairs — в zone of maturation, вырастают из epidermis.","Снаружи к центру: epidermis → cortex → endoderm → vascular cylinder."],
+4:["Xylem: вода и минералы вверх; tracheids + vessels.","Phloem: сахар из листьев; sieve tubes + companion cells.","Вода поднимается за счёт cohesion и adhesion."],
+5:["Open: моллюски и членистоногие. Closed: earthworm, позвоночные, octopus/squid.","Сердце: рыбы 2, земноводные 3, рептилии 3 (крокодил 4), птицы и млекопитающие 4.","Arteries — от сердца, veins — к сердцу, capillaries — самые маленькие."]
+};
+
+/* ---------- questions ---------- */
+// t: one | multi | order | match. o: "English|Русский". order: o in correct order. match: m = [[left,right],...]
+const Q=[
+{c:1,t:"one",p:72,q:"Why don't unicellular organisms need a transport system?",r:"Почему одноклеточным не нужна транспортная система?",
+ o:["They get nutrients directly from the environment|Получают вещества прямо из окружающей среды","They don't need nutrients|Им не нужны питательные вещества","They have a heart|У них есть сердце","They live only in soil|Живут только в почве"],a:0,
+ e:"Одноклеточный организм — одна клетка, вещества поступают в неё прямо через поверхность. У многоклеточных клетки далеко от поверхности, поэтому нужна транспортная система."},
+{c:1,t:"one",p:72,q:"Why do multicellular organisms need a transport system?",r:"Зачем многоклеточным организмам транспортная система?",
+ o:["Their cells are far from the body surface|Их клетки далеко от поверхности тела","They are very small|Они очень маленькие","They live in water|Они живут в воде","They don't eat|Они не питаются"],a:0,
+ e:"Внутренние клетки далеко от поверхности. Без транспортной системы вещества доходили бы до них слишком долго."},
+{c:1,t:"multi",p:72,q:"Choose the nutrients.",r:"Выбери питательные вещества.",
+ o:["Protein|Белки","Carbohydrates|Углеводы","Minerals|Минералы","Plastic|Пластик","Sand|Песок"],a:[0,1,2],
+ e:"Nutrients: protein, fat, carbohydrates, vitamins, minerals, water, oxygen. Они нужны для энергии, роста и размножения."},
+{c:1,t:"one",p:72,q:"Which plant organ absorbs water and minerals from the soil?",r:"Какой орган растения всасывает воду и минералы из почвы?",
+ o:["Roots|Корни","Leaves|Листья","Flowers|Цветы","Fruits|Плоды"],a:0,
+ e:"Roots всасывают воду и минералы, дальше они поднимаются по stem к leaves."},
+{c:1,t:"one",p:72,q:"Where do the sugars made in the leaves go?",r:"Куда идёт сахар, который сделали листья?",
+ o:["Through the stem to the fruits and roots|По стеблю к плодам и корням","Out into the air|В воздух","Only into the soil|Только в почву","They stay in the leaves|Остаются в листьях"],a:0,
+ e:"Листья делают сахар при photosynthesis и отправляют его по стеблю к fruits и roots."},
+{c:1,t:"multi",p:72,q:"Choose the functions of the stem.",r:"Выбери функции стебля.",
+ o:["Transports substances|Проводит вещества","Supports the plant|Держит (опора) растения","Connects leaves and roots|Соединяет листья и корни","Absorbs water from the soil|Всасывает воду из почвы"],a:[0,1,2],
+ e:"Стебель проводит вещества, служит опорой и соединяет листья с корнями. Воду из почвы всасывают корни."},
+{c:1,t:"one",p:73,q:"In vertebrates, the fluid that carries nutrients is called…",r:"У позвоночных жидкость, которая переносит вещества, называется…",
+ o:["blood|кровь","water|вода","sap|сок","lymph only|только лимфа"],a:0,
+ e:"У vertebrates вещества переносит blood. Она течёт по blood vessels."},
+{c:1,t:"multi",p:73,q:"The circulatory system consists of…",r:"Кровеносная система состоит из…",
+ o:["Heart|Сердце","Blood|Кровь","Blood vessels|Кровеносные сосуды","Lungs|Лёгкие","Stomach|Желудок"],a:[0,1,2],
+ e:"Circulatory system = heart + blood + blood vessels. Главный орган — heart."},
+{c:1,t:"one",p:73,q:"A white flower stands in water with food colouring. After a few hours the petals change colour. What does this show?",r:"Белый цветок стоит в воде с красителем. Через несколько часов лепестки окрасились. Что это доказывает?",
+ o:["Water moves up through the stem|Вода поднимается по стеблю","Flowers can photosynthesize|Цветы фотосинтезируют","Roots store sugar|Корни запасают сахар","Petals absorb light|Лепестки поглощают свет"],a:0,
+ e:"Краситель поднялся с водой по стеблю до лепестков. Значит, у растения есть транспортная система."},
+{c:1,t:"one",p:73,q:"Which plants have NO transport system?",r:"У каких растений НЕТ транспортной системы?",
+ o:["Mosses|Мхи","Trees|Деревья","Roses|Розы","Ferns|Папоротники"],a:0,
+ e:"Mosses — nonvascular plants, у них нет проводящих тканей. Это было и в главе 2."},
+{c:1,t:"one",p:71,q:"What is hydroponics?",r:"Что такое гидропоника?",
+ o:["Growing plants in nutrient-rich water without soil|Выращивание растений в воде с питательными веществами, без почвы","Watering plants with rain|Полив дождём","Growing plants in sand|Выращивание в песке","Growing plants in the dark|Выращивание в темноте"],a:0,
+ e:"Hydroponics экономит воду и землю: корни получают всё нужное прямо из раствора."},
+
+{c:2,t:"order",p:74,q:"Put the layers of a tree trunk in order from the OUTSIDE to the centre.",r:"Расставь слои ствола дерева от НАРУЖНОГО к центру.",
+ o:["Cork|Пробка","Phloem|Флоэма","Cambium|Камбий","Sapwood|Заболонь","Heartwood|Ядро"],
+ e:"Cork → phloem (вместе это bark) → cambium → sapwood → heartwood. Sapwood и heartwood — это xylem."},
+{c:2,t:"one",p:86,q:"Cambium is responsible for…",r:"Камбий отвечает за…",
+ o:["growth in width|рост в толщину","growth in length|рост в длину","water transportation|проведение воды","food transportation|проведение пищи"],a:0,
+ e:"Cambium каждый год образует новые слои xylem и phloem, поэтому ствол становится толще. Это вопрос из Summative assessment 5."},
+{c:2,t:"one",p:74,q:"Every year cambium cells produce…",r:"Каждый год клетки камбия образуют…",
+ o:["xylem and phloem|ксилему и флоэму","cork and wax|пробку и воск","leaves and roots|листья и корни","flowers|цветы"],a:0,
+ e:"Cambium делится: внутрь откладывает xylem, наружу phloem. Так появляются annual rings."},
+{c:2,t:"one",p:74,q:"How many layers of cells does cambium have?",r:"Из скольких слоёв клеток состоит камбий?",
+ o:["One|Один","Two|Два","Ten|Десять","Hundreds|Сотни"],a:0,
+ e:"Cambium — тонкое кольцо всего из одного слоя клеток."},
+{c:2,t:"one",p:74,q:"In an old tree, which part carries water and minerals?",r:"Какая часть старого дерева проводит воду и минералы?",
+ o:["Sapwood|Заболонь","Heartwood|Ядро","Cork|Пробка","Bark|Кора"],a:0,
+ e:"Sapwood — молодая xylem, она проводит воду. Heartwood — старая xylem, она уже не проводит."},
+{c:2,t:"one",p:74,q:"What is heartwood?",r:"Что такое ядро (heartwood)?",
+ o:["Old xylem that no longer carries water|Старая ксилема, которая уже не проводит воду","Young phloem|Молодая флоэма","The cork layer|Слой пробки","The tree's heart that pumps sap|Сердце дерева, которое качает сок"],a:0,
+ e:"Heartwood находится в центре ствола. Когда-то это была xylem, но с возрастом она перестала проводить воду."},
+{c:2,t:"one",p:74,q:"The bark consists of…",r:"Кора состоит из…",
+ o:["phloem and cork|флоэмы и пробки","xylem and cambium|ксилемы и камбия","heartwood|ядра","sapwood and heartwood|заболони и ядра"],a:0,
+ e:"Bark = phloem + cork. По молодой phloem рядом с cambium идёт сахар."},
+{c:2,t:"one",p:74,q:"Why doesn't cork let water and air through?",r:"Почему пробка не пропускает воду и воздух?",
+ o:["Its cells collect wax|В её клетках накапливается воск","It is made of metal|Она из металла","It is always wet|Она всегда мокрая","It has chloroplasts|В ней хлоропласты"],a:0,
+ e:"Клетки cork накапливают wax. Пробка защищает стебель от потери воды, повреждений, насекомых и животных."},
+{c:2,t:"one",p:74,q:"Living cells under the cork breathe through…",r:"Живые клетки под пробкой дышат через…",
+ o:["lenticels|чечевички","root hairs|корневые волоски","heartwood|ядро","stomata in the roots|устьица в корнях"],a:0,
+ e:"Lenticels — небольшие отверстия на поверхности cork, через них проходит воздух."},
+{c:2,t:"one",p:75,q:"How can you find out the age of a tree?",r:"Как узнать возраст дерева?",
+ o:["Count the annual rings|Посчитать годичные кольца","Measure its height|Измерить высоту","Count its leaves|Посчитать листья","Weigh the bark|Взвесить кору"],a:0,
+ e:"Каждый год cambium образует одно новое кольцо. Сколько колец, столько лет дереву."},
+{c:2,t:"one",p:75,q:"A tree ring is very wide. What does it mean?",r:"Годичное кольцо очень широкое. Что это значит?",
+ o:["That year had good growing conditions|В тот год были хорошие условия","That year was very dry and cold|Год был сухим и холодным","The tree was sick|Дерево болело","The tree was cut|Дерево срубили"],a:0,
+ e:"В хорошие годы (тепло, много воды) кольца широкие, в плохие узкие."},
+{c:2,t:"one",p:83,q:"The Wawona sequoia lived 88 more years after a tunnel was cut through the middle of its trunk. Why?",r:"Секвойя Wawona прожила ещё 88 лет после того, как через середину ствола прорубили проход. Почему?",
+ o:["The outer sapwood and phloem kept working|Внешние заболонь и флоэма продолжали работать","Trees don't need water|Деревьям не нужна вода","Heartwood grew back in a day|Ядро выросло за день","Leaves took water from the air|Листья брали воду из воздуха"],a:0,
+ e:"Вода идёт по sapwood, сахар по phloem, обе ткани находятся ближе к краю ствола. Середина (heartwood) уже не проводит воду, поэтому дерево выжило."},
+
+{c:3,t:"multi",p:76,q:"Choose the functions of the root.",r:"Выбери функции корня.",
+ o:["Holds the plant in the soil|Удерживает растение в почве","Absorbs water and minerals|Всасывает воду и минералы","Stores nutrients|Запасает питательные вещества","Photosynthesis|Фотосинтез","Produces flowers|Образует цветы"],a:[0,1,2],
+ e:"Корень удерживает растение, всасывает воду и минералы и запасает вещества. Photosynthesis идёт в листьях."},
+{c:3,t:"order",p:76,q:"Put the root zones in order from the TIP upwards.",r:"Расставь зоны корня от КОНЧИКА вверх.",
+ o:["Root cap|Корневой чехлик","Zone of cell division|Зона деления","Zone of elongation|Зона роста (растяжения)","Zone of maturation|Зона всасывания","Zone of conduction|Зона проведения"],
+ e:"Root cap → division → elongation → maturation (root hairs) → conduction. Новые клетки появляются внизу, растягиваются и созревают."},
+{c:3,t:"one",p:86,q:"Root hairs are in the…",r:"Корневые волоски находятся в…",
+ o:["zone of maturation|зоне всасывания (созревания)","zone of elongation|зоне роста","zone of cell division|зоне деления","root cap|корневом чехлике"],a:0,
+ e:"Root hairs — в zone of maturation, они всасывают воду и минералы. Это вопрос из Summative assessment 5."},
+{c:3,t:"one",p:76,q:"In which zone do meristem cells divide all the time?",r:"В какой зоне клетки меристемы постоянно делятся?",
+ o:["Zone of cell division|Зона деления","Zone of maturation|Зона всасывания","Zone of conduction|Зона проведения","Root cap|Корневой чехлик"],a:0,
+ e:"Meristem — образовательная ткань. Её клетки делятся в zone of cell division, так появляются новые клетки корня."},
+{c:3,t:"one",p:76,q:"What does the root cap do?",r:"Что делает корневой чехлик?",
+ o:["Covers and protects the tip of the root|Закрывает и защищает кончик корня","Absorbs water|Всасывает воду","Makes sugar|Делает сахар","Carries water up|Проводит воду вверх"],a:0,
+ e:"Root cap — «шапочка» на кончике, защищает его, когда корень растёт сквозь почву."},
+{c:3,t:"one",p:76,q:"In the zone of elongation, cells…",r:"В зоне роста (растяжения) клетки…",
+ o:["grow and stretch, so the root gets longer|растут и вытягиваются, корень удлиняется","absorb water with hairs|всасывают воду волосками","die and fall off|отмирают и опадают","carry sugar|проводят сахар"],a:0,
+ e:"Elongation = удлинение. Здесь клетки вытягиваются, и корень растёт в длину."},
+{c:3,t:"order",p:76,q:"Put the root layers in order from the OUTSIDE to the centre.",r:"Расставь слои корня от НАРУЖНОГО к центру.",
+ o:["Epidermis|Эпидермис","Cortex|Кора корня","Endoderm|Эндодерма","Vascular cylinder|Центральный (проводящий) цилиндр"],
+ e:"Epidermis → cortex → endoderm → vascular cylinder. Вода идёт тем же путём: от волосков к центру."},
+{c:3,t:"one",p:77,q:"Root hairs grow from the cells of the…",r:"Корневые волоски вырастают из клеток…",
+ o:["epidermis|эпидермиса","cortex|коры","xylem|ксилемы","root cap|чехлика"],a:0,
+ e:"Root hairs — вытянутые клетки epidermis. Их очень много, поэтому поверхность всасывания большая."},
+{c:3,t:"one",p:77,q:"Why does a root have so many root hairs?",r:"Зачем у корня так много корневых волосков?",
+ o:["To increase the surface for absorbing water|Чтобы увеличить поверхность всасывания воды","To protect the tip|Чтобы защищать кончик","To make sugar|Чтобы делать сахар","To store starch|Чтобы запасать крахмал"],a:0,
+ e:"Чем больше волосков, тем больше поверхность, через которую всасываются вода и минералы."},
+{c:3,t:"one",p:76,q:"The vascular cylinder of the root contains…",r:"В центральном цилиндре корня находятся…",
+ o:["xylem and phloem|ксилема и флоэма","root hairs|корневые волоски","cork|пробка","chloroplasts|хлоропласты"],a:0,
+ e:"Vascular cylinder (vascular bundle) — центр корня, там проводящие ткани xylem и phloem."},
+{c:3,t:"one",p:76,q:"Which layer passes water from the root hairs to the vascular cylinder and stores nutrients?",r:"Какой слой передаёт воду от волосков к центральному цилиндру и запасает вещества?",
+ o:["Cortex|Кора корня","Epidermis|Эпидермис","Root cap|Чехлик","Cambium|Камбий"],a:0,
+ e:"Cortex лежит между epidermis и vascular cylinder: передаёт воду и соли внутрь и запасает питательные вещества."},
+{c:3,t:"match",p:86,q:"Match the parts of the root with their functions.",r:"Сопоставь части корня с функциями.",
+ m:[["Root cap|Чехлик","Protects the tip|Защищает кончик"],["Root hairs|Корневые волоски","Increase absorption surface|Увеличивают поверхность всасывания"],["Vascular cylinder|Центр. цилиндр","Contains xylem and phloem|Содержит ксилему и флоэму"],["Cortex|Кора корня","Stores nutrients|Запасает вещества"]],
+ e:"Root cap защищает кончик, root hairs всасывают, cortex запасает, vascular cylinder проводит (xylem + phloem)."},
+
+{c:4,t:"one",p:86,q:"Which tissue transports water from the roots to the leaves?",r:"Какая ткань проводит воду от корней к листьям?",
+ o:["Xylem|Ксилема","Phloem|Флоэма","Epidermis|Эпидермис","Cambium|Камбий"],a:0,
+ e:"Xylem несёт water и minerals вверх от roots к leaves и fruits."},
+{c:4,t:"one",p:78,q:"Phloem transports…",r:"Флоэма проводит…",
+ o:["sugars from the leaves to the fruits and roots|сахар из листьев к плодам и корням","water from the roots|воду от корней","oxygen into the soil|кислород в почву","minerals only|только минералы"],a:0,
+ e:"Phloem несёт вещества, сделанные при photosynthesis, в основном sucrose. Подсказка: Ph-loem → «food»."},
+{c:4,t:"multi",p:78,q:"Which cells make up the xylem?",r:"Из каких клеток состоит ксилема?",
+ o:["Tracheids|Трахеиды","Vessels|Сосуды","Sieve tube elements|Ситовидные трубки","Companion cells|Клетки-спутницы"],a:[0,1],
+ e:"Xylem: tracheids и vessels. Phloem: sieve tube elements и companion cells."},
+{c:4,t:"multi",p:78,q:"Which cells make up the phloem?",r:"Из каких клеток состоит флоэма?",
+ o:["Sieve tube elements|Ситовидные трубки","Companion cells|Клетки-спутницы","Tracheids|Трахеиды","Vessels|Сосуды"],a:[0,1],
+ e:"Phloem: sieve tube elements переносят сахар, companion cells им помогают."},
+{c:4,t:"one",p:78,q:"Long, thin cells with conical ends; water passes between them through pits. These are…",r:"Длинные тонкие клетки с заострёнными концами, вода переходит через поры. Это…",
+ o:["tracheids|трахеиды","vessels|сосуды","companion cells|клетки-спутницы","root hairs|корневые волоски"],a:0,
+ e:"Tracheids — длинные и тонкие. Vessels — широкие и короткие. Обе — клетки xylem."},
+{c:4,t:"one",p:78,q:"Broad, short, thin-walled cells of the xylem that let water through are…",r:"Широкие короткие клетки ксилемы с тонкими стенками, пропускающие воду, — это…",
+ o:["vessels|сосуды","tracheids|трахеиды","sieve tube elements|ситовидные трубки","cork cells|клетки пробки"],a:0,
+ e:"Vessels — широкие и короткие, tracheids — длинные и тонкие."},
+{c:4,t:"one",p:78,q:"Sucrose is carried from the leaves to fruits and roots mainly by…",r:"Сахарозу из листьев к плодам и корням несут в основном…",
+ o:["sieve tube elements|ситовидные трубки","tracheids|трахеиды","vessels|сосуды","root hairs|корневые волоски"],a:0,
+ e:"Главная работа sieve tube elements — перенос carbohydrates, в том числе sucrose. Companion cells помогают."},
+{c:4,t:"one",p:78,q:"How does water rise up a tall tree against gravity?",r:"Как вода поднимается по высокому дереву против силы тяжести?",
+ o:["Water molecules stick to xylem walls and pull each other up|Молекулы воды прилипают к стенкам ксилемы и тянут друг друга вверх","The heart of the tree pumps it|Её качает сердце дерева","Wind pushes it|Её толкает ветер","Phloem carries it down|Её несёт флоэма вниз"],a:0,
+ e:"Adhesion: вода прилипает к стенкам xylem. Cohesion: молекулы воды держатся друг за друга. Вместе они поднимают воду вверх."},
+{c:4,t:"one",p:83,q:"Aphids push their mouths into plant stems to feed. What are they drinking?",r:"Тля прокалывает стебель ртом и питается. Что она пьёт?",
+ o:["Sugary sap from the phloem|Сладкий сок флоэмы","Water from the cork|Воду из пробки","Wax|Воск","Minerals from heartwood|Минералы из ядра"],a:0,
+ e:"В phloem течёт раствор сахара, это вкусная еда для насекомых."},
+{c:4,t:"one",p:79,q:"A white rose stands in blue dye. Which tissue in the stem will turn blue first?",r:"Белая роза стоит в синем красителе. Какая ткань стебля окрасится первой?",
+ o:["Xylem|Ксилема","Phloem|Флоэма","Cork|Пробка","Cambium|Камбий"],a:0,
+ e:"Краситель поднимается с водой по xylem, поэтому окрашиваются её трубочки, а затем лепестки."},
+{c:4,t:"match",p:86,q:"Match the stem structures with their functions.",r:"Сопоставь части стебля с функциями.",
+ m:[["Phloem|Флоэма","Transports nutrients from leaves to roots|Несёт вещества из листьев к корням"],["Xylem|Ксилема","Transports water|Проводит воду"],["Cambium|Камбий","Divides and produces new cells|Делится и образует новые клетки"],["Epidermis|Эпидермис","Protects the stem|Защищает стебель"]],
+ e:"Это задание на сопоставление из Summative assessment 5. Phloem — пища вниз, xylem — вода вверх, cambium — новые клетки, epidermis — защита."},
+
+{c:5,t:"one",p:80,q:"In an OPEN circulatory system…",r:"В НЕЗАМКНУТОЙ кровеносной системе…",
+ o:["blood is pumped into the body cavity and moves freely|кровь выливается в полость тела и свободно движется","blood always stays inside vessels|кровь всегда внутри сосудов","there is no blood|крови нет","there are only capillaries|есть только капилляры"],a:0,
+ e:"Open: кровь выходит в body cavity и течёт во все стороны. Closed: кровь всё время внутри blood vessels."},
+{c:5,t:"multi",p:86,q:"Choose organisms with a CLOSED circulatory system.",r:"Выбери организмы с ЗАМКНУТОЙ кровеносной системой.",
+ o:["Earthworm|Дождевой червь","Mouse|Мышь","Octopus|Осьминог","Crab|Краб","Bee|Пчела","Snail|Улитка"],a:[0,1,2],
+ e:"Closed: annelids (earthworm), все vertebrates (mouse), а также octopus и squid. Crab и bee — членистоногие, snail — моллюск: у них open."},
+{c:5,t:"multi",p:86,q:"Choose organisms with an OPEN circulatory system.",r:"Выбери организмы с НЕЗАМКНУТОЙ кровеносной системой.",
+ o:["Snail|Улитка","Cockroach|Таракан","Crayfish|Речной рак","Earthworm|Дождевой червь","Dog|Собака","Octopus|Осьминог"],a:[0,1,2],
+ e:"Open: моллюски (snail) и членистоногие (cockroach, crayfish, bee, spider). Earthworm, dog и octopus — closed."},
+{c:5,t:"one",p:80,q:"Octopuses and squids are molluscs. What kind of circulatory system do they have?",r:"Осьминоги и кальмары — моллюски. Какая у них кровеносная система?",
+ o:["Closed|Замкнутая","Open|Незамкнутая","None|Никакой","Same as insects|Как у насекомых"],a:0,
+ e:"Это исключение: большинство моллюсков (snail) имеют open, а octopus и squid — closed."},
+{c:5,t:"one",p:80,q:"In an earthworm, what works like a heart?",r:"Что у дождевого червя работает как сердце?",
+ o:["Five aortic arches|Пять кольцевых сосудов (aortic arches)","The gills|Жабры","The stomach|Желудок","Root hairs|Корневые волоски"],a:0,
+ e:"У earthworm closed system: dorsal vessel несёт кровь вперёд, ventral назад, а 5 aortic arches качают кровь."},
+{c:5,t:"match",p:86,q:"Match the animals with the number of heart parts.",r:"Сопоставь животных с числом частей сердца.",
+ m:[["Fish|Рыбы","2 parts|2 части"],["Amphibians|Земноводные","3 parts|3 части"],["Reptiles (most)|Рептилии (большинство)","3 parts|3 части"],["Birds|Птицы","4 parts|4 части"],["Mammals|Млекопитающие","4 parts|4 части"]],
+ e:"Рыбы 2 (1A + 1V), земноводные и рептилии 3 (2A + 1V), птицы и млекопитающие 4 (2A + 2V). Крокодил — исключение, у него 4."},
+{c:5,t:"one",p:81,q:"How many parts does a crocodile's heart have?",r:"Сколько частей в сердце крокодила?",
+ o:["4|4","3|3","2|2","1|1"],a:0,
+ e:"У большинства рептилий 3 части, но у крокодила 4, как у птиц и млекопитающих."},
+{c:5,t:"one",p:81,q:"An amphibian (frog) heart has…",r:"Сердце земноводного (лягушки) состоит из…",
+ o:["2 atria and 1 ventricle|2 предсердий и 1 желудочка","1 atrium and 1 ventricle|1 предсердия и 1 желудочка","2 atria and 2 ventricles|2 предсердий и 2 желудочков","1 ventricle only|только 1 желудочка"],a:0,
+ e:"Atrium — предсердие, ventricle — желудочек. Frog: 2 atria + 1 ventricle = 3 части."},
+{c:5,t:"one",p:81,q:"Arteries carry blood…",r:"Артерии несут кровь…",
+ o:["from the heart to the body|от сердца к телу","from the body to the heart|от тела к сердцу","only inside the lungs|только внутри лёгких","from the roots to the leaves|от корней к листьям"],a:0,
+ e:"Arteries — от сердца, veins — к сердцу, capillaries соединяют их."},
+{c:5,t:"one",p:81,q:"Veins carry blood…",r:"Вены несут кровь…",
+ o:["from the body to the heart|от тела к сердцу","from the heart to the body|от сердца к телу","into the body cavity|в полость тела","only to the brain|только к мозгу"],a:0,
+ e:"Veins возвращают кровь к сердцу."},
+{c:5,t:"one",p:80,q:"What is the smallest blood vessel in the human body?",r:"Какой самый маленький кровеносный сосуд в теле человека?",
+ o:["Capillary|Капилляр","Artery|Артерия","Vein|Вена","Aorta|Аорта"],a:0,
+ e:"Capillaries — самые тонкие сосуды, соединяют arteries и veins. Через их стенки вещества попадают в клетки."},
+{c:5,t:"one",p:80,q:"Pulmonary circulation carries blood…",r:"Малый круг (pulmonary circulation) несёт кровь…",
+ o:["from the right ventricle to the lungs|из правого желудочка в лёгкие","from the left ventricle to the body|из левого желудочка к телу","from the legs to the brain|от ног к мозгу","from the stomach to the heart|от желудка к сердцу"],a:0,
+ e:"Pulmonary (малый круг): right ventricle → lungs → сердце. Systemic (большой): left ventricle → органы → сердце."},
+{c:5,t:"one",p:80,q:"Systemic circulation starts in the…",r:"Большой круг (systemic circulation) начинается в…",
+ o:["left ventricle|левом желудочке","right ventricle|правом желудочке","lungs|лёгких","right atrium|правом предсердии"],a:0,
+ e:"Systemic: из left ventricle кровь идёт ко всем органам и тканям тела."},
+{c:5,t:"one",p:87,q:"Who discovered the circulatory system in 1628?",r:"Кто открыл кровообращение в 1628 году?",
+ o:["William Harvey|Уильям Гарвей","Robert Hooke|Роберт Гук","Carl Linnaeus|Карл Линней","Daniel Hale Williams|Дэниел Хейл Уильямс"],a:0,
+ e:"William Harvey, 1628. Daniel Hale Williams в 1893 году сделал первую операцию на сердце."}
+];
+
+/* ---------- storage ---------- */
+const store={get(k,d){try{const v=localStorage.getItem("arsenbio5:"+k);return v?JSON.parse(v):d}catch(e){return d}},
+ set(k,v){try{localStorage.setItem("arsenbio5:"+k,JSON.stringify(v))}catch(e){}}};
+Q.forEach((q,i)=>q.id=i);
+let mistakes=new Set(store.get("mist",[]));
+let best=store.get("best",{});
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const split=s=>{const [en,ru]=s.split("|");return {en,ru:ru||""}};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const smooth=()=>matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth";
+
+function setRu(on){document.body.classList.toggle("hide-ru",!on);$("ruBtn").setAttribute("aria-pressed",on);store.set("ru",on)}
+setRu(store.get("ru",true));
+$("ruBtn").onclick=()=>setRu(document.body.classList.contains("hide-ru"));
+
+function show(id){["home","lesson","quiz","result"].forEach(s=>$(s).hidden=s!==id);
+ const inQ=id==="quiz";
+ $("homeBtn").hidden=id==="home"; $("brand").hidden=inQ; $("topBar").hidden=!inQ; $("topCount").hidden=!inQ;
+ window.scrollTo(0,0)}
+$("homeBtn").onclick=()=>{renderHome();show("home")};
+
+function renderHome(){
+ $("allCount").textContent=Q.length+" вопросов";
+ $("mistCount").textContent=mistakes.size?`Осталось: ${mistakes.size}`:"Ошибок пока нет";
+ $("startMist").disabled=!mistakes.size;
+ $("topics").innerHTML=[1,2,3,4,5].map(c=>{const n=Q.filter(q=>q.c===c).length,b=best[c];
+  return `<button class="tp" data-c="${c}"><span class="num" style="background:${ts(c)};color:${tv(c)}">${T[c].n}</span>
+  <span class="t"><b>${T[c].en}</b><span class="muted">${T[c].ru} · ${T[c].pg} · ${n} вопр.</span></span>
+  <span class="st">${b!=null?"проверка<br>"+b+"%":"не начата"}</span></button>`}).join("");
+ document.querySelectorAll(".tp").forEach(b=>b.onclick=()=>openLesson(+b.dataset.c));
+}
+$("startFinal").onclick=()=>start([1,2,3,4,5].flatMap(c=>shuffle(Q.filter(q=>q.c===c)).slice(0,5)),"final");
+$("startAll").onclick=()=>start(Q,"all");
+$("startMist").onclick=()=>start(Q.filter(q=>mistakes.has(q.id)),"mist");
+
+function openLesson(c){
+ $("lesson").innerHTML=`<div class="lhead"><span class="num" style="background:${ts(c)};color:${tv(c)}">${T[c].n}</span>
+  <div><h1>${T[c].en}</h1><div class="q muted">${T[c].ru} · ${T[c].pg}</div></div></div>
+  <div class="lesson">${L[c]}
+  <div class="remember" style="background:${ts(c)}"><b class="h" style="color:${tv(c)}">ЗАПОМНИ</b><ul>${REM[c].map(x=>`<li>${x}</li>`).join("")}</ul></div>
+  <div class="lnav"><button class="main" id="lq">Проверить себя: ${Q.filter(q=>q.c===c).length} вопросов</button>
+  ${c<5?`<button class="ghost" id="ln">Следующая тема ${T[c+1].n} →</button>`:""}</div></div>`;
+ show("lesson");
+ $("lq").onclick=()=>start(Q.filter(q=>q.c===c),c);
+ if(c<5) $("ln").onclick=()=>openLesson(c+1);
+}
+
+/* ---------- quiz ---------- */
+let S=null;
+function start(list,tag){S={list:shuffle(list),i:0,score:0,wrong:[],tag,per:{}};show("quiz");renderQ()}
+function renderQ(){
+ const q=S.list[S.i], n=S.list.length;
+ $("topFill").style.width=(S.i/n*100)+"%"; $("topCount").textContent=`${S.i+1}/${n}`;
+ let hint="Один правильный ответ", body="";
+ if(q.t==="order"){
+  hint="Нажимай по порядку. Нажми на строку, чтобы убрать её";
+  const opts=q.o.map((s,k)=>({...split(s),k}));
+  body=`<div class="slots" id="slots">${opts.map(()=>`<button class="slot" disabled></button>`).join("")}</div>
+  <div class="pool" id="pool">${shuffle(opts).map(o=>`<button class="chip" data-k="${o.k}">${esc(o.en)} <span class="ru">· ${esc(o.ru)}</span></button>`).join("")}</div>`;
+ } else if(q.t==="match"){
+  hint="Для каждой строки выбери подходящий ответ";
+  const rights=[...new Set(q.m.map(x=>x[1]))];
+  body=q.m.map((row,i)=>{const l=split(row[0]);
+   return `<div class="mrow" data-i="${i}"><div class="ml">${esc(l.en)} <span class="ru">· ${esc(l.ru)}</span></div>
+   <div class="pool">${shuffle(rights).map(r=>{const x=split(r);return `<button class="chip" data-r="${esc(r)}">${esc(x.en)} <span class="ru">· ${esc(x.ru)}</span></button>`}).join("")}</div></div>`}).join("");
+ } else {
+  if(q.t==="multi") hint=`Выбери все правильные (${q.a.length})`;
+  const opts=q.o.map((s,k)=>({...split(s),k}));
+  body=`<div class="opts">${shuffle(opts).map((o,i)=>`<button class="opt ${q.t}" data-k="${o.k}"><span class="mk">${q.t==="multi"?"":String.fromCharCode(65+i)}</span><span class="ot"><b>${esc(o.en)}</b><span class="ru">${esc(o.ru)}</span></span></button>`).join("")}</div>`;
+ }
+ $("qcard").innerHTML=`<span class="tag" style="background:${ts(q.c)};color:${tv(q.c)}">${T[q.c].n} · ${T[q.c].en} · стр. ${q.p}</span>
+  <div class="qtext">${esc(q.q)}<span class="ru">${esc(q.r)}</span></div>
+  <div class="hint">${hint}</div><div>${body}</div>
+  <div id="fb"></div>
+  <div class="actions" id="acts">${q.t==="one"?"":`<button class="main" id="check" disabled>Проверить</button>`}</div>`;
+
+ const card=$("qcard");
+ if(q.t==="one"){
+  card.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{b.classList.add("sel");finish(q,+b.dataset.k===q.a,[+b.dataset.k])});
+ } else if(q.t==="multi"){
+  const sel=new Set();
+  card.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const k=+b.dataset.k;
+   sel.has(k)?sel.delete(k):sel.add(k); b.classList.toggle("sel"); b.querySelector(".mk").textContent=sel.has(k)?"✓":""; $("check").disabled=!sel.size});
+  $("check").onclick=()=>finish(q,sel.size===q.a.length&&q.a.every(k=>sel.has(k)),[...sel]);
+ } else if(q.t==="order"){
+  const order=[], slots=[...$("slots").children];
+  const paint=()=>{slots.forEach((s,i)=>{const k=order[i];s.disabled=k==null;s.classList.toggle("filled",k!=null);
+    s.innerHTML=k!=null?`${esc(split(q.o[k]).en)} <span class="ru">· ${esc(split(q.o[k]).ru)}</span>`:""});
+   $("pool").querySelectorAll(".chip").forEach(c=>c.disabled=order.includes(+c.dataset.k));
+   $("check").disabled=order.length!==q.o.length};
+  $("pool").querySelectorAll(".chip").forEach(c=>c.onclick=()=>{order.push(+c.dataset.k);paint()});
+  slots.forEach((s,i)=>s.onclick=()=>{order.splice(i,1);paint()});
+  $("check").onclick=()=>{slots.forEach((s,i)=>{s.disabled=true;s.classList.add(order[i]===i?"right":"wrong")});
+   $("pool").querySelectorAll(".chip").forEach(c=>c.disabled=true);
+   finish(q,order.every((k,i)=>k===i),order)};
+ } else {
+  const pick={}; const rows=[...card.querySelectorAll(".mrow")];
+  rows.forEach(row=>row.querySelectorAll(".chip").forEach(ch=>ch.onclick=()=>{
+   row.querySelectorAll(".chip").forEach(x=>x.classList.remove("sel")); ch.classList.add("sel");
+   pick[row.dataset.i]=ch.dataset.r; $("check").disabled=Object.keys(pick).length!==q.m.length}));
+  $("check").onclick=()=>{let ok=true;
+   rows.forEach(row=>{const i=row.dataset.i, want=q.m[i][1];
+    row.querySelectorAll(".chip").forEach(ch=>{ch.disabled=true;
+     if(ch.dataset.r===want) ch.classList.add("right"); else if(ch.dataset.r===pick[i]) ch.classList.add("wrong");
+     ch.classList.remove("sel")});
+    if(pick[i]!==want) ok=false});
+   finish(q,ok,[])};
+ }
+}
+const PRAISE=["Верно!","Отлично, Арсен!","Точно!","Молодец!","Так держать!","Правильно!"];
+const SUPPORT=["Не совсем.","Почти, разберём.","Ошибка, это нормально.","Запомним это."];
+const pickOne=a=>a[Math.floor(Math.random()*a.length)];
+function finish(q,ok,picked){
+ if(q.t==="one"||q.t==="multi"){
+  $("qcard").querySelectorAll(".opt").forEach(b=>{const k=+b.dataset.k;b.disabled=true;
+   const right=q.t==="one"?k===q.a:q.a.includes(k);
+   if(right){b.classList.add("right");b.classList.remove("sel");b.querySelector(".mk").textContent="✓"}
+   else if(picked.includes(k)){b.classList.add("wrong");b.classList.remove("sel");b.querySelector(".mk").textContent="✕"}});
+ }
+ if(ok){S.score++; if(S.tag==="mist") mistakes.delete(q.id)} else {S.wrong.push(q); mistakes.add(q.id)}
+ S.per[q.c]=S.per[q.c]||{ok:0,n:0}; S.per[q.c].n++; if(ok)S.per[q.c].ok++;
+ store.set("mist",[...mistakes]);
+ const extra=!ok&&q.t==="order"?`<div style="margin-top:6px;font-weight:600">${q.o.map(s=>esc(split(s).en)).join(" → ")}</div>`:"";
+ $("fb").innerHTML=`<div class="fb ${ok?"ok":"no"}"><b class="v">${ok?pickOne(PRAISE):pickOne(SUPPORT)}</b>${esc(q.e)}${extra}<span class="pg">Учебник, стр. ${q.p}</span></div>`;
+ const last=S.i===S.list.length-1;
+ $("acts").innerHTML=`<button class="main" id="next">${last?"Посмотреть результат":"Дальше →"}</button>`;
+ $("next").onclick=()=>{if(last)renderResult();else{S.i++;renderQ()}};
+ $("next").focus({preventScroll:true});
+ $("fb").scrollIntoView({behavior:smooth(),block:"nearest"});
+}
+function answerText(q){
+ if(q.t==="order") return q.o.map(s=>split(s).en).join(" → ");
+ if(q.t==="match") return q.m.map(r=>split(r[0]).en+" — "+split(r[1]).en).join("; ");
+ return (q.t==="one"?[q.a]:q.a).map(k=>split(q.o[k]).en).join("; ");
+}
+function renderResult(){
+ const n=S.list.length, pct=Math.round(S.score/n*100);
+ if(typeof S.tag==="number"){best[S.tag]=Math.max(best[S.tag]||0,pct);store.set("best",best)}
+ const msg=pct>=90?"Тема понятна. Отличная работа!":pct>=70?"Хорошо! Прорешай ошибки, и будет отлично.":pct>=50?"Неплохо. Перечитай объяснение и попробуй ещё раз.":"Давай ещё раз прочитаем объяснение со схемой и пройдём заново. Ты разберёшься.";
+ const rows=Object.keys(S.per).sort().map(c=>{const p=S.per[c],v=Math.round(p.ok/p.n*100);
+  return `<div class="brow"><span><b>${T[c].n}</b> ${T[c].ru}</span><span class="counter">${p.ok}/${p.n}</span><div class="bar"><i style="width:${v}%;background:${tv(c)}"></i></div></div>`}).join("");
+ const c=S.tag;
+ const nextBtn=typeof c==="number"&&c<5?`<button class="ghost" id="toNext">Тема ${T[c+1].n} →</button>`:"";
+ const backBtn=typeof c==="number"?`<button class="ghost" id="toLesson">Перечитать тему</button>`:"";
+ $("result").innerHTML=`<section class="score"><div class="muted">Результат</div><div class="n">${S.score}<small>/${n}</small></div><div style="font-weight:700">${pct}%</div><p style="margin:6px 0 0">${msg}</p></section>
+ <div class="breakdown">${rows}</div>
+ <div class="actions" style="margin-top:20px">${S.wrong.length?`<button class="main" id="retryW">Прорешать ошибки (${S.wrong.length})</button>`:""}${backBtn}${nextBtn}<button class="ghost" id="toHome">Меню</button></div>
+ ${S.wrong.length?`<div class="section-label">Правильные ответы на ошибки</div><div class="mist">${S.wrong.map(q=>`<div class="mi"><b>${esc(q.q)}</b><span class="ru">${esc(q.r)}</span><div class="ans">✓ ${esc(answerText(q))}</div></div>`).join("")}</div>`:""}`;
+ show("result");
+ if(S.wrong.length) $("retryW").onclick=()=>start(S.wrong.slice(),"mist");
+ if(backBtn) $("toLesson").onclick=()=>openLesson(c);
+ if(nextBtn) $("toNext").onclick=()=>openLesson(c+1);
+ $("toHome").onclick=()=>{renderHome();show("home")};
+}
+renderHome();
+</script>
+
+</body></html>

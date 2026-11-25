@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ұлы Дала и Жібек жолы</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: one narrow column, like a school notebook; sticky tab bar; big tap targets for a phone */
+:root{
+  --bg:#f3f6f8; --paper:#ffffff; --ink:#14303d; --muted:#5b7280; --line:#d9e3e8;
+  --accent:#0a7ea4; --accent-soft:#e1f2f8; --sun:#f2b705; --sun-soft:#fff4cc;
+  --ok:#1f8a4c; --ok-soft:#e3f5ea; --bad:#c2410c; --bad-soft:#fdebe1;
+  --kz:#0a5f7d;
+  --f-display:"Unbounded", "Arial Black", system-ui, sans-serif;
+  --f-body:"Nunito", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1a20; --paper:#15252d; --ink:#e4eef2; --muted:#93a9b4; --line:#26404c;
+  --accent:#4cc3e8; --accent-soft:#143847; --sun:#f5c63a; --sun-soft:#3a3214;
+  --ok:#5fd28f; --ok-soft:#173a26; --bad:#ff9a6b; --bad-soft:#40241a; --kz:#7fd4f0; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1a20; --paper:#15252d; --ink:#e4eef2; --muted:#93a9b4; --line:#26404c;
+  --accent:#4cc3e8; --accent-soft:#143847; --sun:#f5c63a; --sun-soft:#3a3214;
+  --ok:#5fd28f; --ok-soft:#173a26; --bad:#ff9a6b; --bad-soft:#40241a; --kz:#7fd4f0; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:720px;margin:0 auto;padding-block:20px 60px}
+header.top{display:flex;flex-direction:column;gap:6px;padding-block:8px 14px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800}
+h1{font-family:var(--f-display);font-size:clamp(24px,6vw,34px);line-height:1.15;margin:0;text-wrap:balance}
+h1 span{color:var(--accent)}
+.lead{color:var(--muted);margin:0;max-width:60ch}
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:6px;
+  padding-block:10px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line)}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);font:inherit;font-weight:800;
+  font-size:15px;padding:9px 14px;border-radius:999px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tab:focus-visible,button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+section.panel{padding-top:18px;display:flex;flex-direction:column;gap:16px}
+h2{font-family:var(--f-display);font-size:21px;margin:8px 0 0;line-height:1.25;text-wrap:balance}
+h3{font-size:18px;margin:0;font-weight:800}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card p{margin:0}
+.tip{background:var(--sun-soft);border:1px solid var(--sun);border-radius:14px;padding:14px 16px}
+.tip p{margin:0}
+.kz{color:var(--kz);font-weight:800}
+.ru{color:var(--muted)}
+.vocab{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:4px 14px;margin:0}
+.vocab dt{color:var(--kz);font-weight:800}
+.vocab dd{margin:0;color:var(--ink)}
+.vocab dt,.vocab dd{padding-block:5px;border-bottom:1px dashed var(--line)}
+.formula{font-weight:800;background:var(--accent-soft);border-radius:10px;padding:10px 12px;overflow-x:auto}
+.pill{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.table{width:100%;border-collapse:collapse;font-size:16px}
+.table th,.table td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+.table th{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.scroll{overflow-x:auto}
+ul.clean{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.btn{font:inherit;font-weight:800;border-radius:12px;border:1.5px solid var(--ink);background:var(--ink);color:var(--bg);padding:12px 16px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.small{padding:8px 12px;font-size:15px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+/* quiz */
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.qtext{font-size:20px;font-weight:800;line-height:1.35}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{text-align:left;font:inherit;font-weight:700;padding:13px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.opt:hover{border-color:var(--accent)}
+.opt.right{background:var(--ok-soft);border-color:var(--ok)}
+.opt.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.opt[disabled]{cursor:default}
+.explain{border-radius:12px;padding:12px 14px;background:var(--accent-soft)}
+.explain b.okk{color:var(--ok)} .explain b.no{color:var(--bad)}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font:inherit;font-size:14px;font-weight:800;padding:7px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.score{font-family:var(--f-display);font-size:44px;line-height:1}
+/* flashcards */
+.flash{min-height:210px;border-radius:18px;border:1.5px solid var(--line);background:var(--paper);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:24px;cursor:pointer;gap:8px;user-select:none}
+.flash .big{font-family:var(--f-display);font-size:clamp(24px,7vw,34px);color:var(--kz);line-height:1.2;overflow-wrap:anywhere}
+.flash .hint{font-size:13px;color:var(--muted);font-weight:700}
+.flash.back{background:var(--sun-soft);border-color:var(--sun)}
+.flash.back .big{color:var(--ink);font-family:var(--f-body);font-weight:800}
+.reveal summary{cursor:pointer;font-weight:800;color:var(--accent)}
+.reveal[open] summary{margin-bottom:8px}
+.match{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+select{font:inherit;padding:8px;border-radius:10px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);max-width:100%}
+.mrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;border-bottom:1px dashed var(--line);padding-block:6px}
+.mrow .kz{min-width:0}
+.ok-t{color:var(--ok);font-weight:800}.bad-t{color:var(--bad);font-weight:800}
+.plan{counter-reset:s;display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.plan li{counter-increment:s;display:flex;gap:10px;align-items:flex-start}
+.plan li::before{content:counter(s);flex:0 0 28px;height:28px;border-radius:50%;background:var(--ink);color:var(--bg);font-weight:800;display:grid;place-items:center;font-size:14px}
+.xw{display:grid;grid-template-columns:repeat(7,40px);grid-auto-rows:40px;gap:3px;width:max-content}
+.xc{position:relative;border:1.5px solid var(--ok);background:var(--paper);display:grid;place-items:center;font-weight:800;font-size:18px;color:var(--ink)}
+.xc.key{background:var(--sun-soft);border-color:var(--sun)}
+.xc i{position:absolute;top:1px;left:3px;font-size:10px;font-style:normal;color:var(--muted)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Қазақ тілі · 7 сынып · 4-тақырып · страницы 66–80</div>
+    <h1>Арсен, разбираемся: <span>Ұлы Дала и Жібек жолы</span></h1>
+    <p class="lead">Всё по учебнику, объяснения на русском. Казахские слова выделены цветом, рядом перевод. Начни со шпаргалки, потом карточки, потом квиз.</p>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Разделы">
+    <button class="tab" role="tab" aria-selected="true" data-p="start">С чего начать</button>
+    <button class="tab" role="tab" aria-selected="false" data-p="d">Ұлы Дала</button>
+    <button class="tab" role="tab" aria-selected="false" data-p="g">Одағай</button>
+    <button class="tab" role="tab" aria-selected="false" data-p="o">Отырар</button>
+    <button class="tab" role="tab" aria-selected="false" data-p="j">Жібек жолы</button>
+    <button class="tab" role="tab" aria-selected="false" data-p="z">Жантаза</button>
+    <button class="tab" role="tab" aria-selected="false" data-p="cards">Карточки</button>
+    <button class="tab" role="tab" aria-selected="false" data-p="quiz">Квиз</button>
+    <button class="tab" role="tab" aria-selected="false" data-p="sor">Практика</button>
+  </nav>
+
+  <!-- START -->
+  <section class="panel" id="p-start">
+    <h2>Что на страницах 66–80</h2>
+    <div class="card">
+      <p>Тема 4: <span class="kz">Қазақстанның ежелгі қалалары және Ұлы Жібек жолы</span> — древние города Казахстана и Великий Шёлковый путь. До 80-й страницы четыре урока:</p>
+      <div class="scroll"><table class="table">
+        <tr><th>Урок</th><th>По-русски</th><th>Что главное</th></tr>
+        <tr><td class="kz">1–2. Ұлы Дала өркениеті</td><td>Цивилизация Великой степи (стр. 66–71)</td><td>8 факторов развития + грамматика <b>одағай</b></td></tr>
+        <tr><td class="kz">3. Отырар — өркениет ордасы</td><td>Отырар — центр цивилизации (стр. 72–74)</td><td>әл-Фараби, библиотека, раскопки</td></tr>
+        <tr><td class="kz">4. Ұлы Жібек жолы</td><td>Великий Шёлковый путь (стр. 75–77)</td><td>когда появился, почему так назван, города</td></tr>
+        <tr><td class="kz">5–6. Б. Ұзақов «Жантаза»</td><td>Рассказ-легенда «Чистая душа» (стр. 78–80)</td><td>сюжет, герои, одағай в тексте</td></tr>
+      </table></div>
+    </div>
+    <div class="card">
+      <span class="pill">Вся тема простыми словами</span>
+      <p>Давным-давно на земле Казахстана была <b>Великая степь</b> (<span class="kz">Ұлы Дала</span>). Там жили кочевники, которые первыми приручили лошадь, делали красивые украшения из золота и строили города.</p>
+      <p>Через степь шёл <b>Великий Шёлковый путь</b> (<span class="kz">Ұлы Жібек жолы</span>) — дорога для караванов из Китая в Европу. Главным товаром был китайский шёлк, отсюда и название.</p>
+      <p>Вдоль этой дороги выросли богатые города. Самый известный — <b>Отырар</b>: там родился учёный әл-Фараби и была огромная библиотека. Потом враги город разрушили, и сейчас его раскапывают археологи.</p>
+      <p>Потом читаем рассказ-легенду <b>«Жантаза»</b> Б. Ұзақова: смелый Жанғожа прогоняет дракона, а потом встречает загадочную девушку.</p>
+      <p>А по грамматике учим <b>одағай</b> — короткие слова-эмоции вроде «ура!», «ой!», «эх, жаль!».</p>
+    </div>
+    <div class="tip"><p><b>Главная грамматика этой темы — одағай</b> (междометия: «ура!», «ой!», «эх!»). Начни с вкладки «Одағай», если по ней будет домашка.</p></div>
+    <h2>Как заниматься</h2>
+    <div class="card">
+      <ol class="plan">
+        <li><span>Открой вкладку того урока, который сейчас проходите в классе, и прочитай. Не зубри, просто пойми.</span></li>
+        <li><span>Пройди карточки с новыми словами этого урока (фильтр сверху). 10 минут хватит.</span></li>
+        <li><span>Проверь себя: квиз по этому уроку или «Практика». Ошибки не страшны, под каждым ответом объяснение.</span></li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Слова из самих заданий</h3>
+      <dl class="vocab">
+        <dt>Мәтін / тақырып</dt><dd>текст / тема</dd>
+        <dt>Негізгі ой</dt><dd>главная мысль</dd>
+        <dt>Дұрыс / бұрыс</dt><dd>верно / неверно</dd>
+        <dt>Сөйлем құра</dt><dd>составь предложение</dd>
+        <dt>Тыныс белгісін қой</dt><dd>поставь знаки препинания</dd>
+        <dt>Аудар</dt><dd>переведи</dd>
+        <dt>Тап</dt><dd>найди</dd>
+        <dt>Толықтыр</dt><dd>дополни</dd>
+        <dt>Жоспар жаз</dt><dd>напиши план</dd>
+        <dt>Құттықтау хат</dt><dd>поздравительное письмо</dd>
+        <dt>Өтініш хат</dt><dd>заявление (письмо-просьба)</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ҰЛЫ ДАЛА -->
+  <section class="panel" id="p-d" hidden>
+    <h2>Урок 1–2. Ұлы Дала өркениеті</h2>
+    <div class="card">
+      <span class="pill">Новые слова (стр. 66)</span>
+      <dl class="vocab">
+        <dt>дереккөз</dt><dd>источник (информации)</dd>
+        <dt>бекініс</dt><dd>крепость</dd>
+        <dt>алыс-беріс</dt><dd>обмен, связи (брать и давать)</dd>
+        <dt>жандану</dt><dd>оживляться</dd>
+        <dt>сүйену</dt><dd>опираться (дереккөзге сүйену — опираться на источник)</dd>
+        <dt>өркендеу</dt><dd>процветать, развиваться</dd>
+        <dt>қалашық</dt><dd>городище (остатки древнего города)</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <span class="pill">Интересное из урока</span>
+      <ul class="clean">
+        <li><span class="kz">Ұлы Дала</span> — Великая степь (так называют Казахстан). <span class="kz">Аспан асты елі</span> — Поднебесная (Китай). <span class="kz">Күншығыс елі</span> — Страна восходящего солнца (Япония).</li>
+        <li><b>Геродот</b> — древнегреческий историк, писал о <span class="kz">сақтар</span> (саках).</li>
+        <li><b>Л. П. Окладников</b> — русский учёный, писал о древней тюркской культуре («Древняя тюркская Сибирь»).</li>
+        <li>Древние курганы (<span class="kz">обалар</span>) с золотом: <span class="kz">Есік, Шілікті, Берел, Бесшатыр, Тасмола</span>. <span class="kz">Көмбе</span> — клад.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="pill">Текст «8 факторов» (стр. 68, А. Сейдімбек)</span>
+      <p>Почему цивилизация Великой степи развилась? В тексте 8 причин:</p>
+      <ol class="plan">
+        <li><span>Степь от <b>Алтая до Дона</b> соединила два материка: была «воротами» (<span class="kz">қақпасы</span>) Европы и Азии.</span></li>
+        <li><span>Появилась за <b>1000 лет до н. э.</b>, заняла <b>7000 км</b>. Тюрки первыми <b>приручили лошадь</b> (<span class="kz">жылқыны қолға үйретті</span>).</span></li>
+        <li><span>Через Амударью и Сырдарью соединялась с китайской, персидской, индийской и арабской цивилизациями.</span></li>
+        <li><span>Человек степи жил в полной <b>гармонии с природой</b>.</span></li>
+        <li><span>Через степь шёл <b>Шёлковый путь</b>. Только вдоль Сырдарьи было около <b>300 городов и крепостей</b>.</span></li>
+        <li><span>Развивались <b>металлургия</b> и ювелирное искусство в <span class="kz">аң стилі</span> (зверином стиле).</span></li>
+        <li><span><b>Тюркский каганат (551–744)</b> — первая империя в степях Евразии. Тогда появилась <b>тюркская письменность</b>.</span></li>
+        <li><span>В <b>545 году</b> к Бумын-кагану приехал посол из Китая: тюркское государство получило международный статус.</span></li>
+      </ol>
+    </div>
+    <div class="tip">
+      <p><b>Есте сақта (запомни, стр. 71):</b> <span class="kz">Ұлы Дала өркениеті — жалпыадамзаттық тарихтың құрамдас бөлігі.</span> Цивилизация Великой степи — часть всемирной истории. Там было больше 300 городов, городищ и крепостей. Через Великую степь шёл обмен между Востоком и Западом.</p>
+    </div>
+    <div class="card">
+      <span class="pill">Құттықтау хат (поздравительное письмо, стр. 69)</span>
+      <p>Схема официального поздравления:</p>
+      <dl class="vocab">
+        <dt>Құрметті оқушылар!</dt><dd>1. Обращение</dd>
+        <dt>Сіздерді ... мерекесімен шын жүректен құттықтаймыз!</dt><dd>2. Поздравляем от всего сердца с праздником ...</dd>
+        <dt>... алғыс білдіреміз!</dt><dd>3. Благодарим за ...</dd>
+        <dt>Сіздерге кемел келешек, нұрлы болашақ тілейміз!</dt><dd>4. Желаем светлого будущего!</dd>
+        <dt>Құрметпен, мектеп ұжымы</dt><dd>5. С уважением, коллектив школы</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ОДАҒАЙ -->
+  <section class="panel" id="p-g" hidden>
+    <h2>Грамматика: одағай (междометия)</h2>
+    <div class="card">
+      <p><b>Одағай</b> — это слова-эмоции вроде русских «ура!», «ой!», «эх!», «тсс!», а ещё слова, которыми подзывают животных. Одна из <b>9 частей речи</b> казахского языка.</p>
+      <span class="pill">3 признака одағая</span>
+      <ol class="plan">
+        <li><span>Нет лексического значения: слово ничего не называет, только выражает чувство.</span></li>
+        <li><span>Это вид <span class="kz">оқшау сөз</span> (обособленное слово): грамматически не связано с другими словами.</span></li>
+        <li><span>Не бывает членом предложения (не подлежащее, не сказуемое и т. д.).</span></li>
+      </ol>
+    </div>
+    <div class="card">
+      <span class="pill">3 вида одағая</span>
+      <div class="scroll"><table class="table">
+        <tr><th>Вид</th><th>Когда</th><th>Примеры</th></tr>
+        <tr><td class="kz">Көңіл күй одағайлары</td><td>эмоции: радость, удивление, обида, сожаление</td><td class="kz">пәлі, алақай, пай-пай, уһ, әттеген-ай, қап, ойпыр-ай, япыр-ай, қайран, түһ, па, шіркін</td></tr>
+        <tr><td class="kz">Жекіру одағайлары</td><td>запрет, окрик («тихо!», «хватит!»)</td><td class="kz">тәйт, тек, жә</td></tr>
+        <tr><td class="kz">Шақыру одағайлары</td><td>подзывать или прогонять животных</td><td class="kz">кә-кә, көс-көс, пұшайт-пұшайт</td></tr>
+      </table></div>
+      <p class="ru">Как подзывают животных: жылқы (лошадь) — <span class="kz">құрау-құрау, моһ-моһ</span>; сиыр (корова) — <span class="kz">ауһау-ауһау, әукім-әукім</span>; қой (овца) — <span class="kz">пұшайт-пұшайт</span>; түйе (верблюд) — <span class="kz">көс-көс</span>; ешкі (коза) — <span class="kz">шөре-шөре</span>; ит (собака) — <span class="kz">кә-кә</span>.</p>
+    </div>
+    <div class="card">
+      <span class="pill">Что значат частые одағаи</span>
+      <dl class="vocab">
+        <dt>алақай!</dt><dd>ура! (радость)</dd>
+        <dt>пәлі! / па!</dt><dd>вот это да! браво!</dd>
+        <dt>пай-пай!</dt><dd>ох, ах! (восхищение)</dd>
+        <dt>ойпыр-ай! / япыр-ай!</dt><dd>ничего себе! вот это да!</dd>
+        <dt>әттеген-ай! / қап!</dt><dd>эх, жаль! досада</dd>
+        <dt>уһ!</dt><dd>уф! (облегчение)</dd>
+        <dt>шіркін!</dt><dd>эх, как хорошо! (мечта, восторг)</dd>
+        <dt>қайран!</dt><dd>эх, милые! (с грустью, о прошлом)</dd>
+        <dt>тәйт! / жә!</dt><dd>цыц! хватит!</dd>
+      </dl>
+      <p class="ru">По учебнику одағаи <b>не переводятся</b> на другой язык: они связаны с национальным восприятием. Перевод выше — только чтобы понять смысл.</p>
+    </div>
+    <div class="card">
+      <span class="pill">Знаки препинания (тыныс белгілері)</span>
+      <ol class="plan">
+        <li><span>Одағай <b>внутри предложения выделяется запятыми</b>:<br><span class="kz">Ұлы Даланың тарихы<b>,</b> ойпыр-ай<b>,</b> неткен терең еді!</span></span></li>
+        <li><span>Одағай из <b>двух слов пишется через дефис</b>:<br><span class="kz">Пай<b>-</b>пай, Отырар кітапханасының байлығына сөз жетпес!</span></span></li>
+      </ol>
+      <p class="ru">И ещё: предложение с одағаем обычно заканчивается <b>восклицательным знаком</b>.</p>
+    </div>
+    <div class="tip"><p><b>Лайфхак:</b> хочешь сделать предложение «с одағаем» — просто поставь в начало <span class="kz">Пай-пай,</span> или <span class="kz">Япыр-ай,</span> с запятой, а в конце «!». Пример из учебника: <span class="kz">Па, шіркін, түркі жұртының өркениеті қандай зор болған!</span></p></div>
+  </section>
+
+  <!-- ОТЫРАР -->
+  <section class="panel" id="p-o" hidden>
+    <h2>Урок 3. Отырар — өркениет ордасы</h2>
+    <div class="card">
+      <span class="pill">Новые слова (стр. 72)</span>
+      <dl class="vocab">
+        <dt>билік</dt><dd>власть</dd>
+        <dt>монша</dt><dd>баня</dd>
+        <dt>кәріз</dt><dd>подземный водопровод</dd>
+        <dt>қирау</dt><dd>разрушиться</dd>
+        <dt>ойрандау</dt><dd>разгромить</dd>
+        <dt>діни</dt><dd>религиозный</dd>
+        <dt>рух</dt><dd>дух</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <span class="pill">Текст (стр. 73, Т. Жұртбай)</span>
+      <ul class="clean">
+        <li>Отырар знаменит двумя вещами: это родина великого мыслителя <b>Әбу Насыр әл-Фараби</b>, и там была одна из крупнейших <b>библиотек</b> мира.</li>
+        <li>Названия <b>Отырар и Фараб</b> впервые встречаются в письменных источниках <b>IX века</b>.</li>
+        <li>В <b>XIII веке</b> Отырар — крупный торговый центр на Шёлковом пути.</li>
+        <li>Арабские халифы <b>Харун әл-Рашид</b> (786–809) и <b>Мамун</b> (813–833) открыли «<span class="kz">Даналық үйі</span>» (Дом мудрости), богатую библиотеку и обсерваторию.</li>
+        <li>Купцы дарили правителю Отырара <b>книгу как самый ценный подарок</b>. Это стало традицией и даже государственным обрядом.</li>
+        <li>В Отыраре строили библиотеки, школы, медресе и мечети. В городе были <b>бани и кәріз</b>. Потом всё разгромили враги.</li>
+      </ul>
+      <p class="ru">Жирные слова из текста (задание 4): <span class="kz">танымал</span> — известный, <span class="kz">жазба деректер</span> — письменные источники, <span class="kz">Даналық үйі</span> — Дом мудрости, <span class="kz">дәстүрге айналдырды</span> — сделали традицией, <span class="kz">діни</span>, <span class="kz">билік</span>, <span class="kz">монша, кәріздер</span>, <span class="kz">ойрандалды, қирады</span>.</p>
+    </div>
+    <div class="card">
+      <span class="pill">Раскопки Отырара (стр. 74)</span>
+      <dl class="vocab">
+        <dt>1904</dt><dd>первые раскопки: А. К. Кларе и А. А. Черкасов</dd>
+        <dt>1940-е</dt><dd>профессор А. Н. Бернштам</dd>
+        <dt>1969</dt><dd>Отырарская экспедиция, руководил К. А. Ақышев</dd>
+        <dt>1990-е</dt><dd>руководил К. М. Байпақов</dd>
+        <dt>2001</dt><dd>проект ЮНЕСКО — Казахстан — Япония по сохранению Отырара</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <span class="pill">Өтініш хат (заявление, стр. 74)</span>
+      <dl class="vocab">
+        <dt>№100 орта мектебінің директоры А. Манасқызына</dt><dd>1. Кому (справа вверху, дательный падеж -ға/-не)</dd>
+        <dt>7 «А» сынып оқушысы Омар Маратұлынан</dt><dd>2. От кого (-нан/-нен)</dd>
+        <dt>Өтініш</dt><dd>3. Заголовок «Заявление» по центру</dd>
+        <dt>Сізден ... сұраймын.</dt><dd>4. Текст: «Прошу Вас ...»</dd>
+        <dt>Омар Маратұлы (қолы), 15 наурыз 2025 жыл</dt><dd>5. Имя, подпись, дата</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ЖІБЕК ЖОЛЫ -->
+  <section class="panel" id="p-j" hidden>
+    <h2>Урок 4. Ұлы Жібек жолы</h2>
+    <div class="card">
+      <span class="pill">Новые слова (стр. 75)</span>
+      <dl class="vocab">
+        <dt>сауда жолы</dt><dd>торговый путь</dd>
+        <dt>қоршау</dt><dd>окружать, обносить</dd>
+        <dt>наразы</dt><dd>недовольный</dd>
+        <dt>опасыздық</dt><dd>предательство</dd>
+        <dt>ұстахана</dt><dd>кузница, мастерская</dd>
+        <dt>тасымалдау</dt><dd>перевозить</dd>
+        <dt>өндіру</dt><dd>добывать, производить</dd>
+        <dt>жетістік</dt><dd>достижение</dd>
+        <dt>созылу</dt><dd>тянуться</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <span class="pill">Текст (стр. 75–76)</span>
+      <ul class="clean">
+        <li>Появился в <b>середине II века до н. э.</b> Соединял <b>Китай и Европу</b>, Азию и Европу.</li>
+        <li>До него были: <span class="kz">«Лазурит жолы»</span> (камень лазурит с Памира в Египет, Иран, Вавилон), <span class="kz">«Нефрит жолы»</span> (нефрит из Кашгара в Китай для украшений), <span class="kz">«Құндыз жолы»</span> (дорогие меха бобра).</li>
+        <li>В середине I тысячелетия до н. э. — <span class="kz">«Дала жолы»</span> (Степной путь): китайский шёлк и иранские ковры.</li>
+        <li><b>Почему «Шёлковый»?</b> Главный товар — <b>шёлк из Китая</b>.</li>
+        <li>Путь помог развитию торговли, науки, религии и культуры.</li>
+        <li>В Казахстане шёл вдоль рек <b>Сырдария, Талас, Шу, Іле</b>. Сырдарью раньше называли <span class="kz">Яксарт, Сейхун</span>. Дальше путь тянулся к Чёрному морю, Византии, Западной Европе.</li>
+        <li>Города на пути: <span class="kz">Испиджаб, Отырар, Түркістан, Тараз, Сауран, Сығанақ, Сарайшық, Жанакент</span>.</li>
+      </ul>
+    </div>
+    <div class="tip"><p><b>Есте сақта (стр. 77):</b> Шёлковый путь проходил по казахской земле. Позже колонизаторы <span class="kz">опасыздықпен</span> (вероломно) стирали эту историю, но традиции торгового пути снова оживают.</p></div>
+    <div class="card">
+      <span class="pill">Задание 5: көмекші есім</span>
+      <p>Добавь вспомогательное имя (<span class="kz">жаны, үсті, бойы, маңы</span>) к слову:</p>
+      <dl class="vocab">
+        <dt>қала маңы</dt><dd>окрестности города</dd>
+        <dt>өзен бойы / өзен жаны</dt><dd>вдоль реки / у реки</dd>
+        <dt>Ұлы Жібек жолының бойы</dt><dd>вдоль Шёлкового пути</dd>
+        <dt>керуеннің жаны</dt><dd>рядом с караваном</dd>
+        <dt>сауда жолының бойы</dt><dd>вдоль торгового пути</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ЖАНТАЗА -->
+  <section class="panel" id="p-z" hidden>
+    <h2>Урок 5–6. Б. Ұзақов «Жантаза»</h2>
+    <div class="card">
+      <span class="pill">Название</span>
+      <p><span class="kz">Жан</span> — душа, <span class="kz">таза</span> — чистый. <b>«Жантаза» = «Чистая душа»</b>. Это рассказ-легенда (<span class="kz">аңыз</span>) с волшебными героями (<span class="kz">тылсым кейіпкерлер</span>).</p>
+    </div>
+    <div class="card">
+      <span class="pill">Новые слова (стр. 78)</span>
+      <dl class="vocab">
+        <dt>жабық</dt><dd>закрытый</dd>
+        <dt>аждаһа</dt><dd>дракон, огромный змей</dd>
+        <dt>кері бұрылу</dt><dd>повернуть назад</dd>
+        <dt>ақсақал</dt><dd>аксакал, уважаемый старейшина</dd>
+        <dt>кенет</dt><dd>вдруг, внезапно</dd>
+        <dt>сұңғақ бойлы</dt><dd>высокий и стройный</dd>
+        <dt>инабаттылық</dt><dd>скромность, учтивость</dd>
+      </dl>
+      <p class="ru">Ещё слова из текста: <span class="kz">мақұлық</span> — чудовище, <span class="kz">айбат</span> — грозный вид, <span class="kz">тылсым</span> — тайна, волшебство, <span class="kz">қылыш</span> — сабля, <span class="kz">садақ</span> — лук, <span class="kz">құдық</span> — колодец, <span class="kz">жесір әйел</span> — вдова, <span class="kz">ақ отау</span> — белая юрта, <span class="kz">төр</span> — почётное место в доме, <span class="kz">дастарқан</span> — стол с угощением.</p>
+    </div>
+    <div class="card">
+      <span class="pill">О чём отрывок (стр. 78–79)</span>
+      <ol class="plan">
+        <li><span>Парень с луком (<span class="kz">хабаршы жігіт</span>) рассказывает: уже неделю по аулу бродит <b>дракон</b>. Каждый день после обеда он глотает ягнят, верблюжат, жеребят. Стрелы его не берут. Людей пока не трогал.</span></li>
+        <li><span>«<span class="kz">Ойбай... Әне... Тағы келді!</span>» — дракон выползает из старого колодца у дома вдовы Күлән.</span></li>
+        <li><span><b>Жанғожа</b> берёт саблю и идёт туда. Все разбегаются. Чудовище уже хочет проглотить жеребёнка.</span></li>
+        <li><span>Жанғожа читает молитву, громко кричит и подбегает. Чудовище сразу теряет свой грозный вид, плачет и ложится перед ним.</span></li>
+        <li><span>Жанғожа <b>выливает молоко</b> из пиалы ему на голову. Чудовище в слезах смотрит на него, <span class="kz">кері бұрылып</span> (поворачивает назад) и медленно исчезает.</span></li>
+        <li><span>Жанғожа два дня живёт у <span class="kz">ақсақал</span>. Дракон не возвращается, и на третий день он едет домой.</span></li>
+        <li><span>Ночь, звёзды. <span class="kz">Кенет</span> (вдруг) перед ним белая юрта с огнями. Выходит <span class="kz">сұңғақ бойлы</span> девушка, одетая как ханша, <span class="kz">инабаттылықпен</span> (скромно) кланяется и зовёт переночевать. Жанғожа входит и садится на почётное место (<span class="kz">төрге озды</span>).</span></li>
+      </ol>
+    </div>
+    <div class="card">
+      <span class="pill">Герои (задание 7)</span>
+      <div class="scroll"><table class="table">
+        <tr><th>Кейіпкер</th><th>Какой</th><th>Что делает</th></tr>
+        <tr><td class="kz">Жанғожа</td><td>смелый, сильный, но добрый</td><td>не убивает чудовище, а отпускает его</td></tr>
+        <tr><td class="kz">Пері-қыз</td><td>высокая, красивая, скромная, загадочная</td><td>выходит из белой юрты и приглашает в гости</td></tr>
+        <tr><td class="kz">Хабаршы жігіт</td><td>напуганный («Ойбай...»)</td><td>приносит весть о драконе</td></tr>
+      </table></div>
+    </div>
+    <div class="tip">
+      <p><b>Вопрос учебника (задание 4):</b> <span class="kz">Аждаһа мен сұлу қыз бір кейіпкер болуы мүмкін бе?</span> — Могут ли дракон и красивая девушка быть одним и тем же персонажем?</p>
+      <p>Подумай сам. Подсказки: оба появились внезапно и как-то волшебно; чудовище не стало драться, а заплакало и ушло; а через три дня Жанғожу вдруг встречают в гостях. И вспомни название: «Чистая душа».</p>
+    </div>
+    <div class="card">
+      <span class="pill">Связь с грамматикой</span>
+      <p>В тексте есть одағай: <span class="kz">«Ойбай...»</span> — испуг (көңіл күй одағайы). В задании 5 нужно переделать текст в диалог и добавить одағаи: <span class="kz">Ойпыр-ай, Алақай, Әттеген-ай, Тәйт!</span></p>
+      <p>Задание 8: подобрать сравнения (теңеу) к сказочным героям. Примеры: Дәу (великан) — <span class="kz">таудай үлкен</span> (огромный, как гора); Қар ханым (Снежная королева) — <span class="kz">мұздай суық</span> (холодная, как лёд); Мыстан кемпір (ведьма) — <span class="kz">түлкідей айлакер</span> (хитрая, как лиса).</p>
+    </div>
+  </section>
+
+  <!-- FLASHCARDS -->
+  <section class="panel" id="p-cards" hidden>
+    <h2>Карточки</h2>
+    <p class="ru" style="margin:0">Нажми на карточку, чтобы перевернуть. «Не знаю» вернутся снова.</p>
+    <div class="filters" id="cardFilters"></div>
+    <div class="flash" id="flash" tabindex="0" role="button" aria-label="Перевернуть карточку">
+      <div class="big" id="flashBig"></div>
+      <div class="hint" id="flashHint">нажми, чтобы увидеть перевод</div>
+    </div>
+    <div class="row">
+      <button class="btn ghost" id="cardNo">Ещё не знаю</button>
+      <button class="btn" id="cardYes">Знаю ✓</button>
+      <span class="ru" id="cardCount"></span>
+    </div>
+    <div class="row"><button class="btn ghost small" id="cardSwap">Показывать сначала русский</button></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="panel" id="p-quiz" hidden>
+    <h2>Квиз</h2>
+    <div class="filters" id="quizFilters"></div>
+    <div class="card" id="quizBox"></div>
+  </section>
+
+  <!-- SOR -->
+  <section class="panel" id="p-sor" hidden>
+    <h2>Практика</h2>
+    <p class="ru" style="margin:0">Задания по теме, похожие на те, что в учебнике. Сначала попробуй сам, потом проверь.</p>
+    <div class="card">
+      <span class="pill">Часть 1 · Чтение</span>
+      <p class="kz" style="font-weight:600">Ұлы Жібек жолы біздің заманымызға дейінгі II ғасырдың ортасында пайда болды. Бұл — Қытай мен Еуропаны байланыстырған сауда жолы. Жолдың бұлай аталуына сауданың негізгі заты — Қытайдан шығарылатын жібек мата себеп болды. Ұлы Жібек жолы ежелгі Қазақстан жерімен де өткен. Оның бойында Отырар, Түркістан, Тараз, Сауран сияқты ірі қалалар болған.</p>
+      <details class="reveal"><summary>Показать перевод</summary>
+        <p>Великий Шёлковый путь появился в середине II века до н. э. Это торговый путь, соединивший Китай и Европу. Назван так потому, что главным товаром был шёлк из Китая. Шёлковый путь проходил и по земле древнего Казахстана. Вдоль него были крупные города: Отырар, Туркестан, Тараз, Сауран.</p>
+      </details>
+      <div id="sor1"></div>
+    </div>
+    <div class="card">
+      <span class="pill">Часть 2 · Найди одағай</span>
+      <div id="sor2"></div>
+    </div>
+    <div class="card">
+      <span class="pill">Часть 3 · Вид одағая</span>
+      <div id="sor3"></div>
+    </div>
+    <div class="card">
+      <span class="pill">Часть 4 · Знаки препинания</span>
+      <div id="sor4"></div>
+    </div>
+    <div class="card">
+      <span class="pill">Часть 4б · «Жантаза»: верно или нет?</span>
+      <div id="sor5"></div>
+    </div>
+    <div class="card">
+      <span class="pill">Часть 5 · Соедини слово и перевод</span>
+      <div class="match" id="matchW"></div>
+      <div class="row"><button class="btn small" data-check="matchW">Проверить</button><span id="matchW-res"></span></div>
+    </div>
+    <div class="card">
+      <span class="pill">Часть 6 · Своё предложение с одағаем</span>
+      <p>Составь 2–3 предложения про Великую степь или Отырар с одағаем. Схема: <b>одағай + запятая + мысль + «!»</b></p>
+      <details class="reveal"><summary>Примеры, если не получается</summary>
+        <ul class="clean">
+          <li><span class="kz">Япыр-ай, Ұлы Далада үш жүзден аса қала болған екен!</span> — Ничего себе, в Великой степи было больше трёхсот городов!</li>
+          <li><span class="kz">Пай-пай, Отырар кітапханасы қандай бай болған!</span> — Ах, какой богатой была библиотека Отырара!</li>
+          <li><span class="kz">Әттеген-ай, Отырарды жау ойрандады!</span> — Эх, жаль, Отырар разгромили враги!</li>
+          <li><span class="kz">Алақай, біз Отырар мұражайына барамыз!</span> — Ура, мы едем в музей Отырара!</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  var store={get:function(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  var LBL={d:'Ұлы Дала',g:'Одағай',o:'Отырар',j:'Жібек жолы',z:'Жантаза'};
+
+  var tabs=[].slice.call(document.querySelectorAll('.tab'));
+  function show(id){tabs.forEach(function(t){var on=t.dataset.p===id;t.setAttribute('aria-selected',on);document.getElementById('p-'+t.dataset.p).hidden=!on});store.set('sor3-tab',id);window.scrollTo({top:0})}
+  tabs.forEach(function(t){t.addEventListener('click',function(){show(t.dataset.p)})});
+  var sv=store.get('sor3-tab');if(sv&&document.getElementById('p-'+sv))show(sv);
+
+  function filters(el,cb){[['all','Все']].concat(Object.keys(LBL).map(function(k){return [k,LBL[k]]})).forEach(function(f){
+    var b=document.createElement('button');b.className='chip';b.textContent=f[1];b.setAttribute('aria-pressed',f[0]==='all');
+    b.onclick=function(){[].forEach.call(el.children,function(c){c.setAttribute('aria-pressed',c===b)});cb(f[0])};el.appendChild(b)})}
+
+  /* ---------- cards ---------- */
+  var CARDS=[
+    ['d','дереккөз','источник'],['d','бекініс','крепость'],['d','алыс-беріс','обмен, связи'],['d','жандану','оживляться'],['d','сүйену','опираться'],
+    ['d','өркендеу','процветать, развиваться'],['d','қалашық','городище'],['d','өркениет','цивилизация'],['d','Ұлы Дала','Великая степь'],
+    ['d','Аспан асты елі','Поднебесная (Китай)'],['d','Күншығыс елі','Страна восходящего солнца (Япония)'],['d','түркі жұрты','тюркский народ'],
+    ['d','шығармашылық','творчество'],['d','зергерлік өнер','ювелирное искусство'],['d','оба','курган'],['d','көмбе','клад'],['d','сақтар','саки'],
+    ['d','құттықтау хат','поздравительное письмо'],['d','шын жүректен құттықтаймыз','поздравляем от всего сердца'],
+    ['g','одағай','междометие'],['g','оқшау сөз','обособленное слово'],['g','көңіл күй одағайы','одағай эмоций'],['g','жекіру одағайы','одағай запрета, окрика'],
+    ['g','шақыру одағайы','одағай для животных'],['g','алақай!','ура!'],['g','пәлі!','вот это да! браво!'],['g','пай-пай!','ох, ах! (восхищение)'],
+    ['g','әттеген-ай!','эх, жаль!'],['g','қап!','эх! досада'],['g','ойпыр-ай! / япыр-ай!','ничего себе!'],['g','уһ!','уф!'],['g','шіркін!','эх, как хорошо!'],
+    ['g','тәйт! / жә! / тек!','цыц! хватит!'],['g','кә-кә','так зовут собаку'],['g','көс-көс','так зовут верблюда'],['g','пұшайт-пұшайт','так зовут овец'],
+    ['g','құрау-құрау','так зовут лошадь'],['g','шөре-шөре','так зовут козу'],['g','тыныс белгісі','знак препинания'],
+    ['o','билік','власть'],['o','монша','баня'],['o','кәріз','подземный водопровод'],['o','қирау','разрушиться'],['o','ойрандау','разгромить'],
+    ['o','діни','религиозный'],['o','рух','дух'],['o','танымал','известный'],['o','жазба деректер','письменные источники'],['o','Даналық үйі','Дом мудрости'],
+    ['o','дәстүрге айналдыру','сделать традицией'],['o','ең құнды сыйлық','самый ценный подарок'],['o','кітапхана','библиотека'],['o','қазба жұмыстары','раскопки'],
+    ['o','өтініш хат','заявление'],['o','... сұраймын','прошу ...'],
+    ['j','сауда жолы','торговый путь'],['j','қоршау','окружать'],['j','наразы','недовольный'],['j','опасыздық','предательство'],['j','ұстахана','кузница, мастерская'],
+    ['j','тасымалдау','перевозить'],['j','өндіру','добывать, производить'],['j','жетістік','достижение'],['j','созылу','тянуться'],['j','жібек','шёлк'],
+    ['j','керуен','караван'],['j','саудагер / көпес','купец'],['j','біріктіру','объединять'],['j','тері','шкура, мех'],['j','кілем','ковёр'],['j','бойы','вдоль'],['j','маңы','окрестность'],
+['z','Жантаза','чистая душа'],['z','жабық','закрытый'],['z','аждаһа','дракон'],['z','кері бұрылу','повернуть назад'],['z','ақсақал','старейшина, аксакал'],
+    ['z','кенет','вдруг'],['z','сұңғақ бойлы','высокий и стройный'],['z','инабаттылық','скромность, учтивость'],['z','мақұлық','чудовище'],['z','айбат','грозный вид'],
+    ['z','тылсым','тайна, волшебство'],['z','қылыш','сабля'],['z','садақ','лук (оружие)'],['z','құдық','колодец'],['z','жесір әйел','вдова'],['z','ақ отау','белая юрта'],
+    ['z','төр','почётное место'],['z','дастарқан','стол с угощением'],['z','аңыз','легенда'],['z','ертегі','сказка'],['z','кейіпкер','персонаж, герой'],['z','пері','пери, фея']
+  ];
+  var cardTopic='all',deck=[],idx=0,flipped=false,ruFirst=false,known=0;
+  filters(document.getElementById('cardFilters'),function(t){cardTopic=t;buildDeck()});
+  function buildDeck(){deck=shuffle(CARDS.filter(function(c){return cardTopic==='all'||c[0]===cardTopic}).slice());idx=0;known=0;renderCard()}
+  var flash=document.getElementById('flash'),fb=document.getElementById('flashBig'),fh=document.getElementById('flashHint'),cc=document.getElementById('cardCount');
+  function renderCard(){flipped=false;flash.classList.remove('back');
+    if(!deck.length){fb.textContent='Все выучены!';fh.textContent='выбери другую тему';cc.textContent='';return}
+    var c=deck[idx%deck.length];fb.textContent=ruFirst?c[2]:c[1];fh.textContent='нажми, чтобы увидеть перевод';cc.textContent='Осталось: '+deck.length+' · выучено: '+known}
+  function flip(){if(!deck.length)return;var c=deck[idx%deck.length];flipped=!flipped;flash.classList.toggle('back',flipped);fb.textContent=flipped?(ruFirst?c[1]:c[2]):(ruFirst?c[2]:c[1]);fh.textContent=flipped?'перевод':'нажми, чтобы увидеть перевод'}
+  flash.addEventListener('click',flip);flash.addEventListener('keydown',function(e){if(e.key===' '||e.key==='Enter'){e.preventDefault();flip()}});
+  document.getElementById('cardYes').onclick=function(){if(!deck.length)return;deck.splice(idx%deck.length,1);known++;if(deck.length)idx=idx%deck.length;renderCard()};
+  document.getElementById('cardNo').onclick=function(){if(!deck.length)return;idx=(idx+1)%deck.length;renderCard()};
+  document.getElementById('cardSwap').onclick=function(){ruFirst=!ruFirst;this.textContent=ruFirst?'Показывать сначала казахский':'Показывать сначала русский';renderCard()};
+  buildDeck();
+
+  /* ---------- quiz ---------- */
+  var G3=['көңіл күй','жекіру','шақыру'];
+  var Q=[
+    ['d','Что значит «Ұлы Дала өркениеті»?',['цивилизация Великой степи','история Китая','великая река','древний город'],0,'Ұлы Дала = Великая степь, өркениет = цивилизация.'],
+    ['d','«Аспан асты елі» — так называют…',['Японию','Китай','Казахстан','Индию'],1,'Аспан асты елі = Поднебесная, это Китай.'],
+    ['d','«Күншығыс елі» — это…',['Япония','Китай','Турция','Египет'],0,'Күншығыс = восход солнца. Страна восходящего солнца — Япония.'],
+    ['d','«Бекініс» значит…',['крепость','рынок','река','книга'],0,'Бекініс — крепость.'],
+    ['d','«Дереккөз» значит…',['источник информации','глаз','дерево','озеро'],0,'Дерек = факт, көз = источник.'],
+    ['d','«Алыс-беріс» значит…',['обмен, связи','далёкий путь','ссора','праздник'],0,'Алу = брать, беру = давать. Обмен.'],
+    ['d','«Өркендеу» значит…',['процветать, развиваться','разрушаться','спать','уезжать'],0,'Металлургия өркендеді — металлургия развивалась.'],
+    ['d','Кто писал о саках (сақтар)?',['Геродот','Абай','Мағжан','Пушкин'],0,'Геродот — древнегреческий историк.'],
+    ['d','Великая степь, по тексту, тянулась…',['от Алтая до Дона','от Алматы до Астаны','от Китая до Японии','от Каспия до Арала'],0,'«Алтайдан Донға дейін созылған Ұлы Дала».'],
+    ['d','Какое животное тюрки первыми приручили?',['жылқы (лошадь)','түйе (верблюд)','ит (собака)','сиыр (корова)'],0,'Ең жүйрік аң — жылқыны қолға үйретті.'],
+    ['d','Сколько городов и крепостей было вдоль Сырдарьи?',['около 300','около 30','3000','10'],0,'Сырдарияның бойында 300-ге жуық қала мен бекініс болды.'],
+    ['d','В каком стиле было ювелирное искусство степи?',['аң стилі (звериный)','готический','китайский','современный'],0,'Аң = зверь.'],
+    ['d','Годы Тюркского каганата:',['551–744','1904–2001','786–809','1000–1200'],0,'Түркі қағанаты 551–744 жж. Тогда появилась тюркская письменность.'],
+    ['d','Что случилось в 545 году?',['к Бумын-кагану приехал посол Китая','построили Отырар','появился Шёлковый путь','нашли клад'],0,'С тех пор тюркское государство получило международный статус.'],
+    ['d','Как начать официальное поздравительное письмо?',['Құрметті оқушылар!','Сәлем, бро!','Сау бол!','Өтініш'],0,'Құрметті ... ! — обращение.'],
+    ['d','Как закончить официальное поздравление?',['Құрметпен, мектеп ұжымы','Ойпыр-ай!','Тәйт!','Өтініш'],0,'Құрметпен = с уважением.'],
+
+    ['g','Что такое одағай?',['междометие (ура! ой! эх!)','существительное','глагол','числительное'],0,'Одағай выражает чувства и подзывает животных.'],
+    ['g','Сколько частей речи (сөз табы) в казахском языке?',['9','5','12','3'],0,'Одағай — одна из 9 частей речи.'],
+    ['g','Какой признак у одағая?',['у него нет лексического значения','он всегда подлежащее','он изменяется по падежам','это число'],0,'Одағай ничего не называет, только выражает чувство.'],
+    ['g','Может ли одағай быть членом предложения?',['нет','да, всегда','только сказуемым','только подлежащим'],0,'Одағай не выполняет роль члена предложения.'],
+    ['g','Одағай — вид каких слов?',['оқшау сөз (обособленные)','көмекші есім','сан есім','етістік'],0,'Он грамматически не связан с другими словами.'],
+    ['g','Какое слово — одағай?',['алақай','кітап','жақсы','барды'],0,'Алақай! = ура!'],
+    ['g','Какое слово — одағай?',['ойпыр-ай','қала','бекініс','үлкен'],0,'Ойпыр-ай! = ничего себе!'],
+    ['g','Найди одағай: «Әттеген-ай, Отырарды жау ойрандады!»',['Әттеген-ай','Отырарды','жау','ойрандады'],0,'Әттеген-ай — эх, жаль!'],
+    ['g','«Тәйт!», «жә!», «тек!» — какой это вид одағая?',G3,1,'Жекіру — окрик, запрет.'],
+    ['g','«Алақай!», «пәлі!», «әттеген-ай!» — какой вид?',G3,0,'Көңіл күй — выражают чувства.'],
+    ['g','«Кә-кә», «көс-көс» — какой вид?',G3,2,'Шақыру — подзывают животных.'],
+    ['g','Как казахи подзывают собаку (ит)?',['кә-кә','көс-көс','шөре-шөре','пұшайт-пұшайт'],0,'Итті кә-кә деп шақырады.'],
+    ['g','Как подзывают верблюда (түйе)?',['көс-көс','кә-кә','құрау-құрау','шөре-шөре'],0,'Түйені көс-көс деп шақырады.'],
+    ['g','Как подзывают овец (қой)?',['пұшайт-пұшайт','көс-көс','кә-кә','моһ-моһ'],0,'Қойды пұшайт-пұшайт деп шақырады.'],
+    ['g','Как подзывают лошадь (жылқы)?',['құрау-құрау','кә-кә','шөре-шөре','көс-көс'],0,'Жылқыны құрау-құрау, моһ-моһ деп шақырады.'],
+    ['g','Как правильно поставить знаки? «Ұлы Даланың тарихы ойпыр-ай неткен терең еді»',['Ұлы Даланың тарихы, ойпыр-ай, неткен терең еді!','Ұлы Даланың тарихы ойпыр-ай неткен терең еді.','Ұлы Даланың, тарихы ойпыр-ай неткен терең еді?','Ұлы Даланың тарихы ойпыр, ай неткен терең еді!'],0,'Одағай внутри предложения выделяется запятыми с обеих сторон.'],
+    ['g','Как пишется одағай из двух одинаковых слов?',['через дефис: пай-пай','слитно: пайпай','через запятую: пай, пай','раздельно: пай пай'],0,'Қос сөзден жасалған одағайдың ортасына дефис қойылады.'],
+    ['g','Переводятся ли одағаи на другой язык, по учебнику?',['нет, не переводятся','да, всегда','только на английский','только на русский'],0,'Они связаны с национальным восприятием.'],
+    ['g','«Шіркін!» выражает…',['восторг, мечту','запрет','зов собаки','злость'],0,'Па, шіркін! — эх, как хорошо!'],
+
+    ['o','Чья родина — Отырар?',['әл-Фараби','Абай','Мағжан','Геродот'],0,'Ұлы ойшыл Әбу Насыр әл-Фараби туған қала.'],
+    ['o','Чем ещё знаменит Отырар?',['одной из крупнейших библиотек мира','морским портом','высокими горами','заводами'],0,'Әлемдегі ең ірі кітапхана орналасқан мәдени орталық.'],
+    ['o','Древнее название Отырара:',['Фараб','Тараз','Сауран','Испиджаб'],0,'Отырар және Фараб атаулары IX ғасырда кездеседі.'],
+    ['o','Когда впервые упоминаются Отырар и Фараб?',['в IX веке','в XXI веке','в 1904 году','в 545 году'],0,'IX ғасырдағы жазба деректерде.'],
+    ['o','Что дарили купцы правителю Отырара как самый ценный подарок?',['книгу','золото','коня','ковёр'],0,'Ең құнды сыйлық ретінде кітап сыйлау дәстүрге айналды.'],
+    ['o','Что такое «Даналық үйі»?',['Дом мудрости (библиотека, наука)','баня','рынок','крепость'],0,'Байт әл-Хикма — Дом мудрости.'],
+    ['o','«Монша» — это…',['баня','мечеть','рынок','мост'],0,'Монша = баня.'],
+    ['o','«Кәріз» — это…',['подземный водопровод','крыша','ворота','книга'],0,'В Отыраре были монша и кәріздер.'],
+    ['o','«Ойрандау» значит…',['разгромить','построить','подарить','прочитать'],0,'Жау қолынан ойрандалды — разгромлен врагами.'],
+    ['o','«Билік» значит…',['власть','баня','дух','книга'],0,'Билік құру — править.'],
+    ['o','«Діни орындар» — это…',['религиозные места (мечети, медресе)','бани','рынки','заводы'],0,'Діни = религиозный.'],
+    ['o','Кто впервые раскапывал Отырар в 1904 году?',['А. К. Кларе и А. А. Черкасов','К. Байпақов','әл-Фараби','Геродот'],0,'Члены Туркестанского кружка любителей археологии.'],
+    ['o','Кто возглавил Отырарскую экспедицию в 1969 году?',['К. А. Ақышев','А. Н. Бернштам','Харун әл-Рашид','Бумын-каган'],0,'1969 жылы экспедицияны К. А. Ақышев басқарды.'],
+    ['o','В заявлении (өтініш) текст обычно заканчивается словом…',['сұраймын (прошу)','құттықтаймыз','алақай','сау бол'],0,'«Сізден ... сұраймын» — прошу Вас.'],
+    ['o','«7 «А» сынып оқушысы Омар Маратұлынан» — какая это часть заявления?',['от кого','кому','дата','заголовок'],0,'-нан/-нен = от кого.'],
+
+    ['j','Когда появился Великий Шёлковый путь?',['в середине II века до н. э.','в 1904 году','в XIII веке','в 545 году'],0,'Біздің заманымызға дейінгі II ғасырдың ортасында.'],
+    ['j','Что соединял Шёлковый путь?',['Китай и Европу','Алматы и Астану','Японию и Индию','Африку и Америку'],0,'Қытай мен Еуропаны байланыстырған сауда жолы.'],
+    ['j','Почему путь назвали «Шёлковым»?',['главный товар — шёлк из Китая','дорога была мягкой','его построили из шёлка','так звали купца'],0,'Сауданың негізгі заты — Қытайдан шығарылатын жібек.'],
+    ['j','Что везли по «Лазурит жолы»?',['камень лазурит','меха','шёлк','книги'],0,'Памир тауларында өндірілген лазурит тасы.'],
+    ['j','Что везли по «Құндыз жолы»?',['меха бобра','нефрит','лазурит','ковры'],0,'Құндыз = бобр, тері = мех.'],
+    ['j','Как раньше называли Сырдарью?',['Яксарт, Сейхун','Жайық','Іле','Ертіс'],0,'«Яксарт», «Сейхун» деп аталған Сырдария.'],
+    ['j','Какой город НЕ упомянут на Шёлковом пути в тексте?',['Астана','Отырар','Тараз','Сауран'],0,'Астана — современный город.'],
+    ['j','Верно или нет: «Ұлы Жібек жолы Қазақстан жерімен де өтті»',['Дұрыс (верно)','Бұрыс (неверно)'],0,'Ұлы Жібек жолы ежелгі Қазақстан жерімен де өткен.'],
+    ['j','Верно или нет: «Ұлы Жібек жолы бойында тек қытай жібектері сатылды»',['Дұрыс (верно)','Бұрыс (неверно)'],1,'Не только шёлк: ещё ковры, камни, меха.'],
+    ['j','Верно или нет: «Ұлы Жібек жолының ежелгі қалалардың өркендеуіне ықпалы болмады»',['Дұрыс (верно)','Бұрыс (неверно)'],1,'Наоборот: путь сильно помог развитию городов.'],
+    ['j','«Тасымалдау» значит…',['перевозить','строить','продавать','писать'],0,'Керуендер тауар тасымалдады.'],
+    ['j','«Опасыздық» значит…',['предательство','дружба','торговля','мастерская'],0,'Опасыздықпен өшірген — вероломно стёрли.'],
+    ['j','«Ұстахана» — это…',['кузница, мастерская','библиотека','баня','дворец'],0,'Ұста = мастер.'],
+    ['j','«Жетістік» значит…',['достижение','неудача','путь','город'],0,'Адамзатты жетістікке жеткізді.'],
+    ['j','Соедини правильно: «өзен ... » (вдоль реки)',['бойы','асты','іші','үсті'],0,'Өзен бойы — вдоль реки. Это көмекші есім.'],
+['z','Кто автор «Жантаза»?',['Б. Ұзақов','Абай','Мағжан Жұмабаев','әл-Фараби'],0,'«Жантаза» — Б. Ұзақов.'],
+    ['z','Что значит «Жантаза»?',['чистая душа','большой дракон','белая юрта','старый колодец'],0,'Жан = душа, таза = чистый.'],
+    ['z','«Аждаһа» — это…',['дракон','лошадь','старик','юрта'],0,'Аждаһа = дракон, огромный змей.'],
+    ['z','Что делал дракон в ауле?',['глотал ягнят, верблюжат, жеребят','строил дома','пел песни','охранял аул'],0,'Қой-қозы, бота, тайды жұтады.'],
+    ['z','Откуда выползал дракон?',['из старого колодца у дома вдовы Күлән','из реки','из пещеры в горах','из юрты'],0,'Жесір әйелдің үйінің жанындағы ескі құдықтан.'],
+    ['z','Что взял Жанғожа, когда пошёл к дракону?',['қылыш (саблю)','садақ (лук)','кітап (книгу)','кесе (пиалу)'],0,'Жанғожа қылышын алып, солай қарай жүрді.'],
+    ['z','Что Жанғожа вылил на голову чудовища?',['молоко','воду','мёд','чай'],0,'Зерен кеседегі сүтті алып, мақұлықтың басына шашып жіберді.'],
+    ['z','Что сделало чудовище в конце?',['заплакало, повернуло назад и исчезло','съело Жанғожу','улетело в небо','стало конём'],0,'Көзінен жас тамшылап, кері бұрылып, жоқ боп кетті.'],
+    ['z','Сколько дней Жанғожа жил у ақсақала?',['2','7','1','10'],0,'Жанғожа екі күн ақсақалдың үйінде жатты.'],
+    ['z','Что Жанғожа увидел ночью по дороге домой?',['белую юрту с огнями','дракона','реку','город'],0,'Кенет алдынан ақ отау көрінді.'],
+    ['z','Какой была девушка?',['сұңғақ бойлы — высокая и стройная','маленькая и злая','старая','невидимая'],0,'Ханшадай киінген сұңғақ бойлы қыз.'],
+    ['z','«Кенет» значит…',['вдруг','медленно','вчера','далеко'],0,'Кенет = внезапно.'],
+    ['z','«Инабаттылықпен сәлем берді» значит…',['скромно, учтиво поздоровалась','громко закричала','убежала','заплакала'],0,'Инабаттылық = скромность, учтивость.'],
+    ['z','«Ақсақал» — это…',['уважаемый старейшина','дракон','сабля','колодец'],0,'Ақ = белый, сақал = борода.'],
+    ['z','«Ойбай...» в тексте — это…',['одағай (испуг)','существительное','числительное','имя героя'],0,'Көңіл күй одағайы: выражает испуг.'],
+    ['z','«Төрге озды» значит…',['прошёл на почётное место','вышел на улицу','лёг спать','сел на коня'],0,'Төр — почётное место в доме, напротив входа.']
+  ];
+  var qTopic='all',qs=[],qi=0,right=0,wrongList=[],box=document.getElementById('quizBox');
+  filters(document.getElementById('quizFilters'),function(t){qTopic=t;startQuiz()});
+  function startQuiz(list){qs=shuffle((list||Q.filter(function(q){return qTopic==='all'||q[0]===qTopic})).slice());qi=0;right=0;wrongList=[];renderQ()}
+  function renderQ(){if(qi>=qs.length)return renderEnd();var q=qs[qi];
+    var fixed=q[2]===G3||q[2].length===2;var order=fixed?q[2].map(function(_,i){return i}):shuffle(q[2].map(function(_,i){return i}));
+    box.innerHTML='<div class="qhead"><span class="pill">'+LBL[q[0]]+'</span><span class="ru">Вопрос '+(qi+1)+' из '+qs.length+' · верно: '+right+'</span></div><div class="bar"><i style="width:'+(qi/qs.length*100)+'%"></i></div>'+
+      '<div class="qtext">'+esc(q[1])+'</div><div class="opts">'+order.map(function(i){return '<button class="opt" data-i="'+i+'">'+esc(q[2][i])+'</button>'}).join('')+'</div><div id="qx"></div>';
+    [].forEach.call(box.querySelectorAll('.opt'),function(b){b.onclick=function(){answer(+b.dataset.i)}})}
+  function answer(i){var q=qs[qi],ok=i===q[3];if(ok)right++;else wrongList.push(q);
+    [].forEach.call(box.querySelectorAll('.opt'),function(b){b.disabled=true;var bi=+b.dataset.i;if(bi===q[3])b.classList.add('right');else if(bi===i)b.classList.add('wrong')});
+    document.getElementById('qx').innerHTML='<div class="explain"><b class="'+(ok?'okk':'no')+'">'+(ok?'Верно! Жарайсың! ':'Не совсем. ')+'</b>'+esc(q[4])+'</div><div class="row" style="margin-top:10px"><button class="btn" id="qnext">'+(qi+1<qs.length?'Дальше →':'Результат')+'</button></div>';
+    var n=document.getElementById('qnext');n.onclick=function(){qi++;renderQ()};n.focus()}
+  function renderEnd(){var pct=Math.round(right/qs.length*100);var msg=pct>=85?'Отлично! Тему понимаешь.':pct>=60?'Хорошо! Повтори ошибки, и будет отлично.':'Нормально для начала. Перечитай шпаргалку и пройди ещё раз.';
+    box.innerHTML='<div class="score">'+right+' / '+qs.length+'</div><p><b>'+msg+'</b></p>'+(wrongList.length?'<div class="explain"><b>Ошибки, повтори:</b><ul class="clean" style="margin-top:6px">'+wrongList.map(function(q){return '<li>'+esc(q[1])+' → <span class="kz">'+esc(q[2][q[3]])+'</span></li>'}).join('')+'</ul></div>':'')+
+      '<div class="row">'+(wrongList.length?'<button class="btn" id="qerr">Пройти только ошибки</button>':'')+'<button class="btn ghost" id="qagain">Начать заново</button></div>';
+    var e=document.getElementById('qerr');if(e)e.onclick=function(){startQuiz(wrongList.slice())};document.getElementById('qagain').onclick=function(){startQuiz()}}
+  startQuiz();
+
+  /* ---------- SOR ---------- */
+  function miniQuiz(el,items){
+    el.innerHTML=items.map(function(q,k){return '<div style="display:flex;flex-direction:column;gap:6px;margin-top:10px"><b class="'+(q[4]?'kz':'')+'">'+esc(q[0])+'</b><div class="opts">'+q[1].map(function(o,i){return '<button class="opt" data-k="'+k+'" data-i="'+i+'">'+esc(o)+'</button>'}).join('')+'</div><div class="ru" id="'+el.id+'-x'+k+'"></div></div>'}).join('');
+    [].forEach.call(el.querySelectorAll('.opt'),function(b){b.onclick=function(){var k=+b.dataset.k,i=+b.dataset.i,q=items[k];
+      [].forEach.call(el.querySelectorAll('.opt[data-k="'+k+'"]'),function(x){x.disabled=true;var xi=+x.dataset.i;if(xi===q[2])x.classList.add('right');else if(xi===i)x.classList.add('wrong')});
+      document.getElementById(el.id+'-x'+k).innerHTML=(i===q[2]?'<span class="ok-t">Верно. </span>':'<span class="bad-t">Неверно. </span>')+esc(q[3])}})}
+  miniQuiz(document.getElementById('sor1'),[
+    ['1. Мәтін не туралы?',['Ұлы Жібек жолы туралы','Абай туралы','климат туралы'],0,'О Великом Шёлковом пути.'],
+    ['2. Ұлы Жібек жолы қашан пайда болды?',['б.з.д. II ғасырдың ортасында','1904 жылы','XXI ғасырда'],0,'В середине II века до н. э.'],
+    ['3. Жол неге «Жібек жолы» деп аталды?',['негізгі тауар — қытай жібегі','жол жібектей жұмсақ болды','оны жібектен салды'],0,'Главный товар — шёлк из Китая.'],
+    ['4. Иә ма, жоқ па? «Ұлы Жібек жолы Қазақстан жерімен өткен жоқ»',['Иә','Жоқ'],1,'Неверно: путь проходил по земле Казахстана.'],
+    ['5. Мәтінде қай қала аталмаған?',['Тараз','Сауран','Шымкент'],2,'Шымкента в тексте нет.']
+  ]);
+  miniQuiz(document.getElementById('sor2'),[
+    ['Пай-пай, Отырар кітапханасының байлығына сөз жетпес!',['Пай-пай','кітапханасының','байлығына'],0,'Пай-пай — восхищение.',1],
+    ['Ұлы Даланың тарихы, ойпыр-ай, неткен терең еді!',['тарихы','ойпыр-ай','терең'],1,'Ойпыр-ай — удивление.',1],
+    ['Алақай, біз мұражайға барамыз!',['біз','мұражайға','Алақай'],2,'Алақай — радость.',1],
+    ['Әттеген-ай, Отырар жау қолынан қирады!',['Әттеген-ай','жау','қирады'],0,'Әттеген-ай — сожаление.',1]
+  ]);
+  miniQuiz(document.getElementById('sor3'),[
+    ['Тәйт!',G3,1,'Окрик → жекіру.',1],['Пәлі!',G3,0,'Восхищение → көңіл күй.',1],['Көс-көс',G3,2,'Зовут верблюда → шақыру.',1],
+    ['Қап!',G3,0,'Досада → көңіл күй.',1],['Жә!',G3,1,'«Хватит!» → жекіру.',1],['Шөре-шөре',G3,2,'Зовут козу → шақыру.',1]
+  ]);
+  miniQuiz(document.getElementById('sor4'),[
+    ['Где правильно?',['Япыр-ай, Ұлы Далада үш жүзден аса қала болған!','Япыр ай Ұлы Далада үш жүзден аса қала болған.','Япырай Ұлы Далада, үш жүзден аса қала болған?'],0,'Дефис в одағае, запятая после него, «!» в конце.'],
+    ['Где правильно?',['Бұл кітап пай пай қандай қызық!','Бұл кітап, пай-пай, қандай қызық!','Бұл кітап пай-пай қандай, қызық!'],1,'Одағай внутри предложения — запятые с двух сторон.'],
+    ['Где правильно?',['Па шіркін түркі жұртының өркениеті қандай зор болған.','Па, шіркін, түркі жұртының өркениеті қандай зор болған!','Па шіркін, түркі жұртының, өркениеті қандай зор болған!'],1,'Пример из учебника (стр. 69).']
+  ]);
+  miniQuiz(document.getElementById('sor5'),[
+    ['Аждаһа адамдарды жұтып қойды.',['Дұрыс','Бұрыс'],1,'Неверно: «Әзірге адамға ауыз салған жоқ» — людей пока не трогал.',1],
+    ['Жанғожа мақұлықтың басына сүт шашты.',['Дұрыс','Бұрыс'],0,'Верно: он вылил молоко из пиалы ему на голову.',1],
+    ['Мақұлық Жанғожаны жеңіп кетті.',['Дұрыс','Бұрыс'],1,'Неверно: чудовище заплакало, повернуло назад и исчезло.',1],
+    ['Жанғожа ақсақалдың үйінде екі күн жатты.',['Дұрыс','Бұрыс'],0,'Верно: екі күн — два дня.',1],
+    ['Ақ отаудан сұңғақ бойлы қыз шықты.',['Дұрыс','Бұрыс'],0,'Верно: высокая стройная девушка, одетая как ханша.',1]
+  ]);
+  var M=[['бекініс','крепость'],['дереккөз','источник'],['өркендеу','процветать'],['кәріз','подземный водопровод'],['тасымалдау','перевозить'],['опасыздық','предательство'],['жетістік','достижение']];
+  var el=document.getElementById('matchW'),opts=shuffle(M.map(function(m){return m[1]}));
+  el.innerHTML=M.map(function(m,i){return '<div class="mrow"><label class="kz" for="mw'+i+'">'+esc(m[0])+'</label><select id="mw'+i+'"><option value="">— выбери —</option>'+opts.map(function(o){return '<option>'+esc(o)+'</option>'}).join('')+'</select></div>'}).join('');
+  document.querySelector('[data-check="matchW"]').onclick=function(){var ok=0;M.forEach(function(m,i){var s=document.getElementById('mw'+i);var g=s.value===m[1];if(g)ok++;s.style.borderColor=g?'var(--ok)':'var(--bad)'});
+    document.getElementById('matchW-res').innerHTML='<b>'+ok+' из '+M.length+'</b>'+(ok<M.length?' · красные исправь':' · отлично!')};
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,799 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Тренажёр Арсена к СОР</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: one narrow column, like a school notebook; sticky tab bar; big tap targets for a phone */
+:root{
+  --bg:#f3f6f8; --paper:#ffffff; --ink:#14303d; --muted:#5b7280; --line:#d9e3e8;
+  --accent:#0a7ea4; --accent-soft:#e1f2f8; --sun:#f2b705; --sun-soft:#fff4cc;
+  --ok:#1f8a4c; --ok-soft:#e3f5ea; --bad:#c2410c; --bad-soft:#fdebe1;
+  --kz:#0a5f7d;
+  --f-display:"Unbounded", "Arial Black", system-ui, sans-serif;
+  --f-body:"Nunito", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1a20; --paper:#15252d; --ink:#e4eef2; --muted:#93a9b4; --line:#26404c;
+  --accent:#4cc3e8; --accent-soft:#143847; --sun:#f5c63a; --sun-soft:#3a3214;
+  --ok:#5fd28f; --ok-soft:#173a26; --bad:#ff9a6b; --bad-soft:#40241a; --kz:#7fd4f0; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1a20; --paper:#15252d; --ink:#e4eef2; --muted:#93a9b4; --line:#26404c;
+  --accent:#4cc3e8; --accent-soft:#143847; --sun:#f5c63a; --sun-soft:#3a3214;
+  --ok:#5fd28f; --ok-soft:#173a26; --bad:#ff9a6b; --bad-soft:#40241a; --kz:#7fd4f0; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:720px;margin:0 auto;padding-block:20px 60px}
+header.top{display:flex;flex-direction:column;gap:6px;padding-block:8px 14px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800}
+h1{font-family:var(--f-display);font-size:clamp(24px,6vw,34px);line-height:1.15;margin:0;text-wrap:balance}
+h1 span{color:var(--accent)}
+.lead{color:var(--muted);margin:0;max-width:60ch}
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:6px;
+  padding-block:10px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line)}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);font:inherit;font-weight:800;
+  font-size:15px;padding:9px 14px;border-radius:999px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tab:focus-visible,button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+section.panel{padding-top:18px;display:flex;flex-direction:column;gap:16px}
+h2{font-family:var(--f-display);font-size:21px;margin:8px 0 0;line-height:1.25;text-wrap:balance}
+h3{font-size:18px;margin:0;font-weight:800}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card p{margin:0}
+.tip{background:var(--sun-soft);border:1px solid var(--sun);border-radius:14px;padding:14px 16px}
+.tip p{margin:0}
+.kz{color:var(--kz);font-weight:800}
+.ru{color:var(--muted)}
+.vocab{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:4px 14px;margin:0}
+.vocab dt{color:var(--kz);font-weight:800}
+.vocab dd{margin:0;color:var(--ink)}
+.vocab dt,.vocab dd{padding-block:5px;border-bottom:1px dashed var(--line)}
+.formula{font-weight:800;background:var(--accent-soft);border-radius:10px;padding:10px 12px;overflow-x:auto}
+.pill{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.table{width:100%;border-collapse:collapse;font-size:16px}
+.table th,.table td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+.table th{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.scroll{overflow-x:auto}
+ul.clean{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.btn{font:inherit;font-weight:800;border-radius:12px;border:1.5px solid var(--ink);background:var(--ink);color:var(--bg);padding:12px 16px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.small{padding:8px 12px;font-size:15px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+/* quiz */
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.qtext{font-size:20px;font-weight:800;line-height:1.35}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{text-align:left;font:inherit;font-weight:700;padding:13px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.opt:hover{border-color:var(--accent)}
+.opt.right{background:var(--ok-soft);border-color:var(--ok)}
+.opt.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.opt[disabled]{cursor:default}
+.explain{border-radius:12px;padding:12px 14px;background:var(--accent-soft)}
+.explain b.okk{color:var(--ok)} .explain b.no{color:var(--bad)}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font:inherit;font-size:14px;font-weight:800;padding:7px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.score{font-family:var(--f-display);font-size:44px;line-height:1}
+/* flashcards */
+.flash{min-height:210px;border-radius:18px;border:1.5px solid var(--line);background:var(--paper);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:24px;cursor:pointer;gap:8px;user-select:none}
+.flash .big{font-family:var(--f-display);font-size:clamp(24px,7vw,34px);color:var(--kz);line-height:1.2;overflow-wrap:anywhere}
+.flash .hint{font-size:13px;color:var(--muted);font-weight:700}
+.flash.back{background:var(--sun-soft);border-color:var(--sun)}
+.flash.back .big{color:var(--ink);font-family:var(--f-body);font-weight:800}
+.reveal summary{cursor:pointer;font-weight:800;color:var(--accent)}
+.reveal[open] summary{margin-bottom:8px}
+.match{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+select{font:inherit;padding:8px;border-radius:10px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);max-width:100%}
+.mrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;border-bottom:1px dashed var(--line);padding-block:6px}
+.mrow .kz{min-width:0}
+.ok-t{color:var(--ok);font-weight:800}.bad-t{color:var(--bad);font-weight:800}
+.plan{counter-reset:s;display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.plan li{counter-increment:s;display:flex;gap:10px;align-items:flex-start}
+.plan li::before{content:counter(s);flex:0 0 28px;height:28px;border-radius:50%;background:var(--ink);color:var(--bg);font-weight:800;display:grid;place-items:center;font-size:14px}
+.xw{display:grid;grid-template-columns:repeat(7,40px);grid-auto-rows:40px;gap:3px;width:max-content}
+.xc{position:relative;border:1.5px solid var(--ok);background:var(--paper);display:grid;place-items:center;font-weight:800;font-size:18px;color:var(--ink)}
+.xc.key{background:var(--sun-soft);border-color:var(--sun)}
+.xc i{position:absolute;top:1px;left:3px;font-size:10px;font-style:normal;color:var(--muted)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Қазақ тілі · 7 сынып · страницы 1–52</div>
+    <h1>Арсен, готовимся к <span>СОР</span> без паники</h1>
+    <p class="lead">Всё объяснено по-русски. Казахские слова выделены цветом, рядом перевод. Начни со шпаргалки, потом карточки, потом квиз.</p>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Разделы">
+    <button class="tab" role="tab" id="t-start" aria-selected="true" data-p="start">С чего начать</button>
+    <button class="tab" role="tab" id="t-t1" aria-selected="false" data-p="t1">Тема 1: язык</button>
+    <button class="tab" role="tab" id="t-t2" aria-selected="false" data-p="t2">Тема 2: время</button>
+    <button class="tab" role="tab" id="t-t3" aria-selected="false" data-p="t3">Тема 3: климат</button>
+    <button class="tab" role="tab" id="t-cards" aria-selected="false" data-p="cards">Карточки</button>
+    <button class="tab" role="tab" id="t-quiz" aria-selected="false" data-p="quiz">Квиз</button>
+    <button class="tab" role="tab" id="t-sor" aria-selected="false" data-p="sor">Пробный СОР</button>
+  </nav>
+
+  <!-- START -->
+  <section class="panel" id="p-start">
+    <h2>Что вообще будет на СОР</h2>
+    <div class="card">
+      <p>До 52-й страницы в учебнике три темы:</p>
+      <table class="table">
+        <tr><th>Тема</th><th>По-русски</th><th>Грамматика</th></tr>
+        <tr><td class="kz">1. Мемлекеттік тіл — қазақ тілі</td><td>Государственный язык — казахский</td><td>Көмекші есім, екпін, виды зат есім</td></tr>
+        <tr><td class="kz">2. Уақыт — ұлы күш</td><td>Время — великая сила (Абай)</td><td>Сын есім шырайлары (3 степени прилагательных), время по часам</td></tr>
+        <tr><td class="kz">3. Жердегі климаттық өзгерістер</td><td>Изменения климата на Земле (только первый урок, стр. 47–51)</td><td>Топтау сан есімі (екіден, он-оннан)</td></tr>
+      </table>
+    </div>
+    <div class="tip"><p><b>Как выглядят задания СОР.</b> Обычно дают короткий текст (прочитать или прослушать) и спрашивают: о чём текст, какая главная мысль, какой это тип текста, верно или неверно. Плюс задание на грамматику (в теме 2 это степени прилагательных: <span class="kz">шырай</span>) и написать пару своих предложений. Всё это есть во вкладке «Пробный СОР».</p></div>
+    <h2>План на 3 вечера</h2>
+    <div class="card">
+      <ol class="plan">
+        <li><span><b>Вечер 1.</b> Прочитай «Тема 1» и «Тема 2». Не зубри, просто пойми. Потом карточки (15 минут).</span></li>
+        <li><span><b>Вечер 2.</b> Квиз «Все темы». Ошибки не страшны: под каждым ответом объяснение. Пройди его 2 раза.</span></li>
+        <li><span><b>Вечер 3.</b> «Пробный СОР» и выучи 4 готовые фразы («Менің ойымша...»). Они подходят почти к любому заданию.</span></li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Шпаргалка по словам из заданий</h3>
+      <p class="ru">Эти слова встречаются в самих вопросах. Если их знаешь, уже легче.</p>
+      <dl class="vocab">
+        <dt>Мәтін</dt><dd>текст</dd>
+        <dt>Тақырып</dt><dd>тема, заголовок</dd>
+        <dt>Негізгі ой</dt><dd>главная мысль</dd>
+        <dt>Сөйлем</dt><dd>предложение</dd>
+        <dt>Сұрақ / жауап</dt><dd>вопрос / ответ</dd>
+        <dt>Дұрыс / бұрыс</dt><dd>правильно / неправильно</dd>
+        <dt>Иә / жоқ</dt><dd>да / нет</dd>
+        <dt>Жаз</dt><dd>напиши</dd>
+        <dt>Оқы</dt><dd>прочитай</dd>
+        <dt>Тыңда</dt><dd>послушай</dd>
+        <dt>Айт</dt><dd>скажи</dd>
+        <dt>Толықтыр</dt><dd>дополни</dd>
+        <dt>Сәйкестендір</dt><dd>сопоставь, соедини</dd>
+        <dt>Таңда</dt><dd>выбери</dd>
+        <dt>Көп нүктенің орнына</dt><dd>вместо многоточия</dd>
+        <dt>Мақал-мәтел</dt><dd>пословицы и поговорки</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- TOPIC 1 -->
+  <section class="panel" id="p-t1" hidden>
+    <h2>Тема 1. Казахский язык — государственный</h2>
+    <div class="card">
+      <span class="pill">Главные факты</span>
+      <ul class="clean">
+        <li><span class="kz">Қазақ тілі — мемлекеттік тіл.</span> Казахский — государственный язык (статья 4 закона о языках).</li>
+        <li><span class="kz">Орыс тілі — ресми тіл.</span> Русский — официальный язык.</li>
+        <li><span class="kz">Ағылшын тілі — халықаралық тіл.</span> Английский — международный язык.</li>
+        <li>Казахский относится к <span class="kz">түркі тілдері</span> (тюркские). Поэтому казаху легко понять узбекский, каракалпакский.</li>
+        <li>Русский относится к <span class="kz">славян тілдері</span> (славянские): украинский, белорусский, польский, чешский.</li>
+        <li>Чтобы говорить на чужом языке, нужно знать около <b>2000</b> активных слов. <b>5000</b> слов — «открыта дверь к информации».</li>
+        <li>Чтобы выучить другой язык, сначала хорошо знай <b>родной</b> (<span class="kz">ана тілі</span>).</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="pill">Тексты из учебника</span>
+      <h3>«Талаптыға нұр жауар» (Старательному везёт)</h3>
+      <p><b>Анна</b> — <span class="kz">талапты, ақылды, көптілді оқушы</span> (старательная, умная ученица, знает много языков). Родной язык у неё русский, но она хорошо говорит по-казахски и по-английски. Собрала материал о поэте <b>Мұқағали Мақатаев</b>, выиграла школьный конкурс проектов и нашла там друзей. Мечтает участвовать в международных конкурсах.</p>
+      <h3>Мағжан Жұмабаев, стихотворение «Қазақ тілі»</h3>
+      <p>Мағжан — великий поэт мирового уровня. Написал поэмы <span class="kz">«Батыр Баян», «Қорқыт», «Ертегі»</span> и учебник <span class="kz">«Педагогика»</span>. В его стихах — любовь к Родине и <span class="kz">ұлттық рух</span> (национальный дух).</p>
+      <p><b>Смысл стихотворения:</b> народ пережил тяжёлые времена, многое потеряно. Но остался родной язык — он как звезда, и он соберёт народ вместе. Язык <span class="kz">таза, терең, өткір, күшті, кең</span> (чистый, глубокий, острый, сильный, широкий).</p>
+      <p>Ещё стихи о языке: <b>Дихан Әбілев</b> «Туған тілім» и <b>Несіпбек Айтұлы</b> «Ана тілім». Общая мысль у всех: забыть родной язык — значит забыть мать и свой народ.</p>
+      <h3>«Біз отбасымызбен мемлекеттік тілде сөйлейміз»</h3>
+      <p>Семья из текста: <span class="kz">атам</span> (дедушка) читает Мағжана, <span class="kz">әжем</span> (бабушка) — Мұқағали, <span class="kz">әкем</span> (папа) — <span class="kz">жолсерік</span> (проводник в поезде), <span class="kz">анам</span> (мама) — <span class="kz">сатушы</span> (продавец), <span class="kz">ағам</span> (старший брат) — <span class="kz">тілмаш</span> (переводчик) в министерстве, <span class="kz">жеңгем</span> (жена брата) учит французский, <span class="kz">інім</span> (младший брат) учится в <span class="kz">аралас мектеп</span> (смешанная школа).</p>
+      <h3>«Тіл табыса білу — өнер»</h3>
+      <p>Уметь находить общий язык с людьми — это искусство. У казахов: к родителям обращаются на <span class="kz">«сіз»</span> (на «вы»), старших не называют по имени, а говорят <span class="kz">ата, апа, аға, апай, тәте</span>. Старшие ласково зовут младших <span class="kz">айналайын, қарағым, шырағым, бауырым, балам</span>.</p>
+    </div>
+
+    <h2>Грамматика темы 1</h2>
+    <div class="card">
+      <span class="pill">1. Көмекші есім</span>
+      <p>Это как русские предлоги «на, под, возле», только <b>стоят после слова</b>. Схема простая:</p>
+      <div class="formula">кто/что + -ның/-нің/-дың/-тың + көмекші есім + -ы/-і<br><span class="kz">үй</span> → <span class="kz">үйдің қасы</span> = возле дома</div>
+      <p>Часто ещё добавляется <span class="kz">-нда/-нде</span> (= «в/на»): <span class="kz">үстелдің үстінде</span> — на столе.</p>
+      <dl class="vocab">
+        <dt>алды</dt><dd>перед, впереди</dd>
+        <dt>арты</dt><dd>за, позади</dd>
+        <dt>асты</dt><dd>под</dd>
+        <dt>үсті</dt><dd>на, над</dd>
+        <dt>іші</dt><dd>внутри</dd>
+        <dt>сырты</dt><dd>снаружи</dd>
+        <dt>қасы / жаны</dt><dd>рядом, возле</dd>
+        <dt>маңы</dt><dd>около, поблизости</dd>
+        <dt>бойы</dt><dd>вдоль</dd>
+        <dt>ортасы</dt><dd>середина</dd>
+        <dt>арасы</dt><dd>между</dd>
+        <dt>басы / соңы</dt><dd>начало / конец</dd>
+        <dt>түбі / шеті</dt><dd>дно, низ / край</dd>
+        <dt>төңірегі</dt><dd>вокруг</dd>
+      </dl>
+      <p class="ru">Примеры из учебника: <span class="kz">Өнер алды — қызыл тіл.</span> <span class="kz">Курстың соңында сертификат беріледі</span> (в конце курса дают сертификат).</p>
+    </div>
+    <div class="card">
+      <span class="pill">2. Екпін (ударение)</span>
+      <p><b>Сөз екпіні</b> — ударение в слове. В казахском почти всегда на <b>последний слог</b>: бала<b>лар</b>, мек<b>теп</b>, оқу<b>шы</b>.</p>
+      <p><b>Ой екпіні</b> — логическое ударение: голосом выделяем самое важное слово в предложении. <span class="kz">Мен <b>мемлекеттік</b> тілде сөйлеймін.</span></p>
+    </div>
+    <div class="card">
+      <span class="pill">3. Виды зат есім (существительных)</span>
+      <div class="scroll"><table class="table">
+        <tr><th>Вид</th><th>Что значит</th><th>Пример</th></tr>
+        <tr><td class="kz">Дара</td><td>простое, одно слово</td><td class="kz">әке, тіл</td></tr>
+        <tr><td class="kz">Күрделі</td><td>сложное, из 2+ слов</td><td class="kz">ата-ана, Қазақстан Республикасы</td></tr>
+        <tr><td class="kz">Жалпы</td><td>нарицательное</td><td class="kz">тіл, қала</td></tr>
+        <tr><td class="kz">Жалқы</td><td>собственное (с большой буквы)</td><td class="kz">Анна, Қазақстан</td></tr>
+        <tr><td class="kz">Деректі</td><td>конкретное: можно увидеть, потрогать</td><td class="kz">әже, кітап</td></tr>
+        <tr><td class="kz">Дерексіз</td><td>абстрактное: нельзя потрогать</td><td class="kz">мүмкіндік, білім</td></tr>
+      </table></div>
+    </div>
+    <div class="card">
+      <span class="pill">Пословицы про язык</span>
+      <dl class="vocab">
+        <dt>Өнер алды — қызыл тіл.</dt><dd>Главное искусство — красноречие.</dd>
+        <dt>Жеті жұрттың тілін біл, жеті түрлі ілім біл.</dt><dd>Знай языки семи народов и семь наук.</dd>
+        <dt>Ана сүті бой өсіреді, ана тілі ой өсіреді.</dt><dd>Мамино молоко растит тело, родной язык — ум.</dd>
+        <dt>Тіл — білімнің кілті.</dt><dd>Язык — ключ к знаниям.</dd>
+        <dt>Көп сөз — күміс, аз сөз — алтын.</dt><dd>Много слов — серебро, мало слов — золото.</dd>
+        <dt>Тіл — адам ойының айнасы.</dt><dd>Язык — зеркало мыслей человека.</dd>
+        <dt>Ойнап сөйлесең де, ойлап сөйле.</dt><dd>Даже в шутку говори, подумав.</dd>
+        <dt>Сөйлей-сөйлей шешен боласың.</dt><dd>Говоря, станешь красноречивым.</dd>
+        <dt>Өзге тілдің бәрін біл, өз тіліңді құрметте.</dt><dd>Знай все языки, но уважай свой.</dd>
+        <dt>Талаптыға нұр жауар.</dt><dd>Старательному — удача.</dd>
+        <dt>Ізденген жетер мұратқа.</dt><dd>Кто ищет, тот достигнет цели.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- TOPIC 2 -->
+  <section class="panel" id="p-t2" hidden>
+    <h2>Тема 2. Уақыт — ұлы күш (Время — великая сила)</h2>
+    <div class="card">
+      <span class="pill">Уроки темы (стр. 27–46)</span>
+      <dl class="vocab">
+        <dt>Уақыт — сый</dt><dd>Время — подарок</dd>
+        <dt>Уақыттың бос өткені...</dt><dd>Когда время проходит зря...</dd>
+        <dt>Уақытты бағалайсың ба?</dt><dd>Ценишь ли ты время?</dd>
+        <dt>Өмір, дүние дегенің ағып жатқан су екен</dt><dd>Жизнь и мир — как текущая вода</dd>
+        <dt>Бір минут — бір кісінің өмірі</dt><dd>Одна минута — жизнь человека</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="pill">Абай Құнанбаев · стр. 42</span>
+      <h3>«Сағаттың шықылдағы емес ермек»</h3>
+      <p class="kz">Сағаттың шықылдағы емес ермек,<br>Һәмиша өмір өтпек, ол білдірмек.<br>Бір минут бір кісінің өміріне ұқсас,<br>Өтті, өлді, тағдыр жоқ қайта келмек.</p>
+      <p><b>По-русски по смыслу:</b> тиканье часов — не забава. Оно напоминает, что жизнь всё время проходит. Одна минута похожа на жизнь человека: прошла — и умерла, назад не вернётся.</p>
+      <p class="kz">Сағаттың өзі — ұры шықылдаған,<br>Өмірді білдірмеген, күнде ұрлаған.</p>
+      <p><b>По смыслу:</b> сами часы — это тикающий <b>вор</b> (<span class="kz">ұры</span>): каждый день незаметно крадут жизнь.</p>
+      <ul class="clean">
+        <li><b>Главная мысль:</b> время уходит и не возвращается, поэтому его нельзя тратить зря.</li>
+        <li>С чем Абай сравнивает часы? С <span class="kz">ұры</span> — с вором.</li>
+        <li><span class="kz">«Өткен өмір белгісі — осы сыбдыр»</span> — тиканье часов — знак прошедшей жизни.</li>
+        <li>Дальше в стихе: дни складываются в месяц, двенадцать месяцев — в год, годы старят человека.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <span class="pill">Текст про Абая · стр. 39</span>
+      <ul class="clean">
+        <li>Абай писал стихи с <b>14 лет</b> (<span class="kz">он төрт жасынан</span>).</li>
+        <li>Учился в Семее в медресе <b>Ахмет Риза</b>, выучил <b>арабский и персидский</b> (<span class="kz">араб, парсы тілдері</span>). Время зря не тратил.</li>
+        <li>Потом учился в <b>русской школе</b> в Семее и много читал в библиотеке имени <b>Гоголя</b>. Там познакомился с <b>Е. П. Михаэлисом</b>.</li>
+        <li>Через русскую культуру познакомился с европейской.</li>
+        <li>Учил молодёжь: уважать старших, быть верным в дружбе, учиться и использовать время с пользой.</li>
+        <li><span class="kz">«Сен де бір кірпіш дүниеге, кетігін тап та, бар, қалан!»</span> — «Ты тоже кирпич в этом мире: найди своё место и встань в стену». Смысл: найди своё место в жизни.</li>
+        <li>Жалел, что в юности мало учился: <span class="kz">«Жасымда ғылым бар деп ескермедім...»</span></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <span class="pill">Как казахи называли время суток · стр. 28</span>
+      <div class="scroll"><table class="table">
+        <tr><th>Час</th><th>Название</th><th>Что это</th></tr>
+        <tr><td>6</td><td class="kz">таңсәрі</td><td>рассвет, начинает светать</td></tr>
+        <tr><td>7</td><td class="kz">ертеңгілік</td><td>утро</td></tr>
+        <tr><td>8</td><td class="kz">күн шыға</td><td>солнце встаёт</td></tr>
+        <tr><td>9</td><td class="kz">күн көтеріле</td><td>солнце поднимается</td></tr>
+        <tr><td>10</td><td class="kz">сәске</td><td>предполуденное время</td></tr>
+        <tr><td>11 / 12 / 13</td><td class="kz">сәске түс / талма түс / тал түс</td><td>полдень (тал түс — солнце прямо над головой)</td></tr>
+        <tr><td>14–15</td><td class="kz">түс ауа</td><td>после полудня</td></tr>
+        <tr><td>16 / 17</td><td class="kz">кіші бесін / ұлы бесін</td><td>малое и большое «бесін»</td></tr>
+        <tr><td>18</td><td class="kz">күн еңкейе</td><td>солнце клонится</td></tr>
+        <tr><td>19</td><td class="kz">екінті</td><td>предвечерье</td></tr>
+        <tr><td>20</td><td class="kz">күн бата</td><td>закат</td></tr>
+        <tr><td>20:30–21</td><td class="kz">ақшам</td><td>вечер</td></tr>
+        <tr><td>22</td><td class="kz">іңір</td><td>сумерки</td></tr>
+        <tr><td>23–24</td><td class="kz">ымырт</td><td>темнота, глубокие сумерки</td></tr>
+      </table></div>
+      <p class="ru">Хватит запомнить самые частые: <span class="kz">таңсәрі, тал түс, күн бата, ақшам, ымырт</span>.</p>
+    </div>
+
+    <div class="card">
+      <span class="pill">Сағат неше? (Который час?) · стр. 33</span>
+      <p>Всего две схемы:</p>
+      <div class="formula">кетті = прошло ПОСЛЕ: <span class="kz">оннан жиырма минут кетті</span> = 10:20<br>қалды = осталось ДО: <span class="kz">алтыға бес минут қалды</span> = 5:55</div>
+      <dl class="vocab">
+        <dt>Сағат жеті</dt><dd>7:00</dd>
+        <dt>Тура он екі болды</dt><dd>ровно 12:00</dd>
+        <dt>Тоғыз жарым</dt><dd>9:30 (жарым = половина)</dd>
+        <dt>Алтыдан он бес минут кетті</dt><dd>6:15 (или 18:15)</dd>
+        <dt>Екіден он үш минут кетті</dt><dd>2:13</dd>
+        <dt>Тоғызға 25 минут қалды</dt><dd>8:35</dd>
+        <dt>Беске жиырма минут қалды</dt><dd>4:40 (16:40)</dd>
+        <dt>Екіге он бес минут қалды</dt><dd>1:45 (13:45)</dd>
+      </dl>
+      <p class="ru">Числа: бір 1, екі 2, үш 3, төрт 4, бес 5, алты 6, жеті 7, сегіз 8, тоғыз 9, он 10, он бір 11, он екі 12, жиырма 20, отыз 30.</p>
+    </div>
+
+    <div class="card">
+      <span class="pill">Слова темы</span>
+      <dl class="vocab">
+        <dt>уақыт</dt><dd>время</dd>
+        <dt>сағат</dt><dd>часы; час</dd>
+        <dt>уақыт өлшемі</dt><dd>мера времени</dd>
+        <dt>тәулік / апта</dt><dd>сутки / неделя</dd>
+        <dt>өмір</dt><dd>жизнь</dd>
+        <dt>сый</dt><dd>подарок</dd>
+        <dt>бағалау</dt><dd>ценить</dd>
+        <dt>үнемдеу</dt><dd>экономить, беречь</dd>
+        <dt>тиімді</dt><dd>эффективно, с пользой</dd>
+        <dt>өнімді</dt><dd>продуктивно</dd>
+        <dt>жоспарлау</dt><dd>планировать</dd>
+        <dt>кедергі</dt><dd>помеха</dd>
+        <dt>басқару</dt><dd>руководить</dd>
+        <dt>орындау</dt><dd>выполнять</dd>
+        <dt>асығыс</dt><dd>спешка, торопливый</dd>
+        <dt>тапшы</dt><dd>нехватка, дефицит</dd>
+        <dt>санасу</dt><dd>считаться (с кем-то)</dd>
+        <dt>зая кету / босқа өткізу</dt><dd>пропасть зря / провести впустую</dd>
+        <dt>өкініш</dt><dd>сожаление</dd>
+        <dt>қайрат-жігер</dt><dd>сила воли, энергия</dd>
+        <dt>күресу</dt><dd>бороться</dd>
+        <dt>жас ұрпақ</dt><dd>молодое поколение</dd>
+        <dt>ермек</dt><dd>забава</dd>
+        <dt>ұры / ұрлау</dt><dd>вор / красть</dd>
+        <dt>заман</dt><dd>эпоха, время</dd>
+        <dt>нақыл сөз</dt><dd>изречение, афоризм</dd>
+        <dt>кешігу</dt><dd>опаздывать</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <span class="pill">Изречения про время</span>
+      <dl class="vocab">
+        <dt>Уақыттың бос өткені — өмірдің бос кеткені.</dt><dd>Потерянное время — потерянная жизнь.</dd>
+        <dt>Уақыт — адам өмірі.</dt><dd>Время — это жизнь человека.</dd>
+        <dt>Ұқыптының уақыты мол.</dt><dd>У аккуратного времени много.</dd>
+        <dt>Уақыт — өткір алмас.</dt><dd>Время — острый клинок.</dd>
+        <dt>Тарих — төреші, уақыт — сыншы.</dt><dd>История — судья, время — критик.</dd>
+        <dt>Уақытты босқа жіберіп алудан артық өкініш жоқ. (Гёте)</dt><dd>Нет сожаления сильнее, чем о зря потерянном времени.</dd>
+        <dt>Уақыт — әркімнің өмірлік капиталы.</dt><dd>Время — жизненный капитал каждого.</dd>
+      </dl>
+      <p class="ru">Враги времени (стр. 37): <span class="kz">мақсат қоймау</span> (не ставить цель), <span class="kz">жоспарлай алмау</span> (не уметь планировать), <span class="kz">асығыс шешім қабылдау</span> (поспешные решения), <span class="kz">жоқ деп айта алмау</span> (не уметь сказать «нет»).</p>
+    </div>
+
+    <h2>Грамматика темы 2: шырайлар (степени прилагательных)</h2>
+    <div class="card">
+      <p><b>Сын есім</b> — прилагательное (какой?). <b>Шырай</b> — степень. В учебнике их <b>три</b>:</p>
+      <div class="scroll"><table class="table">
+        <tr><th>Шырай</th><th>По-русски</th><th>Пример</th></tr>
+        <tr><td class="kz">1. Жай</td><td>обычная, просто слово</td><td class="kz">қызыл, биік, жақсы</td></tr>
+        <tr><td class="kz">2. Салыстырмалы</td><td>сравнительная: «краснее» или «красноватый» (чуть больше или чуть меньше)</td><td class="kz">қызылырақ, қызылдау, қызғылт</td></tr>
+        <tr><td class="kz">3. Күшейтпелі</td><td>усилительная: «очень-очень»</td><td class="kz">қып-қызыл, өте қызыл, ең биік</td></tr>
+      </table></div>
+    </div>
+    <div class="card">
+      <span class="pill">Салыстырмалы · окончания</span>
+      <ul class="clean">
+        <li><b>-ырақ/-ірек</b> (после согласной) и <b>-рақ/-рек</b> (после гласной): <span class="kz">қаттырақ, жақсырақ, үлкенірек, кішірек</span></li>
+        <li><b>-лау/-леу, -дау/-деу, -тау/-теу</b>: <span class="kz">жасылдау, қызылдау, биіктеу, аласалау</span></li>
+        <li>Только для некоторых слов (чаще цвета): <span class="kz">-ғылт, -қылт, -ғыл</span> (сарғылт, қызғылт), <span class="kz">-шыл, -шіл</span> (ақшыл, көкшіл), <span class="kz">-ғыш, -ілдір</span> (сарғыш, көгілдір), <span class="kz">-қай, -ша, -ше</span> (қоңырқай, ұзынша, көкше)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="pill">Күшейтпелі · два способа</span>
+      <ul class="clean">
+        <li><b>Повтор первого слога + п</b>, через дефис: <span class="kz">сап-сары, қып-қызыл, біп-биік, тап-таза, жап-жасыл</span></li>
+        <li><b>Слова-усилители перед прилагательным</b>: <span class="kz">өте, ең, аса, тым, нағыз, тіпті</span>. <span class="kz">Нағыз батыр, ең биік, тым алыс, өте күшті.</span></li>
+      </ul>
+      <div class="tip"><p><b>Ловушка!</b> <span class="kz">Ақ</span> и <span class="kz">көк</span> пишутся слитно: <span class="kz">аппақ</span> (не «ап-ақ»), <span class="kz">көкпеңбек</span> (не «көп-көк»).</p></div>
+      <p class="ru">В старых учебниках была ещё «асырмалы шырай» (с <span class="kz">ең</span>). Сейчас учёные относят её к күшейтпелі, и в вашем учебнике так и написано (стр. 35).</p>
+    </div>
+    <div class="tip"><p><b>Лайфхак:</b> есть <b>дефис с «п»</b> или слова <b>өте, ең, тым, аса, нағыз</b> → күшейтпелі. Есть <b>-рақ/-рек, -лау/-леу, -ғылт, -шыл, -ғыш</b> → салыстырмалы. Ничего нет → жай.</p></div>
+  </section>
+
+  <!-- TOPIC 3 -->
+  <section class="panel" id="p-t3" hidden>
+    <h2>Тема 3 (начало). Жердегі климаттық өзгерістер</h2>
+    <div class="card">
+      <p>Пройден урок <span class="kz">«Ғаламдық экология мәселелері»</span> — глобальные экологические проблемы (стр. 47–51). Тема называется «Изменения климата на Земле», роман Д. Дефо «Робинзон Крузо» будет дальше.</p>
+      <ul class="clean">
+        <li><span class="kz">Климат</span> — многолетний режим погоды в определённом месте.</li>
+        <li>Изменение климата влияет на природу, сельское хозяйство, жизнь и здоровье людей.</li>
+        <li>Экологические проблемы бывают <span class="kz">ғаламдық, аймақтық, ұлттық</span> (глобальные, региональные, национальные).</li>
+        <li>Опасные проблемы: разрушение <span class="kz">озон қабаты</span> (озоновый слой), загрязнение атмосферы, океана, воды, отходы нефти.</li>
+        <li>Их можно решить только вместе, всем странам, при руководстве <span class="kz">БҰҰ</span> (ООН).</li>
+        <li><b>Арал теңізі:</b> вода ушла (<span class="kz">суы тартылды</span>), дно высохло, это <span class="kz">экологиялық апатты аймақ</span> (зона экологического бедствия). Ветер разносит вредную солёную пыль (<span class="kz">тұзды шаң</span>).</li>
+        <li>Загрязнение воздуха — мировая проблема, потому что <span class="kz">ауада мемлекеттік шекара жоқ</span> (у воздуха нет границ).</li>
+        <li>За загрязнение природы назначают <span class="kz">айыппұл</span> (штраф).</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="pill">Слова темы</span>
+      <dl class="vocab">
+        <dt>ғаламдық</dt><dd>глобальный, всемирный</dd>
+        <dt>ғаламдық жылыну</dt><dd>глобальное потепление</dd>
+        <dt>климаттың өзгеруі</dt><dd>изменение климата</dd>
+        <dt>қоршаған орта</dt><dd>окружающая среда</dd>
+        <dt>ластану</dt><dd>загрязнение</dd>
+        <dt>ауа райы</dt><dd>погода</dd>
+        <dt>қатерлі</dt><dd>опасный</dd>
+        <dt>құбылыс</dt><dd>явление</dd>
+        <dt>шаң</dt><dd>пыль</dd>
+        <dt>жарылу</dt><dd>разрыв, взрыв</dd>
+        <dt>айыппұл</dt><dd>штраф</dd>
+        <dt>талқылау</dt><dd>обсуждать</dd>
+        <dt>үндеу</dt><dd>обращение, призыв</dd>
+        <dt>мұнай қалдықтары</dt><dd>отходы нефти</dd>
+        <dt>мұхит / теңіз</dt><dd>океан / море</dd>
+        <dt>апат</dt><dd>бедствие, катастрофа</dd>
+        <dt>ауылшаруашылығы</dt><dd>сельское хозяйство</dd>
+      </dl>
+    </div>
+    <h2>Грамматика темы 3: топтау сан есімі</h2>
+    <div class="card">
+      <p><b>Топтау сан есімі</b> — числительное, которое показывает «по сколько» (группами). Вопросы: <span class="kz">нешеден? қаншадан?</span> (по сколько?)</p>
+      <div class="formula">число + <span class="kz">-дан/-ден/-тан/-тен/-нан/-нен</span><br><span class="kz">екі → екіден</span> (по два), <span class="kz">бес → бестен</span> (по пять), <span class="kz">он → оннан</span> (по десять)</div>
+      <dl class="vocab">
+        <dt>екіден, төрттен, жүзден, бестен</dt><dd>простые: по два, по четыре, по сто, по пять</dd>
+        <dt>екі-екіден, он-оннан, жүз-жүзден, он бестен</dt><dd>сложные: по два, по десять, по сто, по пятнадцать</dd>
+      </dl>
+      <p class="ru">Пример из учебника: <span class="kz">Біз екі-екіден бірігіп жұптық жұмыс орындадық.</span> — Мы работали по двое.</p>
+    </div>
+  </section>
+
+  <!-- FLASHCARDS -->
+  <section class="panel" id="p-cards" hidden>
+    <h2>Карточки</h2>
+    <p class="ru" style="margin:0">Нажми на карточку, чтобы перевернуть. Потом честно отметь: знаю или ещё нет. «Не знаю» вернутся снова.</p>
+    <div class="filters" id="cardFilters"></div>
+    <div class="flash" id="flash" tabindex="0" role="button" aria-label="Перевернуть карточку">
+      <div class="big" id="flashBig"></div>
+      <div class="hint" id="flashHint">нажми, чтобы увидеть перевод</div>
+    </div>
+    <div class="row">
+      <button class="btn ghost" id="cardNo">Ещё не знаю</button>
+      <button class="btn" id="cardYes">Знаю ✓</button>
+      <span class="ru" id="cardCount"></span>
+    </div>
+    <div class="row"><button class="btn ghost small" id="cardSwap">Показывать сначала русский</button></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="panel" id="p-quiz" hidden>
+    <h2>Квиз</h2>
+    <div class="filters" id="quizFilters"></div>
+    <div class="card" id="quizBox"></div>
+  </section>
+
+  <!-- SOR -->
+  <section class="panel" id="p-sor" hidden>
+    <h2>Пробный СОР</h2>
+    <p class="ru" style="margin:0">Задания такого же типа, как на настоящем СОР. Сначала сам, потом смотри ответ.</p>
+
+    <div class="card">
+      <span class="pill">Часть 1 · Текст из учебника (стр. 45)</span>
+      <h3>Мәтінді оқы (прочитай текст)</h3>
+      <p class="kz" style="font-weight:600">Уақыт — адам өмірінің ақшалай құны. Уақыт — әркімнің өмірлік капиталы. Адамның босқа кеткен әрбір минуты отқа жаққан теңгемен тең. Байларға да, қарапайым адамдарға да берілетін мерзім — тәулігіне жиырма төрт сағат. Кім уақытын бағалай білсе, сол ғана табысты адамдардың қатарына қосыла алады. Адам күнделікті жоспарын құрады. Сол арқылы ең жаман дерт — еріншектікті жеңеді.</p>
+      <details class="reveal"><summary>Показать перевод</summary>
+        <p>Время — это денежная цена жизни человека. Время — жизненный капитал каждого. Каждая зря потраченная минута — как монета, брошенная в огонь. И богатым, и простым людям дано одинаково — 24 часа в сутки. Только тот, кто умеет ценить время, может стать успешным. Человек составляет план на каждый день. Так он побеждает самую страшную болезнь — лень.</p>
+      </details>
+      <div id="sor1"></div>
+    </div>
+
+    <div class="card">
+      <span class="pill">Часть 2 · Шырай</span>
+      <h3>Какая это степень? (как задание 4 на стр. 39)</h3>
+      <div id="sor3"></div>
+    </div>
+
+    <div class="card">
+      <span class="pill">Часть 3 · Вставь слово (стр. 45)</span>
+      <div id="sor4"></div>
+    </div>
+
+    <div class="card">
+      <span class="pill">Часть 4 · Сағат неше?</span>
+      <h3>Соедини время и слова</h3>
+      <div class="match" id="matchTime"></div>
+      <div class="row"><button class="btn small" data-check="matchTime">Проверить</button><span id="matchTime-res"></span></div>
+    </div>
+
+    <div class="card">
+      <span class="pill">Часть 5 · Время суток по-казахски</span>
+      <h3>Соедини название и час</h3>
+      <div class="match" id="matchDay"></div>
+      <div class="row"><button class="btn small" data-check="matchDay">Проверить</button><span id="matchDay-res"></span></div>
+    </div>
+
+    <div class="card">
+      <span class="pill">Часть 6 · Тема 1 и 3</span>
+      <div id="sor5"></div>
+    </div>
+
+    <div class="card">
+      <span class="pill">Часть 7 · Пишем сами</span>
+      <h3>4 фразы, которые спасут любое письменное задание</h3>
+      <p>Это формула <b>ПОПС</b> из учебника: позиция → объяснение → пример → вывод.</p>
+      <dl class="vocab">
+        <dt>Менің ойымша, ...</dt><dd>По-моему, ...</dd>
+        <dt>Себебі ...</dt><dd>Потому что ...</dd>
+        <dt>Мысалы, ...</dt><dd>Например, ...</dd>
+        <dt>Сондықтан ...</dt><dd>Поэтому ...</dd>
+      </dl>
+      <details class="reveal"><summary>Готовый ответ: «Уақыт — керемет сый»</summary>
+        <p class="kz">Менің ойымша, уақыт — керемет сый. Себебі өткен уақыт ешқашан қайтып келмейді. Мысалы, Абай «Бір минут бір кісінің өміріне ұқсас» деп жазған. Сондықтан мен күнімді алдын ала жоспарлаймын және уақытымды тиімді пайдаланамын.</p>
+        <p class="ru">По-моему, время — прекрасный подарок. Потому что прошедшее время никогда не вернётся. Например, Абай писал: «Одна минута похожа на жизнь человека». Поэтому я заранее планирую свой день и использую время с пользой.</p>
+      </details>
+      <details class="reveal"><summary>Готовый ответ: «Менің бір күнім» (с шыраями)</summary>
+        <p class="kz">Мен таңертең сағат жетіде тұрамын. Мектебім үйден өте алыс, сондықтан жетіден он минут кеткенде шығамын. Сабақ сегізде басталады. Сабақтан кейін спортпен айналысамын. Бассейн кең әрі тап-таза. Кешке үй тапсырмасын орындаймын. Түнгі он бірде ұйықтаймын.</p>
+        <p class="ru">Я встаю в 7 утра. Школа <b>очень далеко</b> (өте алыс — күшейтпелі), поэтому выхожу в 7:10. Уроки начинаются в 8. После уроков занимаюсь спортом. Бассейн просторный и <b>чистый-пречистый</b> (тап-таза — күшейтпелі). Вечером делаю домашку. В 11 ночи сплю.</p>
+      </details>
+      <details class="reveal"><summary>Готовый ответ: «Экологиялық мәселе»</summary>
+        <p class="kz">Менің ойымша, ауаның ластануы — ең қатерлі мәселе. Себебі ауада мемлекеттік шекара жоқ. Мысалы, Арал теңізінің суы тартылып, тұзды шаң желмен тарап жатыр. Сондықтан қоршаған ортаны бәріміз бірге қорғауымыз керек.</p>
+        <p class="ru">По-моему, загрязнение воздуха — самая опасная проблема. Потому что у воздуха нет границ. Например, Аральское море высохло, и ветер разносит солёную пыль. Поэтому мы все вместе должны защищать окружающую среду.</p>
+      </details>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  var store={get:function(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+  /* ---------- tabs ---------- */
+  var tabs=[].slice.call(document.querySelectorAll('.tab'));
+  function show(id){
+    tabs.forEach(function(t){var on=t.dataset.p===id;t.setAttribute('aria-selected',on);document.getElementById('p-'+t.dataset.p).hidden=!on});
+    store.set('arsen-tab',id); window.scrollTo({top:0});
+  }
+  tabs.forEach(function(t){t.addEventListener('click',function(){show(t.dataset.p)})});
+  var saved=store.get('arsen-tab'); if(saved&&document.getElementById('p-'+saved)) show(saved);
+
+  /* ---------- flashcards ---------- */
+  var CARDS=[
+    ['t1','мемлекеттік тіл','государственный язык'],['t1','ана тілі','родной язык'],['t1','ресми тіл','официальный язык'],
+    ['t1','халықаралық тіл','международный язык'],['t1','көптілді','знающий много языков'],['t1','оқып-үйрену','изучать'],
+    ['t1','меңгеру','овладеть, освоить'],['t1','аударма сөздік','словарь-переводчик'],['t1','жетік деңгей','свободный уровень'],
+    ['t1','талапты','старательный'],['t1','ақылды','умный'],['t1','байқау','конкурс'],['t1','жеңімпаз','победитель'],
+    ['t1','қызығушылық','интерес'],['t1','дағды','навык'],['t1','тілмаш','переводчик'],['t1','жолсерік','проводник (в поезде)'],
+    ['t1','сатушы','продавец'],['t1','аралас мектеп','смешанная школа'],['t1','сұхбат','интервью'],['t1','әңгімелесу','беседовать'],
+    ['t1','ағам','мой старший брат'],['t1','інім','мой младший брат'],['t1','жеңгем','жена моего брата'],['t1','атам / әжем','дедушка / бабушка'],
+    ['t1','мүмкіндік','возможность'],['t1','қасиет','качество, свойство'],['t1','өнер','искусство'],['t1','әдеп','вежливость, приличие'],
+    ['t1','қарым-қатынас','общение'],['t1','ұлттық рух','национальный дух'],['t1','терең','глубокий'],['t1','полиглот','человек, знающий много языков'],
+    ['t1','асты / үсті','под / на'],['t1','іші / сырты','внутри / снаружи'],['t1','алды / арты','перед / позади'],['t1','қасы / жаны','рядом'],['t1','маңы','около'],
+    ['t1','басы / соңы','начало / конец'],
+    ['t2','уақыт','время'],['t2','сағат','часы; час'],['t2','сый','подарок'],['t2','тәулік','сутки'],['t2','апта','неделя'],['t2','өмір','жизнь'],
+    ['t2','бағалау','ценить'],['t2','үнемдеу','экономить, беречь'],['t2','тиімді','с пользой, эффективно'],['t2','өнімді','продуктивно'],
+    ['t2','жоспарлау','планировать'],['t2','кедергі','помеха'],['t2','асығыс','спешка'],['t2','тапшы','нехватка'],
+    ['t2','зая кету','пропасть зря'],['t2','босқа өткізу','провести впустую'],['t2','өкініш','сожаление'],['t2','қайрат-жігер','сила воли'],
+    ['t2','жас ұрпақ','молодое поколение'],['t2','ермек','забава'],['t2','ұры','вор'],['t2','нақыл сөз','изречение'],['t2','кешігу','опаздывать'],
+    ['t2','таңсәрі','рассвет (6 часов)'],['t2','тал түс','полдень (13 часов)'],['t2','күн бата','закат (20 часов)'],['t2','ақшам','вечер (20:30–21)'],
+    ['t2','іңір','сумерки (22 часа)'],['t2','ымырт','темнота (23–24)'],['t2','сәске','около 10 утра'],
+    ['t2','...-дан ... минут кетті','... минут после ... (10:20)'],['t2','...-ға ... минут қалды','без ... минут ... (5:55)'],['t2','жарым','половина (9:30 = тоғыз жарым)'],
+    ['t2','сын есім','прилагательное'],['t2','шырай','степень прилагательного'],['t2','салыстырмалы шырай','сравнительная (қызылырақ, қызылдау)'],
+    ['t2','күшейтпелі шырай','усилительная (қып-қызыл, өте, ең)'],['t2','аппақ','белоснежный (пишется слитно!)'],['t2','көкпеңбек','ярко-синий (слитно!)'],
+    ['t3','ғаламдық','глобальный'],['t3','ғаламдық жылыну','глобальное потепление'],['t3','қоршаған орта','окружающая среда'],['t3','ластану','загрязнение'],
+    ['t3','ауа райы','погода'],['t3','қатерлі','опасный'],['t3','құбылыс','явление'],['t3','шаң','пыль'],['t3','айыппұл','штраф'],
+    ['t3','талқылау','обсуждать'],['t3','үндеу','обращение, призыв'],['t3','озон қабаты','озоновый слой'],['t3','мұнай қалдықтары','отходы нефти'],
+    ['t3','апатты аймақ','зона бедствия'],['t3','БҰҰ','ООН'],['t3','топтау сан есімі','числительное «по сколько» (екіден)'],
+    ['t3','екі-екіден','по двое'],['t3','он-оннан','по десять']
+  ];
+  var cardTopic='all', deck=[], idx=0, flipped=false, ruFirst=false, known=0;
+  var cf=document.getElementById('cardFilters');
+  [['all','Все слова'],['t1','Тема 1'],['t2','Тема 2'],['t3','Тема 3']].forEach(function(f){
+    var b=document.createElement('button');b.className='chip';b.textContent=f[1];b.setAttribute('aria-pressed',f[0]==='all');
+    b.onclick=function(){cardTopic=f[0];[].forEach.call(cf.children,function(c){c.setAttribute('aria-pressed',c===b)});buildDeck()};cf.appendChild(b);
+  });
+  function buildDeck(){deck=shuffle(CARDS.filter(function(c){return cardTopic==='all'||c[0]===cardTopic}).slice());idx=0;known=0;renderCard()}
+  var flash=document.getElementById('flash'),fb=document.getElementById('flashBig'),fh=document.getElementById('flashHint'),cc=document.getElementById('cardCount');
+  function renderCard(){
+    flipped=false;flash.classList.remove('back');
+    if(!deck.length){fb.textContent='Все выучены!';fh.textContent='выбери другую тему или начни заново';cc.textContent='';return}
+    var c=deck[idx%deck.length];fb.textContent=ruFirst?c[2]:c[1];fh.textContent='нажми, чтобы увидеть перевод';
+    cc.textContent='Осталось: '+deck.length+' · выучено: '+known;
+  }
+  function flip(){if(!deck.length)return;var c=deck[idx%deck.length];flipped=!flipped;flash.classList.toggle('back',flipped);
+    fb.textContent=flipped?(ruFirst?c[1]:c[2]):(ruFirst?c[2]:c[1]);fh.textContent=flipped?'перевод':'нажми, чтобы увидеть перевод'}
+  flash.addEventListener('click',flip);flash.addEventListener('keydown',function(e){if(e.key===' '||e.key==='Enter'){e.preventDefault();flip()}});
+  document.getElementById('cardYes').onclick=function(){if(!deck.length)return;deck.splice(idx%deck.length,1);known++;if(deck.length)idx=idx%deck.length;renderCard()};
+  document.getElementById('cardNo').onclick=function(){if(!deck.length)return;idx=(idx+1)%deck.length;renderCard()};
+  document.getElementById('cardSwap').onclick=function(){ruFirst=!ruFirst;this.textContent=ruFirst?'Показывать сначала казахский':'Показывать сначала русский';renderCard()};
+  buildDeck();
+
+  /* ---------- quiz ---------- */
+  var SH=['жай','салыстырмалы','күшейтпелі'];
+  var Q=[
+    ['t1','Что значит «мемлекеттік тіл»?',['государственный язык','родной язык','иностранный язык','международный язык'],0,'Мемлекет = государство. Қазақ тілі — мемлекеттік тіл.'],
+    ['t1','Какой язык — мемлекеттік тіл Казахстана?',['орыс тілі','ағылшын тілі','қазақ тілі','түрік тілі'],2,'Қазақ тілі — Қазақстан Республикасының мемлекеттік тілі (статья 4 закона о языках).'],
+    ['t1','«Ана тілі» — это…',['родной язык','английский язык','язык жестов','иностранный язык'],0,'Ана = мама. Ана тілі = родной язык.'],
+    ['t1','Человек, который знает много языков, — это…',['талапты адам','көптілді адам','ақылды адам','жеңімпаз'],1,'Көп = много, тіл = язык. Көптілді = многоязычный (полиглот).'],
+    ['t1','К какой группе языков относится казахский?',['славян тілдері','түркі тілдері','роман тілдері','герман тілдері'],1,'Казахский — тюркский. Поэтому казаху легко понять узбекский и каракалпакский.'],
+    ['t1','К какой группе относится русский язык?',['түркі тілдері','славян тілдері','араб тілдері','қытай тілдері'],1,'Русский — славянский, как украинский, белорусский, польский, чешский.'],
+    ['t1','По тексту, сколько активных слов нужно, чтобы выражать мысли на другом языке?',['500','2 мың (2000)','10 мың','100'],1,'2 мың белсенді сөз = 2000. А 5 мың (5000) — «дверь к информации открыта».'],
+    ['t1','«Тілмаш» — это…',['учитель','переводчик','продавец','проводник'],1,'Ағам министрлікте тілмаш болып жұмыс істейді.'],
+    ['t1','«Жолсерік» — это…',['проводник в поезде','водитель','продавец','врач'],0,'Әкем — пойызда жолсерік.'],
+    ['t1','«Аралас мектеп» — это…',['спортивная школа','смешанная школа','музыкальная школа','частная школа'],1,'Аралас = смешанный.'],
+    ['t1','Кто автор стихотворения «Қазақ тілі»?',['Абай Құнанбаев','Мағжан Жұмабаев','Мұқағали Мақатаев','Дихан Әбілев'],1,'«Қазақ тілі» — Мағжан Жұмабаев.'],
+    ['t1','Какое произведение НЕ написал Мағжан Жұмабаев?',['«Батыр Баян»','«Қорқыт»','«Педагогика»','«Робинзон Крузо»'],3,'«Робинзон Крузо» — Даниэль Дефо.'],
+    ['t1','Главная мысль стихотворения «Қазақ тілі»:',['язык трудно учить','родной язык остался главным богатством и соберёт народ вместе','надо учить английский','поэт любит природу'],1,'Многое потеряно, но язык остался, как сияющая звезда.'],
+    ['t1','Кто написал «Туған тілім»?',['Мағжан Жұмабаев','Абай','Дихан Әбілев','Анна'],2,'«Туған тілім» — Дихан Әбілев.'],
+    ['t1','О каком поэте Анна собирала материал?',['Мұқағали Мақатаев','Абай','Пушкин','Мағжан'],0,'Анна оқу жылының басында Мұқағали Мақатаев туралы көп материал жинады.'],
+    ['t1','«Талаптыға нұр жауар» означает…',['старательному — удача','время — деньги','язык — зеркало','много слов — серебро'],0,'Талапты = старательный.'],
+    ['t1','Дополни пословицу: «Өнер алды — ...»',['алтын','қызыл тіл','кітап','білім'],1,'Главное искусство — красноречие.'],
+    ['t1','Дополни: «Ана сүті бой өсіреді, ана тілі ...»',['ой өсіреді','ән айтады','білім береді','бой өсіреді'],0,'Родной язык растит ум (ой = мысль).'],
+    ['t1','Дополни: «Көп сөз — күміс, аз сөз — ...»',['темір','алтын','тас','бос'],1,'Мало слов — золото (алтын).'],
+    ['t1','Дополни: «Тіл — адам ойының ...»',['айнасы','кілті','досы','анасы'],0,'Язык — зеркало (айна) мыслей.'],
+    ['t1','Как в казахской семье принято обращаться к родителям?',['«сен» (на ты)','«сіз» (на вы)','по имени','никак'],1,'«Сіз» — знак уважения.'],
+    ['t1','Как старшие ласково обращаются к младшим?',['айналайын','апай','тәте','ағай'],0,'Айналайын, қарағым, шырағым, бауырым, балам.'],
+    ['t1','«Кітап үстелдің ... жатыр» (книга лежит НА столе):',['астында','үстінде','ішінде','артында'],1,'Үсті = на. Асты = под.'],
+    ['t1','Какое слово — көмекші есім?',['кітап','асты','жақсы','оқыды'],1,'Асты (под) — вспомогательное имя.'],
+    ['t1','«Курстың соңында» значит…',['в начале курса','в конце курса','в середине курса','после школы'],1,'Соңы = конец, басы = начало.'],
+    ['t1','На какой слог обычно падает ударение в казахском?',['на первый','на последний','на второй','как захочешь'],1,'Почти всегда на последний: балаЛАР, мекТЕП.'],
+    ['t1','Что такое «ой екпіні»?',['ударение в слове','выделение голосом главного слова в предложении','восклицательный знак','рифма'],1,'Ой = мысль. Логическое ударение.'],
+    ['t1','Какое слово — жалқы есім (имя собственное)?',['тіл','Қазақстан','кітап','мүмкіндік'],1,'Жалқы — с большой буквы.'],
+    ['t1','Какое слово — дерексіз (абстрактное)?',['әже','кітап','мүмкіндік','мектеп'],2,'Мүмкіндік нельзя потрогать.'],
+    ['t1','Какое существительное — күрделі (сложное)?',['әке','ата-ана','тіл','әже'],1,'Күрделі — из двух и более слов.'],
+
+    ['t2','Кто написал «Сағаттың шықылдағы емес ермек»?',['Мағжан Жұмабаев','Абай Құнанбаев','Дихан Әбілев','Даниэль Дефо'],1,'Это стихотворение Абая.'],
+    ['t2','Дополни строку Абая: «Бір минут бір кісінің ...»',['өміріне ұқсас','досы болмақ','уақыты көп','сағаты екен'],0,'«Бір минут бір кісінің өміріне ұқсас» — минута похожа на жизнь человека.'],
+    ['t2','С кем Абай сравнивает часы?',['с другом','с вором (ұры)','с учителем','с птицей'],1,'«Сағаттың өзі — ұры шықылдаған, ... күнде ұрлаған» — часы каждый день крадут жизнь.'],
+    ['t2','Главная мысль стихотворения:',['часы красиво тикают','время уходит и не вернётся, его нельзя тратить зря','надо купить часы','лучше спать'],1,'«Өтті, өлді, тағдыр жоқ қайта келмек» — прошло и не вернётся.'],
+    ['t2','С какого возраста Абай писал стихи?',['с 7 лет','с 14 лет','с 20 лет','с 40 лет'],1,'Абай он төрт жасынан бастап өлең шығарған.'],
+    ['t2','Какие языки Абай выучил в медресе?',['араб и парсы (персидский)','английский и французский','китайский','немецкий'],0,'Медреседе ол араб, парсы тілдерін үйренеді.'],
+    ['t2','Где Абай познакомился с Е. П. Михаэлисом?',['в медресе','в библиотеке имени Гоголя в Семее','в Алматы','в Москве'],1,'Семейдегі Гоголь атындағы кітапханада.'],
+    ['t2','«Өмір, дүние дегенің ағып жатқан су екен» значит…',['жизнь — как текущая вода, быстро проходит','надо пить воду','река глубокая','мир большой'],0,'Жизнь проходит, как течёт вода.'],
+    ['t2','«Сен де бір кірпіш дүниеге, кетігін тап та, бар, қалан!» — смысл:',['строй дом','найди своё место в жизни','учи языки','береги время'],1,'Ты тоже кирпич: найди своё место в стене мира.'],
+    ['t2','«Уақыттың бос өткені — ...»',['өмірдің бос кеткені','ақшаның көп болғаны','демалыс','ойын'],0,'Потерянное время — потерянная жизнь.'],
+    ['t2','«Тиімді пайдалану» значит…',['использовать с пользой','выбросить','потерять','купить'],0,'Уақытты тиімді пайдалану — использовать время с пользой.'],
+    ['t2','Кто сказал: «Уақытты босқа жіберіп алудан артық өкініш жоқ»?',['Гёте','Абай','Суворов','Мағжан'],0,'Иоганн Вольфганг Гёте.'],
+    ['t2','Что из этого — «враг времени» (уақыттың жауы)?',['жоспарлау','мақсат қоймау (не ставить цель)','ерте тұру','кітап оқу'],1,'Враги: мақсат қоймау, жоспарлай алмау, асығыс шешім, «жоқ» деп айта алмау.'],
+    ['t2','«Таңсәрі» — это примерно…',['6 утра, рассвет','12 дня','8 вечера','полночь'],0,'Таңсәрі — когда начинает светать, около 6.'],
+    ['t2','«Тал түс» — это…',['рассвет','полдень, солнце над головой','закат','ночь'],1,'Тал түс — около 13 часов.'],
+    ['t2','«Күн бата» — это…',['закат (около 20 часов)','утро','полдень','рассвет'],0,'Күн бата = солнце садится.'],
+    ['t2','«Ымырт» — это…',['утро','обед','темнота поздно вечером (23–24)','рассвет'],2,'Ымырттың түсуі — наступление темноты.'],
+    ['t2','«Оннан жиырма минут кетті» — это…',['9:40','10:20','20:10','10:40'],1,'Кетті = прошло после 10 → 10:20.'],
+    ['t2','«Алтыға бес минут қалды» — это…',['6:05','5:55','5:05','6:55'],1,'Қалды = осталось до 6 → 5:55.'],
+    ['t2','«Тоғыз жарым» — это…',['9:30','9:15','8:30','9:00'],0,'Жарым = половина.'],
+    ['t2','Сколько шыраев (степеней) прилагательного по учебнику?',['2','3','4','5'],1,'Три: жай, салыстырмалы, күшейтпелі.'],
+    ['t2','«Сын есім» — это…',['существительное','прилагательное','глагол','числительное'],1,'Отвечает на вопрос «қандай?» (какой?).'],
+    ['t2','Какой шырай у слова «биік»?',SH,0,'Просто слово без добавок → жай.'],
+    ['t2','Какой шырай у слова «қызылырақ»?',SH,1,'-ырақ → салыстырмалы.'],
+    ['t2','Какой шырай у слова «жақсылау»?',SH,1,'-лау → салыстырмалы.'],
+    ['t2','Какой шырай у слова «сарғыш»?',SH,1,'-ғыш → салыстырмалы (желтоватый).'],
+    ['t2','Какой шырай у слова «көгілдір»?',SH,1,'-ілдір → салыстырмалы (голубоватый).'],
+    ['t2','Какой шырай у слова «біп-биік»?',SH,2,'Повтор слога с «п» → күшейтпелі.'],
+    ['t2','Какой шырай у слов «ең биік»?',SH,2,'«Ең» — усилитель → күшейтпелі (в вашем учебнике асырмалы входит сюда).'],
+    ['t2','Какой шырай у слов «нағыз батыр»?',SH,2,'«Нағыз» — усилитель → күшейтпелі.'],
+    ['t2','Как правильно написать «белоснежный»?',['ап-ақ','аппақ','ақ-ақ','ап ақ'],1,'Исключение: аппақ пишется слитно.'],
+    ['t2','Как правильно написать «ярко-синий» от «көк»?',['көп-көк','көкпеңбек','көк-көк','көп көк'],1,'Исключение: көкпеңбек, слитно.'],
+    ['t2','Какое окончание делает салыстырмалы шырай?',['-рақ / -рек','-лар / -лер','-ды / -ді','-ның / -нің'],0,'-рақ/-рек, -ырақ/-ірек: жақсырақ, үлкенірек.'],
+    ['t2','«Театр біздің үйге ... жақын». Какое слово-усилитель подходит?',['ең','шымқай','көкше','ұзындау'],0,'Ең жақын — самый близкий. Это күшейтпелі.'],
+
+    ['t3','«Климат» по учебнику — это…',['погода на один день','многолетний режим погоды в месте','температура воды','ветер'],1,'Климат — ауа райының көпжылдық режимі.'],
+    ['t3','«Ғаламдық жылыну» — это…',['глобальное потепление','холодная зима','землетрясение','наводнение'],0,'Ғаламдық = глобальный, жылыну = потепление.'],
+    ['t3','«Қоршаған орта» — это…',['окружающая среда','середина круга','школа','город'],0,'Қоршаған = окружающий.'],
+    ['t3','«Ластану» значит…',['очищение','загрязнение','потепление','рост'],1,'Ауаның ластануы — загрязнение воздуха.'],
+    ['t3','«Айыппұл» — это…',['штраф','подарок','зарплата','налог на дом'],0,'За загрязнение природы — айыппұл.'],
+    ['t3','«Қатерлі құбылыс» — это…',['опасное явление','красивое явление','праздник','погода'],0,'Қатерлі = опасный, құбылыс = явление.'],
+    ['t3','Что случилось с Аральским морем?',['стало глубже','вода ушла, дно высохло, это зона бедствия','замёрзло','стало чище'],1,'Арал теңізінің суы тартылды, экологиялық апатты аймаққа айналды.'],
+    ['t3','Почему загрязнение воздуха — мировая проблема?',['воздух дорогой','у воздуха нет государственных границ','так решил учитель','воздуха мало'],1,'Ауада мемлекеттік шекара жоқ.'],
+    ['t3','Какое слово — топтау сан есімі?',['екі','екіден','екінші','екеу'],1,'Екіден = по два. Отвечает на «нешеден?».'],
+    ['t3','На какой вопрос отвечает топтау сан есімі?',['нешеден? қаншадан?','кім?','қайда?','қашан?'],0,'Нешеден? — по сколько?'],
+    ['t3','«Он-оннан кітап алдық» значит…',['взяли 10 книг','взяли по десять книг','взяли десятую книгу','взяли около десяти'],1,'Он-оннан = по десять.'],
+    ['t3','Что такое «БҰҰ»?',['ООН','школа','завод','министерство'],0,'Біріккен Ұлттар Ұйымы = ООН.']
+  ];
+  var qTopic='all', qs=[], qi=0, right=0, wrongList=[];
+  var qf=document.getElementById('quizFilters'), box=document.getElementById('quizBox');
+  [['all','Все темы'],['t1','Тема 1'],['t2','Тема 2'],['t3','Тема 3']].forEach(function(f){
+    var b=document.createElement('button');b.className='chip';b.textContent=f[1];b.setAttribute('aria-pressed',f[0]==='all');
+    b.onclick=function(){qTopic=f[0];[].forEach.call(qf.children,function(c){c.setAttribute('aria-pressed',c===b)});startQuiz()};qf.appendChild(b);
+  });
+  function startQuiz(list){qs=shuffle((list||Q.filter(function(q){return qTopic==='all'||q[0]===qTopic})).slice());qi=0;right=0;wrongList=[];renderQ()}
+  function renderQ(){
+    if(qi>=qs.length){return renderEnd()}
+    var q=qs[qi], fixed=q[2]===SH;
+    var order=fixed?[0,1,2]:shuffle(q[2].map(function(_,i){return i}));
+    box.innerHTML='<div class="qhead"><span class="pill">'+({t1:'Тема 1',t2:'Тема 2',t3:'Тема 3'}[q[0]])+'</span><span class="ru">Вопрос '+(qi+1)+' из '+qs.length+' · верно: '+right+'</span></div>'+
+      '<div class="bar"><i style="width:'+(qi/qs.length*100)+'%"></i></div>'+
+      '<div class="qtext">'+esc(q[1])+'</div><div class="opts">'+order.map(function(i){return '<button class="opt" data-i="'+i+'">'+esc(q[2][i])+'</button>'}).join('')+'</div><div id="qx"></div>';
+    [].forEach.call(box.querySelectorAll('.opt'),function(b){b.onclick=function(){answer(+b.dataset.i)}});
+  }
+  function answer(i){
+    var q=qs[qi],ok=i===q[3];
+    if(ok)right++;else wrongList.push(q);
+    [].forEach.call(box.querySelectorAll('.opt'),function(b){b.disabled=true;var bi=+b.dataset.i;if(bi===q[3])b.classList.add('right');else if(bi===i)b.classList.add('wrong')});
+    document.getElementById('qx').innerHTML='<div class="explain"><b class="'+(ok?'okk':'no')+'">'+(ok?'Верно! Жарайсың! ':'Не совсем. ')+'</b>'+esc(q[4])+'</div>'+
+      '<div class="row" style="margin-top:10px"><button class="btn" id="qnext">'+(qi+1<qs.length?'Дальше →':'Результат')+'</button></div>';
+    var n=document.getElementById('qnext');n.onclick=function(){qi++;renderQ()};n.focus();
+  }
+  function renderEnd(){
+    var pct=Math.round(right/qs.length*100);
+    var msg=pct>=85?'Отлично! К СОР готов.':pct>=60?'Хорошо! Повтори ошибки, и будет отлично.':'Нормально для начала. Перечитай шпаргалку и пройди ещё раз.';
+    var best=store.get('arsen-best')||{};var key=qTopic;if(!best[key]||pct>best[key]){best[key]=pct;store.set('arsen-best',best)}
+    box.innerHTML='<div class="score">'+right+' / '+qs.length+'</div><p><b>'+msg+'</b></p><p class="ru">Лучший результат в этом разделе: '+best[key]+'%</p>'+
+      (wrongList.length?'<div class="explain"><b>Ошибки, повтори:</b><ul class="clean" style="margin-top:6px">'+wrongList.map(function(q){return '<li>'+esc(q[1])+' → <span class="kz">'+esc(q[2][q[3]])+'</span></li>'}).join('')+'</ul></div>':'')+
+      '<div class="row">'+(wrongList.length?'<button class="btn" id="qerr">Пройти только ошибки</button>':'')+'<button class="btn ghost" id="qagain">Начать заново</button></div>';
+    var e=document.getElementById('qerr');if(e)e.onclick=function(){startQuiz(wrongList.slice())};
+    document.getElementById('qagain').onclick=function(){startQuiz()};
+  }
+  startQuiz();
+
+  /* ---------- SOR mini quizzes ---------- */
+  function miniQuiz(el,items){
+    el.innerHTML=items.map(function(q,k){return '<div style="display:flex;flex-direction:column;gap:6px;margin-top:10px"><b>'+esc(q[0])+'</b><div class="opts">'+
+      q[1].map(function(o,i){return '<button class="opt" data-k="'+k+'" data-i="'+i+'">'+esc(o)+'</button>'}).join('')+'</div><div class="ru" id="'+el.id+'-x'+k+'"></div></div>'}).join('');
+    [].forEach.call(el.querySelectorAll('.opt'),function(b){b.onclick=function(){
+      var k=+b.dataset.k,i=+b.dataset.i,q=items[k];
+      [].forEach.call(el.querySelectorAll('.opt[data-k="'+k+'"]'),function(x){x.disabled=true;var xi=+x.dataset.i;if(xi===q[2])x.classList.add('right');else if(xi===i)x.classList.add('wrong')});
+      document.getElementById(el.id+'-x'+k).innerHTML=(i===q[2]?'<span class="ok-t">Верно. </span>':'<span class="bad-t">Неверно. </span>')+esc(q[3]);
+    }});
+  }
+  miniQuiz(document.getElementById('sor1'),[
+    ['1. Мәтін не туралы? (О чём текст?)',['тіл туралы','уақыт туралы','экология туралы','спорт туралы'],1,'Уақыт туралы — о времени.'],
+    ['2. Мәтіннің негізгі ойы (главная мысль):',['Байлардың уақыты көп','Уақытты бағалай білген адам табысты болады','Ақша — ең қымбат нәрсе','Еріншектік — жақсы қасиет'],1,'Кто ценит время, тот успешен.'],
+    ['3. Мәтінге тақырып таңда (выбери заголовок):',['Уақыт — өмірлік капитал','Менің отбасым','Арал теңізі','Қазақ тілі'],0,'Текст о том, что время — капитал жизни.'],
+    ['4. Иә ма, жоқ па? «Байларға тәулігіне 30 сағат беріледі»',['Иә (да)','Жоқ (нет)'],1,'Всем одинаково: тәулігіне жиырма төрт сағат (24).'],
+    ['5. Иә ма, жоқ па? «Жоспар құру еріншектікті жеңуге көмектеседі»',['Иә (да)','Жоқ (нет)'],0,'В тексте: план помогает победить лень.'],
+    ['6. Мәтінде «ең жаман дерт» деп нені айтады?',['ауру','еріншектік (лень)','ақша','уақыт'],1,'Ең жаман дерт — еріншектік. «Ең жаман» — күшейтпелі шырай.']
+  ]);
+  var SH3=['жай','салыстырмалы','күшейтпелі'];
+  miniQuiz(document.getElementById('sor3'),[
+    ['біп-биік',SH3,2,'Повтор с «п» → күшейтпелі.'],['сарғыш',SH3,1,'-ғыш → салыстырмалы.'],['тым алыс',SH3,2,'«Тым» → күшейтпелі.'],
+    ['жұқарақ',SH3,1,'-рақ → салыстырмалы.'],['сарғылт',SH3,1,'-ғылт → салыстырмалы.'],['өте күшті',SH3,2,'«Өте» → күшейтпелі.'],
+    ['көгілдір',SH3,1,'-ілдір → салыстырмалы.'],['жақсылау',SH3,1,'-лау → салыстырмалы.'],['нағыз адал',SH3,2,'«Нағыз» → күшейтпелі.'],['әдемі',SH3,0,'Без добавок → жай.']
+  ]);
+  miniQuiz(document.getElementById('sor4'),[
+    ['«Әйгерімнің қасы ... әдемі.»',['өте','ұзындау','көкше'],0,'Өте әдемі — очень красивые (брови).'],
+    ['«Ол қолына ... таяқ ұстап алды.»',['ең','ұзындау','аса'],1,'Ұзындау таяқ — длинноватая палка (салыстырмалы).'],
+    ['«Басындағы ... орамалы жақсы жарасып тұр.»',['шымқай қызыл','биігірек','күштірек'],0,'Шымқай қызыл орамал — ярко-красный платок.'],
+    ['«Азамат Әмірдің ... жақын досы еді.»',['ең','тіпті','аса'],0,'Ең жақын досы — самый близкий друг.']
+  ]);
+  miniQuiz(document.getElementById('sor5'),[
+    ['Қазақ тілі — Қазақстан Республикасының ... тілі.',['мемлекеттік','халықаралық','ресми емес'],0,'Мемлекеттік тіл — государственный.'],
+    ['«Мектептің ... » (возле школы)',['жанында','астында','ішінде'],0,'Жаны / қасы = рядом.'],
+    ['Біз ... бірігіп жұптық жұмыс орындадық. (по двое)',['екі','екі-екіден','екінші'],1,'Топтау сан есімі: екі-екіден.'],
+    ['Арал теңізінің суы ... (вода ушла).',['тазарды','тартылды','көбейді'],1,'Суы тартылды — высохло.'],
+    ['Ауада мемлекеттік шекара ...',['бар','жоқ'],1,'Шекара жоқ — границ нет, поэтому проблема глобальная.']
+  ]);
+
+  /* ---------- SOR matching ---------- */
+  var MATCH={
+    matchTime:[['8:35','тоғызға 25 минут қалды'],['18:15','алтыдан он бес минут кетті'],['2:13','екіден он үш минут кетті'],['16:40','беске жиырма минут қалды'],['13:45','екіге он бес минут қалды'],['12:00','тура он екі болды'],['22:16','оннан он алты минут кетті']],
+    matchDay:[['таңсәрі','6:00'],['күн шыға','8:00'],['сәске','10:00'],['тал түс','13:00'],['күн бата','20:00'],['іңір','22:00'],['ымырт','23:00–24:00']]
+  };
+  Object.keys(MATCH).forEach(function(id){
+    var M=MATCH[id],el=document.getElementById(id),opts=shuffle(M.map(function(m){return m[1]}));
+    el.innerHTML=M.map(function(m,i){return '<div class="mrow"><label class="kz" for="'+id+i+'">'+esc(m[0])+'</label><select id="'+id+i+'"><option value="">— выбери —</option>'+
+      opts.map(function(o){return '<option>'+esc(o)+'</option>'}).join('')+'</select></div>'}).join('');
+  });
+  [].forEach.call(document.querySelectorAll('[data-check]'),function(btn){btn.onclick=function(){
+    var id=btn.dataset.check,M=MATCH[id],ok=0;
+    M.forEach(function(m,i){var s=document.getElementById(id+i);var good=s.value===m[1];if(good)ok++;s.style.borderColor=good?'var(--ok)':'var(--bad)'});
+    document.getElementById(id+'-res').innerHTML='<b>'+ok+' из '+M.length+'</b>'+(ok<M.length?' · красные исправь':' · отлично!');
+  }});
+})();
+</script>
+
+</body></html>

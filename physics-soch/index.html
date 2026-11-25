@@ -1,0 +1,511 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>СОЧ Physics 7</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;700;800&family=Caveat:wght@600;700&display=swap">
+<style>
+/* Layout: school notebook page in squares — red margin line, ink-blue headings, cards = sticky notes for rules, trainer = worksheet */
+:root{
+  --paper:#f6f8fb; --grid:#dfe7f2; --card:#ffffff; --ink:#1d3f8f; --text:#1c2230; --muted:#5b6578;
+  --red:#d2405a; --good:#1f8a4c; --goodbg:#e6f5ec; --badbg:#fdecef; --line:#d5dceb; --hl:#fff4c2;
+  --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#121722; --grid:#1c2433; --card:#19202e; --ink:#93b3ff; --text:#e6eaf2; --muted:#9aa4b8;
+  --red:#ff7d90; --good:#5fd394; --goodbg:#16301f; --badbg:#3a1c23; --line:#2b3446; --hl:#3a3415; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#121722; --grid:#1c2433; --card:#19202e; --ink:#93b3ff; --text:#e6eaf2; --muted:#9aa4b8;
+  --red:#ff7d90; --good:#5fd394; --goodbg:#16301f; --badbg:#3a1c23; --line:#2b3446; --hl:#3a3415; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--text);font-family:var(--f-body);font-size:16px;line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;}
+.wrap{max-width:860px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance;color:var(--ink);margin:0}
+h1{font-size:clamp(28px,6vw,40px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:24px;font-weight:800;margin-top:44px;padding-bottom:6px;border-bottom:2px solid var(--red)}
+h3{font-size:17px;font-weight:700}
+.hand{font-family:var(--f-hand);color:var(--red);font-size:22px;line-height:1.1}
+.lead{color:var(--muted);max-width:62ch;margin:8px 0 0}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+nav.toc a{color:var(--ink);text-decoration:none;border:1.5px solid var(--ink);border-radius:999px;padding:4px 12px;font-weight:500;font-size:14px;background:var(--card)}
+nav.toc a:hover,nav.toc a:focus-visible{background:var(--ink);color:var(--card);outline:none}
+.plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:20px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
+.step b{color:var(--red);font-family:var(--f-hand);font-size:26px;margin-right:6px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,370px),1fr));gap:14px;margin-top:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0;display:flex;flex-direction:column;gap:8px}
+.card p{margin:0}
+.card ul{margin:0;padding-left:20px}
+.rule{background:var(--hl);border-radius:6px;padding:6px 10px;font-weight:700}
+.en{font-weight:700;color:var(--ink)}
+.ru{color:var(--muted)}
+.fig{display:flex;justify-content:center}
+.fig svg{max-width:100%;height:auto}
+svg .s{stroke:var(--ink);stroke-width:2;fill:none}
+svg .s2{stroke:var(--red);stroke-width:2;fill:none}
+svg .d{fill:var(--ink)}
+svg text{fill:var(--text);font:600 13px var(--f-body)}
+svg .tr{fill:var(--red)}
+.trap{border-left:4px solid var(--red);background:var(--badbg);padding:8px 12px;border-radius:0 8px 8px 0}
+.algo{background:var(--card);border:2px dashed var(--ink);border-radius:12px;padding:14px 18px;margin-top:16px}
+.algo ol{margin:6px 0 0;padding-left:22px}
+/* trainer */
+.score{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.bar{flex:1 1 160px;height:10px;background:var(--grid);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--good);transition:width .3s}
+.q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:12px;display:flex;flex-direction:column;gap:10px}
+.q.ok{border-color:var(--good);background:var(--goodbg)}
+.q.bad{border-color:var(--red)}
+.qh{display:flex;gap:10px;align-items:baseline}
+.qn{font-family:var(--f-hand);font-size:24px;color:var(--red);min-width:28px}
+.qt{min-width:0}
+.qt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+input[type=text]{font:inherit;width:120px;padding:6px 10px;border:1.5px solid var(--line);border-radius:8px;background:var(--paper);color:var(--text)}
+input[type=text]:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
+button{font:inherit;font-weight:500;cursor:pointer;border-radius:8px;padding:6px 12px;border:1.5px solid var(--ink);background:var(--ink);color:var(--card)}
+button.ghost{background:transparent;color:var(--ink)}
+button.opt{background:var(--card);color:var(--text);border-color:var(--line)}
+button.opt.right{border-color:var(--good);background:var(--goodbg)}
+button.opt.wrong{border-color:var(--red);background:var(--badbg)}
+button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.msg{font-weight:700}
+.msg.ok{color:var(--good)} .msg.bad{color:var(--red)}
+.sol{border-top:1px dashed var(--line);padding-top:8px;color:var(--text)}
+.hint{color:var(--muted);font-style:italic}
+.tablewrap{overflow-x:auto;margin-top:14px;background:var(--card);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:15px}
+th,td{text-align:left;padding:7px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--ink);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+td:first-child{font-weight:700;color:var(--ink);white-space:nowrap}
+footer{margin-top:40px;color:var(--muted);font-size:14px}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+
+<div class="wrap">
+  <div class="wrap">
+  <div class="hand">Physics 7 · СОЧ за 1 четверть</div>
+  <h1>Готовимся к СОЧ по физике</h1>
+  <p class="lead">Глава 1 и глава 2 до раздела 2.6 включительно. Задания будут на английском, поэтому правила объяснены по-русски, а термины даны как в учебнике.</p>
+  <nav class="toc" aria-label="Разделы">
+    <a href="#c1">1.1–1.3 Основы</a>
+    <a href="#c14">1.4 Степени 10</a>
+    <a href="#c15">1.5 SI и приставки</a>
+    <a href="#c16">1.6 Погрешность</a>
+    <a href="#c17">1.7 Скаляр / вектор</a>
+    <a href="#c2">2.1–2.2 Движение</a>
+    <a href="#c23">2.3–2.5 Скорость</a>
+    <a href="#c26">2.6 Графики</a>
+    <a href="#train">Тренажёр</a>
+    <a href="#words">Словарик</a>
+  </nav>
+  <div class="plan">
+    <div class="step"><b>1</b>Прочитай карточки. Жёлтая строка — главное, это надо знать наизусть. ~20 минут.</div>
+    <div class="step"><b>2</b>Реши тренажёр в тетради, ответ впиши и нажми «Проверить». Сначала без подсказок.</div>
+    <div class="step"><b>3</b>Где ошибся — открой решение, вернись к карточке и перереши задачу завтра ещё раз.</div>
+  </div>
+
+  <!-- ============ 1.1–1.3 ============ -->
+  <h2 id="c1">1.1–1.3 Физика, научный метод, величины</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Физическое явление · <span class="en">physical phenomenon</span></h3>
+      <p>Физика изучает движение материи в природе. Любое движение — физическое явление: дождь, молния, радуга, звук, восход Солнца, кипение воды.</p>
+      <p>Слово «физика» значит «знание о природе», его ввёл <b>Аристотель</b>.</p>
+    </div>
+    <div class="card">
+      <h3>Научный метод · <span class="en">scientific method</span></h3>
+      <p class="rule">Question → Hypothesis → Experiment → Conclusion</p>
+      <ul>
+        <li><span class="en">observation</span> — наблюдение органами чувств, мы ничего <b>не контролируем</b></li>
+        <li><span class="en">hypothesis</span> — предположение, «educated guess»</li>
+        <li><span class="en">experiment</span> — опыт, мы <b>контролируем</b> условия</li>
+        <li><span class="en">measurement</span> — измерение</li>
+        <li><span class="en">conclusion</span> — вывод, <b>последний шаг</b></li>
+      </ul>
+      <p>Гипотеза неверна → придумываем новую и снова проводим опыт.</p>
+    </div>
+    <div class="card">
+      <h3>Физическая величина · <span class="en">physical quantity</span></h3>
+      <p>То, что можно измерить. У величины есть: название, символ, единица, прибор, число.</p>
+      <p class="rule">m = 40 kg: масса, символ m, весы (scales), 40, килограмм</p>
+      <p><span class="en">Measurement</span> — сравнение величины с эталоном (единицей).</p>
+    </div>
+    <div class="card">
+      <h3>Приборы</h3>
+      <ul>
+        <li>mass (m) — <span class="en">scales</span>, kg</li>
+        <li>time (t) — <span class="en">clock / stopwatch</span>, s</li>
+        <li>length (l) — <span class="en">ruler / measuring tape</span>, m</li>
+        <li>temperature (T) — <span class="en">thermometer</span>, °C</li>
+        <li>speed (v) — <span class="en">speedometer / odometer</span>, m/s</li>
+        <li>volume (V) — <span class="en">measuring cylinder</span>, m³</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ 1.4 ============ -->
+  <h2 id="c14">1.4 Стандартный вид · <span style="font-weight:500">scientific notation</span></h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Как записать</h3>
+      <p class="rule">b = c × 10ⁿ, где 1 ≤ c &lt; 10, n — целое</p>
+      <p>Двигаем запятую, пока не останется одна цифра (не ноль) перед запятой. Считаем шаги:</p>
+      <ul>
+        <li>число <b>≥ 10</b>, запятая ушла <b>влево</b> → n <b>положительное</b>: 5800 = 5.8 × 10³</li>
+        <li>число <b>&lt; 1</b>, запятая ушла <b>вправо</b> → n <b>отрицательное</b>: 0.0009 = 9 × 10⁻⁴</li>
+      </ul>
+      <p class="trap"><b>Ловушка:</b> 84 × 10² — не стандартный вид, правильно 8.4 × 10³.</p>
+    </div>
+    <div class="card">
+      <h3>Обратно в обычное число</h3>
+      <p>10ⁿ с плюсом → запятая на n шагов <b>вправо</b>: 4.08 × 10⁴ = 40 800.</p>
+      <p>10ⁿ с минусом → запятая на n шагов <b>влево</b>: 6.37 × 10⁻³ = 0.00637.</p>
+      <h3 style="margin-top:6px">Действия со степенями</h3>
+      <ul>
+        <li>умножение — показатели <b>складываем</b>: 10⁸ × 10⁶ = 10¹⁴</li>
+        <li>деление — <b>вычитаем</b>: 10⁹ / 10⁵ = 10⁴</li>
+        <li>степень степени — <b>умножаем</b>: (10⁻⁵)² = 10⁻¹⁰</li>
+        <li>10⁰ = 1, 10⁻¹ = 0.1</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ 1.5 ============ -->
+  <h2 id="c15">1.5 Система SI и приставки</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Основные единицы SI</h3>
+      <p class="rule">длина — метр (m), масса — килограмм (kg), время — секунда (s)</p>
+      <p>SI — от французского Système International, используется с 1960 года. Всего 7 основных единиц.</p>
+      <p><span class="en">Derived units</span> (производные) составлены из основных: площадь m², скорость m/s, km/h. Площадь и скорость — производные величины, время, масса, длина — основные (<span class="en">base</span>).</p>
+      <p class="trap">Минута, час, грамм, сантиметр — НЕ единицы SI.</p>
+    </div>
+    <div class="card">
+      <h3>Приставки · <span class="en">metric prefixes</span></h3>
+      <div class="tablewrap" style="margin-top:0"><table style="min-width:0">
+        <thead><tr><th>Символ</th><th>Название</th><th>Множитель</th></tr></thead>
+        <tbody>
+          <tr><td>G</td><td>giga</td><td>10⁹</td></tr>
+          <tr><td>M</td><td>mega</td><td>10⁶</td></tr>
+          <tr><td>k</td><td>kilo</td><td>10³ = 1000</td></tr>
+          <tr><td>m</td><td>milli</td><td>10⁻³ = 0.001</td></tr>
+          <tr><td>μ</td><td>micro</td><td>10⁻⁶</td></tr>
+          <tr><td>n</td><td>nano</td><td>10⁻⁹</td></tr>
+        </tbody>
+      </table></div>
+      <p>Ещё: 1 m = 10 dm = 100 cm = 1000 mm.</p>
+    </div>
+    <div class="card">
+      <h3>Как переводить</h3>
+      <p class="rule">Большая единица → маленькая: умножаем. Маленькая → большая: делим.</p>
+      <ul>
+        <li>1.5 m = 1.5 · 100 = 150 cm</li>
+        <li>720 dm = 720 : 10 = 72 m</li>
+        <li>100 nm = 100 · 10⁻⁹ m = 10⁻⁷ m</li>
+        <li>1 h = 60 min = 3600 s; 1 day = 24 h = 86 400 s</li>
+        <li>15 min = 15 : 60 = 0.25 h = 900 s</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ 1.6 ============ -->
+  <h2 id="c16">1.6 Точность измерений</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Цена деления · <span class="en">scale division</span></h3>
+      <div class="fig"><svg viewBox="0 0 300 64" width="300"><line class="s" x1="20" y1="20" x2="280" y2="20"/>
+        <line class="s" x1="40" y1="20" x2="40" y2="40"/><line class="s" x1="140" y1="20" x2="140" y2="40"/><line class="s" x1="240" y1="20" x2="240" y2="40"/>
+        <line class="s" x1="60" y1="20" x2="60" y2="30"/><line class="s" x1="80" y1="20" x2="80" y2="30"/><line class="s" x1="100" y1="20" x2="100" y2="30"/><line class="s" x1="120" y1="20" x2="120" y2="30"/>
+        <line class="s" x1="160" y1="20" x2="160" y2="30"/><line class="s" x1="180" y1="20" x2="180" y2="30"/><line class="s" x1="200" y1="20" x2="200" y2="30"/><line class="s" x1="220" y1="20" x2="220" y2="30"/>
+        <text x="36" y="56">1</text><text x="136" y="56">2</text><text x="236" y="56">3</text><text class="tr" x="190" y="56">cm</text></svg></div>
+      <p class="rule">C = (разность двух чисел на шкале) : (число делений между ними)</p>
+      <p>Между 1 и 2 см 5 делений → C = 1 : 5 = 0.2 см. Если делений 10 → C = 0.1 см = 1 мм.</p>
+      <p>Чем <b>меньше</b> цена деления, тем <b>точнее</b> прибор (<span class="en">precision</span>).</p>
+    </div>
+    <div class="card">
+      <h3>Погрешность · <span class="en">measurement error</span></h3>
+      <p class="rule">Δa = C : 2 &nbsp;·&nbsp; результат A = a ± Δa</p>
+      <p>Линейка с ценой деления 1 мм: Δa = 0.5 мм. Ластик 50 мм → l = (50 ± 0.5) мм, то есть от 49.5 до 50.5 мм.</p>
+      <p>Маленькие предметы (толщина проволоки): намотать n витков, измерить длину L, тогда d = L : n.</p>
+    </div>
+  </div>
+
+  <!-- ============ 1.7 ============ -->
+  <h2 id="c17">1.7 Скалярные и векторные величины</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Скаляр · <span class="en">scalar</span></h3>
+      <p class="rule">Только величина (magnitude), без направления</p>
+      <p>distance, speed, mass, time, temperature, volume, количество страниц.</p>
+      <p>Нельзя сказать «5 кг вправо» — значит скаляр.</p>
+    </div>
+    <div class="card">
+      <h3>Вектор · <span class="en">vector</span></h3>
+      <p class="rule">Величина + направление (direction), рисуем стрелкой</p>
+      <p>displacement, velocity, force, position. Примеры: «30 m/s, East», «1 km north-east», указатель «Almaty 5 km →».</p>
+      <p>У стрелки есть <span class="en">tail</span> (хвост, начало) и <span class="en">head</span> (конец).</p>
+    </div>
+  </div>
+
+  <!-- ============ 2.1–2.2 ============ -->
+  <h2 id="c2">2.1–2.2 Движение, путь и перемещение</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Движение и система отсчёта</h3>
+      <p><span class="en">Motion</span> — изменение положения относительно места или тела, которое не движется.</p>
+      <p><span class="en">Reference frame</span> — точка зрения наблюдателя. <span class="en">Reference point</span> — неподвижное тело: дерево, дом, знак.</p>
+      <p class="rule">Всё движение относительно (relative motion)</p>
+      <p>Из поезда кажется, что дерево движется. Для друга на перроне дерево стоит.</p>
+    </div>
+    <div class="card">
+      <h3>Материальная точка · <span class="en">point particle</span></h3>
+      <p>Тело, размером которого можно пренебречь, потому что он гораздо меньше расстояния.</p>
+      <p>Машина 4 м едет Алматы → Астана (1261 км) — точка. Машина проезжает 5 м — уже не точка.</p>
+    </div>
+    <div class="card">
+      <h3>Путь и перемещение</h3>
+      <div class="fig"><svg viewBox="0 0 260 120" width="260"><path class="s" stroke-dasharray="6 5" d="M40 100 L40 25 L220 25 L220 100"/><line class="s2" x1="44" y1="105" x2="212" y2="105"/><path class="s2" d="M206 99 L216 105 L206 111"/><text x="6" y="66">150</text><text x="118" y="18">250</text><text x="226" y="66">150</text><text class="tr" x="112" y="100">Δx = 250</text></svg></div>
+      <p><span class="en">Trajectory</span> — линия движения. <span class="en">Distance</span> (путь, s) — вся длина траектории, <b>скаляр</b>.</p>
+      <p><span class="en">Displacement</span> (перемещение, Δx) — стрелка от начала к концу, <b>вектор</b>.</p>
+      <p class="rule">Δx = x₂ − x₁. Путь 150 + 250 + 150 = 550 м, перемещение 250 м</p>
+      <p>Вернулся в начало → перемещение 0. Перемещение никогда не больше пути.</p>
+    </div>
+    <div class="card">
+      <h3>Положение · <span class="en">position (x)</span></h3>
+      <p>Где тело находится относительно точки отсчёта. Вправо — плюс, влево — минус.</p>
+      <p>Девочка: 5 м вправо, потом 7 м влево. Путь 5 + 7 = 12 м. Перемещение 5 − 7 = −2 м (2 м влево).</p>
+    </div>
+  </div>
+
+  <!-- ============ 2.3–2.5 ============ -->
+  <h2 id="c23">2.3–2.5 Скорость</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Скорость · <span class="en">speed</span></h3>
+      <p class="rule">v = x : t &nbsp;&nbsp; x = v · t &nbsp;&nbsp; t = x : v</p>
+      <p>Единицы: m/s (SI) или km/h. <span class="en">Speed</span> — скаляр.</p>
+      <p><span class="en">Velocity</span> — скорость с направлением, вектор. Две машины по 60 km/h на запад и восток: speed одинаковый, velocity разный. +4 m/s и −4 m/s — одинаковый speed.</p>
+      <p>Поезд 240 м проходит тоннель 360 м: путь = 240 + 360 = 600 м.</p>
+    </div>
+    <div class="card">
+      <h3>Перевод km/h ↔ m/s</h3>
+      <p class="rule">km/h → m/s: делим на 3.6 &nbsp;·&nbsp; m/s → km/h: умножаем на 3.6</p>
+      <ul>
+        <li>72 km/h = 72 : 3.6 = 20 m/s</li>
+        <li>36 km/h = 10 m/s</li>
+        <li>15 m/s = 15 · 3.6 = 54 km/h</li>
+      </ul>
+      <p class="trap"><b>Ловушка:</b> перед расчётом приведи всё к одним единицам: минуты в секунды или часы, км в м.</p>
+    </div>
+    <div class="card">
+      <h3>Средняя скорость · <span class="en">average speed</span></h3>
+      <p class="rule">v<sub>ave</sub> = весь путь : всё время</p>
+      <p>8 км за 2 ч, потом 2 км за 2 ч: (8 + 2) : (2 + 2) = 2.5 km/h.</p>
+      <p class="trap"><b>Ловушка:</b> это НЕ среднее арифметическое скоростей! Половина <b>пути</b> 80 и 120 km/h → 96 km/h, а не 100. Половина <b>времени</b> 80 и 120 → тут как раз 100.</p>
+    </div>
+    <div class="card">
+      <h3>Равномерное и неравномерное</h3>
+      <p><span class="en">Uniform motion</span> — скорость постоянная, за равные времена равные пути. Круиз-контроль, капли дождя, парашютист после раскрытия, пузырьки в газировке.</p>
+      <p><span class="en">Non-uniform motion</span> — скорость меняется. Поезд подъезжает к станции, яблоко падает, мяч катится с горки, автобус тормозит у светофора.</p>
+    </div>
+  </div>
+
+  <!-- ============ 2.6 ============ -->
+  <h2 id="c26">2.6 Графики движения</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>График x(t) · <span class="en">displacement–time</span></h3>
+      <div class="fig"><svg viewBox="0 0 300 190" width="300">
+        <line class="s" x1="40" y1="10" x2="40" y2="180"/><line class="s" x1="40" y1="100" x2="290" y2="100"/>
+        <polyline class="s2" points="40,100 80,40 130,40 160,100 200,100 240,190"/>
+        <text x="8" y="44">50</text><text x="20" y="104">0</text><text x="6" y="186">−60</text>
+        <text x="74" y="116">4</text><text x="124" y="116">9</text><text x="152" y="116">12</text><text x="194" y="116">16</text><text x="234" y="116">20</text>
+        <text x="270" y="94">t, s</text><text x="46" y="20">x, m</text>
+        <text class="tr" x="50" y="66">I</text><text class="tr" x="100" y="34">II</text><text class="tr" x="150" y="66">III</text><text class="tr" x="172" y="94">IV</text><text class="tr" x="226" y="140">V</text>
+      </svg></div>
+      <ul>
+        <li><b>наклонная линия</b> → движется с постоянной скоростью</li>
+        <li><b>горизонтальная</b> → стоит (at rest): участки II и IV</li>
+        <li><b>вниз</b> → едет обратно (III, V)</li>
+        <li>чем <b>круче</b> линия, тем больше скорость</li>
+      </ul>
+      <p class="rule">Скорость по графику: v = Δx : Δt</p>
+      <p>Участок I: 50 : 4 = 12.5 m/s. Участок V: 60 : 4 = 15 m/s.</p>
+    </div>
+    <div class="card">
+      <h3>График v(t) · <span class="en">speed–time</span></h3>
+      <div class="fig"><svg viewBox="0 0 260 150" width="260">
+        <rect x="40" y="40" width="180" height="90" fill="var(--hl)" stroke="none"/>
+        <line class="s" x1="40" y1="10" x2="40" y2="130"/><line class="s" x1="40" y1="130" x2="250" y2="130"/>
+        <line class="s2" x1="40" y1="40" x2="220" y2="40"/>
+        <text x="14" y="44">15</text><text x="214" y="146">5</text><text x="232" y="124">t, s</text><text x="46" y="20">v, m/s</text>
+        <text x="96" y="92">x = v · t = 75 m</text>
+      </svg></div>
+      <p>Горизонтальная линия на графике v(t) — равномерное движение.</p>
+      <p class="rule">Путь = площадь под графиком v(t)</p>
+      <p>15 m/s в течение 5 s → 15 · 5 = 75 m.</p>
+    </div>
+  </div>
+
+  <div class="algo">
+    <h3>Как решать задачу на движение</h3>
+    <ol>
+      <li>Выпиши <b>Given</b>: что дано, и что найти.</li>
+      <li>Переведи в одни единицы: min → s или h, km → m.</li>
+      <li>Выбери формулу: v = x : t, x = v · t, t = x : v, или v<sub>ave</sub> = весь путь : всё время.</li>
+      <li>Подставь и запиши ответ с единицей.</li>
+    </ol>
+    <p style="margin:8px 0 0">Пример: 12.6 km за 15 min, найти v в m/s → 12 600 m : 900 s = 14 m/s.</p>
+  </div>
+
+  <!-- ============ TRAINER ============ -->
+  <h2 id="train">Тренажёр</h2>
+  <p class="lead">Задачи как в учебнике и в СОЧ, по порядку разделов. Дроби пиши через точку или запятую, единицы не нужны. Где спрашивают степень, впиши только показатель n (например −6).</p>
+  <div class="score" role="status">
+    <span><b id="sc">0</b> из <b id="tot">0</b> решено верно</span>
+    <div class="bar" aria-hidden="true"><i id="barfill"></i></div>
+    <button class="ghost" id="reset" type="button">Начать заново</button>
+  </div>
+  <div id="qs"></div>
+
+  <!-- ============ WORDS ============ -->
+  <h2 id="words">Словарик EN → RU</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>English</th><th>По-русски</th><th>Запомнить</th></tr></thead>
+    <tbody>
+      <tr><td>physical phenomenon</td><td>физическое явление</td><td>любое движение</td></tr>
+      <tr><td>observation / experiment</td><td>наблюдение / опыт</td><td>не контролируем / контролируем</td></tr>
+      <tr><td>hypothesis / conclusion</td><td>гипотеза / вывод</td><td>вывод — последний шаг</td></tr>
+      <tr><td>physical quantity</td><td>физическая величина</td><td>то, что измеряют</td></tr>
+      <tr><td>unit / magnitude</td><td>единица / числовое значение</td><td></td></tr>
+      <tr><td>scales</td><td>весы</td><td>масса</td></tr>
+      <tr><td>scientific notation</td><td>стандартный вид числа</td><td>c × 10ⁿ</td></tr>
+      <tr><td>exponent / base / coefficient</td><td>показатель / основание / коэффициент</td><td></td></tr>
+      <tr><td>base / derived units</td><td>основные / производные единицы</td><td>m, kg, s / m², m/s</td></tr>
+      <tr><td>metric prefix</td><td>приставка</td><td>k, M, G, m, μ, n</td></tr>
+      <tr><td>convert</td><td>перевести</td><td></td></tr>
+      <tr><td>scale division</td><td>цена деления</td><td>C</td></tr>
+      <tr><td>measurement error</td><td>погрешность</td><td>Δa = C/2</td></tr>
+      <tr><td>precision / accuracy</td><td>точность / аккуратность</td><td></td></tr>
+      <tr><td>scalar / vector</td><td>скаляр / вектор</td><td>без направления / с направлением</td></tr>
+      <tr><td>direction</td><td>направление</td><td></td></tr>
+      <tr><td>motion / relative motion</td><td>движение / относительное движение</td><td></td></tr>
+      <tr><td>reference frame / point</td><td>система / тело отсчёта</td><td></td></tr>
+      <tr><td>point particle</td><td>материальная точка</td><td>размер не важен</td></tr>
+      <tr><td>position</td><td>положение</td><td>x</td></tr>
+      <tr><td>trajectory</td><td>траектория</td><td></td></tr>
+      <tr><td>distance</td><td>путь</td><td>скаляр, s</td></tr>
+      <tr><td>displacement</td><td>перемещение</td><td>вектор, Δx</td></tr>
+      <tr><td>speed / velocity</td><td>скорость (число) / скорость с направлением</td><td>скаляр / вектор</td></tr>
+      <tr><td>average speed</td><td>средняя скорость</td><td>весь путь : всё время</td></tr>
+      <tr><td>uniform / non-uniform motion</td><td>равномерное / неравномерное</td><td>v постоянная / меняется</td></tr>
+      <tr><td>at rest</td><td>в покое</td><td>горизонталь на x(t)</td></tr>
+      <tr><td>inclined / horizontal</td><td>наклонный / горизонтальный</td><td>про линию графика</td></tr>
+    </tbody>
+  </table></div>
+
+  <footer>По учебнику «Physics, Grade 7» (Astana-kitap, 2022): глава 1 (1.1–1.7) и глава 2 (2.1–2.6).</footer>
+</div>
+
+<script>
+const G1='<div class="fig" style="justify-content:flex-start"><svg viewBox="0 0 300 190" width="260"><line class="s" x1="40" y1="10" x2="40" y2="180"/><line class="s" x1="40" y1="100" x2="290" y2="100"/><polyline class="s2" points="40,100 80,40 130,40 160,100 200,100 240,190"/><text x="8" y="44">50</text><text x="20" y="104">0</text><text x="6" y="186">−60</text><text x="74" y="116">4</text><text x="124" y="116">9</text><text x="152" y="116">12</text><text x="194" y="116">16</text><text x="234" y="116">20</text><text x="270" y="94">t, s</text><text x="46" y="20">x, m</text></svg></div>';
+const G2='<div class="fig" style="justify-content:flex-start"><svg viewBox="0 0 260 150" width="220"><line class="s" x1="40" y1="10" x2="40" y2="130"/><line class="s" x1="40" y1="130" x2="250" y2="130"/><line class="s2" x1="40" y1="130" x2="200" y2="30"/><line class="s" stroke-dasharray="4 4" x1="40" y1="30" x2="200" y2="30"/><line class="s" stroke-dasharray="4 4" x1="200" y1="30" x2="200" y2="130"/><text x="14" y="34">75</text><text x="196" y="146">5</text><text x="226" y="124">t, s</text><text x="46" y="20">x, m</text></svg></div>';
+const Q = [
+ {t:"1.2 Научный метод",q:"A possible answer to a question, also called an educated guess, is…",opts:["observation","hypothesis","conclusion","experiment"],a:1,s:"Hypothesis — предположение, которое потом проверяют опытом."},
+ {t:"1.2 Научный метод",q:"What is the last step in the scientific method?",opts:["Experiment","Hypothesis","Conclusion","Observation"],a:2,s:"Question → Hypothesis → Experiment → Conclusion."},
+ {t:"1.2 Научный метод",q:"Arman looked at the sky and saw that it was blue. Which method did he use?",opts:["Experiment","Observation","Hypothesis","Measurement"],a:1,s:"Он только смотрел и ничего не менял — это observation."},
+ {t:"1.3 Величины",q:"Which tool measures mass?",opts:["Thermometer","Odometer","Scales","Stopwatch"],a:2,s:"Массу измеряют весами (scales)."},
+ {t:"1.4 Стандартный вид",q:"Write 845 000 in scientific notation: 8.45 × 10ⁿ. Find n.",a:5,h:"Запятая сдвигается влево на сколько шагов?",s:"845 000 → 8.45000: 5 шагов влево, n = 5."},
+ {t:"1.4 Стандартный вид",q:"Write 0.0000056 in scientific notation: 5.6 × 10ⁿ. Find n.",a:-6,h:"Число меньше 1 → n отрицательное.",s:"Запятая сдвигается вправо на 6 шагов: 5.6 × 10⁻⁶, n = −6."},
+ {t:"1.4 Стандартный вид",q:"Write 4.08 × 10⁴ in standard form (обычным числом).",a:40800,h:"Плюс 4 → запятая на 4 шага вправо.",s:"4.08 → 40 800."},
+ {t:"1.4 Стандартный вид",q:"Write 3 × 10⁻² in standard form.",a:0.03,h:"Минус 2 → запятая на 2 шага влево.",s:"3 × 10⁻² = 0.03."},
+ {t:"1.4 Степени",q:"10⁸ × 10⁶ = 10ⁿ. Find n.",a:14,h:"При умножении показатели складываем.",s:"8 + 6 = 14."},
+ {t:"1.4 Степени",q:"10⁷ × 10⁻³ / (10⁻⁵)² = 10ⁿ. Find n.",a:14,h:"(10⁻⁵)² = 10⁻¹⁰.",s:"10⁷ × 10⁻³ = 10⁴. 10⁴ / 10⁻¹⁰ = 10⁴⁺¹⁰ = 10¹⁴."},
+ {t:"1.4 Сравнение",q:"Which is larger?",opts:["9.1 × 10⁴","910 000","they are equal"],a:1,s:"9.1 × 10⁴ = 91 000, это меньше чем 910 000."},
+ {t:"1.5 SI",q:"Which of the following is an SI unit of length?",opts:["Decimeter","Meter","Kilometer","Centimeter"],a:1,s:"Основные единицы SI: метр, килограмм, секунда."},
+ {t:"1.5 SI",q:"Which of the following is a derived quantity?",opts:["Time","Mass","Length","Area"],a:3,s:"Площадь (m²) составлена из длины, значит производная."},
+ {t:"1.5 Приставки",q:"Match: micro (μ) = …",opts:["10⁶","10⁻³","10⁻⁶","10⁻⁹"],a:2,s:"micro = 10⁻⁶. mega = 10⁶, milli = 10⁻³, nano = 10⁻⁹."},
+ {t:"1.5 Перевод",q:"The width of the table is 0.8 m. Convert it to millimetres.",a:800,h:"1 m = 1000 mm.",s:"0.8 · 1000 = 800 mm."},
+ {t:"1.5 Перевод",q:"Convert 0.75 km to centimetres.",a:75000,h:"1 km = 1000 m = 100 000 cm.",s:"0.75 · 100 000 = 75 000 cm."},
+ {t:"1.5 Перевод",q:"Convert 2 h 10 min to seconds.",a:7800,h:"1 h = 3600 s, 1 min = 60 s.",s:"2 · 3600 + 10 · 60 = 7200 + 600 = 7800 s."},
+ {t:"1.5 Перевод",q:"How many seconds are in 1.5 days?",a:129600,h:"1 day = 86 400 s.",s:"1.5 · 24 · 3600 = 129 600 s."},
+ {t:"1.5 Перевод",q:"A student travels 15 min to school. Convert this time to hours.",a:0.25,h:"Раздели на 60.",s:"15 : 60 = 0.25 h."},
+ {t:"1.6 Цена деления",q:"Between 20 and 30 on a scale there are 5 divisions. Find the scale division.",a:2,h:"(30 − 20) : 5.",s:"C = 10 : 5 = 2."},
+ {t:"1.6 Погрешность",q:"A thermometer has a scale division of 0.1 °C. Find the measurement error.",a:0.05,h:"Δa = C : 2.",s:"0.1 : 2 = 0.05 °C."},
+ {t:"1.6 Погрешность",q:"l = (50 ± 0.5) mm. What is the smallest possible length?",a:49.5,h:"a − Δa.",s:"50 − 0.5 = 49.5 mm. Наибольшая 50.5 mm."},
+ {t:"1.6 Точность",q:"Which ruler measures more precisely?",opts:["scale division 5 mm","scale division 1 mm","both the same"],a:1,s:"Чем меньше цена деления, тем точнее."},
+ {t:"1.7 Вектор",q:"Which one of the following is a vector quantity?",opts:["Time","Temperature","Displacement","Mass"],a:2,s:"Displacement имеет направление — вектор."},
+ {t:"1.7 Вектор",q:"Which statement describes a scalar quantity?",opts:["It has both direction and magnitude","It has only magnitude","It has only direction"],a:1,s:"Скаляр — только величина, без направления."},
+ {t:"1.7 Вектор",q:"Which of the following is a vector?",opts:["40 kg","Wind blowing at 20 m/s","30 m/s, East","A man walks 3 km along the street"],a:2,s:"Только здесь указано направление (East)."},
+ {t:"2.1 Система отсчёта",q:"You sit on a moving train and look at a tree. In your reference frame the tree is…",opts:["at rest","moving","it is impossible to say"],a:1,s:"Расстояние между тобой и деревом меняется, значит в твоей системе отсчёта дерево движется."},
+ {t:"2.1 Точка",q:"In which case can a car be treated as a point particle?",opts:["It parks in a garage","It travels from Almaty to Astana","It moves 5 m forward"],a:1,s:"Размер машины (4 м) намного меньше 1261 км."},
+ {t:"2.2 Путь",q:"A student walks 150 m North, 250 m East, then 150 m South. Find the distance.",a:550,h:"Сложи все отрезки.",s:"150 + 250 + 150 = 550 m."},
+ {t:"2.2 Перемещение",q:"Same student (150 m N, 250 m E, 150 m S). Find the magnitude of the displacement.",a:250,h:"От начала до конца по прямой.",s:"Север и юг взаимно отменились, осталось 250 m на восток."},
+ {t:"2.2 Перемещение",q:"A girl walks 5 m to the right, then 7 m to the left. Find the displacement (right is +).",a:-2,h:"5 − 7.",s:"Δx = 5 − 7 = −2 m. Путь 12 m."},
+ {t:"2.3 Скорость",q:"A car moves 200 m in 10 s. Find its speed in m/s.",a:20,h:"v = x : t.",s:"200 : 10 = 20 m/s."},
+ {t:"2.3 Путь",q:"A ship moves at 18 km/h for half an hour. Find the distance in km.",a:9,h:"x = v · t.",s:"18 · 0.5 = 9 km = 9000 m."},
+ {t:"2.3 Путь",q:"A horse runs at 8 m/s. What distance in metres does it cover in one hour?",a:28800,h:"1 h = 3600 s.",s:"8 · 3600 = 28 800 m."},
+ {t:"2.3 Время",q:"An athlete runs 3 km at 5 m/s. Find the time in minutes.",a:10,h:"3 km = 3000 m, t = x : v.",s:"3000 : 5 = 600 s = 10 min."},
+ {t:"2.3 Поезд",q:"A 240 m long train passes through a 360 m long tunnel in 2 minutes. Find its speed in m/s.",a:5,h:"Путь = длина поезда + длина тоннеля.",s:"600 m : 120 s = 5 m/s."},
+ {t:"2.3 Поезд",q:"A 120 m long train moves at 36 km/h. How many seconds does it take to pass a 200 m bridge?",a:32,h:"36 km/h = 10 m/s, путь 120 + 200.",s:"320 m : 10 m/s = 32 s."},
+ {t:"2.3 Единицы",q:"A car travels 12.6 km in 15 min. Find its speed in m/s.",a:14,h:"Переведи в m и s.",s:"12 600 m : 900 s = 14 m/s."},
+ {t:"2.4 Перевод",q:"Convert 72 km/h to m/s.",a:20,h:"Раздели на 3.6.",s:"72 : 3.6 = 20 m/s."},
+ {t:"2.4 Перевод",q:"Convert 15 m/s to km/h.",a:54,h:"Умножь на 3.6.",s:"15 · 3.6 = 54 km/h."},
+ {t:"2.4 Средняя",q:"A man walks 8 km in 2 hours and then 2 km in the next 2 hours. Find his average speed in km/h.",a:2.5,h:"Весь путь : всё время.",s:"(8 + 2) : (2 + 2) = 10 : 4 = 2.5 km/h."},
+ {t:"2.4 Средняя",q:"A runner covers 1200 m at an average speed of 4 m/s. How many seconds does it take?",a:300,h:"t = x : v.",s:"1200 : 4 = 300 s = 5 min."},
+ {t:"2.4 Средняя",q:"For the first half of the TIME a car moves at 40 km/h, for the second half at 60 km/h. Find the average speed.",a:50,h:"Половины времени равны — можно взять среднее.",s:"За время t/2 + t/2: путь 20t + 30t = 50t, v = 50t : t = 50 km/h."},
+ {t:"2.4 Средняя",q:"A bus goes the first half of the WAY at 80 km/h and the second half at 120 km/h. Find the average speed.",a:96,h:"Пусть каждая половина 240 km. Посчитай время.",s:"240 : 80 = 3 h, 240 : 120 = 2 h. 480 : 5 = 96 km/h. Не 100!"},
+ {t:"2.4 Средняя",q:"A body goes from A to B at 5 m/s and returns to A at 3 m/s. Find the average speed in m/s.",a:3.75,h:"Пусть AB = 15 m.",s:"15 : 5 = 3 s, 15 : 3 = 5 s. 30 m : 8 s = 3.75 m/s. Average velocity = 0, потому что вернулся."},
+ {t:"2.5 Виды движения",q:"A train coming to its station. What kind of motion is it?",opts:["uniform","non-uniform"],a:1,s:"Поезд тормозит, скорость меняется."},
+ {t:"2.5 Виды движения",q:"A train travels equal distances in equal times. What kind of motion is it?",opts:["uniform","non-uniform"],a:0,s:"Равные пути за равные времена — равномерное."},
+ {t:"2.3 Speed vs velocity",q:"Car A has a velocity of 4 m/s and car B has −4 m/s. Which is true?",opts:["They have the same speed","They have the same velocity","They travel in the same direction"],a:0,s:"Speed одинаковый (4 m/s), направления противоположные."},
+ {t:"2.6 Графики",q:"Use the graph. How many seconds was the motorbike at rest in total?"+G1,a:9,h:"Горизонтальные участки: 4–9 s и 12–16 s.",s:"(9 − 4) + (16 − 12) = 5 + 4 = 9 s."},
+ {t:"2.6 Графики",q:"Use the same graph. Find the speed in section 0–4 s (m/s)."+G1,a:12.5,h:"v = Δx : Δt.",s:"50 m : 4 s = 12.5 m/s."},
+ {t:"2.6 Графики",q:"Distance–time graph of a car. Find its speed in m/s."+G2,a:15,h:"75 m за 5 s.",s:"75 : 5 = 15 m/s."},
+ {t:"2.6 Графики",q:"A speed–time graph is a horizontal line at 15 m/s from 0 to 5 s. Find the distance covered.",a:75,h:"Площадь под графиком = v · t.",s:"15 · 5 = 75 m."},
+ {t:"2.6 Графики",q:"Which speed–time graph shows uniform motion?",opts:["a line going up from 0","a horizontal line","a line going down"],a:1,s:"На графике v(t) горизонтальная линия — скорость не меняется."},
+];
+const KEY="soch-phys7-v1";
+let st={};
+try{st=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){st={}}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const box=document.getElementById("qs");
+document.getElementById("tot").textContent=Q.length;
+function upd(){const n=Object.values(st).filter(v=>v==="ok").length;document.getElementById("sc").textContent=n;document.getElementById("barfill").style.width=(n/Q.length*100)+"%";}
+function render(){
+ box.innerHTML="";
+ Q.forEach((it,i)=>{
+  const d=document.createElement("div");d.className="q";d.id="q"+i;
+  d.innerHTML=`<div class="qh"><span class="qn">${i+1}</span><div class="qt"><span class="tag">${it.t}</span><div>${it.q}</div></div></div>`;
+  const row=document.createElement("div");row.className="row";
+  const msg=document.createElement("span");msg.className="msg";
+  const sol=document.createElement("div");sol.className="sol";sol.hidden=true;sol.innerHTML="<b>Решение:</b> "+it.s;
+  const hint=document.createElement("div");hint.className="hint";hint.hidden=true;hint.textContent="Подсказка: "+(it.h||"");
+  const mark=(ok)=>{d.classList.toggle("ok",ok);d.classList.toggle("bad",!ok);msg.className="msg "+(ok?"ok":"bad");msg.textContent=ok?"Верно!":"Пока нет, попробуй ещё";if(ok)sol.hidden=false;if(st[i]!=="ok"){st[i]=ok?"ok":"bad";save();upd();}};
+  if(it.opts){
+   it.opts.forEach((o,k)=>{const b=document.createElement("button");b.type="button";b.className="opt";b.textContent=o;
+    b.onclick=()=>{row.querySelectorAll(".opt").forEach(x=>x.classList.remove("right","wrong"));b.classList.add(k===it.a?"right":"wrong");mark(k===it.a);};row.appendChild(b);});
+  }else{
+   const inp=document.createElement("input");inp.type="text";inp.id="in"+i;inp.inputMode="decimal";inp.placeholder="ответ";inp.setAttribute("aria-label","Ответ к задаче "+(i+1));
+   const chk=document.createElement("button");chk.type="button";chk.textContent="Проверить";
+   const go=()=>{const v=parseFloat(inp.value.replace(",",".").replace(/[−–]/g,"-").replace(/\s/g,"").replace(/[^0-9.\-]/g,""));if(isNaN(v)){msg.className="msg bad";msg.textContent="Впиши число";return;}mark(Math.abs(v-it.a)<0.001);};
+   chk.onclick=go;inp.addEventListener("keydown",e=>{if(e.key==="Enter")go();});
+   const hb=document.createElement("button");hb.type="button";hb.className="ghost";hb.textContent="Подсказка";hb.onclick=()=>{hint.hidden=!hint.hidden;};
+   row.append(inp,chk,hb);
+  }
+  const sb=document.createElement("button");sb.type="button";sb.className="ghost";sb.textContent="Решение";sb.onclick=()=>{sol.hidden=!sol.hidden;};
+  row.append(sb,msg);
+  d.append(row,hint,sol);
+  if(st[i]==="ok"){d.classList.add("ok");msg.className="msg ok";msg.textContent="Решено";}
+  box.appendChild(d);
+ });
+ upd();
+}
+document.getElementById("reset").onclick=()=>{st={};save();render();};
+render();
+</script>
+
+</body></html>

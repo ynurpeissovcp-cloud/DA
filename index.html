@@ -3,29 +3,46 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Тренажёры Арсена</title>
+<title>Тренажёры · Арсен и Дария</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;600;700&family=Unbounded:wght@500&display=swap">
 <style>
-:root{--bg:#f3f5fb;--card:#fff;--ink:#18203a;--muted:#5c6684;--line:#dbe1ef;--pen:#2546c4;--sun:#fff3d6;--sunb:#f2a516}
-@media (prefers-color-scheme:dark){:root{--bg:#10141d;--card:#1a2030;--ink:#e8ecf6;--muted:#9ba5c0;--line:#2b3448;--pen:#8aa2ff;--sun:#3a2f17;--sunb:#f5b94a;color-scheme:dark}}
+:root{--bg:#f3f5fb;--card:#fff;--ink:#18203a;--muted:#5c6684;--line:#dbe1ef;--pen:#2546c4;--sun:#fff3d6;--sunb:#f2a516;--rose:#c42572}
+@media (prefers-color-scheme:dark){:root{--bg:#10141d;--card:#1a2030;--ink:#e8ecf6;--muted:#9ba5c0;--line:#2b3448;--pen:#8aa2ff;--sun:#3a2f17;--sunb:#f5b94a;--rose:#ff8ac0;color-scheme:dark}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 "Golos Text",system-ui,sans-serif}
+[hidden]{display:none!important}
 .wrap{max-width:560px;margin:0 auto;padding:22px 16px 40px}
-h1{font-family:Unbounded,system-ui,sans-serif;font-weight:500;font-size:26px;margin:0 0 6px}
+h1{font-family:Unbounded,system-ui,sans-serif;font-weight:500;font-size:24px;margin:0 0 14px}
 h2{font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:24px 0 8px}
 p{color:var(--muted);margin:0 0 8px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:5px;margin-bottom:16px;position:sticky;top:8px;z-index:2}
+.tabs a{text-align:center;padding:11px 8px;border-radius:12px;font-weight:700;color:var(--muted);text-decoration:none}
+.tabs a.on{background:var(--pen);color:#fff}
+.tabs a.on.d{background:var(--rose)}
 a.item{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px;color:var(--ink);text-decoration:none}
 a.item.now{background:var(--sun);border-color:var(--sunb)}
 a.item b{display:block;color:var(--pen)}a.item span{font-size:14px;color:var(--muted)}
+#dariya a.item b{color:var(--rose)}
+details{margin-top:6px}summary{color:var(--muted);font-size:14px;cursor:pointer;padding:6px 0}
 </style>
 </head>
 <body><div class="wrap">
-<h1>Тренажёры Арсена</h1>
+<h1>Тренажёры</h1>
+<nav class="tabs"><a href="#arsen" data-t="arsen">Арсен · 7D</a><a href="#dariya" data-t="dariya" class="d">Дария · 9F</a></nav>
+
+<section id="arsen">
 <p>Открывай тренажёр и иди по шагам. Ответы проверяются сразу, при ошибке будет подсказка.</p>
 <h2>Домашка сейчас</h2>
 <a class="item now" href="kazakh-96/"><b>Казахский · с. 94–96 · слова и пересказ</b><span>Жидебай-Бөрілі: жаңа сөздер, мәтін, мазмұндау</span></a>
+
 <h2>Казахский язык</h2>
 <a class="item" href="kazakh-96/"><b>5-тақырып · Киелі жерлер · с. 94–96</b><span>Новые слова и пересказ текста про Жидебай</span></a>
+<a class="item" href="kazakh-uly-dala/"><b>Ұлы Дала и Жібек жолы · с. 66–77</b><span>Объяснения, карточки, квиз и практика</span></a>
+<a class="item" href="kazakh-zhibek-zholy/"><b>Домашка: Жібек жолы · с. 75–77</b><span>Новые слова и письмо от имени монеты</span></a>
+<a class="item" href="kazakh-zhibek-konstruktor/"><b>Жібек жолы: конструктор письма</b><span>с. 77, задание 7 — собери текст из слов</span></a>
+<a class="item" href="kazakh-otyrar/"><b>Домашка: Отырар · с. 72</b><span>Новые слова и кроссворд</span></a>
+<a class="item" href="kazakh-sor-klimat/"><b>Подготовка к СОР</b><span>Изменения климата, степени прилагательных</span></a>
+
 <h2>Алгебра</h2>
 <a class="item" href="algebra-143/"><b>с. 143 · № 7 и 8</b><span>Фильмы и круг: прямая пропорциональность</span></a>
 <a class="item" href="algebra-review/"><b>Повторение тем 3.1–3.4 + № 9 с. 147</b><span>Вопросы по всей главе про функции</span></a>
@@ -33,10 +50,65 @@ a.item b{display:block;color:var(--pen)}a.item span{font-size:14px;color:var(--m
 <a class="item" href="algebra-3-3/"><b>3.3 · y = mx</b><span>с. 142, № 4–6</span></a>
 <a class="item" href="algebra-3-2/"><b>3.2 · Domain и range</b><span>с. 138–139, № 1–6</span></a>
 <a class="item" href="algebra-3-1/"><b>3.1 · Что такое функция</b><span>№ 1–4</span></a>
-<a class="item" href="algebra-soch/"><b>Подготовка к СОЧ</b><span>Степени, одночлены, многочлены</span></a>
+<a class="item" href="algebra-soch/"><b>Подготовка к СОЧ</b><span>38 типов заданий с правилами и решениями</span></a>
+<a class="item" href="algebra-stepeni/"><b>СОЧ · Степени</b><span>Integer Exponents: шпаргалка и пробный СОЧ</span></a>
+
 <h2>Геометрия</h2>
 <a class="item" href="geometry-2-2-hw-11-14/"><b>2.2 · № 11–14, с. 67</b><span>Построения по клеточкам</span></a>
 <a class="item" href="geometry-2-2-hw-7-10/"><b>2.2 · № 7–10, с. 66–67</b><span>Медианы, биссектрисы, средние линии</span></a>
 <a class="item" href="geometry-2-2/"><b>2.2 · Объяснение темы</b><span>Пять особых отрезков треугольника</span></a>
-<a class="item" href="geometry-soch/"><b>Подготовка к СОЧ</b><span>Отрезки, углы, равенство фигур</span></a>
-</div></body></html>
+<a class="item" href="geometry-soch/"><b>Подготовка к СОЧ</b><span>36 типов заданий с чертежами и решениями</span></a>
+<details><summary>Старые версии подготовки к СОЧ</summary>
+<a class="item" href="geometry-soch-old-1/"><b>СОЧ · рецепты и пробный СОЧ</b><span>Темы 1.1–2.1, 12 заданий</span></a>
+<a class="item" href="geometry-soch-old-2/"><b>СОЧ · 8 типов задач</b><span>Шпаргалка и 20 вопросов</span></a>
+<a class="item" href="geometry-soch-old-3/"><b>СОЧ · шпаргалка и тренажёр</b><span>Глава 1 и раздел 2.1</span></a>
+</details>
+
+<h2>Физика</h2>
+<a class="item" href="physics-sor/"><b>СОР · главы 1 и 2.1–2.6</b><span>Шпаргалка, слова, тест и задачи</span></a>
+<a class="item" href="physics-soch/"><b>СОЧ · Physics 7</b><span>Шпаргалка и тренажёр</span></a>
+
+<h2>Химия</h2>
+<a class="item" href="chemistry-3-2/"><b>Тема 3.2</b><span>Объяснение и вопросы</span></a>
+<a class="item" href="chemistry-soch/"><b>СОЧ · темы 1.1–3.1</b><span>Квиз с переводом и разбором</span></a>
+
+<h2>Биология</h2>
+<a class="item" href="biology-transport/"><b>SAU 1 · Transport 5.1–5.5</b><span>Транспорт веществ: схемы и вопросы</span></a>
+<a class="item" href="biology-soch/"><b>СОЧ · стр. 1–66</b><span>90 вопросов с переводом и объяснениями</span></a>
+
+<h2>География</h2>
+<a class="item" href="geography-sor/"><b>СОР · §1–15</b><span>Шпаргалки, 156 вопросов, пробный СОР</span></a>
+
+<h2>История Казахстана</h2>
+<a class="item" href="history-abylai/"><b>Абылай и культура</b><span>Объяснения и тест</span></a>
+<a class="item" href="history-1-10/"><b>§1–10 · стр. 5–36</b><span>Шпаргалки, тесты, лента дат, пробный СОР</span></a>
+
+<h2>Литература</h2>
+<a class="item" href="literature-cheremukha/"><b>«Сыплет черёмуха снегом»</b><span>Учим стих наизусть, с медленной озвучкой</span></a>
+<a class="item" href="literature-legendy/"><b>СОР · Легенды и притчи</b><span>Шпаргалка, 55 вопросов, письменные ответы</span></a>
+</section>
+
+<section id="dariya" hidden>
+<p>Короткие тесты: ответ проверяется сразу, после ошибки — разбор.</p>
+<h2>Алгебра</h2>
+<a class="item" href="dariya/algebra-sor/"><b>СОР · главы 1–2</b><span>44 вопроса: уравнения, неравенства, комбинаторика</span></a>
+<a class="item" href="dariya/algebra-sor-min/"><b>СОР · минимум</b><span>15 рецептов по комбинаторике и 24 задачи</span></a>
+<a class="item" href="dariya/algebra-sor-2/"><b>СОР · Algebra 9</b><span>Подготовка к СОР</span></a>
+<a class="item" href="dariya/algebra-soch/"><b>СОЧ · Algebra 9</b><span>Подготовка к СОЧ</span></a>
+<h2>Химия</h2>
+<a class="item" href="dariya/chemistry-soch/"><b>СОЧ · тест из 12 вопросов</b><span>Электролиты, ионные уравнения, гидролиз</span></a>
+<h2>География Казахстана</h2>
+<a class="item" href="dariya/geography-soch/"><b>СОЧ · физическая география</b><span>15 вопросов с объяснениями</span></a>
+<h2>Физика и астрономия</h2>
+<a class="item" href="dariya/physics-oshibki/"><b>Работа над ошибками</b><span>СОЧ по физике и СОР по астрономии, 26 вопросов</span></a>
+</section>
+</div>
+<script>
+function show(){var t=location.hash==='#dariya'?'dariya':'arsen';
+document.getElementById('arsen').hidden=t!=='arsen';document.getElementById('dariya').hidden=t!=='dariya';
+document.querySelectorAll('.tabs a').forEach(function(a){a.classList.toggle('on',a.dataset.t===t)});
+document.title=t==='dariya'?'Тренажёры Дарии':'Тренажёры Арсена';}
+document.querySelectorAll('.tabs a').forEach(function(a){a.onclick=function(e){e.preventDefault();history.replaceState(null,'','#'+a.dataset.t);show();scrollTo(0,0)}});
+window.addEventListener('hashchange',show);show();
+</script>
+</body></html>

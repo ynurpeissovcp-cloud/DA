@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<title>Арсен: химия, тема 3.2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one column "lab notebook" on faint graph paper; periodic-table tiles carry levels and scores. */
+:root{
+  --bg:#F2F5F7; --grid:rgba(30,91,216,.06); --card:#FFFFFF; --ink:#0F1E2A; --muted:#566876; --line:#D6DEE5;
+  --accent:#1E5BD8; --accent-soft:#E4ECFC; --flame:#D9660A; --flame-soft:#FCEBDD;
+  --good:#12805A; --good-soft:#E1F3EA; --bad:#C2303B; --bad-soft:#FBE5E7;
+  --f-display:"Unbounded", "Arial Black", system-ui, sans-serif;
+  --f-body:"Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0C151E; --grid:rgba(110,155,255,.07); --card:#13212E; --ink:#E5EDF3; --muted:#93A5B4; --line:#24384B;
+  --accent:#7AA2FF; --accent-soft:#1A2D4D; --flame:#FF9C45; --flame-soft:#3A2614;
+  --good:#45C792; --good-soft:#123327; --bad:#FF7079; --bad-soft:#3A1A1E; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#0C151E; --grid:rgba(110,155,255,.07); --card:#13212E; --ink:#E5EDF3; --muted:#93A5B4; --line:#24384B;
+  --accent:#7AA2FF; --accent-soft:#1A2D4D; --flame:#FF9C45; --flame-soft:#3A2614;
+  --good:#45C792; --good-soft:#123327; --bad:#FF7079; --bad-soft:#3A1A1E; color-scheme:dark; }
+
+*{box-sizing:border-box}
+body{
+  background-color:var(--bg); color:var(--ink); font-family:var(--f-body); font-size:16px; line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.wrap{max-width:780px; margin:0 auto; padding-block:28px 64px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px));}
+h1,h2,h3{font-family:var(--f-display); text-wrap:balance; margin:0; letter-spacing:-.01em}
+button{font:inherit; color:inherit; cursor:pointer}
+button:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.label{font-family:var(--f-mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+
+/* Hero */
+.hero{display:flex; gap:22px; align-items:center; flex-wrap:wrap; margin-bottom:26px}
+.tile{width:118px; height:132px; border:2.5px solid var(--ink); border-radius:6px; background:var(--card);
+  display:grid; grid-template-rows:auto 1fr auto; padding:8px 10px; flex:none; box-shadow:6px 6px 0 var(--accent)}
+.tile .num{font-family:var(--f-mono); font-weight:700; font-size:15px}
+.tile .sym{font-family:var(--f-display); font-weight:800; font-size:50px; line-height:1; align-self:center}
+.tile .nm{font-size:12px; font-weight:700}
+.tile .ms{font-family:var(--f-mono); font-size:11px; color:var(--muted)}
+.hero-text{flex:1; min-width:240px}
+.hero h1{font-size:clamp(26px,5vw,38px); line-height:1.1; margin-block:6px 10px}
+.hero p{margin:0; color:var(--muted); max-width:52ch}
+
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:26px}
+.btn{border:2px solid var(--ink); background:var(--card); padding:10px 16px; border-radius:8px; font-weight:700;
+  display:inline-flex; gap:8px; align-items:center; transition:transform .12s, box-shadow .12s}
+.btn:hover{transform:translate(-1px,-1px); box-shadow:3px 3px 0 var(--ink)}
+.btn.primary{background:var(--accent); border-color:var(--accent); color:#fff}
+.btn.primary:hover{box-shadow:3px 3px 0 var(--ink)}
+.btn[disabled]{opacity:.45; cursor:not-allowed; transform:none; box-shadow:none}
+.switch{display:inline-flex; align-items:center; gap:8px; font-weight:600; font-size:14px; color:var(--muted);
+  border:1.5px dashed var(--line); padding:8px 12px; border-radius:8px; background:var(--card)}
+.switch input{accent-color:var(--accent); width:18px; height:18px}
+
+/* Levels grid */
+.levels{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px}
+.lvl{text-align:left; background:var(--card); border:1.5px solid var(--line); border-radius:10px; padding:14px 14px 12px;
+  display:grid; grid-template-columns:auto 1fr; gap:4px 12px; align-items:start; transition:border-color .12s, transform .12s}
+.lvl:hover{border-color:var(--accent); transform:translateY(-2px)}
+.lvl .code{grid-row:span 3; width:52px; height:58px; border:2px solid var(--ink); border-radius:5px; display:grid; place-items:center;
+  font-family:var(--f-display); font-weight:700; font-size:17px; background:var(--accent-soft)}
+.lvl .t{font-weight:800; line-height:1.25}
+.lvl .r{font-size:13px; color:var(--muted); line-height:1.3}
+.lvl .meta{font-family:var(--f-mono); font-size:12px; color:var(--muted); margin-top:6px; display:flex; gap:10px; flex-wrap:wrap}
+.best{color:var(--good); font-weight:700}
+.boss{grid-column:1/-1; display:flex; gap:16px; align-items:center; flex-wrap:wrap; background:var(--ink); color:var(--bg);
+  border:none; border-radius:12px; padding:18px 20px; text-align:left}
+.boss .code{width:60px; height:66px; border:2px solid var(--bg); border-radius:6px; display:grid; place-items:center;
+  font-family:var(--f-display); font-weight:800; font-size:18px; background:var(--flame); color:#fff; flex:none}
+.boss .t{font-family:var(--f-display); font-size:20px}
+.boss .r{opacity:.8; font-size:14px}
+.boss .grow{flex:1; min-width:200px}
+.boss:hover{transform:translateY(-2px)}
+.section-h{display:flex; justify-content:space-between; align-items:baseline; margin:30px 0 12px; gap:12px; flex-wrap:wrap}
+.section-h h2{font-size:18px}
+
+/* Quiz */
+.qtop{display:flex; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap}
+.qtop .grow{flex:1; min-width:140px}
+.bar{height:10px; background:var(--line); border-radius:99px; overflow:hidden}
+.bar > i{display:block; height:100%; width:0; background:var(--accent); transition:width .3s}
+.stats{display:flex; gap:8px; font-family:var(--f-mono); font-size:13px}
+.pill{padding:4px 10px; border-radius:99px; background:var(--card); border:1.5px solid var(--line); white-space:nowrap}
+.pill.streak{background:var(--flame-soft); border-color:var(--flame); color:var(--flame); font-weight:700}
+.card{background:var(--card); border:2px solid var(--ink); border-radius:12px; padding:22px; box-shadow:6px 6px 0 var(--line)}
+.qtag{display:flex; justify-content:space-between; gap:10px; margin-bottom:10px; flex-wrap:wrap}
+.qen{font-size:clamp(19px,3.2vw,23px); font-weight:800; line-height:1.3; margin:0}
+.qru{margin:8px 0 0; color:var(--muted); font-size:15px}
+.opts{display:grid; gap:10px; margin-top:20px}
+.opt{display:flex; gap:12px; align-items:flex-start; text-align:left; background:var(--bg); border:2px solid var(--line);
+  border-radius:10px; padding:12px 14px; transition:border-color .12s, background .12s}
+.opt:hover:not([disabled]){border-color:var(--accent)}
+.opt .k{font-family:var(--f-mono); font-weight:700; width:26px; height:26px; border-radius:6px; border:1.5px solid currentColor;
+  display:grid; place-items:center; flex:none; font-size:13px; opacity:.7}
+.opt .ot{min-width:0}
+.opt .ot small{display:block; color:var(--muted); font-size:13px}
+.opt.correct{border-color:var(--good); background:var(--good-soft)}
+.opt.wrong{border-color:var(--bad); background:var(--bad-soft)}
+.opt[disabled]{cursor:default}
+
+.sort{display:grid; gap:8px; margin-top:18px}
+.srow{display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; padding:10px 12px;
+  border:2px solid var(--line); border-radius:10px; background:var(--bg)}
+.srow .it{font-weight:700; min-width:0; flex:1 1 160px}
+.srow .it small{display:block; font-weight:500; color:var(--muted); font-size:13px}
+.seg{display:inline-flex; border:1.5px solid var(--line); border-radius:8px; overflow:hidden; flex-wrap:wrap}
+.seg button{border:none; background:var(--card); padding:7px 11px; font-size:13px; font-weight:700; border-right:1.5px solid var(--line)}
+.seg button:last-child{border-right:none}
+.seg button.on{background:var(--accent); color:#fff}
+.srow.ok{border-color:var(--good); background:var(--good-soft)}
+.srow.no{border-color:var(--bad); background:var(--bad-soft)}
+.srow .fix{font-size:13px; font-weight:700; color:var(--good); width:100%}
+
+.fb{margin-top:18px; border-radius:10px; padding:14px 16px; border:2px solid; display:grid; gap:6px}
+.fb.good{border-color:var(--good); background:var(--good-soft)}
+.fb.bad{border-color:var(--bad); background:var(--bad-soft)}
+.fb .v{font-weight:800}
+.fb p{margin:0}
+.term{font-family:var(--f-mono); font-size:13px; display:inline-block; padding:3px 8px; border-radius:6px; background:var(--card); border:1px solid var(--line); justify-self:start}
+.qactions{display:flex; justify-content:space-between; gap:10px; margin-top:18px; flex-wrap:wrap; align-items:center}
+.hint{font-size:13px; color:var(--muted)}
+
+/* Results */
+.res-head{display:flex; gap:22px; align-items:center; flex-wrap:wrap}
+.mark{width:120px; height:134px; border:2.5px solid var(--ink); border-radius:6px; background:var(--card); display:grid;
+  grid-template-rows:auto 1fr auto; padding:8px 10px; box-shadow:6px 6px 0 var(--flame); flex:none}
+.mark .sym{font-family:var(--f-display); font-weight:800; font-size:56px; line-height:1; align-self:center}
+.res-head h2{font-size:clamp(22px,4vw,30px)}
+.res-nums{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+.mist{display:grid; gap:12px; margin-top:12px}
+.mi{background:var(--card); border:1.5px solid var(--line); border-left:5px solid var(--bad); border-radius:8px; padding:12px 14px}
+.mi .q{font-weight:800}
+.mi .a{color:var(--good); font-weight:700; margin-top:4px}
+.mi .e{color:var(--muted); font-size:14px; margin-top:4px}
+
+/* Cheat sheet */
+.cheat{display:grid; gap:14px}
+.cs{background:var(--card); border:1.5px solid var(--line); border-radius:10px; padding:16px 18px}
+.cs h3{font-size:16px; display:flex; gap:10px; align-items:center; margin-bottom:8px}
+.cs h3 .code{font-family:var(--f-mono); font-size:12px; border:1.5px solid var(--ink); border-radius:4px; padding:2px 6px; background:var(--accent-soft)}
+.cs ul{margin:0; padding-left:20px; display:grid; gap:4px}
+.cs li{max-width:68ch}
+.cs b{font-weight:800}
+.tbl{overflow-x:auto}
+.tbl table{border-collapse:collapse; font-size:14px; min-width:420px}
+.tbl th,.tbl td{border:1px solid var(--line); padding:6px 10px; text-align:left}
+.tbl th{font-family:var(--f-mono); font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted)}
+
+@media (max-width:520px){ .card{padding:16px} .tile{width:96px; height:110px} .tile .sym{font-size:40px} }
+@media (prefers-reduced-motion:reduce){ *{transition:none!important; animation:none!important} }
+@keyframes pop{0%{transform:scale(.96)}60%{transform:scale(1.02)}100%{transform:scale(1)}}
+.pop{animation:pop .25s ease-out}
+</style>
+
+<div class="wrap">
+
+<!-- HOME -->
+<section id="home">
+  <div class="hero">
+    <div class="tile" aria-hidden="true">
+      <span class="num">18</span><span class="sym">Ar</span>
+      <span><span class="nm">Arsen</span><br><span class="ms">7th grade · 39.95</span></span>
+    </div>
+    <div class="hero-text">
+      <div class="label">Chemistry · Grade 7 · тема 3.2</div>
+      <h1>Арсен, элементы и вещества</h1>
+      <p>Вопросы на английском, как будет на СОЧ, а под каждым — перевод и разбор по-русски. Пройди три части темы 3.2 по очереди, а в конце — «Мини-СОЧ» по всей теме.</p>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button class="btn" id="openCheat" type="button">Шпаргалка по теме 3.2</button>
+    <label class="switch" for="ruToggle"><input type="checkbox" id="ruToggle" checked> Показывать перевод на русский</label>
+  </div>
+
+  <div class="section-h"><h2>Части темы 3.2</h2><span class="label" id="totalQ"></span></div>
+  <div class="levels" id="levels"></div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz" hidden>
+  <div class="qtop">
+    <button class="btn" id="quitBtn" type="button" aria-label="Выйти к темам">← Назад</button>
+    <div class="grow">
+      <div class="label" id="qLevelName" style="margin-bottom:6px"></div>
+      <div class="bar"><i id="qBar"></i></div>
+    </div>
+    <div class="stats"><span class="pill" id="qCount">1/10</span><span class="pill streak" id="qStreak" hidden></span></div>
+  </div>
+  <div class="card" id="qCard"></div>
+</section>
+
+<!-- RESULTS -->
+<section id="results" hidden>
+  <div class="res-head">
+    <div class="mark" aria-hidden="true"><span class="label" id="rMarkLbl">оценка</span><span class="sym" id="rMark">5</span><span class="label" id="rPct">100%</span></div>
+    <div style="flex:1; min-width:220px">
+      <div class="label" id="rLevel"></div>
+      <h2 id="rTitle"></h2>
+      <p id="rMsg" style="margin:8px 0 0; color:var(--muted)"></p>
+      <div class="res-nums" id="rNums"></div>
+    </div>
+  </div>
+  <div class="toolbar" style="margin-top:22px">
+    <button class="btn primary" id="retryMist" type="button">Повторить ошибки</button>
+    <button class="btn" id="retryAll" type="button">Пройти заново</button>
+    <button class="btn" id="toHome" type="button">В начало</button>
+  </div>
+  <div id="mistWrap">
+    <div class="section-h"><h2>Работа над ошибками</h2></div>
+    <div class="mist" id="mistList"></div>
+  </div>
+</section>
+
+<!-- CHEAT SHEET -->
+<section id="cheat" hidden>
+  <div class="qtop"><button class="btn" id="cheatBack" type="button">← Назад</button><div class="grow"><div class="label">Шпаргалка · тема 3.2</div></div></div>
+  <div class="cheat" id="cheatBody"></div>
+</section>
+
+</div>
+
+<script>
+/* ---------- DATA ---------- */
+const LEVELS = [
+ {id:'3.2·A', en:'Elements and symbols', ru:'Элементы и их символы', qs:[
+  {en:'An element contains…', ru:'Элемент содержит…', o:[['only one type of atom','атомы только одного вида'],['two or more types of atoms','атомы двух и более видов'],['different substances mixed together','разные смешанные вещества'],['only molecules of water','только молекулы воды']], a:0, ex:'Elements contain only one type of atom, поэтому они — чистые вещества. Железо состоит только из атомов железа, кислород — только из атомов кислорода.', term:'chemical element — химический элемент'},
+  {en:'How many chemical elements have been identified today?', ru:'Сколько химических элементов известно сегодня?', o:[['118','118'],['94','94'],['500','500'],['24','24']], a:0, ex:'118 элементов. Из них 94 встречаются в природе, а 24 получены искусственно (synthetic).', term:'Periodic table — периодическая таблица'},
+  {en:'How many of the 118 elements occur naturally on Earth?', ru:'Сколько из 118 элементов встречаются в природе?', o:[['94','94'],['118','118'],['24','24'],['50','50']], a:0, ex:'Первые 94 — природные, остальные 24 — синтетические (созданы людьми).', term:'synthetic — синтетический'},
+  {en:'Elements that are made by people and do not occur naturally are called…', ru:'Элементы, созданные людьми и не встречающиеся в природе, называются…', o:[['synthetic','синтетическими'],['noble','благородными'],['brittle','хрупкими'],['complex','сложными']], a:0, ex:'Synthetic elements — их 24.', term:'synthetic — синтетический'},
+  {en:'Which element symbol is written correctly?', ru:'Какой символ элемента записан правильно?', o:[['Al','Al'],['AL','AL'],['al','al'],['aL','aL']], a:0, ex:'Правило: до двух латинских букв, первая всегда заглавная, вторая строчная. Al — алюминий, H — водород.', term:'symbol — символ'},
+  {en:'All element symbols are placed on a special table called the…', ru:'Все символы элементов собраны в специальной таблице, которая называется…', o:[['Periodic table','периодическая таблица'],['Multiplication table','таблица умножения'],['Solubility table','таблица растворимости'],['Time table','расписание']], a:0, ex:'Periodic table — «самая популярная таблица в химии» (рисунок 3.2.3).', term:'Periodic table — периодическая таблица'},
+  {en:'What is the symbol of gold?', ru:'Какой символ у золота?', o:[['Au','Au'],['Go','Go'],['G','G'],['Ag','Ag']], a:0, ex:'Au — от латинского aurum. Ag — это серебро (argentum).', term:'gold — золото'},
+  {en:'What is the symbol of iron?', ru:'Какой символ у железа?', o:[['Fe','Fe'],['Ir','Ir'],['I','I'],['In','In']], a:0, ex:'Fe — от латинского ferrum. Ir — иридий, I — йод, In — индий.', term:'iron — железо'},
+  {en:'What is the symbol of sodium?', ru:'Какой символ у натрия?', o:[['Na','Na'],['S','S'],['So','So'],['Sd','Sd']], a:0, ex:'Na — от латинского natrium. S — это сера (sulfur). Частая ловушка!', term:'sodium — натрий'},
+  {en:'What is the symbol of lead?', ru:'Какой символ у свинца?', o:[['Pb','Pb'],['Le','Le'],['L','L'],['Ld','Ld']], a:0, ex:'Pb — от латинского plumbum. Английское lead не похоже на символ, это надо просто запомнить.', term:'lead — свинец'},
+  {t:'sort', en:'Match each element to its symbol (part 1).', ru:'Сопоставь элемент и символ (часть 1).', cats:[['H','водород'],['Na','натрий'],['Cr','хром'],['P','фосфор']], items:[['Hydrogen','водород',0],['Sodium','натрий',1],['Chromium','хром',2],['Phosphorus','фосфор',3]], ex:'Hydrogen — H, sodium — Na, chromium — Cr, phosphorus — P. Это задание 2 из Literacy.'},
+  {t:'sort', en:'Match each element to its symbol (part 2).', ru:'Сопоставь элемент и символ (часть 2).', cats:[['Br','бром'],['Ar','аргон'],['Pb','свинец'],['U','уран']], items:[['Bromine','бром',0],['Argon','аргон',1],['Lead','свинец',2],['Uranium','уран',3]], ex:'Bromine — Br, argon — Ar (как Арсен!), lead — Pb, uranium — U.'},
+  {en:'Which statement about elements is TRUE?', ru:'Какое утверждение об элементах ВЕРНО?', o:[['An element cannot be broken down into another substance','элемент нельзя разложить на другое вещество'],['An element is made of different kinds of atoms','элемент состоит из разных атомов'],['An element is always a gas','элемент всегда газ'],['An element is a mixture','элемент — это смесь']], a:0, ex:'Свойства элементов: 1) нельзя разложить на другое вещество; 2) их «кирпичики» — атомы; 3) реагируя друг с другом, образуют соединения.', term:'property — свойство'},
+  {en:'When elements react with each other, they produce…', ru:'Когда элементы реагируют друг с другом, они образуют…', o:[['compounds','соединения'],['new elements','новые элементы'],['mixtures only','только смеси'],['nothing','ничего']], a:0, ex:'Например, водород + кислород → вода (H₂O), это соединение (compound).', term:'compound — соединение'},
+  {en:'Which elements are the most essential to living organisms?', ru:'Какие элементы самые важные для живых организмов?', o:[['Carbon, hydrogen, oxygen, nitrogen','углерод, водород, кислород, азот'],['Gold, silver, platinum, lead','золото, серебро, платина, свинец'],['Uranium, argon, neon, helium','уран, аргон, неон, гелий'],['Aluminium, chromium, bromine, iron only','только алюминий, хром, бром, железо']], a:0, ex:'Основа живого — C, H, O, N, а также P и S. Ещё важны Ca, Fe, Na, K. Свинец и уран для организма ядовиты.', term:'living organisms — живые организмы'}
+ ]},
+ {id:'3.2·B', en:'Metals and nonmetals', ru:'Металлы и неметаллы', qs:[
+  {en:'Elements can be classified as…', ru:'Элементы делят на…', o:[['metals and nonmetals','металлы и неметаллы'],['solids and gases','твёрдые и газы'],['mixtures and solutions','смеси и растворы'],['natural and magical','природные и волшебные']], a:0, ex:'Главная классификация в этой теме — metals и nonmetals.', term:'metals — металлы · nonmetals — неметаллы'},
+  {en:'Which is a property of METALS?', ru:'Что из этого — свойство МЕТАЛЛОВ?', o:[['They are good conductors of electricity','хорошо проводят электричество'],['They are brittle','хрупкие'],['They have a dull color','тусклого цвета'],['They are usually gases','обычно газы']], a:0, ex:'Металлы: проводят электричество, твёрдые при комнатной температуре, блестят, куются в листы, вытягиваются в проволоку.', term:'conductor — проводник'},
+  {en:'Metals can be hammered into sheets and…', ru:'Металлы можно ковать в листы и…', o:[['drawn into wires','вытягивать в проволоку'],['dissolved in air','растворять в воздухе'],['broken like glass','бить как стекло'],['turned into nonmetals','превращать в неметаллы']], a:0, ex:'Hammered into sheets — ковкость, drawn into wires — пластичность. Поэтому из меди делают провода.', term:'wire — проволока'},
+  {en:'Nonmetals are brittle. What does "brittle" mean?', ru:'Неметаллы хрупкие (brittle). Что значит «brittle»?', o:[['They break and cannot be hammered','ломаются, их нельзя ковать'],['They are very shiny','очень блестящие'],['They conduct electricity well','хорошо проводят ток'],['They are always liquid','всегда жидкие']], a:0, ex:'Brittle — хрупкий. Например, кусочек серы при ударе рассыпается.', term:'brittle — хрупкий'},
+  {en:'Which nonmetal CAN conduct electricity?', ru:'Какой неметалл МОЖЕТ проводить электричество?', o:[['Carbon (graphite)','углерод (графит)'],['Sulfur','сера'],['Oxygen','кислород'],['Nitrogen','азот']], a:0, ex:'Исключение из правила: неметаллы не проводят ток, кроме углерода в виде графита (из него сделан грифель карандаша).', term:'graphite — графит'},
+  {en:'At room conditions, nonmetals can be…', ru:'При комнатных условиях неметаллы бывают…', o:[['solid, liquid or gaseous','твёрдыми, жидкими или газообразными'],['only solid','только твёрдыми'],['only gaseous','только газами'],['only liquid','только жидкими']], a:0, ex:'Сера — твёрдая, бром — жидкий, кислород — газ. А металлы при комнатной температуре твёрдые.', term:'gaseous — газообразный'},
+  {en:'Nonmetals usually have…', ru:'Неметаллы обычно…', o:[['a dull color','тусклые'],['a metallic shiny color','с металлическим блеском'],['the ability to be drawn into wires','вытягиваются в проволоку'],['high electrical conductivity','хорошо проводят ток']], a:0, ex:'Dull — тусклый. Блеск — признак металлов.', term:'dull — тусклый'},
+  {en:'The yellow, brittle sample in Figure 3.2.4 is pure sulfur. Sulfur is a…', ru:'Жёлтый хрупкий образец на рисунке 3.2.4 — сера. Сера — это…', o:[['nonmetal','неметалл'],['metal','металл'],['mixture','смесь'],['compound','соединение']], a:0, ex:'Сера тусклая, хрупкая и не проводит ток, значит это неметалл. Её символ — S.', term:'sulfur — сера'},
+  {en:'Which statement is TRUE about the Periodic table?', ru:'Какое утверждение о периодической таблице ВЕРНО?', o:[['Most of the elements are metals','большинство элементов — металлы'],['Most of the elements are nonmetals','большинство элементов — неметаллы'],['It has only gases','в ней только газы'],['It has exactly 500 elements','в ней ровно 500 элементов']], a:0, ex:'Большинство элементов — металлы: щелочные, щёлочноземельные, переходные, лантаноиды, актиноиды и т.д.', term:'transition metals — переходные металлы'},
+  {en:'Noble gases (like helium, neon, argon) are…', ru:'Благородные газы (гелий, неон, аргон)…', o:[['unreactive','нереакционноспособные (почти не реагируют)'],['very reactive metals','очень активные металлы'],['brittle solids','хрупкие твёрдые вещества'],['compounds','соединения']], a:0, ex:'Noble gases почти ни с чем не реагируют (unreactive). Их место в таблице — крайний правый столбец.', term:'noble gases — благородные газы · unreactive — нереактивный'},
+  {en:'Which is NOT a physical property of copper?', ru:'Что НЕ является физическим свойством меди?', o:[['It is brittle','она хрупкая'],['It conducts electricity','проводит электричество'],['It can be drawn into wires','вытягивается в проволоку'],['It has a reddish shiny color','красноватая и блестящая']], a:0, ex:'Медь — металл, она не хрупкая, а ковкая. Пять свойств меди: красноватый блеск, проводит ток, проводит тепло, куётся в листы, вытягивается в проволоку.', term:'copper — медь'},
+  {en:'The gold leopard badge from the Issyk Kurgan shows that gold is…', ru:'Золотая бляшка-барс из Иссыкского кургана показывает, что золото…', o:[['a soft golden-yellow metal','мягкий золотисто-жёлтый металл'],['a brittle nonmetal','хрупкий неметалл'],['a gas','газ'],['a compound','соединение']], a:0, ex:'Рисунок 3.2.2: gold is a soft golden-yellow metal, поэтому из него легко делать украшения.', term:'gold — золото'},
+  {t:'sort', en:'Classify each element: metal or nonmetal.', ru:'Распредели: металл или неметалл.', cats:[['Metal','металл'],['Nonmetal','неметалл']], items:[['Iron (Fe)','железо',0],['Sulfur (S)','сера',1],['Copper (Cu)','медь',0],['Oxygen (O)','кислород',1],['Gold (Au)','золото',0],['Carbon (C)','углерод',1],['Sodium (Na)','натрий',0],['Nitrogen (N)','азот',1],['Aluminium (Al)','алюминий',0],['Bromine (Br)','бром',1]], ex:'Металлы: Fe, Cu, Au, Na, Al. Неметаллы: S, O, C, N, Br.'},
+  {t:'sort', en:'Is it a property of metals or nonmetals?', ru:'Это свойство металлов или неметаллов?', cats:[['Metals','металлы'],['Nonmetals','неметаллы']], items:[['Shiny, metallic color','блестящие',0],['Dull color','тусклые',1],['Brittle','хрупкие',1],['Can be drawn into wires','вытягиваются в проволоку',0],['Can be hammered into sheets','куются в листы',0],['Good conductors of electricity','хорошо проводят ток',0],['Do not conduct electricity (except graphite)','не проводят ток (кроме графита)',1],['Can be solid, liquid or gas at room conditions','бывают твёрдыми, жидкими и газами',1]], ex:'Сравни две колонки в учебнике: Properties of Metals (5 пунктов) и Properties of Nonmetals (5 пунктов) — они противоположны.'}
+ ]},
+ {id:'3.2·C', en:'Simple and complex substances', ru:'Простые и сложные вещества', qs:[
+  {en:'Simple substances are made up of…', ru:'Простые вещества состоят из…', o:[['atoms of the same kind (one element)','атомов одного вида (одного элемента)'],['atoms of different kinds','атомов разных видов'],['mixtures of compounds','смесей соединений'],['only metals','только металлов']], a:0, ex:'Simple substance: O₂, S₈, Fe, He — атомы одного элемента.', term:'simple substance — простое вещество'},
+  {en:'Complex substances are made up of…', ru:'Сложные вещества состоят из…', o:[['atoms of two or more different elements','атомов двух и более разных элементов'],['atoms of only one element','атомов одного элемента'],['only gases','только газов'],['only one atom','одного атома']], a:0, ex:'Complex substance: H₂O, CO₂, NaCl, C₁₂H₂₂O₁₁ — в них разные элементы.', term:'complex substance — сложное вещество'},
+  {en:'Complex substances are also called…', ru:'Сложные вещества также называют…', o:[['chemical compounds','химическими соединениями'],['elements','элементами'],['mixtures','смесями'],['noble gases','благородными газами']], a:0, ex:'Complex substance = compound (соединение).', term:'compound — соединение'},
+  {en:'Which is a SIMPLE substance?', ru:'Что из этого — ПРОСТОЕ вещество?', o:[['O₂','O₂'],['H₂O','H₂O'],['CO₂','CO₂'],['NaCl','NaCl']], a:0, ex:'В O₂ только кислород. В H₂O, CO₂ и NaCl по два элемента, значит они сложные.', term:'oxygen — кислород'},
+  {en:'Which is a COMPLEX substance?', ru:'Что из этого — СЛОЖНОЕ вещество?', o:[['Sucrose, C₁₂H₂₂O₁₁','сахароза C₁₂H₂₂O₁₁'],['Sulfur, S₈','сера S₈'],['Helium, He','гелий He'],['Iron, Fe','железо Fe']], a:0, ex:'В сахарозе три элемента: C, H и O. Остальные состоят из одного элемента.', term:'sucrose — сахароза'},
+  {en:'Sulfur exists as S₈ (8 atoms in a molecule). Is it simple or complex?', ru:'Сера существует как S₈ (8 атомов в молекуле). Простое или сложное вещество?', o:[['Simple','простое'],['Complex','сложное']], a:0, fixed:true, ex:'Неважно, сколько атомов в молекуле, важно, сколько ВИДОВ. В S₈ все 8 атомов — сера, значит вещество простое.', term:'simple substance — простое вещество'},
+  {en:'Ozone (O₃) is a…', ru:'Озон (O₃) — это…', o:[['simple substance (element)','простое вещество (элемент)'],['complex substance (compound)','сложное вещество (соединение)'],['mixture','смесь']], a:0, fixed:true, ex:'Ловушка: три атома, но все кислородные. Значит простое вещество.', term:'ozone — озон'},
+  {en:'About how many simple substances do the 118 elements form?', ru:'Примерно сколько простых веществ образуют 118 элементов?', o:[['About 500','около 500'],['Exactly 118','ровно 118'],['About 94','около 94'],['About 10','около 10']], a:0, ex:'118 элементов образуют около 500 простых веществ, потому что один элемент может давать несколько простых веществ (кислород — O₂ и O₃, углерод — графит и алмаз).', term:'simple substance — простое вещество'},
+  {en:'How many different elements are in sucrose, C₁₂H₂₂O₁₁?', ru:'Сколько разных элементов в сахарозе C₁₂H₂₂O₁₁?', o:[['3','3'],['45','45'],['12','12'],['1','1']], a:0, ex:'Считаем символы, а не цифры: C, H, O — три элемента. 45 — это общее число атомов (12 + 22 + 11).', term:'formula — формула'},
+  {en:'How many different elements are in baking soda, NaHCO₃?', ru:'Сколько разных элементов в пищевой соде NaHCO₃?', o:[['4','4'],['6','6'],['3','3'],['1','1']], a:0, ex:'Na, H, C, O — четыре элемента. Значит сода — сложное вещество.', term:'baking soda — пищевая сода'},
+  {en:'True or false: "A molecule with many atoms is always a complex substance."', ru:'Верно или нет: «Молекула из многих атомов — всегда сложное вещество».', o:[['True','верно'],['False','неверно']], a:1, fixed:true, ex:'Неверно: S₈ и O₃ — простые вещества. Решает число видов атомов, а не количество атомов.', term:'complex substance — сложное вещество'},
+  {en:'Why is it especially important to use PURE substances in medicine?', ru:'Почему в медицине особенно важно использовать ЧИСТЫЕ вещества?', o:[['Impurities in drugs can be harmful','примеси в лекарствах могут навредить'],['Pure substances are always cheaper','чистые вещества всегда дешевле'],['Pure substances are always gases','чистые вещества всегда газы'],['It does not matter','это неважно']], a:0, ex:'В учебнике: в медицине и производстве лекарств получение и использование чистых веществ особенно важно. Так же мы хотим пить воду и дышать воздухом без вредных примесей.', term:'pure substance — чистое вещество'},
+  {t:'sort', en:'Literacy task 4 (part 1): element, compound or mixture?', ru:'Задание 4 (часть 1): элемент, соединение или смесь?', cats:[['Element','элемент'],['Compound','соединение'],['Mixture','смесь']], items:[['Sand (SiO₂)','песок',1],['Hydrogen peroxide (H₂O₂)','перекись водорода',1],['Oxygen','кислород',0],['Ozone (O₃)','озон',0],['Lead','свинец',0],['Nitrogen gas (N₂)','азот',0],['Air','воздух',2]], ex:'SiO₂ и H₂O₂ — разные элементы, значит соединения. O₂, O₃, Pb, N₂ — по одному элементу. Воздух — смесь газов.'},
+  {t:'sort', en:'Literacy task 4 (part 2): element, compound or mixture?', ru:'Задание 4 (часть 2): элемент, соединение или смесь?', cats:[['Element','элемент'],['Compound','соединение'],['Mixture','смесь']], items:[['Baking soda (NaHCO₃)','пищевая сода',1],['Silver','серебро',0],['Table salt (NaCl)','поваренная соль',1],['Gold','золото',0],['Glucose (C₆H₁₂O₆)','глюкоза',1],['Sugar (C₁₂H₂₂O₁₁)','сахар',1],['Graphite','графит',0],['Antifreeze','антифриз',2]], ex:'Графит — это чистый углерод (C), поэтому элемент. Антифриз — смесь (в основном этиленгликоль + вода).'}
+ ]}
+];
+
+const CHEAT = [
+ ['3.2','Elements and symbols',[
+  '<b>Element</b> — вещество из атомов одного вида; его нельзя разложить на другие вещества. Элементы, реагируя, образуют <b>compounds</b>.',
+  'Известно <b>118</b> элементов: <b>94</b> природных + <b>24</b> синтетических. Все они в <b>Periodic table</b>.',
+  'Символ — до двух латинских букв: первая ЗАГЛАВНАЯ, вторая строчная (H, Al, Ca).',
+  '<div class="tbl"><table><tr><th>Element</th><th>Symbol</th><th>Русский</th></tr><tr><td>hydrogen</td><td>H</td><td>водород</td></tr><tr><td>oxygen</td><td>O</td><td>кислород</td></tr><tr><td>carbon</td><td>C</td><td>углерод</td></tr><tr><td>nitrogen</td><td>N</td><td>азот</td></tr><tr><td>sodium</td><td>Na</td><td>натрий</td></tr><tr><td>calcium</td><td>Ca</td><td>кальций</td></tr><tr><td>iron</td><td>Fe</td><td>железо</td></tr><tr><td>gold</td><td>Au</td><td>золото</td></tr><tr><td>silver</td><td>Ag</td><td>серебро</td></tr><tr><td>copper</td><td>Cu</td><td>медь</td></tr><tr><td>lead</td><td>Pb</td><td>свинец</td></tr><tr><td>chromium</td><td>Cr</td><td>хром</td></tr><tr><td>phosphorus</td><td>P</td><td>фосфор</td></tr><tr><td>sulfur</td><td>S</td><td>сера</td></tr><tr><td>bromine</td><td>Br</td><td>бром</td></tr><tr><td>argon</td><td>Ar</td><td>аргон</td></tr><tr><td>uranium</td><td>U</td><td>уран</td></tr></table></div>',
+  'Главные элементы живых организмов: C, H, O, N (+ P, S, Ca, Fe, Na, K).']],
+ ['3.2','Metals and nonmetals',[
+  '<b>Metals</b>: проводят электричество; твёрдые при комнатной температуре; блестят (shiny); куются в листы; вытягиваются в проволоку. Большинство элементов — металлы.',
+  '<b>Nonmetals</b>: не проводят ток (кроме графита, C); бывают твёрдыми, жидкими и газами; тусклые (dull); хрупкие (brittle); в проволоку не тянутся. Пример — сера.',
+  '<b>Noble gases</b> (He, Ne, Ar) — unreactive, почти ни с чем не реагируют.',
+  'Медь (Cu): красноватый блеск, проводит ток и тепло, куётся, тянется в проволоку, плавится при 1085 °C.']],
+ ['3.2','Simple and complex substances',[
+  '<b>Simple substance</b> — атомы ОДНОГО элемента: O₂, O₃, S₈, Fe, He, N₂, графит.',
+  '<b>Complex substance</b> = <b>compound</b> — атомы ДВУХ и более элементов: H₂O, CO₂, NaCl, NaHCO₃, C₁₂H₂₂O₁₁.',
+  'Решает число ВИДОВ атомов (разных символов в формуле), а не количество атомов: S₈ — простое, NaCl — сложное.',
+  '118 элементов образуют около 500 простых веществ. Воздух и антифриз — смеси, они не простые и не сложные вещества.']]
+];
+
+/* ---------- STATE ---------- */
+const $ = s => document.querySelector(s);
+const store = { get(k,d){ try{ const v=localStorage.getItem(k); return v==null?d:JSON.parse(v);}catch(e){return d;} },
+                set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} } };
+let showRu = store.get('arsen32_ru', true);
+let run = null;
+const praise = ['Отлично, Арсен!','В точку!','Так держать!','Химик растёт!','Верно!','Чётко!'];
+const oops   = ['Почти! Запомни:','Не беда, разберём:','Тут ловушка:','Смотри, как правильно:'];
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; };
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function show(id){ ['home','quiz','results','cheat'].forEach(s=> $('#'+s).hidden = s!==id); window.scrollTo({top:0}); }
+
+/* ---------- HOME ---------- */
+function renderHome(){
+  const best = store.get('arsen32_best', {});
+  const total = LEVELS.reduce((n,l)=>n+l.qs.length,0);
+  $('#totalQ').textContent = total + ' заданий';
+  const el = $('#levels'); el.innerHTML='';
+  LEVELS.forEach((l,i)=>{
+    const b = document.createElement('button'); b.className='lvl'; b.type='button';
+    const bs = best[l.id];
+    b.innerHTML = `<span class="code">${esc(l.id)}</span><span class="t">${esc(l.en)}</span><span class="r">${esc(l.ru)}</span>
+      <span class="meta"><span>${l.qs.length} заданий</span>${bs!=null?`<span class="best">рекорд ${bs}%</span>`:'<span>не пройдено</span>'}</span>`;
+    b.onclick = ()=> startRun({name:l.id+' · '+l.en, key:l.id, qs:l.qs.map(q=>({...q,lvl:l.id}))});
+    el.appendChild(b);
+  });
+  const boss = document.createElement('button'); boss.className='boss'; boss.type='button';
+  const bb = best['final'];
+  boss.innerHTML = `<span class="code">СОЧ</span><span class="grow"><span class="t">Мини-СОЧ по теме 3.2</span><br>
+    <span class="r">15 случайных заданий из всех трёх частей. ${bb!=null?'Рекорд: '+bb+'%':'Пройди после трёх частей.'}</span></span>
+    <span class="btn" style="background:var(--flame);border-color:var(--flame);color:#fff">Начать</span>`;
+  boss.onclick = ()=>{
+    const all = LEVELS.flatMap(l=>l.qs.map(q=>({...q,lvl:l.id})));
+    startRun({name:'Мини-СОЧ · тема 3.2', key:'final', qs:shuffle(all).slice(0,15), noShuffle:true});
+  };
+  el.appendChild(boss);
+  $('#ruToggle').checked = showRu;
+}
+
+/* ---------- QUIZ ---------- */
+function startRun(cfg){
+  run = {...cfg, qs: cfg.noShuffle ? cfg.qs : shuffle(cfg.qs), i:0, score:0, streak:0, bestStreak:0, xp:0, wrong:[]};
+  $('#qLevelName').textContent = run.name;
+  show('quiz'); renderQ();
+}
+function ruLine(t){ return showRu && t ? `<p class="qru">${esc(t)}</p>` : ''; }
+function renderQ(){
+  const q = run.qs[run.i], n = run.qs.length;
+  $('#qCount').textContent = (run.i+1)+'/'+n;
+  $('#qBar').style.width = (run.i/n*100)+'%';
+  const st = $('#qStreak'); st.hidden = run.streak<2; st.textContent = 'серия ×'+run.streak;
+  const card = $('#qCard'); card.classList.remove('pop'); void card.offsetWidth; card.classList.add('pop');
+  const tag = `<div class="qtag"><span class="label">Часть ${esc(q.lvl)}</span><span class="label">${q.t==='sort'?'распредели':'выбери ответ'}</span></div>`;
+  if(q.t==='sort') return renderSort(q, card, tag);
+  let opts = q.o.map((o,idx)=>({o,idx}));
+  if(!q.fixed) opts = shuffle(opts);
+  card.innerHTML = tag + `<p class="qen">${esc(q.en)}</p>${ruLine(q.ru)}
+    <div class="opts">${opts.map((x,k)=>`<button type="button" class="opt" data-idx="${x.idx}"><span class="k">${'ABCDE'[k]}</span><span class="ot">${esc(x.o[0])}${showRu?`<small>${esc(x.o[1])}</small>`:''}</span></button>`).join('')}</div>
+    <div id="fbBox"></div>
+    <div class="qactions"><span class="hint">Клавиши 1–${opts.length} для ответа, Enter — дальше</span><button class="btn primary" id="nextBtn" type="button" hidden>Дальше →</button></div>`;
+  card.querySelectorAll('.opt').forEach(b=> b.onclick = ()=> answerMC(q, +b.dataset.idx));
+  $('#nextBtn').onclick = next;
+}
+function answerMC(q, idx){
+  const ok = idx===q.a;
+  $('#qCard').querySelectorAll('.opt').forEach(b=>{
+    b.disabled = true; const i=+b.dataset.idx;
+    if(i===q.a) b.classList.add('correct'); else if(i===idx) b.classList.add('wrong');
+  });
+  grade(q, ok, q.o[q.a][0] + (q.o[q.a][1]!==q.o[q.a][0] ? ' — '+q.o[q.a][1] : ''));
+}
+function renderSort(q, card, tag){
+  const items = shuffle(q.items.map((it,k)=>({it,k})));
+  card.innerHTML = tag + `<p class="qen">${esc(q.en)}</p>${ruLine(q.ru)}
+    <div class="sort">${items.map(x=>`<div class="srow" data-k="${x.k}"><span class="it">${esc(x.it[0])}${showRu?`<small>${esc(x.it[1])}</small>`:''}</span>
+      <span class="seg" role="group">${q.cats.map((c,ci)=>`<button type="button" data-c="${ci}" title="${esc(c[1])}">${esc(c[0])}</button>`).join('')}</span></div>`).join('')}</div>
+    <div id="fbBox"></div>
+    <div class="qactions"><span class="hint" id="sortHint">Выбери вариант для каждой строки</span>
+      <span style="display:flex;gap:10px"><button class="btn primary" id="checkBtn" type="button" disabled>Проверить</button><button class="btn primary" id="nextBtn" type="button" hidden>Дальше →</button></span></div>`;
+  const choice = {};
+  card.querySelectorAll('.srow').forEach(row=>{
+    row.querySelectorAll('.seg button').forEach(b=> b.onclick = ()=>{
+      if(row.dataset.done) return;
+      row.querySelectorAll('.seg button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+      choice[row.dataset.k] = +b.dataset.c;
+      $('#checkBtn').disabled = Object.keys(choice).length < q.items.length;
+    });
+  });
+  $('#checkBtn').onclick = ()=>{
+    let right=0;
+    card.querySelectorAll('.srow').forEach(row=>{
+      row.dataset.done='1'; const it=q.items[+row.dataset.k]; const good = choice[row.dataset.k]===it[2];
+      row.classList.add(good?'ok':'no'); if(good) right++;
+      else row.insertAdjacentHTML('beforeend', `<span class="fix">Правильно: ${esc(q.cats[it[2]][0])} (${esc(q.cats[it[2]][1])})</span>`);
+      row.querySelectorAll('.seg button').forEach(x=>x.disabled=true);
+    });
+    $('#checkBtn').hidden = true;
+    const ok = right===q.items.length;
+    grade(q, ok, q.items.map(it=>it[0]+' → '+q.cats[it[2]][0]).join('; '), `${right} из ${q.items.length} верно. `);
+  };
+  $('#nextBtn').onclick = next;
+}
+function grade(q, ok, correctText, prefix=''){
+  if(ok){ run.score++; run.streak++; run.bestStreak=Math.max(run.bestStreak,run.streak); run.xp += 10 + Math.min(run.streak,5)*2; }
+  else { run.streak=0; run.wrong.push({q, correctText}); }
+  const st = $('#qStreak'); st.hidden = run.streak<2; st.textContent = 'серия ×'+run.streak;
+  $('#fbBox').innerHTML = `<div class="fb ${ok?'good':'bad'}"><span class="v">${ok?pick(praise):pick(oops)}</span>
+    <p>${esc(prefix)}${esc(q.ex)}</p>${q.term?`<span class="term">${esc(q.term)}</span>`:''}</div>`;
+  const nb = $('#nextBtn'); nb.hidden=false; nb.textContent = run.i===run.qs.length-1 ? 'Результат →' : 'Дальше →'; nb.focus({preventScroll:true});
+}
+function next(){ run.i++; if(run.i>=run.qs.length) return finish(); renderQ(); }
+
+document.addEventListener('keydown', e=>{
+  if($('#quiz').hidden) return;
+  const nb = $('#nextBtn');
+  if(e.key==='Enter' && nb && !nb.hidden){ e.preventDefault(); next(); return; }
+  const n = parseInt(e.key,10);
+  if(n>=1){ const b = $('#qCard').querySelectorAll('.opt')[n-1]; if(b && !b.disabled) b.click(); }
+});
+
+/* ---------- RESULTS ---------- */
+function finish(){
+  const n = run.qs.length, pct = Math.round(run.score/n*100);
+  const mark = pct>=85?5:pct>=65?4:pct>=40?3:2;
+  $('#qBar').style.width='100%';
+  const best = store.get('arsen32_best', {});
+  const isRecord = best[run.key]==null || pct>best[run.key];
+  if(!run.isRetry && isRecord){ best[run.key]=pct; store.set('arsen32_best', best); }
+  $('#rMark').textContent = mark; $('#rPct').textContent = pct+'%';
+  $('#rLevel').textContent = run.name;
+  $('#rTitle').textContent = mark===5?'Арсен, это уровень пятёрки!':mark===4?'Хороший результат, почти пятёрка':mark===3?'Есть база, но надо подтянуть':'Пора повторить тему 3.2';
+  $('#rMsg').textContent = run.wrong.length ? 'Ниже все ошибки с правильными ответами. Прочитай их и нажми «Повторить ошибки» — пройди, пока не будет 100%.' : 'Ни одной ошибки. Переходи к следующей части или к Мини-СОЧ.';
+  $('#rNums').innerHTML = `<span class="pill">${run.score} из ${n} верно</span><span class="pill">+${run.xp} XP</span><span class="pill streak">лучшая серия ×${run.bestStreak}</span>${(!run.isRetry && isRecord)?'<span class="pill" style="border-color:var(--good);color:var(--good)">новый рекорд</span>':''}`;
+  $('#mistWrap').hidden = !run.wrong.length; $('#retryMist').hidden = !run.wrong.length;
+  $('#mistList').innerHTML = run.wrong.map(w=>`<div class="mi"><div class="label">Часть ${esc(w.q.lvl)}</div><div class="q">${esc(w.q.en)}</div>
+    ${showRu&&w.q.ru?`<div class="e">${esc(w.q.ru)}</div>`:''}<div class="a">✓ ${esc(w.correctText)}</div><div class="e">${esc(w.q.ex)}</div></div>`).join('');
+  show('results');
+}
+$('#retryMist').onclick = ()=>{ const qs = run.wrong.map(w=>w.q); const name=run.name; const key=run.key; startRun({name:'Работа над ошибками · '+name, key, qs}); run.isRetry=true; };
+$('#retryAll').onclick = ()=>{ const base = run.key==='final' ? null : LEVELS.find(l=>l.id===run.key);
+  if(base) startRun({name:base.id+' · '+base.en, key:base.id, qs:base.qs.map(q=>({...q,lvl:base.id}))});
+  else { const all = LEVELS.flatMap(l=>l.qs.map(q=>({...q,lvl:l.id}))); startRun({name:'Мини-СОЧ · тема 3.2', key:'final', qs:shuffle(all).slice(0,15), noShuffle:true}); } };
+$('#toHome').onclick = ()=>{ renderHome(); show('home'); };
+$('#quitBtn').onclick = ()=>{ renderHome(); show('home'); };
+
+/* ---------- CHEAT SHEET ---------- */
+$('#cheatBody').innerHTML = CHEAT.map(([code,title,pts])=>`<div class="cs"><h3><span class="code">${code}</span>${esc(title)}</h3><ul>${pts.map(p=>`<li>${p}</li>`).join('')}</ul></div>`).join('');
+$('#openCheat').onclick = ()=> show('cheat');
+$('#cheatBack').onclick = ()=> show('home');
+$('#ruToggle').onchange = e=>{ showRu = e.target.checked; store.set('arsen32_ru', showRu); };
+
+renderHome();
+</script>

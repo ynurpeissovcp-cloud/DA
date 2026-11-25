@@ -1,0 +1,136 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Тест по химии к СОЧ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Layout: one narrow column, one question per screen, a litmus strip as the progress bar */
+:root{
+  --bg:#f6f5fa; --surface:#ffffff; --fg:#1d1b29; --muted:#666379; --line:#dedbea;
+  --accent:#6a4fc2; --accent-soft:#ece7fb;
+  --ok:#1f7a4d; --ok-soft:#e1f3e9; --bad:#b4313b; --bad-soft:#fbe5e6;
+  --acid:#d9475a; --base:#3b6fd6;
+  --display:"Unbounded", "Golos Text", system-ui, sans-serif;
+  --body:"Golos Text", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#15141c; --surface:#1f1d29; --fg:#ece9f6; --muted:#a29fb5; --line:#34313f;
+  --accent:#a892f0; --accent-soft:#2c2645;
+  --ok:#5fcf93; --ok-soft:#1a3326; --bad:#f07c84; --bad-soft:#3a1d21;
+  --acid:#ee6b7c; --base:#6f97ee; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#15141c; --surface:#1f1d29; --fg:#ece9f6; --muted:#a29fb5; --line:#34313f;
+  --accent:#a892f0; --accent-soft:#2c2645;
+  --ok:#5fcf93; --ok-soft:#1a3326; --bad:#f07c84; --bad-soft:#3a1d21;
+  --acid:#ee6b7c; --base:#6f97ee; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 32px}
+main{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+header{display:flex;flex-direction:column;gap:4px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1{font-family:var(--display);font-weight:700;font-size:22px;line-height:1.25;margin:0;text-wrap:balance}
+.strip{display:grid;gap:3px;height:10px}
+.strip span{border-radius:2px;background:var(--line);transition:background .25s}
+.strip span.ok{background:var(--base)} .strip span.bad{background:var(--acid)} .strip span.cur{background:var(--accent)}
+.meta{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:16px}
+.q{font-size:19px;font-weight:600;line-height:1.4;margin:0;text-wrap:pretty}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{font:inherit;color:var(--fg);text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;
+  padding:14px 14px;min-height:52px;display:flex;gap:12px;align-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.opt .k{flex:none;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-size:14px;font-weight:600;color:var(--muted)}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:focus-visible,.btn:focus-visible,.link:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)} .opt.right .k{border-color:var(--ok);background:var(--ok);color:var(--surface)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)} .opt.wrong .k{border-color:var(--bad);background:var(--bad);color:var(--surface)}
+.opt.dim{opacity:.55}
+.hint{background:var(--accent-soft);border-radius:10px;padding:12px 14px;font-size:15px}
+.fb{border-radius:10px;padding:14px;font-size:16px;display:flex;flex-direction:column;gap:4px}
+.fb b{font-size:16px}
+.fb.ok{background:var(--ok-soft)} .fb.ok b{color:var(--ok)}
+.fb.bad{background:var(--bad-soft)} .fb.bad b{color:var(--bad)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.btn{font:inherit;font-weight:600;border:0;border-radius:12px;padding:14px 18px;min-height:52px;cursor:pointer;flex:1 1 auto;background:var(--accent);color:var(--surface)}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--line)}
+.link{font:inherit;font-size:15px;background:none;border:0;color:var(--accent);padding:6px 0;cursor:pointer;text-align:left;text-decoration:underline;text-underline-offset:3px}
+.score{font-family:var(--display);font-size:56px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.score small{font-size:22px;color:var(--muted)}
+.review{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.review li{display:flex;gap:10px;font-size:15px;padding:10px 12px;border-radius:10px;background:var(--bad-soft)}
+.review li b{flex:none;color:var(--bad)}
+.legend{font-size:13px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<main>
+  <header>
+    <div class="eyebrow">Химия · 9 класс · СОЧ</div>
+    <h1>Электролиты, ионные уравнения, гидролиз</h1>
+  </header>
+  <div class="strip" id="strip" aria-hidden="true"></div>
+  <div class="meta"><span id="pos"></span><span id="pts"></span></div>
+  <section class="card" id="card" aria-live="polite"></section>
+  <div class="legend"><span><i style="background:var(--base)"></i>верно</span><span><i style="background:var(--acid)"></i>ошибка</span><span>как лакмус: синий и красный</span></div>
+</main>
+
+<script>
+const Q=[
+{q:"Какое вещество является электролитом (electrolyte)?",o:["Глюкоза","Этанол C₂H₅OH","Нитрат калия KNO₃","Кислород O₂"],a:2,h:"Электролиты — это кислоты, щёлочи и соли.",e:"KNO₃ — растворимая соль, в воде распадается на K⁺ и NO₃⁻. Глюкоза и этанол — органические молекулы, O₂ — простое вещество, ионов они не дают."},
+{q:"Какая кислота является слабым электролитом (weak electrolyte)?",o:["HCl","HNO₃","H₂SO₄","CH₃COOH"],a:3,h:"Сильных кислот в школьном курсе немного: HCl, HNO₃, H₂SO₄.",e:"Уксусная кислота CH₃COOH диссоциирует частично и обратимо (⇌). HCl, HNO₃ и H₂SO₄ — сильные кислоты."},
+{q:"Почему твёрдый NaCl НЕ проводит ток, а его раствор проводит?",o:["В твёрдом NaCl нет ионов","В твёрдом NaCl ионы закреплены в решётке и не могут двигаться","Ток разрушает кристалл только в воде","В растворе NaCl образуются молекулы"],a:1,h:"Ток переносят только подвижные заряженные частицы.",e:"Ионы в кристалле NaCl есть, но они неподвижны. В расплаве и в растворе ионы двигаются и переносят заряд."},
+{q:"Какое уравнение диссоциации записано верно?",o:["Fe₂(SO₄)₃ → Fe₂³⁺ + (SO₄)₃²⁻","Fe₂(SO₄)₃ → 2Fe³⁺ + 3SO₄²⁻","Fe₂(SO₄)₃ → 2Fe²⁺ + 3SO₄²⁻","Fe₂(SO₄)₃ → 3Fe³⁺ + 2SO₄²⁻"],a:1,h:"Индексы превращаются в коэффициенты, а заряды должны уравновеситься.",e:"Два иона Fe³⁺ дают +6, три иона SO₄²⁻ дают −6. Сумма зарядов равна нулю."},
+{q:"Какое сокращённое ионное уравнение (net ionic) соответствует реакции BaCl₂ + Na₂SO₄?",o:["Na⁺ + Cl⁻ → NaCl","Ba²⁺ + SO₄²⁻ → BaSO₄↓","Ba²⁺ + 2Cl⁻ → BaCl₂","2Na⁺ + SO₄²⁻ → Na₂SO₄"],a:1,h:"Посмотри, какое вещество выпадает в осадок.",e:"Осадок BaSO₄ — единственное, что уходит из раствора. Na⁺ и Cl⁻ — ионы-наблюдатели, они сокращаются."},
+{q:"Какой паре соответствует сокращённое уравнение CO₃²⁻ + 2H⁺ → H₂O + CO₂↑?",o:["K₂CO₃ + HNO₃","CaCO₃ + HCl","K₂CO₃ + NaCl","Na₂CO₃ + KOH"],a:0,h:"Нужен растворимый карбонат и кислота.",e:"K₂CO₃ растворим и записывается ионами, HNO₃ даёт H⁺. CaCO₃ нерастворим, его пишут целиком: CaCO₃ + 2H⁺ → Ca²⁺ + H₂O + CO₂↑."},
+{q:"Какая пара растворов НЕ реагирует?",o:["AgNO₃ + KCl","CuSO₄ + NaOH","NaNO₃ + KCl","Na₂S + HCl"],a:2,h:"Реакция идёт, если образуется осадок, газ или вода.",e:"NaNO₃ + KCl → NaCl + KNO₃: всё растворимо, нет осадка, газа или воды. В остальных парах образуются AgCl↓, Cu(OH)₂↓, H₂S↑."},
+{q:"Из 500 молекул слабой кислоты на ионы распалось 15. Чему равна степень диссоциации α?",o:["0,3 %","3 %","15 %","33 %"],a:1,h:"α = распавшиеся / всего × 100 %",e:"α = 15 / 500 × 100 % = 3 %. Маленькое значение — электролит слабый."},
+{q:"Степень диссоциации 0,02. Сколько молекул из 1000 распадётся на ионы?",o:["2","20","200","50"],a:1,h:"Умножь α на общее число молекул.",e:"0,02 × 1000 = 20 молекул."},
+{q:"Какая среда у раствора Na₂CO₃?",o:["Кислая (acidic)","Нейтральная (neutral)","Щелочная (alkaline)"],a:2,h:"NaOH — сильное основание, H₂CO₃ — слабая кислота.",e:"Соль сильного основания и слабой кислоты. CO₃²⁻ забирает H⁺ у воды, остаётся избыток OH⁻, pH > 7."},
+{q:"В каком растворе лакмус станет красным?",o:["KCl","NH₄NO₃","Na₂S","CH₃COONa"],a:1,h:"Красный лакмус — кислая среда. Ищи соль слабого основания и сильной кислоты.",e:"NH₄NO₃ образован слабым основанием NH₃·H₂O и сильной кислотой HNO₃ — гидролиз по катиону, среда кислая. KCl — нейтральная, Na₂S и CH₃COONa — щелочная."},
+{q:"Раствор: лампочка горит тускло, лакмус синий. Что это может быть?",o:["Раствор NaOH","Раствор сахара","Раствор NH₃·H₂O","Раствор HCl"],a:2,h:"Тусклая лампочка — слабый электролит. Синий лакмус — щелочная среда.",e:"NH₃·H₂O — слабое основание: мало ионов (тусклый свет) и щелочная среда (синий). NaOH дал бы яркий свет, HCl — красный лакмус, сахар не проводит ток."}
+];
+const KEY="himiya9-quiz";
+let st={i:0,ans:Array(Q.length).fill(null)};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&Array.isArray(s.ans)&&s.ans.length===Q.length)st=s;}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const $=id=>document.getElementById(id);
+const L="АБВГ";
+function strip(){
+  const s=$("strip");s.style.gridTemplateColumns=`repeat(${Q.length},1fr)`;
+  s.innerHTML=Q.map((q,k)=>{const a=st.ans[k];const c=a===null?(k===st.i&&st.i<Q.length?"cur":""):(a===q.a?"ok":"bad");return `<span class="${c}"></span>`}).join("");
+  const done=st.ans.filter(a=>a!==null).length, right=st.ans.filter((a,k)=>a===Q[k].a).length;
+  $("pos").textContent=st.i<Q.length?`Вопрос ${st.i+1} из ${Q.length}`:"Готово";
+  $("pts").textContent=`Верно: ${right} из ${done}`;
+}
+function esc(t){return t.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}
+function render(){
+  strip();
+  const c=$("card");
+  if(st.i>=Q.length){return result()}
+  const q=Q[st.i], a=st.ans[st.i], answered=a!==null;
+  c.innerHTML=`<p class="q">${esc(q.q)}</p>
+  <div class="opts">${q.o.map((t,k)=>{let cls="opt";if(answered){if(k===q.a)cls+=" right";else if(k===a)cls+=" wrong";else cls+=" dim"}
+    return `<button class="${cls}" id="o${k}" data-k="${k}" ${answered?"disabled":""}><span class="k">${L[k]}</span><span>${esc(t)}</span></button>`}).join("")}</div>
+  ${answered?`<div class="fb ${a===q.a?"ok":"bad"}"><b>${a===q.a?"Верно!":"Неверно. Правильный ответ: "+L[q.a]}</b><span>${esc(q.e)}</span></div>`
+    :`<button class="link" id="hb">Показать подсказку</button><div class="hint" id="hint" hidden>${esc(q.h)}</div>`}
+  <div class="row">${st.i>0?`<button class="btn ghost" id="back">Назад</button>`:""}${answered?`<button class="btn" id="next">${st.i===Q.length-1?"Результат":"Дальше"}</button>`:""}</div>`;
+  c.querySelectorAll(".opt:not(:disabled)").forEach(b=>b.onclick=()=>{st.ans[st.i]=+b.dataset.k;save();render();const n=$("next");n&&n.focus({preventScroll:true})});
+  const hb=$("hb");if(hb)hb.onclick=()=>{$("hint").hidden=false;hb.hidden=true};
+  const n=$("next");if(n)n.onclick=()=>{const after=st.ans.findIndex((v,k)=>v===null&&k>st.i),any=st.ans.indexOf(null);st.i=after!==-1?after:(any!==-1?any:Q.length);save();render();window.scrollTo({top:0})};
+  const bk=$("back");if(bk)bk.onclick=()=>{st.i--;save();render()};
+}
+function result(){
+  const right=st.ans.filter((a,k)=>a===Q[k].a).length, wrong=Q.map((q,k)=>k).filter(k=>st.ans[k]!==Q[k].a);
+  const msg=right===Q.length?"Все ответы верные. К СОЧ готова!":right>=9?"Хороший результат. Повтори вопросы с ошибками.":"Стоит ещё раз пройти конспект и повторить тест.";
+  $("card").innerHTML=`<div class="score">${right}<small> / ${Q.length}</small></div><p style="margin:0">${msg}</p>
+  ${wrong.length?`<div class="eyebrow">Ошибки</div><ul class="review">${wrong.map(k=>`<li><b>${k+1}</b><span>${esc(Q[k].q)} <br>Ответ: ${esc(Q[k].o[Q[k].a])}</span></li>`).join("")}</ul>`:""}
+  <div class="row">${wrong.length?`<button class="btn" id="redo">Перерешать ошибки</button>`:""}<button class="btn ${wrong.length?"ghost":""}" id="again">Пройти заново</button></div>`;
+  $("again").onclick=()=>{st={i:0,ans:Array(Q.length).fill(null)};save();render()};
+  const r=$("redo");if(r)r.onclick=()=>{wrong.forEach(k=>st.ans[k]=null);st.i=wrong[0];save();render()};
+}
+render();
+</script>
+
+</body></html>

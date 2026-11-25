@@ -1,0 +1,385 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Dariya · Algebra СОР</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=Source+Serif+4:ital,wght@1,500&display=swap">
+<style>
+/* Layout: graph-paper notebook — one card at a time, thumb-reachable controls at the bottom */
+:root{
+  --paper:#F4F7FB; --grid:#DDE5F0; --card:#FFFFFF; --ink:#1B2740; --muted:#5B6782;
+  --pen:#2F55D4; --pen-soft:#E3EAFE; --mark:#FFE16B; --line:#CFD8E6;
+  --ok:#1E8A55; --ok-soft:#DDF3E6; --bad:#C83A3A; --bad-soft:#FBE3E3;
+  --shade:rgba(47,85,212,.28); --axis:#53607A;
+  --f-display:"Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --f-body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-math:"Source Serif 4", Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#111827; --grid:#1B2436; --card:#172033; --ink:#E7ECF6; --muted:#9AA6BF;
+  --pen:#8AA6FF; --pen-soft:#22305A; --mark:#E5C53F; --line:#2A3650;
+  --ok:#4CC587; --ok-soft:#173A2A; --bad:#FF7B7B; --bad-soft:#43222A;
+  --shade:rgba(138,166,255,.30); --axis:#8E9AB3; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#111827; --grid:#1B2436; --card:#172033; --ink:#E7ECF6; --muted:#9AA6BF;
+  --pen:#8AA6FF; --pen-soft:#22305A; --mark:#E5C53F; --line:#2A3650;
+  --ok:#4CC587; --ok-soft:#173A2A; --bad:#FF7B7B; --bad-soft:#43222A;
+  --shade:rgba(138,166,255,.30); --axis:#8E9AB3; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;min-height:100vh}
+.wrap{max-width:620px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 120px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--pen);outline-offset:2px}
+.m{font-family:var(--f-math);font-style:normal;white-space:nowrap}
+.m i{font-style:italic}
+.m sup{font-size:.7em;line-height:0}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 .15em;font-size:.92em}
+.fr>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .2em}
+.fr>span:last-child{padding:0 .2em}
+.sys{display:inline-flex;flex-direction:column;vertical-align:middle;border-left:2px solid currentColor;border-radius:8px 0 0 8px;padding:2px 0 2px 10px;gap:2px;margin:4px 0;line-height:1.3}
+
+/* home */
+.hero{padding:8px 0 18px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.hero h1{font-size:clamp(34px,9vw,48px);font-weight:800;margin-top:6px}
+.hero h1 .hl{background:linear-gradient(transparent 58%,var(--mark) 58%,var(--mark) 92%,transparent 92%);padding:0 4px}
+.hero p{color:var(--muted);margin:10px 0 0;max-width:46ch}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0 8px}
+.btn{border:0;border-radius:14px;padding:15px 16px;font-weight:700;font-size:16px;text-align:center}
+.btn.primary{background:var(--pen);color:var(--card);grid-column:1/-1;font-size:17px}
+.btn.ghost{background:var(--card);border:1.5px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:default}
+.group{margin-top:26px}
+.group h2{font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-family:var(--f-body);font-weight:700;margin-bottom:8px}
+.topics{display:flex;flex-direction:column;background:var(--card);border:1.5px solid var(--line);border-radius:16px;overflow:hidden}
+.topic{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;padding:14px 16px;border:0;background:none;text-align:left;border-top:1px solid var(--line)}
+.topic:first-child{border-top:0}
+.topic .name{font-weight:600;min-width:0}
+.topic .cnt{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar{grid-column:1/-1;height:5px;background:var(--grid);border-radius:4px;overflow:hidden}
+.bar>span{display:block;height:100%;background:var(--ok);border-radius:4px;transition:width .3s}
+.foot{color:var(--muted);font-size:13px;margin-top:22px;text-align:center}
+
+/* quiz */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);padding-block:10px 10px;margin:-20px 0 12px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+.toprow{display:flex;align-items:center;gap:10px}
+.x{border:1.5px solid var(--line);background:var(--card);border-radius:12px;width:42px;height:42px;font-size:20px;line-height:1;flex:none}
+.toptitle{flex:1;min-width:0;font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.counter{font-variant-numeric:tabular-nums;color:var(--muted);font-size:14px;font-weight:600}
+.pbar{height:6px;background:var(--grid);border-radius:4px;margin-top:10px;overflow:hidden}
+.pbar>span{display:block;height:100%;background:var(--pen);transition:width .3s}
+.rulebtn{display:inline-flex;align-items:center;gap:6px;border:0;background:var(--pen-soft);color:var(--pen);font-weight:700;font-size:14px;padding:8px 12px;border-radius:999px}
+.rule{background:var(--card);border:1.5px dashed var(--pen);border-radius:14px;padding:14px 16px;margin-top:10px;font-size:15px}
+.rule ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+.rule .ru{color:var(--muted);font-size:13px;margin-top:10px}
+.qcard{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:20px 18px;margin-top:14px}
+.qtopic{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--pen);font-weight:700}
+.qtext{font-size:19px;font-weight:600;margin-top:8px;line-height:1.45}
+.qtext .m{font-size:1.08em}
+.opts{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.opts.graphs{display:grid;grid-template-columns:1fr 1fr}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:2px solid var(--line);background:var(--card);border-radius:14px;padding:13px 14px;font-size:17px;transition:border-color .15s,background .15s}
+.opt .k{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--grid);font-weight:700;font-size:14px}
+.opt .t{min-width:0}
+.opts.graphs .opt{flex-direction:column;align-items:stretch;padding:8px}
+.opts.graphs .opt .k{align-self:flex-start}
+.opt canvas{width:100%;aspect-ratio:1;max-width:100%;display:block;border-radius:8px}
+.opt:not([disabled]):hover{border-color:var(--pen)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.right .k{background:var(--ok);color:var(--card)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.wrong .k{background:var(--bad);color:var(--card)}
+.opt[disabled]{cursor:default}
+.expl{margin-top:16px;border-radius:14px;padding:14px 16px;font-size:16px}
+.expl.ok{background:var(--ok-soft)} .expl.no{background:var(--bad-soft)}
+.expl b.v{display:block;font-family:var(--f-display);font-size:18px;margin-bottom:4px}
+.expl.ok b.v{color:var(--ok)} .expl.no b.v{color:var(--bad)}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:6;background:linear-gradient(transparent,var(--paper) 30%);padding-top:22px;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.dock .btn{display:block;width:100%;max-width:620px;margin:0 auto;background:var(--pen);color:var(--card);font-size:17px}
+
+/* result */
+.result{text-align:center;padding-top:30px}
+.score{font-family:var(--f-display);font-weight:800;font-size:72px;line-height:1;margin-top:14px;font-variant-numeric:tabular-nums}
+.score small{font-size:28px;color:var(--muted)}
+.result p{color:var(--muted);max-width:40ch;margin:12px auto 0}
+.result .actions{max-width:420px;margin:26px auto 0}
+.miss{text-align:left;margin-top:26px}
+.miss li{margin-bottom:8px}
+
+/* cheat sheet */
+.sheet h2{font-size:28px;font-weight:800;margin:6px 0 4px}
+.sheet section{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:16px;margin-top:14px}
+.sheet h3{font-size:18px;margin-bottom:8px}
+.sheet ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+.sheet .ru{color:var(--muted);font-size:13px;margin-top:8px}
+.pascal{display:flex;flex-direction:column;align-items:center;gap:2px;font-family:var(--f-math);font-variant-numeric:tabular-nums;margin-top:10px;overflow-x:auto}
+.pascal div{display:flex;gap:10px;white-space:nowrap}
+.pascal span{min-width:22px;text-align:center}
+.pascal .rn{color:var(--muted);font-size:12px;min-width:auto}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap" id="app"></div>
+
+<script>
+/* ---------- tiny math formatter: $...$ ---------- */
+function grp(s,p){let d=0,i=p;for(;i<s.length;i++){if(s[i]=='{')d++;else if(s[i]=='}'){d--;if(d==0)break}}return[s.slice(p+1,i),i+1]}
+function fmt(s){let o='',i=0;while(i<s.length){
+  if(s.startsWith('\\frac{',i)){const[a,j]=grp(s,i+5);const[b,k]=grp(s,j);o+=`<span class="fr"><span>${fmt(a)}</span><span>${fmt(b)}</span></span>`;i=k;continue}
+  if(s.startsWith('\\sys{',i)){const[a,j]=grp(s,i+4);o+=`<span class="sys">${a.split('|').map(p=>`<span>${fmt(p)}</span>`).join('')}</span>`;i=j;continue}
+  const c=s[i];
+  if(c=='^'){if(s[i+1]=='{'){const[a,j]=grp(s,i+1);o+=`<sup>${fmt(a)}</sup>`;i=j}else{const mm=s.slice(i+1).match(/^[0-9]+|^[a-z]/);o+=`<sup>${fmt(mm[0])}</sup>`;i+=1+mm[0].length}continue}
+  if(c=='<'&&s[i+1]=='='){o+=' ≤ ';i+=2;continue}
+  if(c=='>'&&s[i+1]=='='){o+=' ≥ ';i+=2;continue}
+  if(c=='<'){o+=' &lt; ';i++;continue}
+  if(c=='>'){o+=' &gt; ';i++;continue}
+  if(c=='-'){o+='−';i++;continue}
+  if(c=='*'){o+='·';i++;continue}
+  if(/[a-zA-Z]/.test(c)){o+=`<i>${c}</i>`;i++;continue}
+  o+=c;i++}return o}
+const R=s=>s.replace(/\$([^$]+)\$/g,(_,m)=>`<span class="m">${fmt(m)}</span>`);
+
+/* ---------- graphs ---------- */
+const G={
+  lin:(above,dashed)=>({region:(x,y)=>above?y>x+1:y<x+1,curves:[{f:x=>x+1,dashed}]}),
+  par:(inside,dashed)=>({region:(x,y)=>inside?y<-x*x+4:y>-x*x+4,curves:[{f:x=>-x*x+4,dashed}]}),
+  sys:(kind)=>{const p=x=>x*x-2;const r={
+      between:(x,y)=>y>=p(x)&&y<=2, above:(x,y)=>y>=p(x)&&y>=2,
+      under:(x,y)=>y<=p(x)&&y<=2, outside:(x,y)=>y<=p(x)||y>=2}[kind];
+    return{region:r,curves:[{f:p,dashed:false},{f:()=>2,dashed:false}]}}
+};
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()}
+function draw(cv,spec){
+  const dpr=window.devicePixelRatio||1,W=cv.clientWidth||140;cv.width=W*dpr;cv.height=W*dpr;
+  const c=cv.getContext('2d');c.scale(dpr,dpr);const L=-5,H=5,s=W/(H-L);
+  const X=x=>(x-L)*s,Y=y=>(H-y)*s;
+  c.fillStyle=css('--card');c.fillRect(0,0,W,W);
+  c.strokeStyle=css('--grid');c.lineWidth=1;
+  for(let k=L;k<=H;k++){c.beginPath();c.moveTo(X(k),0);c.lineTo(X(k),W);c.stroke();c.beginPath();c.moveTo(0,Y(k));c.lineTo(W,Y(k));c.stroke()}
+  c.fillStyle=css('--shade');const st=2;
+  for(let px=0;px<W;px+=st)for(let py=0;py<W;py+=st){const x=L+(px+st/2)/s,y=H-(py+st/2)/s;if(spec.region(x,y))c.fillRect(px,py,st,st)}
+  c.strokeStyle=css('--axis');c.lineWidth=1.4;
+  c.beginPath();c.moveTo(X(0),0);c.lineTo(X(0),W);c.stroke();c.beginPath();c.moveTo(0,Y(0));c.lineTo(W,Y(0));c.stroke();
+  c.fillStyle=css('--axis');c.font='10px '+css('--f-body');
+  c.fillText('x',W-9,Y(0)-4);c.fillText('y',X(0)+4,10);
+  for(const k of[-4,-2,2,4]){c.fillText(k,X(k)-4,Y(0)+11);c.fillText(k,X(0)+3,Y(k)+3)}
+  c.strokeStyle=css('--pen');c.lineWidth=2.2;
+  for(const cu of spec.curves){c.setLineDash(cu.dashed?[6,5]:[]);c.beginPath();let st=false;
+    for(let x=L;x<=H;x+=.02){const y=cu.f(x);if(y>H+2||y<L-2){st=false;continue}st?c.lineTo(X(x),Y(y)):c.moveTo(X(x),Y(y));st=true}c.stroke()}
+  c.setLineDash([]);
+}
+
+/* ---------- content ---------- */
+const TOPICS=[
+ {id:'lin',group:'Equations',name:'Linear equations in two variables',
+  rule:['$ax+by=c$ — both variables have power 1.','A solution is a pair $(x, y)$ that makes the equation true.','The graph is a straight line.'],
+  ru:'linear equation — линейное уравнение · solution — решение',
+  qs:[
+   {q:'Which equation is <b>linear</b> in two variables?',o:['$3x+2y=10$','$x^2+y=4$','$xy=6$','$\\frac{1}{x}+y=2$'],a:0,e:'Only $3x+2y=10$ has both variables with power 1. The others contain $x^2$, $xy$ or $\\frac{1}{x}$.'},
+   {q:'Which point is a solution of $2x-y=5$?',o:['$(3, 1)$','$(1, 3)$','$(2, 2)$','$(0, 5)$'],a:0,e:'Plug in: $2*3-1=5$ ✓. For example $(1, 3)$ gives $2-3=-1$, not 5.'},
+   {q:'In $3x+2y=18$, find $y$ when $x=4$.',o:['$3$','$6$','$2$','$-3$'],a:0,e:'$3*4+2y=18$ → $12+2y=18$ → $2y=6$ → $y=3$.'}
+  ]},
+ {id:'nonlin',group:'Equations',name:'Nonlinear equations in two variables',
+  rule:['The graph is <b>not</b> a straight line: the equation has $x^2$, $xy$, $y^3$, $\\frac{1}{x}$…','Degree = the biggest sum of exponents in one term: $x^3y^2$ → $3+2=5$.','Circle: $x^2+y^2=r^2$ (centre $(0,0)$, radius $r$).'],
+  ru:'nonlinear — нелинейное · degree — степень',
+  qs:[
+   {q:'Which equation is <b>nonlinear</b>?',o:['$5x^2+3y=12$','$2x-7y=1$','$x=3y$','$4x+y-9=0$'],a:0,e:'$5x^2$ has power 2, so the graph is a parabola, not a line.'},
+   {q:'What is the degree of the equation $x^3y^2-4xy=7$?',o:['$5$','$3$','$2$','$6$'],a:0,e:'Add exponents inside each term: $x^3y^2$ → $3+2=5$; $xy$ → $1+1=2$. The biggest is <b>5</b>.'},
+   {q:'Which point lies on the circle $x^2+y^2=25$?',o:['$(3, -4)$','$(5, 5)$','$(2, 3)$','$(4, 4)$'],a:0,e:'$3^2+(-4)^2=9+16=25$ ✓. Remember: a negative number squared is positive.'}
+  ]},
+ {id:'sys',group:'Equations',name:'Systems of nonlinear equations',
+  rule:['<b>Substitution:</b> express $y$ (or $x$) from one equation and put it into the other.','<b>Elimination:</b> add or subtract the equations to remove one variable.','Write every answer as a pair $(x, y)$. There can be 2, 3 or 4 solutions.'],
+  ru:'system — система · substitution — подстановка · elimination — сложение/исключение',
+  qs:[
+   {q:'Solve $\\sys{y=x^2|y=4}$',o:['$(2, 4)$ and $(-2, 4)$','only $(2, 4)$','$(4, 16)$','$(16, 4)$ and $(-16, 4)$'],a:0,e:'$x^2=4$ → $x=2$ or $x=-2$. Both have $y=4$. Don\'t forget the negative root!'},
+   {q:'Solve $\\sys{x+y=5|xy=6}$',o:['$(2, 3)$ and $(3, 2)$','$(1, 6)$ and $(6, 1)$','$(-2, -3)$','$(5, 1)$'],a:0,e:'$y=5-x$ → $x(5-x)=6$ → $x^2-5x+6=0$ → $x=2$ or $x=3$. Then $y=3$ or $y=2$.'},
+   {q:'Solve $\\sys{y=x+1|y=x^2-1}$',o:['$(2, 3)$ and $(-1, 0)$','$(-2, -1)$ and $(1, 2)$','only $(2, 3)$','$(1, 2)$ and $(0, 1)$'],a:0,e:'$x^2-1=x+1$ → $x^2-x-2=0$ → $(x-2)(x+1)=0$ → $x=2$ or $x=-1$. Then $y=x+1$: $(2, 3)$ and $(-1, 0)$.'},
+   {q:'How many solutions does $\\sys{x^2+y^2=13|x^2-y^2=5}$ have?',o:['$4$','$2$','$1$','$0$'],a:0,e:'Add the equations: $2x^2=18$ → $x^2=9$, so $y^2=4$. $x=±3$, $y=±2$ → four pairs: $(3, 2)$, $(3, -2)$, $(-3, 2)$, $(-3, -2)$.'}
+  ]},
+ {id:'word',group:'Equations',name:'Word problems',
+  rule:['1) Name the unknowns $x$ and $y$.','2) Write two equations from the text.','3) Solve the system. 4) Check: lengths must be positive.','Rectangle: $P=2(a+b)$, $S=ab$. Right triangle: $a^2+b^2=c^2$.'],
+  ru:'word problem — текстовая задача · perimeter — периметр · area — площадь',
+  qs:[
+   {q:'“The sum of two numbers is 20 and their product is 96.” Which system matches?',o:['$\\sys{x+y=20|xy=96}$','$\\sys{x-y=20|xy=96}$','$\\sys{x+y=96|xy=20}$','$\\sys{x+y=20|x^2+y^2=96}$'],a:0,e:'“Sum” means $x+y$, “product” means $xy$. So $x+y=20$ and $xy=96$.'},
+   {q:'The sum of two numbers is 12 and their product is 35. Find the numbers.',o:['$5$ and $7$','$3$ and $9$','$4$ and $8$','$6$ and $6$'],a:0,e:'$5+7=12$ and $5*7=35$ ✓. (Algebra: $x^2-12x+35=0$ → $x=5$ or $7$.)'},
+   {q:'A rectangle has perimeter 26 cm and area 40 cm². Find its sides.',o:['$5$ cm and $8$ cm','$4$ cm and $10$ cm','$2$ cm and $20$ cm','$6$ cm and $7$ cm'],a:0,e:'$2(a+b)=26$ → $a+b=13$, and $ab=40$. $5+8=13$, $5*8=40$ ✓. ($4$ and $10$ has area 40 but perimeter 28.)'},
+   {q:'A right triangle has hypotenuse 10 cm. The sum of its legs is 14 cm. Find the legs.',o:['$6$ and $8$','$5$ and $9$','$4$ and $10$','$7$ and $7$'],a:0,e:'$a+b=14$ and $a^2+b^2=100$. $6^2+8^2=36+64=100$ ✓.'}
+  ]},
+ {id:'lineq',group:'Inequalities',name:'Linear inequalities in two variables',
+  rule:['Boundary line: $y=ax+b$.','$<$ or $>$ → <b>dashed</b> line (points on it are NOT solutions).','$<=$ or $>=$ → <b>solid</b> line (points on it ARE solutions).','Test point $(0, 0)$: TRUE → shade the side with $(0, 0)$; FALSE → shade the other side.'],
+  ru:'dashed — пунктирная · solid — сплошная · shade — заштриховать · test point — пробная точка',
+  qs:[
+   {q:'Test the point $(0, 0)$ in $5x+2y>10$. What do you get?',o:['$0>10$ is FALSE → shade the side without $(0, 0)$','$0>10$ is TRUE → shade the side with $(0, 0)$','$10>0$ is TRUE → shade the side with $(0, 0)$','$(0, 0)$ lies on the line'],a:0,e:'$5*0+2*0=0$, and $0>10$ is false. So $(0, 0)$ is not a solution: shade the opposite side.'},
+   {q:'What is the boundary for $y<=2x-1$?',o:['solid line $y=2x-1$','dashed line $y=2x-1$','solid line $y=-2x+1$','dashed line $y=2x+1$'],a:0,e:'The sign $<=$ includes “equal”, so the line is <b>solid</b>. The line itself is $y=2x-1$.'},
+   {q:'Which point satisfies $3x-4y<12$?',o:['$(0, 0)$','$(4, 0)$','$(8, 1)$','$(5, -1)$'],a:0,e:'$(0, 0)$: $0<12$ ✓. $(4, 0)$ gives $12<12$ — false, because 12 is not less than 12.'},
+   {q:'Which graph shows $y>x+1$?',g:[G.lin(true,true),G.lin(true,false),G.lin(false,true),G.lin(false,false)],a:0,e:'$>$ → dashed line. Test $(0, 0)$: $0>1$ is false, so shade the side <b>above</b> the line, away from $(0, 0)$.'}
+  ]},
+ {id:'quadineq',group:'Inequalities',name:'Quadratic inequalities in two variables',
+  rule:['Boundary: parabola $y=ax^2+bx+c$. $a>0$ opens up, $a<0$ opens down.','Vertex: $h=-\\frac{b}{2a}$, $k=y(h)$.','Same rule: $<$, $>$ dashed; $<=$, $>=$ solid.','Test point tells you: shade <b>inside</b> (interior) or <b>outside</b> (exterior).'],
+  ru:'parabola — парабола · vertex — вершина · interior — внутренняя область · exterior — внешняя',
+  qs:[
+   {q:'Find the vertex of $y=-x^2+6x-7$.',o:['$(3, 2)$','$(-3, 2)$','$(6, -7)$','$(3, -2)$'],a:0,e:'$h=-\\frac{6}{2*(-1)}=3$. $k=-9+18-7=2$. Vertex $(3, 2)$.'},
+   {q:'Which point satisfies $y<x^2+1$?',o:['$(2, 3)$','$(0, 2)$','$(1, 5)$','$(-1, 2)$'],a:0,e:'$(2, 3)$: $3<4+1=5$ ✓. $(-1, 2)$ gives $2<2$ — false.'},
+   {q:'For $y>=x^2-4$: what kind of line, and where do you shade?',o:['solid parabola, shade inside','dashed parabola, shade inside','solid parabola, shade outside','dashed parabola, shade outside'],a:0,e:'$>=$ → solid. Test $(0, 0)$: $0>=-4$ TRUE, and $(0, 0)$ is inside the parabola → shade inside.'},
+   {q:'Which graph shows $y<-x^2+4$?',g:[G.par(true,true),G.par(false,true),G.par(true,false),G.par(false,false)],a:0,e:'$<$ → dashed. Test $(0, 0)$: $0<4$ TRUE. $(0, 0)$ is under the arch, so shade inside (below the parabola).'}
+  ]},
+ {id:'sysineq',group:'Inequalities',name:'Systems of nonlinear inequalities',
+  rule:['Graph each inequality separately.','The answer is the <b>overlap</b> — where all shadings meet.','$x^2+y^2<r^2$ → inside a circle of radius $r$; $>$ → outside.','$xy>0$ → quadrants I and III; $xy<0$ → quadrants II and IV.'],
+  ru:'overlap — пересечение (перекрытие) · quadrant — координатная четверть · circle — окружность',
+  qs:[
+   {q:'Which point is a solution of $\\sys{y>x^2|y<4}$?',o:['$(1, 2)$','$(0, 5)$','$(3, 1)$','$(-2, 3)$'],a:0,e:'$(1, 2)$: $2>1$ ✓ and $2<4$ ✓. A point must satisfy <b>both</b> inequalities.'},
+   {q:'$xy<0$ — where are the solutions?',o:['quadrants II and IV','quadrants I and III','only quadrant I','only on the axes'],a:0,e:'A product is negative when the signs are different: $x<0, y>0$ (II) or $x>0, y<0$ (IV).'},
+   {q:'$x^2+y^2<9$ describes…',o:['inside the circle with radius 3, dashed boundary','inside the circle with radius 9','outside the circle with radius 3','inside the circle with radius 3, solid boundary'],a:0,e:'$r^2=9$ → $r=3$. The sign $<$ means inside, and the boundary is dashed.'},
+   {q:'Which graph shows $\\sys{y>=x^2-2|y<=2}$?',g:[G.sys('between'),G.sys('above'),G.sys('under'),G.sys('outside')],a:0,e:'$y>=x^2-2$ is inside (above) the parabola; $y<=2$ is below the line. The overlap is the cup between them.'}
+  ]},
+ {id:'fact',group:'Combinatorics',name:'Factorial',
+  rule:['$n!=n*(n-1)*…*2*1$','$0!=1$, $1!=1$','Shortcut: $n!=n*(n-1)!$, so $\\frac{6!}{3!}=6*5*4$.'],
+  ru:'factorial — факториал',
+  qs:[
+   {q:'$5!=$ ?',o:['$120$','$25$','$60$','$720$'],a:0,e:'$5*4*3*2*1=120$.'},
+   {q:'Evaluate $\\frac{6!}{3!}$',o:['$120$','$2$','$720$','$6$'],a:0,e:'$\\frac{6*5*4*3!}{3!}=6*5*4=120$. You cannot just divide $6:3$!'},
+   {q:'$0!=$ ?',o:['$1$','$0$','undefined','$-1$'],a:0,e:'By definition $0!=1$. It must be remembered.'},
+   {q:'Simplify $\\frac{(n+1)!}{(n-1)!}$',o:['$n(n+1)$','$n+1$','$2$','$(n+1)(n-1)$'],a:0,e:'$(n+1)!=(n+1)*n*(n-1)!$. Cancel $(n-1)!$ → $(n+1)n$.'}
+  ]},
+ {id:'perm',group:'Combinatorics',name:'Permutation',
+  rule:['Permutation = <b>order matters</b> (places, prizes, a queue, a number).','All $n$ objects: $P(n, n)=n!$','$r$ objects from $n$: $P(n, r)=\\frac{n!}{(n-r)!}$','Or boxes: 1st place 5 choices, 2nd 4, 3rd 3 → $5*4*3$.'],
+  ru:'permutation — перестановка/размещение · order matters — порядок важен',
+  qs:[
+   {q:'Evaluate $P(5, 3)$',o:['$60$','$10$','$120$','$15$'],a:0,e:'$\\frac{5!}{2!}=5*4*3=60$.'},
+   {q:'In how many ways can 4 different books be arranged on a shelf?',o:['$24$','$4$','$16$','$10$'],a:0,e:'$P(4, 4)=4!=4*3*2*1=24$.'},
+   {q:'7 runners are in a race. In how many ways can gold, silver and bronze be given?',o:['$210$','$35$','$343$','$21$'],a:0,e:'Order matters (gold ≠ silver): $P(7, 3)=7*6*5=210$. ($35$ would be if order did not matter.)'},
+   {q:'How many two-digit numbers can be made from digits 1, 2, 3, 4, 5 if a digit cannot repeat?',o:['$20$','$25$','$10$','$9$'],a:0,e:'Tens: 5 choices, units: 4 left → $5*4=20$. (With repeats it would be $5*5=25$.)'}
+  ]},
+ {id:'comb',group:'Combinatorics',name:'Combination',
+  rule:['Combination = <b>order does NOT matter</b> (a team, a group, a set).','$C(n, r)=\\frac{n!}{(n-r)!*r!}$','$C(n, r)=C(n, n-r)$; $C(n, 0)=C(n, n)=1$; $C(n, 1)=n$'],
+  ru:'combination — сочетание · order doesn’t matter — порядок не важен',
+  qs:[
+   {q:'Evaluate $C(5, 2)$',o:['$10$','$20$','$7$','$25$'],a:0,e:'$\\frac{5!}{3!*2!}=\\frac{5*4}{2*1}=10$.'},
+   {q:'Which situation is a <b>combination</b>?',o:['choosing 3 pizza toppings','giving 1st, 2nd, 3rd prizes','making a 4-digit PIN code','arranging books on a shelf'],a:0,e:'Toppings {cheese, ham, olives} are the same in any order. The others depend on order → permutations.'},
+   {q:'A coach chooses 3 players from 10. In how many ways?',o:['$120$','$720$','$30$','$1000$'],a:0,e:'A team — order doesn\'t matter: $C(10, 3)=\\frac{10*9*8}{3*2*1}=120$. ($720$ is $P(10, 3)$.)'},
+   {q:'6 friends meet and everyone shakes hands with everyone once. How many handshakes?',o:['$15$','$30$','$36$','$12$'],a:0,e:'A handshake is a pair, order doesn\'t matter: $C(6, 2)=\\frac{6*5}{2}=15$.'},
+   {q:'$C(8, 6)=$ ?',o:['$28$','$56$','$48$','$20160$'],a:0,e:'$C(8, 6)=C(8, 2)=\\frac{8*7}{2}=28$. Choosing 6 to take = choosing 2 to leave.'}
+  ]},
+ {id:'pascal',group:'Combinatorics',name:'Pascal’s triangle',
+  rule:['Rows start from <b>row 0</b>. Each row starts and ends with 1.','Each inner number = sum of the two numbers above it.','Row $n$ = coefficients of $(a+b)^n$; there are $n+1$ terms.','Sum of row $n$ = $2^n$. Sum of coefficients: put $a=b=1$.'],
+  ru:'Pascal’s triangle — треугольник Паскаля · coefficient — коэффициент · expansion — разложение',
+  pascal:true,
+  qs:[
+   {q:'Which is row 4 of Pascal’s triangle?',o:['1 4 6 4 1','1 3 3 1','1 4 4 1','1 5 10 10 5 1'],a:0,e:'Row 3 is 1 3 3 1. Add neighbours: 1, 1+3, 3+3, 3+1, 1 → 1 4 6 4 1.'},
+   {q:'Row 6: 1 6 15 ▢ 15 6 1. What is missing?',o:['$20$','$21$','$30$','$16$'],a:0,e:'From row 5 (1 5 10 10 5 1): $10+10=20$.'},
+   {q:'How many terms are in the expansion of $(a+b)^7$?',o:['$8$','$7$','$14$','$6$'],a:0,e:'There are always $n+1$ terms: $7+1=8$.'},
+   {q:'What is the coefficient of $a^2b^2$ in $(a+b)^4$?',o:['$6$','$4$','$2$','$1$'],a:0,e:'Row 4 is 1 4 6 4 1 for $a^4, a^3b, a^2b^2, ab^3, b^4$. The middle one is 6.'},
+   {q:'Find the sum of the coefficients of $(2a-b)^5$.',o:['$1$','$32$','$243$','$0$'],a:0,e:'Put $a=1$, $b=1$: $(2-1)^5=1^5=1$.'}
+  ]}
+];
+TOPICS.forEach(t=>t.qs.forEach((q,i)=>{q.id=t.id+i;q.t=t}));
+const ALL=TOPICS.flatMap(t=>t.qs);
+
+/* ---------- state ---------- */
+let done={};try{done=JSON.parse(localStorage.getItem('dariya-sor')||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem('dariya-sor',JSON.stringify(done))}catch(e){}};
+let run=null; // {list, i, wrong:[], right:0, title, answered}
+const app=document.getElementById('app');
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+
+function pascalHTML(){let rows=[[1]];for(let n=1;n<=7;n++){const p=rows[n-1],r=[1];for(let k=1;k<n;k++)r.push(p[k-1]+p[k]);r.push(1);rows.push(r)}
+  return `<div class="pascal">${rows.map((r,n)=>`<div><span class="rn">row ${n}</span>${r.map(v=>`<span>${v}</span>`).join('')}</div>`).join('')}</div>`}
+function ruleHTML(t){return `<ul>${t.rule.map(r=>`<li>${R(r)}</li>`).join('')}</ul>${t.pascal?pascalHTML():''}<div class="ru">🇷🇺 ${t.ru}</div>`}
+
+function home(){
+  run=null;window.scrollTo(0,0);
+  const groups=[...new Set(TOPICS.map(t=>t.group))];
+  const wrongN=ALL.filter(q=>done[q.id]===false).length;
+  const okN=ALL.filter(q=>done[q.id]===true).length;
+  app.innerHTML=`
+   <header class="hero"><div class="eyebrow">Algebra 9 · Chapters 1–2 · СОР</div>
+   <h1>Ready, <span class="hl">Dariya</span>?</h1>
+   <p>${ALL.length} short questions. Tap an answer, read the explanation, go on. Stuck? Open the rule card above each question.</p></header>
+   <div class="actions">
+     <button class="btn primary" id="all">Start all ${ALL.length} questions</button>
+     <button class="btn ghost" id="mix">Random 10</button>
+     <button class="btn ghost" id="mist" ${wrongN?'':'disabled'}>My mistakes${wrongN?' ('+wrongN+')':''}</button>
+     <button class="btn ghost" id="sheet" style="grid-column:1/-1">Cheat sheet — all rules</button>
+   </div>
+   ${groups.map(g=>`<div class="group"><h2>${g}</h2><div class="topics">${TOPICS.filter(t=>t.group==g).map(t=>{
+      const ok=t.qs.filter(q=>done[q.id]===true).length;
+      return `<button class="topic" data-t="${t.id}"><span class="name">${t.name}</span><span class="cnt">${ok}/${t.qs.length}</span><span class="bar"><span style="width:${ok/t.qs.length*100}%"></span></span></button>`}).join('')}</div></div>`).join('')}
+   <p class="foot">${okN} of ${ALL.length} answered right so far · progress is saved on this phone<br><button class="btn" id="reset" style="background:none;color:var(--muted);font-size:13px;padding:8px;font-weight:600;text-decoration:underline">Reset progress</button></p>`;
+  app.querySelector('#all').onclick=()=>start(ALL,'All topics');
+  app.querySelector('#mix').onclick=()=>start(shuffle(ALL).slice(0,10),'Random 10');
+  app.querySelector('#mist').onclick=()=>start(ALL.filter(q=>done[q.id]===false),'My mistakes');
+  app.querySelector('#sheet').onclick=sheet;
+  const rs=app.querySelector('#reset');rs.onclick=()=>{if(rs.dataset.c){done={};save();home()}else{rs.dataset.c=1;rs.textContent='Tap again to reset'}};
+  app.querySelectorAll('.topic').forEach(b=>b.onclick=()=>{const t=TOPICS.find(t=>t.id==b.dataset.t);start(t.qs,t.name)});
+}
+
+function sheet(){
+  window.scrollTo(0,0);
+  app.innerHTML=`<div class="top"><div class="toprow"><button class="x" id="back" aria-label="Back">←</button><div class="toptitle">Cheat sheet</div></div></div>
+  <div class="sheet"><h2>All the rules</h2><p style="color:var(--muted);margin:0">Read this once before the СОР.</p>
+  ${TOPICS.map(t=>`<section><h3>${t.name}</h3>${ruleHTML(t)}</section>`).join('')}</div>`;
+  app.querySelector('#back').onclick=home;
+}
+
+function start(list,title){run={list,i:0,wrong:[],right:0,title};question()}
+
+function question(){
+  const q=run.list[run.i],t=q.t;window.scrollTo(0,0);
+  const order=shuffle((q.g||q.o).map((_,k)=>k));
+  const L='ABCD';
+  app.innerHTML=`
+   <div class="top"><div class="toprow"><button class="x" id="quit" aria-label="Back to topics">×</button>
+     <div class="toptitle">${run.title}</div><div class="counter">${run.i+1} / ${run.list.length}</div></div>
+     <div class="pbar"><span style="width:${run.i/run.list.length*100}%"></span></div></div>
+   <button class="rulebtn" id="rb">📐 Rule: ${t.name}</button>
+   <div class="rule" id="rule" hidden>${ruleHTML(t)}</div>
+   <div class="qcard"><div class="qtopic">${t.name}</div><div class="qtext">${R(q.q)}</div>
+   <div class="opts ${q.g?'graphs':''}">${order.map((k,n)=>`<button class="opt" data-k="${k}"><span class="k">${L[n]}</span>${q.g?`<canvas aria-label="graph ${L[n]}"></canvas>`:`<span class="t">${R(q.o[k])}</span>`}</button>`).join('')}</div>
+   <div id="ex"></div></div>
+   <div class="dock" id="dock" hidden><button class="btn" id="next">${run.i+1<run.list.length?'Next question →':'See my result'}</button></div>`;
+  if(q.g){app.querySelectorAll('.opt').forEach(b=>draw(b.querySelector('canvas'),q.g[+b.dataset.k]))}
+  app.querySelector('#quit').onclick=home;
+  const rb=app.querySelector('#rb'),rule=app.querySelector('#rule');rb.onclick=()=>{rule.hidden=!rule.hidden};
+  app.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(q,+b.dataset.k));
+  app.querySelector('#next').onclick=()=>{run.i++;run.i<run.list.length?question():result()};
+}
+
+function answer(q,k){
+  const ok=k===q.a;
+  app.querySelectorAll('.opt').forEach(b=>{b.disabled=true;const kk=+b.dataset.k;if(kk===q.a)b.classList.add('right');else if(kk===k)b.classList.add('wrong')});
+  if(ok){run.right++;done[q.id]=true}else{run.wrong.push(q);done[q.id]=false}save();
+  const praise=['Correct!','Yes, exactly!','Well done!','Right!','Great!'];
+  app.querySelector('#ex').innerHTML=`<div class="expl ${ok?'ok':'no'}"><b class="v">${ok?praise[Math.floor(Math.random()*praise.length)]:'Not quite — look:'}</b>${R(q.e)}</div>`;
+  const d=app.querySelector('#dock');d.hidden=false;
+  app.querySelector('#ex').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function result(){
+  window.scrollTo(0,0);
+  const n=run.list.length,p=Math.round(run.right/n*100);
+  const msg=p>=90?'Excellent! You are ready for the СОР.':p>=70?'Good job! Repeat the mistakes once more and you are ready.':p>=50?'Not bad. Open the cheat sheet, then try your mistakes again.':'Read the rules in the cheat sheet and try again — it will get easier.';
+  app.innerHTML=`<div class="result"><div class="eyebrow">${run.title}</div>
+   <div class="score">${run.right}<small> / ${n}</small></div>
+   <p>${p}% · ${msg}</p>
+   <div class="actions">
+    ${run.wrong.length?`<button class="btn primary" id="retry">Try my ${run.wrong.length} mistake${run.wrong.length>1?'s':''} again</button>`:''}
+    <button class="btn ghost" id="sheet2">Cheat sheet</button><button class="btn ghost" id="home">All topics</button></div>
+   ${run.wrong.length?`<div class="miss"><div class="eyebrow" style="margin-bottom:8px">To repeat</div><ul>${[...new Set(run.wrong.map(q=>q.t.name))].map(x=>`<li>${x}</li>`).join('')}</ul></div>`:''}</div>`;
+  const w=run.wrong;
+  if(w.length)app.querySelector('#retry').onclick=()=>start(w,'Mistakes again');
+  app.querySelector('#home').onclick=home;app.querySelector('#sheet2').onclick=sheet;
+}
+
+const mq=window.matchMedia('(prefers-color-scheme: dark)');
+const redraw=()=>{if(run&&run.list[run.i]&&run.list[run.i].g){const q=run.list[run.i];app.querySelectorAll('.opt').forEach(b=>{const c=b.querySelector('canvas');if(c)draw(c,q.g[+b.dataset.k])})}};
+mq.addEventListener&&mq.addEventListener('change',redraw);
+new MutationObserver(redraw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+window.addEventListener('resize',redraw);
+home();
+</script>
+
+</body></html>

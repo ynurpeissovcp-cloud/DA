@@ -1,0 +1,664 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Тренажёр СОЧ «Степени»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@500;700&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+/* Layout: тетрадь в клетку — липкие вкладки сверху, одна колонка, карточки-правила в сетке; маркер-выделитель для главного, красная ручка для ошибок */
+:root{
+  --paper:#f5f8fc; --grid:rgba(47,91,211,.07); --card:#ffffff; --ink:#18264a; --muted:#56658a;
+  --line:#d6dfee; --accent:#2f5bd3; --accent-soft:#e6edfd; --hl:#ffe66b; --ok:#1d8a4b; --ok-soft:#e3f5ea;
+  --bad:#d2382c; --bad-soft:#fdeceb;
+  --f-display:"Unbounded","Golos Text",system-ui,sans-serif;
+  --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-math:"STIX Two Text","Cambria Math","Times New Roman",serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0e1422; --grid:rgba(127,162,255,.06); --card:#151e31; --ink:#e5ebf7; --muted:#9aa8c4;
+  --line:#28334d; --accent:#86a6ff; --accent-soft:#1d2a4a; --hl:rgba(255,214,64,.30); --ok:#4cc580; --ok-soft:#14301f;
+  --bad:#ff6d60; --bad-soft:#3a1a18; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0e1422; --grid:rgba(127,162,255,.06); --card:#151e31; --ink:#e5ebf7; --muted:#9aa8c4;
+  --line:#28334d; --accent:#86a6ff; --accent-soft:#1d2a4a; --hl:rgba(255,214,64,.30); --ok:#4cc580; --ok-soft:#14301f;
+  --bad:#ff6d60; --bad-soft:#3a1a18; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55}
+.wrap{max-width:980px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 56px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:clamp(22px,4.4vw,34px);font-weight:700;letter-spacing:-.01em}
+h2{font-size:20px;font-weight:700}
+h3{font-size:15px;font-weight:500}
+p{margin:0}
+.m{font-family:var(--f-math);font-size:1.12em;white-space:nowrap}
+sup{font-size:.68em;line-height:0}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.86em;line-height:1.15;margin:0 .12em}
+.fr>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .18em}
+.hl{background:linear-gradient(transparent 52%,var(--hl) 52%);padding:0 .15em}
+.red{color:var(--bad);text-decoration:line-through;text-decoration-thickness:2px}
+.ok{color:var(--ok);font-weight:600}
+.muted{color:var(--muted)}
+.en{font-size:.82em;color:var(--muted);font-style:italic}
+
+header.top{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.lead{color:var(--muted);max-width:62ch}
+
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:6px;padding:8px 0;background:var(--paper);border-bottom:1px solid var(--line);margin-bottom:20px;overflow-x:auto}
+nav.tabs button{font:600 14px var(--f-body);color:var(--ink);background:transparent;border:1.5px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+button:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:22px}
+.plan>div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
+.plan b{font-family:var(--f-display);font-weight:500;font-size:13px;display:block;margin-bottom:4px;color:var(--accent)}
+.plan p{font-size:14px}
+
+.rules{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.rule{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.rule h3{display:flex;gap:8px;align-items:baseline}
+.rule h3 .n{font-family:var(--f-math);font-size:18px;color:var(--accent)}
+.rule ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px}
+.trap{border-top:1px dashed var(--line);padding-top:8px;font-size:14px}
+.trap::before{content:"Ловушка: ";font-weight:700;color:var(--bad)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{border-bottom:1px solid var(--line);padding:5px 6px;text-align:left;vertical-align:middle}
+th{font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+.tw{overflow-x:auto}
+.gloss{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.gloss .tw table td:first-child{font-style:italic;white-space:nowrap}
+
+/* Тренажёр */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.chip{font:500 14px var(--f-body);color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer;display:flex;flex-direction:column;gap:4px;align-items:flex-start;min-width:0}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.chip small{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar{height:4px;width:100%;min-width:90px;background:var(--line);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok);width:0}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:16px}
+.qhead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.score{font-variant-numeric:tabular-nums;font-weight:600;color:var(--ink)}
+.prompt{font-weight:600}
+.qmath{font-family:var(--f-math);font-size:clamp(24px,5.5vw,34px);text-align:center;padding:10px 0;overflow-x:auto;line-height:1.5}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:520px){.opts{grid-template-columns:1fr}}
+.opt{font-family:var(--f-math);font-size:20px;color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:10px;padding:12px;cursor:pointer;text-align:center;min-height:56px;line-height:1.5}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.why{border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 8px 8px 0;padding:10px 14px;font-size:15px}
+.why .v{font-weight:700;display:block;margin-bottom:2px}
+.why.good .v{color:var(--ok)} .why.bad .v{color:var(--bad)}
+.next{align-self:flex-end;font:600 15px var(--f-body);background:var(--ink);color:var(--paper);border:0;border-radius:10px;padding:11px 20px;cursor:pointer}
+.streak{font-size:13px;color:var(--muted)}
+
+/* Пробный СОЧ */
+.test-intro{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px;display:flex;flex-direction:column;gap:6px}
+.tasks{display:flex;flex-direction:column;gap:12px;counter-reset:t}
+.task{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.task h3{display:flex;gap:10px;align-items:baseline}
+.task h3 .n{font-family:var(--f-math);font-size:20px;color:var(--accent);min-width:1.4em}
+.lvl{font:600 11px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 6px;margin-left:auto}
+.items{display:flex;flex-wrap:wrap;gap:8px 26px;font-family:var(--f-math);font-size:20px;line-height:1.7}
+details{border-top:1px dashed var(--line);padding-top:8px}
+summary{cursor:pointer;font-weight:600;color:var(--accent);font-size:14px}
+details .sol{margin-top:8px;display:flex;flex-direction:column;gap:6px;font-size:15px}
+details .sol .m{font-size:1.08em}
+.mini{font-size:13px}
+@media (prefers-reduced-motion:no-preference){.opt,.chip{transition:border-color .15s,background-color .15s}}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <span class="eyebrow">Алгебра 7 · Chapter 1 · Integer Exponents</span>
+  <h1>Степени и стандартный вид к СОЧ</h1>
+  <p class="lead">Всё из главы 1 учебника на одной странице: правила с примерами, тренажёр с мгновенной проверкой и пробный СОЧ с решениями. Задания в учебнике на английском, поэтому рядом с правилами стоят английские слова из заданий.</p>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button role="tab" id="tab-rules" aria-selected="true" data-tab="rules">1 · Шпаргалка</button>
+  <button role="tab" id="tab-train" aria-selected="false" data-tab="train">2 · Тренажёр</button>
+  <button role="tab" id="tab-test" aria-selected="false" data-tab="test">3 · Пробный СОЧ</button>
+</nav>
+
+<!-- ============ ШПАРГАЛКА ============ -->
+<section id="rules" role="tabpanel">
+  <div class="plan">
+    <div><b>День 1</b><p>Прочитать §1–§4. В тренажёре темы «Степени и 5 свойств» и «Ноль и минус», пока не будет 8 верных подряд.</p></div>
+    <div><b>День 2</b><p>§5–§9. Темы «Стандартный вид», «Округление и погрешности», «Последняя цифра, площадь, ряды».</p></div>
+    <div><b>День 3</b><p>Пробный СОЧ на листке за 40 минут, без подсказок. Потом проверить и перерешать ошибки в тренажёре.</p></div>
+    <div><b>Если есть один вечер</b><p>15 минут шпаргалка → 20 задач «Всё вперемешку» → пробный СОЧ.</p></div>
+  </div>
+
+  <div class="rules">
+    <article class="rule">
+      <h3><span class="n">§1</span>Что такое степень</h3>
+      <p class="m"><span class="hl">a<sup>n</sup> = a · a · … · a</span> &nbsp;(n раз)</p>
+      <ul>
+        <li><b>a</b> — основание <span class="en">base</span>, <b>n</b> — показатель <span class="en">exponent</span></li>
+        <li><span class="m">2<sup>6</sup> = 64</span>, <span class="m">1<sup>100</sup> = 1</span>, <span class="m">17<sup>1</sup> = 17</span></li>
+        <li>Минус в основании: чётная степень даёт «+», нечётная «−»: <span class="m">(−2)<sup>5</sup> = −32</span></li>
+      </ul>
+      <p class="trap">смотри на скобки. <span class="m">(−2)<sup>4</sup> = 16</span>, но <span class="m">−2<sup>4</sup> = −16</span>: без скобок в степень идёт только 2.</p>
+    </article>
+
+    <article class="rule">
+      <h3><span class="n">§2</span>Пять свойств степеней</h3>
+      <div class="tw"><table>
+        <tr><td class="m"><span class="hl">a<sup>m</sup> · a<sup>n</sup> = a<sup>m+n</sup></span></td><td>умножение → показатели <b>складываем</b></td></tr>
+        <tr><td class="m"><span class="hl"><span class="fr"><span>a<sup>m</sup></span><span>a<sup>n</sup></span></span> = a<sup>m−n</sup></span></td><td>деление → <b>вычитаем</b></td></tr>
+        <tr><td class="m"><span class="hl">(a<sup>m</sup>)<sup>n</sup> = a<sup>m·n</sup></span></td><td>степень степени → <b>умножаем</b></td></tr>
+        <tr><td class="m"><span class="hl">(ab)<sup>n</sup> = a<sup>n</sup>b<sup>n</sup></span></td><td>каждый множитель в степень</td></tr>
+        <tr><td class="m"><span class="hl">(<span class="fr"><span>a</span><span>b</span></span>)<sup>n</sup> = <span class="fr"><span>a<sup>n</sup></span><span>b<sup>n</sup></span></span></span></td><td>и числитель, и знаменатель</td></tr>
+      </table></div>
+      <p class="mini">Пример: <span class="m">(−2b<sup>2</sup>)<sup>4</sup> = 16b<sup>8</sup></span>, <span class="m">(3a)<sup>3</sup>·(2a<sup>8</sup>)<sup>2</sup> = 27a<sup>3</sup>·4a<sup>16</sup> = 108a<sup>19</sup></span></p>
+      <p class="trap">свойства работают только при <b>одинаковом основании</b>: <span class="red m">4<sup>2</sup>·2<sup>3</sup> = 8<sup>5</sup></span>. И <span class="red m">(a+b)<sup>2</sup> = a<sup>2</sup>+b<sup>2</sup></span> неверно.</p>
+    </article>
+
+    <article class="rule">
+      <h3><span class="n">§3</span>Один приём, который решает половину СОЧ</h3>
+      <p>Приведи всё к одному основанию, потом пользуйся §2.</p>
+      <div class="tw"><table>
+        <tr><td class="m">4 = 2<sup>2</sup>, 8 = 2<sup>3</sup>, 16 = 2<sup>4</sup>, 32 = 2<sup>5</sup>, 64 = 2<sup>6</sup></td></tr>
+        <tr><td class="m">9 = 3<sup>2</sup>, 27 = 3<sup>3</sup>, 81 = 3<sup>4</sup>, 243 = 3<sup>5</sup></td></tr>
+        <tr><td class="m">25 = 5<sup>2</sup>, 125 = 5<sup>3</sup>, 1000 = 10<sup>3</sup></td></tr>
+      </table></div>
+      <p class="mini">Пример: <span class="m"><span class="fr"><span>2<sup>4</sup> · 4<sup>3</sup></span><span>8<sup>3</sup></span></span> = <span class="fr"><span>2<sup>4</sup> · 2<sup>6</sup></span><span>2<sup>9</sup></span></span> = 2<sup>1</sup> = 2</span></p>
+      <p class="mini">Сравнение: <span class="m">2<sup>600</sup> = 8<sup>200</sup></span>, <span class="m">3<sup>400</sup> = 9<sup>200</sup></span>, значит <span class="m">3<sup>400</sup></span> больше.</p>
+    </article>
+
+    <article class="rule">
+      <h3><span class="n">§4</span>Ноль и минус в показателе</h3>
+      <ul>
+        <li class="m"><span class="hl">a<sup>0</sup> = 1</span> (a ≠ 0); &nbsp;0<sup>0</sup> не определено</li>
+        <li class="m"><span class="hl">a<sup>−n</sup> = <span class="fr"><span>1</span><span>a<sup>n</sup></span></span></span> &nbsp; 2<sup>−3</sup> = <span class="fr"><span>1</span><span>8</span></span></li>
+        <li class="m"><span class="hl">(<span class="fr"><span>a</span><span>b</span></span>)<sup>−n</sup> = (<span class="fr"><span>b</span><span>a</span></span>)<sup>n</sup></span> &nbsp; (<span class="fr"><span>3</span><span>2</span></span>)<sup>−3</sup> = <span class="fr"><span>8</span><span>27</span></span></li>
+        <li><span class="m">−7<sup>0</sup> = −1</span>, но <span class="m">(−7)<sup>0</sup> = 1</span>; <span class="m">5a<sup>0</sup> = 5</span></li>
+      </ul>
+      <p class="mini"><b>Excluded value</b> (какое x нельзя): основание степени 0 или минус-степени не может быть нулём. <span class="m">(2a − 6)<sup>0</sup></span> → 2a − 6 ≠ 0 → <b>a ≠ 3</b>. <span class="m">(x + 2)<sup>−1</sup></span> → <b>x ≠ −2</b>.</p>
+      <p class="trap">минус в показателе <b>не</b> делает число отрицательным: <span class="red m">2<sup>−3</sup> = −8</span>.</p>
+    </article>
+
+    <article class="rule">
+      <h3><span class="n">§5</span>Последняя цифра степени</h3>
+      <p>Смотрим только на последнюю цифру основания. Цикл повторяется:</p>
+      <div class="tw"><table>
+        <tr><th>цифра</th><th>цикл</th><th>цифра</th><th>цикл</th></tr>
+        <tr><td>2</td><td class="m">2, 4, 8, 6</td><td>7</td><td class="m">7, 9, 3, 1</td></tr>
+        <tr><td>3</td><td class="m">3, 9, 7, 1</td><td>8</td><td class="m">8, 4, 2, 6</td></tr>
+        <tr><td>4</td><td class="m">4, 6</td><td>9</td><td class="m">9, 1</td></tr>
+        <tr><td colspan="4">0, 1, 5, 6 всегда остаются собой</td></tr>
+      </table></div>
+      <p class="mini">Делим показатель на длину цикла (4 или 2). Остаток 1 → 1-я цифра цикла, 2 → 2-я, 3 → 3-я, остаток 0 → последняя.<br><span class="m">7<sup>2023</sup></span>: 2023 : 4 = 505, ост. 3 → третья цифра цикла 7, 9, <b>3</b>, 1 → ответ <b>3</b>.</p>
+    </article>
+
+    <article class="rule">
+      <h3><span class="n">§6</span>Площадь, объём, последовательности</h3>
+      <ul>
+        <li>Сторону квадрата увеличили в <b>k</b> раз → площадь в <span class="hl m">k<sup>2</sup></span> раз</li>
+        <li>Ребро куба в <b>k</b> раз → объём в <span class="hl m">k<sup>3</sup></span> раз (ребро ×3 → объём ×27)</li>
+        <li>Объём ×64 → ребро ×4, потому что <span class="m">4<sup>3</sup> = 64</span></li>
+      </ul>
+      <p class="mini"><b>Sequence</b>: каждый раз умножают на одно число. <span class="m">2, 6, 18, 54, …</span> → ×3 → следующие 162, 486, 1458. Правило: <span class="m">2 · 3<sup>n−1</sup></span>. Бактерии удваиваются каждый час: через 8 ч из 1 клетки <span class="m">2<sup>8</sup> = 256</span>.</p>
+    </article>
+
+    <article class="rule">
+      <h3><span class="n">§7</span>Стандартный вид числа</h3>
+      <p class="m"><span class="hl">a · 10<sup>n</sup>,&nbsp; 1 ≤ |a| &lt; 10</span></p>
+      <ul>
+        <li>Ставим запятую после первой ненулевой цифры, считаем, на сколько знаков сдвинули</li>
+        <li>Число большое (≥ 10) → n <b>положительный</b>: <span class="m">780 000 000 = 7.8·10<sup>8</sup></span></li>
+        <li>Число меньше 1 → n <b>отрицательный</b>: <span class="m">0.0000547 = 5.47·10<sup>−5</sup></span></li>
+        <li>Обратно: <span class="m">4.3·10<sup>−4</sup> = 0.00043</span> (запятую влево на 4)</li>
+      </ul>
+      <p class="trap">в учебнике <b>scientific notation</b> = наш «стандартный вид», а <b>standard form</b> = обычная запись числа (50 600). Не перепутай задание. И <span class="red m">82.5·10<sup>6</sup></span> не стандартный вид: 82.5 больше 10.</p>
+    </article>
+
+    <article class="rule">
+      <h3><span class="n">§8</span>Действия в стандартном виде</h3>
+      <ul>
+        <li><b>×</b> числа перемножаем, показатели складываем: <span class="m">(4.5·10<sup>7</sup>)(5.1·10<sup>4</sup>) = 22.95·10<sup>11</sup> = 2.295·10<sup>12</sup></span></li>
+        <li><b>÷</b> делим, показатели вычитаем: <span class="m"><span class="fr"><span>0.8·10<sup>−3</sup></span><span>4·10<sup>−7</sup></span></span> = 0.2·10<sup>4</sup> = 2·10<sup>3</sup></span></li>
+        <li><b>+ −</b> сначала одинаковые степени 10: <span class="m">3.7·10<sup>4</sup> + 8.5·10<sup>3</sup> = 3.7·10<sup>4</sup> + 0.85·10<sup>4</sup> = 4.55·10<sup>4</sup></span></li>
+        <li><b>Сравнение</b>: сначала показатели, при равных показателях числа. <span class="m">8.4·10<sup>7</sup> &lt; 2.3·10<sup>9</sup></span></li>
+      </ul>
+      <p class="mini">Приставки: k = 10<sup>3</sup>, M = 10<sup>6</sup>, G = 10<sup>9</sup>, c = 10<sup>−2</sup>, m = 10<sup>−3</sup>, μ = 10<sup>−6</sup>, n = 10<sup>−9</sup>. Пример: 15.48 km = 15.48·10<sup>5</sup> cm = 1.548·10<sup>6</sup> cm.</p>
+      <p class="trap">в конце всегда проверь, что первое число от 1 до 10. Если нет, сдвинь: <span class="m">24·10<sup>3</sup> = 2.4·10<sup>4</sup></span>.</p>
+    </article>
+
+    <article class="rule">
+      <h3><span class="n">§9</span>Округление и погрешности</h3>
+      <ul>
+        <li>Цифра справа ≥ 5 → вверх, &lt; 5 → вниз: 6.847 ≈ 6.85, 682 ≈ 680</li>
+        <li>Абсолютная <span class="en">absolute error</span>: <span class="hl m">Δ = |a − ã|</span>, a — точное, ã — приближённое</li>
+        <li>Относительная <span class="en">relative error</span>: <span class="hl m">ε = <span class="fr"><span>|a − ã|</span><span>ã</span></span> · 100%</span></li>
+        <li>Запись <span class="m">a = ã ± Δ</span> значит <span class="m">ã − Δ ≤ a ≤ ã + Δ</span>: 52.24 ± 0.16 → 52.08 ≤ b ≤ 52.40</li>
+        <li>420 g ± 3%: Δ = 3% от 420 = 12.6 g → 407.4 ≤ m ≤ 432.6</li>
+      </ul>
+      <p class="mini">Пример: 128.0478 ≈ 128.05, Δ = |128.0478 − 128.05| = 0.0022.</p>
+      <p class="trap">36.97 до десятых — это <b>37.0</b>, а не «37»: ноль после запятой показывает точность.</p>
+    </article>
+  </div>
+
+  <div class="gloss">
+    <h2>Слова из заданий</h2>
+    <div class="tw"><table>
+      <tr><td>Evaluate / Calculate</td><td>вычисли значение</td><td>Simplify</td><td>упрости</td></tr>
+      <tr><td>base / exponent / power</td><td>основание / показатель / степень</td><td>reciprocal</td><td>обратное число (3 и 1/3)</td></tr>
+      <tr><td>scientific notation</td><td>стандартный вид a·10<sup>n</sup></td><td>standard form</td><td>обычная запись числа</td></tr>
+      <tr><td>round off to the nearest tenth</td><td>округли до десятых</td><td>hundredth / thousandth</td><td>сотых / тысячных</td></tr>
+      <tr><td>absolute / relative error</td><td>абсолютная / относительная погрешность</td><td>excluded value</td><td>значение, которое нельзя подставлять</td></tr>
+      <tr><td>ascending order</td><td>по возрастанию</td><td>last digit</td><td>последняя цифра</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============ ТРЕНАЖЁР ============ -->
+<section id="train" role="tabpanel" hidden>
+  <div class="chips" id="chips"></div>
+  <div class="qcard" id="qcard" aria-live="polite">
+    <div class="qhead"><span id="qtopic"></span><span class="score" id="score">Верно 0 из 0</span></div>
+    <p class="prompt" id="qprompt"></p>
+    <div class="qmath" id="qmath"></div>
+    <div class="opts" id="opts"></div>
+    <div class="why" id="why" hidden></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <span class="streak" id="streak"></span>
+      <button class="next" id="next" type="button">Следующий →</button>
+    </div>
+  </div>
+  <p class="mini muted" style="margin-top:10px">Задачи каждый раз новые. Решай на листке, потом выбирай ответ. Полоска под темой показывает долю верных ответов на этом устройстве.</p>
+</section>
+
+<!-- ============ ПРОБНЫЙ СОЧ ============ -->
+<section id="test" role="tabpanel" hidden>
+  <div class="test-intro">
+    <h2>Пробный СОЧ, 40 минут</h2>
+    <p>Задания в формате Summative Test из учебника (стр. 68–71). Реши всё на листке без подсказок, потом открывай «Ответ и решение» и проверяй. Задания A — база, B — средние, C — на высший балл.</p>
+  </div>
+  <div class="tasks">
+
+    <article class="task">
+      <h3><span class="n">1</span>Evaluate · Вычисли<span class="lvl">A</span></h3>
+      <div class="items"><span>a) (−3)<sup>4</sup></span><span>b) −3<sup>4</sup></span><span>c) 5<sup>0</sup> + 2<sup>−3</sup></span></div>
+      <details><summary>Ответ и решение</summary><div class="sol">
+        <p>a) <span class="m">(−3)<sup>4</sup> = (−3)(−3)(−3)(−3) = <b>81</b></span>: чётная степень, знак «+».</p>
+        <p>b) <span class="m">−3<sup>4</sup> = −(3·3·3·3) = <b>−81</b></span>: скобок нет, в степень идёт только 3.</p>
+        <p>c) <span class="m">1 + <span class="fr"><span>1</span><span>8</span></span> = <b>1<span class="fr"><span>1</span><span>8</span></span></b></span></p>
+      </div></details>
+    </article>
+
+    <article class="task">
+      <h3><span class="n">2</span>Simplify · Упрости<span class="lvl">A</span></h3>
+      <div class="items"><span>a) x<sup>5</sup> · x<sup>7</sup></span><span>b) a<sup>10</sup> : a<sup>4</sup></span><span>c) (y<sup>3</sup>)<sup>4</sup></span><span>d) (−2m<sup>3</sup>)<sup>5</sup></span></div>
+      <details><summary>Ответ и решение</summary><div class="sol">
+        <p>a) <span class="m">x<sup>5+7</sup> = <b>x<sup>12</sup></b></span> &nbsp; b) <span class="m">a<sup>10−4</sup> = <b>a<sup>6</sup></b></span> &nbsp; c) <span class="m">y<sup>3·4</sup> = <b>y<sup>12</sup></b></span></p>
+        <p>d) <span class="m">(−2)<sup>5</sup> · (m<sup>3</sup>)<sup>5</sup> = <b>−32m<sup>15</sup></b></span></p>
+      </div></details>
+    </article>
+
+    <article class="task">
+      <h3><span class="n">3</span>Write in scientific notation · Запиши в стандартном виде<span class="lvl">A</span></h3>
+      <div class="items"><span>a) 0.000052</span><span>b) 340 000 000</span><span>c) 6.07·10<sup>−3</sup> в standard form</span></div>
+      <details><summary>Ответ и решение</summary><div class="sol">
+        <p>a) запятую вправо на 5 знаков → <span class="m"><b>5.2·10<sup>−5</sup></b></span></p>
+        <p>b) запятую влево на 8 знаков → <span class="m"><b>3.4·10<sup>8</sup></b></span></p>
+        <p>c) запятую влево на 3 → <b>0.00607</b></p>
+      </div></details>
+    </article>
+
+    <article class="task">
+      <h3><span class="n">4</span>Find the excluded value · Какое значение нельзя<span class="lvl">A</span></h3>
+      <div class="items"><span>a) (2x − 8)<sup>0</sup></span><span>b) (x + 5)<sup>−1</sup></span></div>
+      <details><summary>Ответ и решение</summary><div class="sol">
+        <p>a) 2x − 8 ≠ 0 → <b>x ≠ 4</b> &nbsp; b) x + 5 ≠ 0 → <b>x ≠ −5</b></p>
+        <p class="muted">0<sup>0</sup> не определено, а 0<sup>−1</sup> = 1/0, на ноль делить нельзя.</p>
+      </div></details>
+    </article>
+
+    <article class="task">
+      <h3><span class="n">5</span>Calculate · Вычисли<span class="lvl">B</span></h3>
+      <div class="items"><span>a) <span class="fr"><span>2<sup>5</sup> · 4<sup>3</sup></span><span>8<sup>4</sup></span></span></span><span>b) 81<sup>−1</sup> · 27<sup>2</sup></span></div>
+      <details><summary>Ответ и решение</summary><div class="sol">
+        <p>a) <span class="m"><span class="fr"><span>2<sup>5</sup> · 2<sup>6</sup></span><span>2<sup>12</sup></span></span> = 2<sup>11−12</sup> = 2<sup>−1</sup> = <b><span class="fr"><span>1</span><span>2</span></span></b></span></p>
+        <p>b) <span class="m">3<sup>−4</sup> · 3<sup>6</sup> = 3<sup>2</sup> = <b>9</b></span></p>
+      </div></details>
+    </article>
+
+    <article class="task">
+      <h3><span class="n">6</span>Simplify, no negative exponents · Упрости, без отрицательных показателей<span class="lvl">B</span></h3>
+      <div class="items"><span>a) <span class="fr"><span>(3a<sup>2</sup>)<sup>3</sup> · a<sup>−4</sup></span><span>9a</span></span></span><span>b) (2x<sup>−3</sup>y<sup>2</sup>)<sup>−2</sup></span></div>
+      <details><summary>Ответ и решение</summary><div class="sol">
+        <p>a) <span class="m"><span class="fr"><span>27a<sup>6</sup> · a<sup>−4</sup></span><span>9a</span></span> = 3a<sup>6−4−1</sup> = <b>3a</b></span></p>
+        <p>b) <span class="m">2<sup>−2</sup> · x<sup>6</sup> · y<sup>−4</sup> = <b><span class="fr"><span>x<sup>6</sup></span><span>4y<sup>4</sup></span></span></b></span></p>
+      </div></details>
+    </article>
+
+    <article class="task">
+      <h3><span class="n">7</span>Last digit · Найди последнюю цифру<span class="lvl">B</span></h3>
+      <div class="items"><span>a) 7<sup>2023</sup></span><span>b) 3<sup>25</sup> + 4<sup>25</sup></span></div>
+      <details><summary>Ответ и решение</summary><div class="sol">
+        <p>a) цикл 7, 9, 3, 1; 2023 : 4 = 505 ост. 3 → <b>3</b></p>
+        <p>b) 3<sup>25</sup>: 25 : 4 ост. 1 → 3. 4<sup>25</sup>: нечётная степень → 4. Сумма оканчивается на 3 + 4 = <b>7</b></p>
+      </div></details>
+    </article>
+
+    <article class="task">
+      <h3><span class="n">8</span>Perform the operations · Выполни действия, ответ в стандартном виде<span class="lvl">B</span></h3>
+      <div class="items"><span>a) (6·10<sup>5</sup>)(4·10<sup>−2</sup>)</span><span>b) <span class="fr"><span>3.6·10<sup>5</sup></span><span>1.2·10<sup>9</sup></span></span></span><span>c) 4.5·10<sup>6</sup> + 7.8·10<sup>5</sup></span></div>
+      <details><summary>Ответ и решение</summary><div class="sol">
+        <p>a) <span class="m">24·10<sup>3</sup> = <b>2.4·10<sup>4</sup></b></span></p>
+        <p>b) <span class="m">3·10<sup>5−9</sup> = <b>3·10<sup>−4</sup></b></span></p>
+        <p>c) <span class="m">4.5·10<sup>6</sup> + 0.78·10<sup>6</sup> = <b>5.28·10<sup>6</sup></b></span></p>
+      </div></details>
+    </article>
+
+    <article class="task">
+      <h3><span class="n">9</span>Ascending order · Расставь по возрастанию<span class="lvl">B</span></h3>
+      <div class="items"><span>3.15·10<sup>−3</sup>, &nbsp;0.0031, &nbsp;3.2·10<sup>−4</sup></span></div>
+      <details><summary>Ответ и решение</summary><div class="sol">
+        <p>0.0031 = 3.1·10<sup>−3</sup>. Самый маленький показатель −4.</p>
+        <p><b>3.2·10<sup>−4</sup> &lt; 0.0031 &lt; 3.15·10<sup>−3</sup></b></p>
+      </div></details>
+    </article>
+
+    <article class="task">
+      <h3><span class="n">10</span>Errors · Погрешности<span class="lvl">B</span></h3>
+      <p>a) Округли 47.386 до десятых, найди абсолютную и относительную погрешность.<br>b) На упаковке написано 500 g ± 2%. В каких пределах масса?</p>
+      <details><summary>Ответ и решение</summary><div class="sol">
+        <p>a) сотые 8 ≥ 5 → <b>47.4</b>; Δ = |47.386 − 47.4| = <b>0.014</b>; ε = 0.014 : 47.4 · 100% ≈ <b>0.03%</b></p>
+        <p>b) 2% от 500 = 10 g → <b>490 g ≤ m ≤ 510 g</b></p>
+      </div></details>
+    </article>
+
+    <article class="task">
+      <h3><span class="n">11</span>Word problems · Задачи<span class="lvl">B</span></h3>
+      <p>a) Ребро куба увеличили в 3 раза. Во сколько раз увеличился объём?<br>b) Свет проходит 3·10<sup>5</sup> km за секунду. Сколько km он пройдёт за 8 минут? Ответ в стандартном виде.<br>c) 2, 6, 18, 54, … Запиши правило и следующие три члена.</p>
+      <details><summary>Ответ и решение</summary><div class="sol">
+        <p>a) <span class="m">3<sup>3</sup> = <b>27</b></span> раз</p>
+        <p>b) 8 мин = 480 s = 4.8·10<sup>2</sup> s; <span class="m">3·10<sup>5</sup> · 4.8·10<sup>2</sup> = 14.4·10<sup>7</sup> = <b>1.44·10<sup>8</sup> km</b></span></p>
+        <p>c) каждый раз ×3, правило <span class="m">2·3<sup>n−1</sup></span>; дальше <b>162, 486, 1458</b></p>
+      </div></details>
+    </article>
+
+    <article class="task">
+      <h3><span class="n">12</span>Challenge · На высший балл<span class="lvl">C</span></h3>
+      <div class="items"><span>a) <span class="fr"><span>(2<sup>3</sup>)<sup>4</sup> · 4<sup>5</sup></span><span>16<sup>3</sup> · 8<sup>5</sup></span></span></span><span>b) x<sup>−3</sup> = <span class="fr"><span>1</span><span>64</span></span>, x = ?</span><span>c) что больше: 2<sup>600</sup> или 3<sup>400</sup>?</span></div>
+      <details><summary>Ответ и решение</summary><div class="sol">
+        <p>a) <span class="m"><span class="fr"><span>2<sup>12</sup> · 2<sup>10</sup></span><span>2<sup>12</sup> · 2<sup>15</sup></span></span> = 2<sup>22−27</sup> = 2<sup>−5</sup> = <b><span class="fr"><span>1</span><span>32</span></span></b></span></p>
+        <p>b) <span class="m"><span class="fr"><span>1</span><span>x<sup>3</sup></span></span> = <span class="fr"><span>1</span><span>64</span></span></span> → x<sup>3</sup> = 64 → <b>x = 4</b></p>
+        <p>c) <span class="m">2<sup>600</sup> = (2<sup>3</sup>)<sup>200</sup> = 8<sup>200</sup></span>, <span class="m">3<sup>400</sup> = (3<sup>2</sup>)<sup>200</sup> = 9<sup>200</sup></span> → <b>3<sup>400</sup> больше</b></p>
+      </div></details>
+    </article>
+
+  </div>
+</section>
+</div>
+
+<script>
+/* ---------- утилиты ---------- */
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const NZ=(a,b)=>{let x;do{x=R(a,b)}while(x===0);return x};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const M=n=>(n<0?'−':'')+Math.abs(n);
+const sup=e=>'<sup>'+M(e)+'</sup>';
+const par=n=>n<0?'('+M(n)+')':M(n);
+const gcd=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a};
+const fr2=(n,d)=>'<span class="fr"><span>'+n+'</span><span>'+d+'</span></span>';
+function fr(n,d){if(d<0){n=-n;d=-d}const g=gcd(n,d)||1;n/=g;d/=g;if(d===1)return M(n);return (n<0?'−':'')+fr2(Math.abs(n),d)}
+function pl(n,a,b,c){n=Math.abs(n)%100;const k=n%10;if(n>10&&n<20)return c;if(k===1)return a;if(k>=2&&k<=4)return b;return c}
+function group(s){return s.length>4?s.replace(/\B(?=(\d{3})+(?!\d))/g,' '):s}
+function decFixed(m,s){const neg=m<0;let t=String(Math.abs(m));if(s>0){t=t.padStart(s+1,'0');t=t.slice(0,-s)+'.'+t.slice(-s)}return (neg?'−':'')+t}
+function dec(m,s){let t=decFixed(m,s);if(s>0)t=t.replace(/0+$/,'').replace(/\.$/,'');return t}
+function toSci(m,p){const neg=m<0;let s=String(Math.abs(m));while(s.length>1&&s.endsWith('0')){s=s.slice(0,-1);p++}return {d:s,e:p+s.length-1,neg}}
+const coef=n=>n.d[0]+(n.d.length>1?'.'+n.d.slice(1):'');
+const sciH=n=>(n.neg?'−':'')+coef(n)+'·10'+sup(n.e);
+function stdH(n){const d=n.d,pos=1+n.e;let t;if(pos<=0)t='0.'+'0'.repeat(-pos)+d;else if(pos>=d.length)t=group(d+'0'.repeat(pos-d.length));else t=group(d.slice(0,pos))+'.'+d.slice(pos);return (n.neg?'−':'')+t}
+const sh=(n,k)=>({d:n.d,e:n.e+k,neg:n.neg});
+const neg_e=n=>({d:n.d,e:-n.e,neg:n.neg});
+const sciVal=n=>parseFloat(coef(n))*Math.pow(10,n.e)*(n.neg?-1:1);
+function rndSci(lo,hi){const len=R(1,3);let d=String(R(1,9));for(let i=1;i<len;i++)d+=R(0,9);if(len>1&&d.endsWith('0'))d=d.slice(0,-1)+R(1,9);let e;do{e=R(lo,hi)}while(e===0||e===1);return {d,e,neg:false}}
+
+function mk(topic,prompt,q,correct,wrongs,why,nw){
+  nw=nw||3;const seen=new Set([correct]);const w=[];
+  for(const x of wrongs){if(!seen.has(x)){seen.add(x);w.push(x)}if(w.length===nw)break}
+  if(w.length<nw)return null;
+  const opts=shuffle([correct,...w]);
+  return {topic,prompt,q,opts,ans:opts.indexOf(correct),why};
+}
+
+/* ---------- генераторы: степени ---------- */
+function gEval(){
+  const a=R(2,5),n=R(2,4),inParens=Math.random()<.5,v=Math.pow(a,n);
+  let val,q,why;
+  if(inParens){val=n%2?-v:v;q='(−'+a+')'+sup(n);
+    why='Основание <b>−'+a+'</b>, оно в скобках. Показатель '+n+' '+(n%2?'нечётный → знак минус':'чётный → знак плюс')+': '+M(val)+'.';}
+  else{val=-v;q='−'+a+sup(n);
+    why='Скобок нет, в степень возводим только '+a+': '+a+sup(n)+' = '+v+', минус остаётся впереди: '+M(val)+'.';}
+  return mk('pow','Evaluate · Вычисли',q,M(val),[M(-val),M(-a*n),M(a*n),M(val+a),M(-(val+a)),M(Math.pow(a,n+1))],why);
+}
+function gProps(){
+  const x=pick(['x','a','m','y','b']);const X=e=>e===1?x:x+sup(e);const t=R(0,3);
+  if(t===0){const m=R(2,9),n=R(2,9);
+    return mk('pow','Simplify · Упрости',X(m)+' · '+X(n),X(m+n),[X(m*n),m!==n?X(Math.abs(m-n)):X(2*m+1),'2'+X(m+n),X(m+n+1)],
+      'При <b>умножении</b> степеней с одинаковым основанием показатели <b>складываем</b>: '+m+' + '+n+' = '+(m+n)+'.');}
+  if(t===1){const n=R(2,6),m=n+R(2,8);
+    return mk('pow','Simplify · Упрости',fr2(X(m),X(n)),X(m-n),[X(m+n),m%n===0?X(m/n):X(m*n),X(n-m),X(m-n+1)],
+      'При <b>делении</b> показатели <b>вычитаем</b>: '+m+' − '+n+' = '+(m-n)+'.');}
+  if(t===2){const m=R(2,6),n=R(2,5);
+    return mk('pow','Simplify · Упрости','('+X(m)+')'+sup(n),X(m*n),[X(m+n),n+X(m),X(m*n+1),X(m*n-1)],
+      '<b>Степень степени</b>: показатели <b>умножаем</b>: '+m+' · '+n+' = '+(m*n)+'.');}
+  const k=pick([2,3,-2,-3]),n=Math.abs(k)===3?R(2,3):R(2,4),m=R(2,5),kn=Math.pow(k,n);
+  return mk('pow','Simplify · Упрости','('+M(k)+X(m)+')'+sup(n),M(kn)+X(m*n),[M(k*n)+X(m*n),M(k)+X(m*n),M(kn)+X(m+n),M(-kn)+X(m*n)],
+    'Каждый множитель в скобках возводим в степень '+n+': '+par(k)+sup(n)+' = '+M(kn)+', ('+X(m)+')'+sup(n)+' = '+X(m*n)+'.');
+}
+function gNeg(){
+  const t=R(0,2);
+  if(t===0){const [a,n]=pick([[2,1],[2,2],[2,3],[2,4],[2,5],[3,1],[3,2],[3,3],[4,2],[4,3],[5,2],[5,3],[10,2],[10,3],[6,2],[7,2]]);const v=Math.pow(a,n);
+    return mk('neg','Evaluate · Вычисли',a+sup(-n),fr(1,v),[M(-v),'−'+fr(1,v),M(v),fr(1,a*n),M(-a*n),fr(1,2*v)],
+      'Минус в показателе значит «перевернуть»: '+a+sup(-n)+' = '+fr2('1',a+sup(n))+' = '+fr(1,v)+'. Число при этом <b>не</b> становится отрицательным.');}
+  if(t===1){const [p,q]=pick([[2,3],[3,4],[2,5],[1,4],[1,3],[3,5],[4,5],[1,2],[5,6],[2,7]]);const n=q>=5?R(1,2):R(1,3);
+    const P=Math.pow(p,n),Q=Math.pow(q,n);
+    return mk('neg','Evaluate · Вычисли','('+fr2(p,q)+')'+sup(-n),fr(Q,P),[fr(P,Q),'−'+fr(Q,P),'−'+fr(P,Q),fr(q*n,p)],
+      'Дробь в минус-степени: переворачиваем и убираем минус: ('+fr2(p,q)+')'+sup(-n)+' = ('+fr2(q,p)+')'+sup(n)+' = '+fr(Q,P)+'.');}
+  const z=pick([
+    ['−7'+sup(0),'−1',['1','0','−7'],'Скобок нет: 7'+sup(0)+' = 1, впереди минус → −1.'],
+    ['(−7)'+sup(0),'1',['−1','0','−7'],'Любое число, кроме 0, в нулевой степени равно 1, даже отрицательное.'],
+    ['5a'+sup(0),'5',['1','0','5a'],'В нулевую степень возводится только a: a'+sup(0)+' = 1, значит 5 · 1 = 5.'],
+    ['(5a)'+sup(0),'1',['5','0','5a'],'Вся скобка в нулевой степени → 1.'],
+    ['0'+sup(8),'0',['1','8','не определено'],'0 · 0 · … · 0 = 0. Не определено только 0'+sup(0)+'.'],
+    ['3'+sup(0)+' + 3'+sup(-1),fr(4,3),['1',fr(1,3),'−2'],'3'+sup(0)+' = 1, 3'+sup(-1)+' = '+fr(1,3)+'; 1 + '+fr(1,3)+' = '+fr(4,3)+'.'],
+    ['2'+sup(-2)+' + 2'+sup(-1),fr(3,4),['−'+fr(3,4),fr(1,8),'−6'],'2'+sup(-2)+' = '+fr(1,4)+', 2'+sup(-1)+' = '+fr(1,2)+'; сумма '+fr(3,4)+'.'],
+    ['(6'+sup(0)+')'+sup(3)+' + (−6'+sup(0)+')'+sup(3),'0',['2','1','−2'],'6'+sup(0)+' = 1, −6'+sup(0)+' = −1; 1'+sup(3)+' + (−1)'+sup(3)+' = 1 − 1 = 0.']
+  ]);
+  return mk('neg','Evaluate · Вычисли',z[0],z[1],z[2],z[3]);
+}
+function gExcl(){
+  if(Math.random()<.5){const a=pick([1,2,3,5]);let r=R(-5,5);if(r===0)r=4;const b=a*r;const v=pick(['x','a','y']);
+    const q='('+(a===1?'':a)+v+' '+(b>=0?'−':'+')+' '+Math.abs(b)+')'+sup(0);
+    return mk('neg','Find the excluded value · Какое значение исключено?',q,v+' ≠ '+M(r),[v+' ≠ '+M(-r),v+' ≠ '+M(b===r?r+1:b),v+' ≠ 0',v+' ≠ '+M(-b)],
+      'Выражение 0'+sup(0)+' не определено, поэтому основание ≠ 0: '+(a===1?'':a)+v+' '+(b>=0?'−':'+')+' '+Math.abs(b)+' ≠ 0 → '+v+' ≠ '+M(r)+'.');}
+  let c=R(-6,6);if(c===0)c=3;
+  const q='(x '+(c>0?'+':'−')+' '+Math.abs(c)+')'+sup(-1);
+  return mk('neg','Find the excluded value · Какое значение исключено?',q,'x ≠ '+M(-c),['x ≠ '+M(c),'x ≠ 0','x ≠ 1','x ≠ −1'],
+    '(…)'+sup(-1)+' = '+fr2('1','…')+', а на ноль делить нельзя: x '+(c>0?'+':'−')+' '+Math.abs(c)+' ≠ 0 → x ≠ '+M(-c)+'.');
+}
+
+/* ---------- применение степеней ---------- */
+const CYC={2:[2,4,8,6],3:[3,9,7,1],4:[4,6],7:[7,9,3,1],8:[8,4,2,6],9:[9,1]};
+function gLast(){
+  const d=pick([2,3,4,7,8,9]);const base=Math.random()<.5?d:10*R(1,9)+d;const n=R(11,2030);
+  const c=CYC[d],L=c.length,r=n%L,ans=c[(r+L-1)%L];
+  return mk('app','Find the last digit · Последняя цифра числа',base+sup(n),String(ans),[...c.map(String),String(d),'1','5','6','0'],
+    'Смотрим только на последнюю цифру основания — '+d+'. Её степени оканчиваются циклом '+c.join(', ')+' (длина '+L+'). '+n+' : '+L+' даёт остаток '+r+(r===0?' → берём последнюю цифру цикла':' → берём '+r+'-ю цифру цикла')+': <b>'+ans+'</b>.');
+}
+function gScale(){
+  const t=R(0,2),k=R(2,5);
+  if(t===0)return mk('app','Сторону квадрата увеличили в '+k+' '+pl(k,'раз','раза','раз')+'. Во сколько раз увеличится площадь?','S = a'+sup(2),String(k*k),[String(k),String(2*k),String(k*k*k),String(4*k)],
+    'Площадь зависит от стороны во второй степени: (ka)'+sup(2)+' = k'+sup(2)+'a'+sup(2)+'. '+k+sup(2)+' = '+(k*k)+'.');
+  if(t===1)return mk('app','Ребро куба увеличили в '+k+' '+pl(k,'раз','раза','раз')+'. Во сколько раз увеличится объём?','V = a'+sup(3),String(k*k*k),[String(k*k),String(3*k),String(k),String(2*k*k)],
+    'Объём зависит от ребра в третьей степени: (ka)'+sup(3)+' = k'+sup(3)+'a'+sup(3)+'. '+k+sup(3)+' = '+(k*k*k)+'.');
+  return mk('app','Объём куба увеличился в '+(k*k*k)+' раз. Во сколько раз увеличили ребро?','V × '+(k*k*k),String(k),[String(k*k),String(2*k),String(k+1),String(k+2),String(3*k)],
+    'Ищем число, которое в кубе даёт '+(k*k*k)+': '+k+sup(3)+' = '+(k*k*k)+'. Ребро увеличили в '+k+' '+pl(k,'раз','раза','раз')+'.');
+}
+function gSeq(){
+  let t;
+  if(Math.random()<.25){const a1=Math.pow(2,R(5,8));t=[a1,a1/2,a1/4,a1/8];const nx=a1/16;
+    return mk('app','Find the next term · Найди следующий член',t.join(', ')+', …',String(nx),[String(t[3]-(t[2]-t[3])),String(nx/2),String(t[3]*2),String(nx+1)],
+      'Каждый член делится на 2 (умножается на '+fr(1,2)+'): '+t[3]+' : 2 = '+nx+'.');}
+  const a1=pick([1,2,3,5,-2,-1]),r=pick([2,3,-2,-3,4,5]);t=[a1,a1*r,a1*r*r,a1*r*r*r];const nx=t[3]*r;
+  return mk('app','Find the next term · Найди следующий член',t.map(M).join(', ')+', …',M(nx),[M(t[3]+(t[3]-t[2])),M(-nx),M(nx*r),M(t[3]*(r+1))],
+    'Каждый член умножается на '+M(r)+': '+M(t[3])+' · '+par(r)+' = '+M(nx)+'. Правило: '+(a1===1?'':a1===-1?'−':M(a1)+'·')+par(r)+'<sup>n−1</sup>.');
+}
+
+/* ---------- стандартный вид ---------- */
+function gSciWrite(){
+  const n=rndSci(-7,9),k=Math.abs(n.e);
+  if(Math.random()<.55)
+    return mk('sci','Write in scientific notation · Запиши в стандартном виде',stdH(n),sciH(n),[sciH(neg_e(n)),sciH(sh(n,1)),sciH(sh(n,-1))],
+      'Ставим запятую после первой ненулевой цифры: <b>'+coef(n)+'</b>. Сдвиг на '+k+' '+pl(k,'знак','знака','знаков')+'. '+(n.e>0?'Число было большим → показатель <b>положительный</b>':'Число было меньше 1 → показатель <b>отрицательный</b>')+': '+sciH(n)+'.');
+  return mk('sci','Write in standard form · Запиши обычным числом',sciH(n),stdH(n),[stdH(neg_e(n)),stdH(sh(n,1)),stdH(sh(n,-1))],
+    'Показатель '+M(n.e)+': двигаем запятую на '+k+' '+pl(k,'знак','знака','знаков')+' '+(n.e>0?'<b>вправо</b>, число станет большим':'<b>влево</b>, число станет меньше 1')+': '+stdH(n)+'.');
+}
+const rndC=()=>Math.random()<.5?{m:R(2,9),s:0}:(()=>{let m=R(11,99);if(m%10===0)m++;return {m,s:1}})();
+const cH=(c,E)=>dec(c.m,c.s)+'·10'+sup(E);
+function gSciOps(){
+  const t=R(0,2);
+  if(t===0){const a=rndC(),b=rndC(),E1=NZ(-9,9),E2=NZ(-9,9);
+    const raw=a.m*b.m,rs=a.s+b.s,ans=toSci(raw,E1+E2-rs),big=raw/Math.pow(10,rs)>=10;
+    return mk('sci','Multiply, answer in scientific notation · Умножь',
+      '('+cH(a,E1)+') · ('+cH(b,E2)+')',sciH(ans),[sciH(toSci(raw,E1-E2-rs)),sciH(sh(ans,1)),sciH(sh(ans,-1)),sciH(neg_e(ans))],
+      'Числа умножаем: '+dec(a.m,a.s)+' · '+dec(b.m,b.s)+' = '+dec(raw,rs)+'. Показатели складываем: '+M(E1)+' + '+par(E2)+' = '+M(E1+E2)+'. '+(big?'Получилось '+dec(raw,rs)+'·10'+sup(E1+E2)+', а первое число должно быть меньше 10, сдвигаем: ':'Ответ: ')+sciH(ans)+'.');}
+  if(t===1){const qa=R(2,9),bm=R(2,4),Ea=NZ(-8,8),E2=NZ(-8,8);
+    const top=toSci(qa*bm,Ea+E2),bot={d:String(bm),e:E2,neg:false},ans={d:String(qa),e:Ea,neg:false},k=top.e-E2-Ea;
+    return mk('sci','Divide, answer in scientific notation · Раздели',
+      fr2(sciH(top),sciH(bot)),sciH(ans),[sciH({d:String(qa),e:top.e+E2,neg:false}),sciH(sh(ans,1)),sciH(sh(ans,-1)),sciH(neg_e(ans))],
+      'Числа делим: '+coef(top)+' : '+bm+' = '+dec(qa,k)+'. Показатели вычитаем: '+M(top.e)+' − '+par(E2)+' = '+M(top.e-E2)+'. '+(k?dec(qa,k)+'·10'+sup(top.e-E2)+' приводим к виду 1 ≤ a &lt; 10: ':'Ответ: ')+sciH(ans)+'.');}
+  const E=pick([-6,-5,-4,-3,-2,3,4,5,6,7,8]),mk1=()=>{let m=R(11,99);if(m%10===0)m++;return m};
+  let a=mk1(),b=mk1();const same=Math.random()<.5,minus=Math.random()<.35;
+  if(same&&minus&&a<=b){if(a===b)a++;else{const tt=a;a=b;b=tt}}
+  const sg=minus?'−':'+',f=minus?-1:1;
+  if(same){const s=a+f*b,ans=toSci(s,E-1),norm=s>=100||s<10;
+    return mk('sci','Answer in scientific notation · Ответ в стандартном виде',
+      dec(a,1)+'·10'+sup(E)+' '+sg+' '+dec(b,1)+'·10'+sup(E),sciH(ans),[sciH(toSci(s,2*E-1)),sciH(sh(ans,1)),sciH(sh(ans,-1)),sciH(neg_e(ans))],
+      'Показатели одинаковые, работаем только с числами: '+dec(a,1)+' '+sg+' '+dec(b,1)+' = '+dec(s,1)+'. '+(norm?'Приводим к виду 1 ≤ a &lt; 10: ':'Ответ: ')+sciH(ans)+'.');}
+  const s=10*a+f*b,ans=toSci(s,E-2),naive=toSci(a+f*b,E-1);
+  return mk('sci','Answer in scientific notation · Ответ в стандартном виде',
+    dec(a,1)+'·10'+sup(E)+' '+sg+' '+dec(b,1)+'·10'+sup(E-1),sciH(ans),[sciH(naive),sciH(sh(ans,1)),sciH(sh(ans,-1)),sciH(toSci(s,2*E-3))],
+    'Показатели разные. Переписываем второе число с 10'+sup(E)+': '+dec(b,1)+'·10'+sup(E-1)+' = '+dec(b,2)+'·10'+sup(E)+'. Теперь '+dec(a,1)+' '+sg+' '+dec(b,2)+' = '+dec(s,2)+': '+sciH(ans)+'.');
+}
+function gCompare(){
+  const A=rndSci(-8,9);let B=rndSci(-8,9);
+  if(Math.random()<.5){B.e=A.e+pick([-3,-2,-1,1,2,3]);}else{B.e=A.e;if(B.d===A.d)return null}
+  const va=sciVal(A),vb=sciVal(B);if(va===vb)return null;
+  const showStd=Math.random()<.5&&B.e>=-6&&B.e<=7;const bH=showStd?stdH(B):sciH(B);
+  const corr=va>vb?'&gt;':'&lt;';
+  let why=(showStd?'Сначала переводим: '+stdH(B)+' = '+sciH(B)+'. ':'');
+  why+=A.e!==B.e?'Сравниваем показатели: '+M(A.e)+(A.e>B.e?' &gt; ':' &lt; ')+M(B.e)+', значит первое число '+(va>vb?'больше':'меньше')+'.':'Показатели равны, сравниваем числа: '+coef(A)+(va>vb?' &gt; ':' &lt; ')+coef(B)+'.';
+  return mk('sci','Compare · Сравни, поставь знак',sciH(A)+' &nbsp;?&nbsp; '+bH,corr,['&gt;','&lt;','='],why,2);
+}
+
+/* ---------- округление и погрешности ---------- */
+function gRound(){
+  let X=R(1001,99999);if(X%10===0)X+=R(1,9);
+  const P=pick([[100,'десятых','tenth',1],[10,'сотых','hundredth',2],[1000,'целых','whole number',0]]);
+  const q=P[0],r=Math.floor((X+q/2)/q)*q,t=Math.floor(X/q)*q,other=r===t?t+q:t,AE=Math.abs(X-r),dig=Math.floor((X%q)/(q/10));
+  const rs=v=>decFixed(v/Math.pow(10,3-P[3]),P[3]);
+  const opt=(v,ae)=>rs(v)+'; &nbsp;Δ = '+dec(ae,3);
+  return mk('err','Round to the nearest '+P[2]+', find the absolute error · Округли до '+P[1]+' и найди абсолютную погрешность',dec(X,3),opt(r,AE),
+    [opt(other,Math.abs(X-other)),opt(r,q-AE),opt(other,AE),opt(r,AE*10)],
+    'Цифра справа от нужного разряда — '+dig+(dig>=5?' (≥ 5), округляем вверх':' (&lt; 5), округляем вниз')+': '+rs(r)+'. Δ = |'+dec(X,3)+' − '+rs(r)+'| = '+dec(AE,3)+'.');
+}
+function gRel(){
+  const opts=[];[20,50,200,250,400,500,800,1000].forEach(a=>[1,2,4,5,10,20].forEach(p=>{if(a*p%100===0)opts.push([a,p])}));
+  const [ap,p]=pick(opts),d=ap*p/100,a=Math.random()<.5?ap+d:ap-d;
+  return mk('err','Find the relative error · Найди относительную погрешность','a = '+a+', &nbsp;ã = '+ap,p+'%',[d+'%',(p*10)+'%',dec(p,1)+'%',(p*2)+'%',(p+1)+'%'],
+    'Абсолютная: Δ = |'+a+' − '+ap+'| = '+d+'. Относительная: '+fr2(d,ap)+' · 100% = '+p+'%. Делим на приближённое значение ã.');
+}
+function gLimits(){
+  if(Math.random()<.5){const v=R(100,999),D=R(1,9);
+    const f=x=>decFixed(x,1),c=f(v-D)+' ≤ a ≤ '+f(v+D);
+    return mk('err','Indicate the possible limits · В каких пределах число?','a = '+f(v)+' ± '+f(D),c,[f(v)+' ≤ a ≤ '+f(v+D),f(v-D)+' ≤ a ≤ '+f(v),f(v-2*D)+' ≤ a ≤ '+f(v+2*D),f(v-D)+' ≤ a ≤ '+f(v+2*D)],
+      'ã ± Δ значит от ã − Δ до ã + Δ: '+f(v)+' − '+f(D)+' = '+f(v-D)+', '+f(v)+' + '+f(D)+' = '+f(v+D)+'.');}
+  const opts=[];[200,300,400,500,600,800,1000].forEach(a=>[1,2,3,5,10].forEach(p=>{if(a*p%100===0&&a*p/100!==p)opts.push([a,p])}));
+  const [a,p]=pick(opts),D=a*p/100;
+  return mk('err','Mass limits · Масса на упаковке, найди пределы',a+' g ± '+p+'%',(a-D)+' ≤ m ≤ '+(a+D),[(a-p)+' ≤ m ≤ '+(a+p),(a-2*D)+' ≤ m ≤ '+(a+2*D),a+' ≤ m ≤ '+(a+D),(a-D)+' ≤ m ≤ '+a],
+    p+'% от '+a+' g = '+D+' g. Значит от '+(a-D)+' до '+(a+D)+' g.');
+}
+
+const TOPICS=[
+  {id:'pow',name:'Степени и 5 свойств',gens:[gEval,gProps,gProps,gProps]},
+  {id:'neg',name:'Ноль и минус',gens:[gNeg,gNeg,gExcl]},
+  {id:'app',name:'Последняя цифра, площадь, ряды',gens:[gLast,gScale,gSeq]},
+  {id:'sci',name:'Стандартный вид',gens:[gSciWrite,gSciWrite,gSciOps,gSciOps,gCompare]},
+  {id:'err',name:'Округление и погрешности',gens:[gRound,gRel,gLimits]},
+];
+function generate(tid){
+  for(let i=0;i<60;i++){
+    const T=tid==='mix'?pick(TOPICS):TOPICS.find(t=>t.id===tid);
+    const q=pick(T.gens)();if(q)return q;
+  }
+}
+if(typeof module!=='undefined'){module.exports={TOPICS,generate}}
+
+/* ---------- интерфейс ---------- */
+if(typeof document!=='undefined'){
+  const $=s=>document.querySelector(s);
+  // вкладки
+  const tabs=[...document.querySelectorAll('nav.tabs button')];
+  function show(id){tabs.forEach(b=>{const on=b.dataset.tab===id;b.setAttribute('aria-selected',on);document.getElementById(b.dataset.tab).hidden=!on});try{localStorage.setItem('soch-tab',id)}catch(e){}}
+  tabs.forEach(b=>b.addEventListener('click',()=>{show(b.dataset.tab);window.scrollTo({top:0})}));
+  let start='rules';try{start=localStorage.getItem('soch-tab')||'rules'}catch(e){}
+  const h=(location.hash||'').slice(1);if(['rules','train','test'].includes(h))start=h;
+  show(start);
+
+  // статистика
+  let stats={};try{stats=JSON.parse(localStorage.getItem('soch-stats')||'{}')||{}}catch(e){stats={}}
+  const saveStats=()=>{try{localStorage.setItem('soch-stats',JSON.stringify(stats))}catch(e){}};
+  let topic='mix',cur=null,answered=false,ok=0,total=0,streak=0;
+  const chips=$('#chips');
+  function renderChips(){
+    chips.innerHTML='';
+    [{id:'mix',name:'Всё вперемешку'},...TOPICS].forEach(t=>{
+      const b=document.createElement('button');b.className='chip';b.type='button';b.id='chip-'+t.id;
+      b.setAttribute('aria-pressed',t.id===topic);
+      const s=stats[t.id];const pct=s&&s.t?Math.round(100*s.ok/s.t):0;
+      b.innerHTML='<span>'+t.name+'</span>'+(t.id==='mix'?'<small>все 5 тем</small>':'<small>'+(s&&s.t?s.ok+' из '+s.t+' верно':'ещё не решал')+'</small><span class="bar"><i style="width:'+pct+'%"></i></span>');
+      b.addEventListener('click',()=>{topic=t.id;renderChips();nextQ()});
+      chips.appendChild(b);
+    });
+  }
+  const names=Object.fromEntries(TOPICS.map(t=>[t.id,t.name]));
+  function nextQ(){
+    cur=generate(topic);answered=false;
+    $('#qtopic').textContent=names[cur.topic];
+    $('#qprompt').innerHTML=cur.prompt;$('#qmath').innerHTML=cur.q;
+    const box=$('#opts');box.innerHTML='';
+    box.style.gridTemplateColumns=cur.opts.length===3?'repeat(3,1fr)':'';
+    cur.opts.forEach((o,i)=>{const b=document.createElement('button');b.className='opt';b.type='button';b.innerHTML=o;b.addEventListener('click',()=>choose(i,b));box.appendChild(b)});
+    $('#why').hidden=true;$('#next').textContent='Пропустить →';
+  }
+  function choose(i){
+    if(answered)return;answered=true;
+    const btns=[...document.querySelectorAll('#opts .opt')];
+    btns.forEach((b,j)=>{b.disabled=true;if(j===cur.ans)b.classList.add('right')});
+    const good=i===cur.ans;if(!good)btns[i].classList.add('wrong');
+    total++;if(good){ok++;streak++}else streak=0;
+    const s=stats[cur.topic]||(stats[cur.topic]={ok:0,t:0});s.t++;if(good)s.ok++;saveStats();
+    const w=$('#why');w.className='why '+(good?'good':'bad');
+    w.innerHTML='<span class="v">'+(good?'Верно!':'Не то. Правильный ответ: '+cur.opts[cur.ans])+'</span>'+cur.why;w.hidden=false;
+    $('#score').textContent='Верно '+ok+' из '+total;
+    $('#streak').textContent=streak>=3?'Подряд верно: '+streak+(streak>=8?' — тема освоена':''):'';
+    $('#next').textContent='Следующий →';
+    renderChips();
+  }
+  $('#next').addEventListener('click',nextQ);
+  document.addEventListener('keydown',e=>{if(document.getElementById('train').hidden)return;
+    if(e.key==='Enter'&&answered){nextQ()}else if(!answered&&['1','2','3','4'].includes(e.key)){const b=document.querySelectorAll('#opts .opt')[+e.key-1];if(b)choose(+e.key-1)}});
+  renderChips();nextQ();
+}
+</script>
+
+</body></html>

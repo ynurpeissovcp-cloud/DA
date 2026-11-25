@@ -1,0 +1,656 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Биология 7: СОЧ Арсена</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one narrow column like a lab notebook page; chapter = colour (leaf, ochre, cell-stain, water) */
+:root{
+  --bg:#EEF3EF; --surface:#FFFFFF; --ink:#13241B; --muted:#5A6B61; --line:#D5E0D8;
+  --accent:#23744A; --accent-ink:#FFFFFF; --accent-soft:#DCEFE3;
+  --ok:#1F8A52; --ok-bg:#E1F4E8; --bad:#BF3B34; --bad-bg:#FBE6E4;
+  --c1:#23744A; --c2:#A86A12; --c3:#9A3D7A; --c4:#1F6FA8;
+  --c1s:#DCEFE3; --c2s:#F6EAD3; --c3s:#F4E1EC; --c4s:#DDEBF6;
+  --display:"Unbounded", "Manrope", system-ui, sans-serif;
+  --body:"Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0E1612; --surface:#16211B; --ink:#E5EEE8; --muted:#94A69B; --line:#2A3A31;
+  --accent:#6CC08E; --accent-ink:#0E1612; --accent-soft:#1E3327;
+  --ok:#6CC08E; --ok-bg:#183326; --bad:#F08A80; --bad-bg:#3A1F1C;
+  --c1:#6CC08E; --c2:#E2AA55; --c3:#E08BC0; --c4:#6FB3E6;
+  --c1s:#1E3327; --c2s:#3A2E19; --c3s:#3A2232; --c4s:#1B2E3D; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0E1612; --surface:#16211B; --ink:#E5EEE8; --muted:#94A69B; --line:#2A3A31;
+  --accent:#6CC08E; --accent-ink:#0E1612; --accent-soft:#1E3327;
+  --ok:#6CC08E; --ok-bg:#183326; --bad:#F08A80; --bad-bg:#3A1F1C;
+  --c1:#6CC08E; --c2:#E2AA55; --c3:#E08BC0; --c4:#6FB3E6;
+  --c1s:#1E3327; --c2s:#3A2E19; --c3s:#3A2232; --c4s:#1B2E3D; color-scheme:dark }
+
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0 40px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:10;background:var(--bg)}
+.wrap{max-width:640px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.2}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.muted{color:var(--muted)}
+.ru{color:var(--muted);font-size:.92em}
+body.hide-ru .ru{display:none}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top, 0px);z-index:5;background:var(--bg);padding-block:12px 10px;display:flex;align-items:center;gap:10px}
+.top .brand{font-family:var(--display);font-weight:700;font-size:15px;flex:1;min-width:0}
+.tbtn{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600}
+.tbtn[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+
+/* home */
+.hero{padding-block:18px 8px;display:grid;gap:10px}
+.hero h1{font-size:clamp(24px,6.4vw,34px)}
+.hero p{margin:0;max-width:60ch}
+.section-label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:26px 0 10px}
+.chapters{display:grid;gap:10px}
+.chap{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.chap .num{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:18px}
+.chap .t{min-width:0}
+.chap .t b{display:block;font-size:15px}
+.chap .t span{font-size:13px}
+.chap .best{font-size:12px;font-weight:700;text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.big{display:flex;flex-direction:column;gap:2px;width:100%;text-align:left;border:0;border-radius:14px;padding:16px 18px;background:var(--accent);color:var(--accent-ink)}
+.big b{font-family:var(--display);font-size:17px}
+.big span{font-size:14px;opacity:.9}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.sec{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:12px 14px;text-align:left;font-weight:600;font-size:14px}
+.sec small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.sec:disabled{opacity:.5;cursor:default}
+.tip{margin-top:22px;border-left:3px solid var(--accent);padding:4px 0 4px 14px;font-size:14px}
+
+/* quiz */
+.bar{height:6px;background:var(--line);border-radius:99px;overflow:hidden;flex:1}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.counter{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--muted)}
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:8px;display:grid;gap:14px}
+.tag{display:inline-flex;gap:6px;align-items:center;font-size:12px;font-weight:700;border-radius:99px;padding:3px 10px;width:max-content;max-width:100%}
+.qtext{font-size:19px;font-weight:700;line-height:1.35}
+.qtext .ru{display:block;font-weight:500;font-size:15px;margin-top:6px}
+.hint{font-size:13px;font-weight:600;color:var(--accent)}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:12px 14px}
+.opt .mk{flex:none;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-size:13px;font-weight:700;margin-top:1px}
+.opt.multi .mk{border-radius:6px}
+.opt .ot{min-width:0}
+.opt .ot b{font-weight:600;display:block}
+.opt .ot .ru{display:block;font-size:13.5px}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.sel .mk{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.opt.right .mk{background:var(--ok);border-color:var(--ok);color:var(--accent-ink)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt.wrong .mk{background:var(--bad);border-color:var(--bad);color:#fff}
+.opt:disabled{cursor:default}
+.slots{display:grid;gap:6px;counter-reset:s}
+.slot{display:flex;gap:10px;align-items:center;border:1.5px dashed var(--line);border-radius:10px;padding:9px 12px;min-height:44px;font-weight:600;text-align:left;background:transparent;width:100%}
+.slot::before{counter-increment:s;content:counter(s);flex:none;width:22px;height:22px;border-radius:50%;background:var(--line);display:grid;place-items:center;font-size:12px;font-weight:700}
+.slot.filled{border-style:solid;border-color:var(--accent);background:var(--accent-soft)}
+.slot.right{border-color:var(--ok);background:var(--ok-bg)}
+.slot.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.pool{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--surface);border-radius:99px;padding:8px 14px;font-weight:600;font-size:14px}
+.chip .ru{font-weight:500}
+.chip:disabled{opacity:.35}
+.fb{border-radius:12px;padding:12px 14px;font-size:15px}
+.fb.ok{background:var(--ok-bg)}
+.fb.no{background:var(--bad-bg)}
+.fb b.v{display:block;font-family:var(--display);font-size:15px;margin-bottom:4px}
+.fb.ok b.v{color:var(--ok)} .fb.no b.v{color:var(--bad)}
+.fb .pg{display:block;font-size:12px;color:var(--muted);margin-top:6px}
+.actions{display:flex;gap:10px}
+.main{flex:1;border:0;border-radius:12px;padding:14px;font-weight:700;background:var(--accent);color:var(--accent-ink);font-size:16px}
+.main:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:14px 16px;font-weight:600}
+
+/* result */
+.score{text-align:center;padding-block:24px 8px;display:grid;gap:6px}
+.score .n{font-family:var(--display);font-size:56px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.score .n small{font-size:24px;color:var(--muted)}
+.breakdown{display:grid;gap:8px;margin-top:16px}
+.brow{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;font-size:14px}
+.brow .bar{grid-column:1/-1}
+.mist{display:grid;gap:8px}
+.mi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px}
+.mi b{display:block}
+.mi .ans{color:var(--ok);font-weight:600;margin-top:4px}
+
+/* cheat sheet */
+.cheat{display:grid;gap:14px;margin-top:10px}
+.cs{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
+.cs h2{font-size:17px;display:flex;gap:10px;align-items:center}
+.cs h2 .num{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:14px;flex:none}
+.cs ul{margin:12px 0 0;padding-left:18px;display:grid;gap:7px;font-size:15px}
+.cs li b{font-weight:700}
+.chain{display:flex;flex-wrap:wrap;gap:4px;align-items:center;font-size:13px;font-weight:700;margin-top:4px}
+.chain span{background:var(--bg);border-radius:6px;padding:2px 7px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <button class="tbtn" id="homeBtn" hidden>← Меню</button>
+    <div class="brand" id="brand">Biology 7 · СОЧ</div>
+    <div class="bar" id="topBar" hidden><i id="topFill"></i></div>
+    <span class="counter" id="topCount" hidden></span>
+    <button class="tbtn" id="ruBtn" aria-pressed="true" title="Показывать перевод на русский">RU</button>
+  </header>
+
+  <!-- HOME -->
+  <main id="home">
+    <section class="hero">
+      <h1>Арсен, готовимся к СОЧ по биологии</h1>
+      <p>Учебник Biology 7, страницы 1–66: четыре главы. Вопросы на английском, как на СОЧ. Под каждым есть перевод, а после ответа объяснение по-русски.</p>
+    </section>
+
+    <div class="section-label">Быстрый старт</div>
+    <button class="big" id="startMix"><b>Тренировка: 20 вопросов</b><span>Вперемешку из всех четырёх глав</span></button>
+    <div class="row2">
+      <button class="sec" id="startAll">Весь тест<small id="allCount"></small></button>
+      <button class="sec" id="startMist">Работа над ошибками<small id="mistCount"></small></button>
+    </div>
+    <div class="row2">
+      <button class="sec" id="openCheat" style="grid-column:1/-1">Шпаргалка по главам<small>Главное из каждой темы: термины на английском и русском</small></button>
+    </div>
+
+    <div class="section-label">По главам</div>
+    <div class="chapters" id="chapters"></div>
+
+    <p class="tip">Сначала прочитай шпаргалку, потом пройди главу. Ошибки сохраняются, их можно прорешать отдельно, пока не останется ни одной.</p>
+  </main>
+
+  <!-- CHEAT -->
+  <main id="cheat" hidden>
+    <section class="hero"><h1>Шпаргалка</h1><p class="muted">Самое важное из страниц 1–66.</p></section>
+    <div class="cheat" id="cheatList"></div>
+  </main>
+
+  <!-- QUIZ -->
+  <main id="quiz" hidden>
+    <article class="qcard" id="qcard"></article>
+  </main>
+
+  <!-- RESULT -->
+  <main id="result" hidden></main>
+</div>
+
+<script>
+const CH={
+ 1:{en:"Ecosystem",ru:"Экосистема",pg:"стр. 8–25"},
+ 2:{en:"Classification",ru:"Классификация",pg:"стр. 26–41"},
+ 3:{en:"Cell biology",ru:"Биология клетки",pg:"стр. 42–53"},
+ 4:{en:"Water and organic compounds",ru:"Вода и органические вещества",pg:"стр. 54–66"}
+};
+// t: one | multi | order. o: "English|Русский". a: index / indices. For order, o is in the correct order.
+const Q=[
+// ===== Chapter 1 =====
+{c:1,t:"one",p:10,q:"What does ecology study?",r:"Что изучает экология?",
+ o:["Interactions between living organisms and their environment|Связи живых организмов друг с другом и со средой","Only the structure of cells|Только строение клетки","Chemical elements in rocks|Химические элементы в горных породах","Only plants|Только растения"],a:0,
+ e:"Ecology — наука о том, как живые организмы взаимодействуют друг с другом и с окружающей средой (environment)."},
+{c:1,t:"multi",p:10,q:"Choose the abiotic factors.",r:"Выбери абиотические факторы (неживая природа).",
+ o:["Light|Свет","Humidity|Влажность","Acidity (pH)|Кислотность","Bee|Пчела","Grass|Трава","Bacteria|Бактерии"],a:[0,1,2],
+ e:"Abiotic = неживые факторы: light, temperature, humidity, acidity. Biotic = всё живое: растения, животные, микроорганизмы."},
+{c:1,t:"one",p:10,q:"Water vapour in the atmosphere is called…",r:"Водяной пар в атмосфере называется…",
+ o:["humidity|влажность","acidity|кислотность","temperature|температура","pollution|загрязнение"],a:0,
+ e:"Humidity — влажность, количество водяного пара в воздухе. Она влияет на климат."},
+{c:1,t:"one",p:10,q:"Acidity of soil and water is measured by…",r:"Кислотность почвы и воды измеряют…",
+ o:["the pH scale|шкалой pH","a thermometer|термометром","a microscope|микроскопом","a ruler|линейкой"],a:0,
+ e:"Кислотность измеряют по шкале pH. Слишком кислая почва мешает росту растений."},
+{c:1,t:"one",p:12,q:"Why are plants called producers?",r:"Почему растения называют продуцентами?",
+ o:["They use sunlight to make nutrients|Они сами создают питательные вещества с помощью солнечного света","They eat other animals|Они едят животных","They break down dead organisms|Они разлагают мёртвые организмы","They live in water|Они живут в воде"],a:0,
+ e:"Producer (продуцент) — тот, кто сам производит пищу. Растения делают это при фотосинтезе (photosynthesis), используя энергию Солнца."},
+{c:1,t:"one",p:12,q:"Grass → Grasshopper → Mouse → Owl. The owl is a…",r:"Трава → кузнечик → мышь → сова. Сова — это…",
+ o:["tertiary consumer|консумент 3-го порядка","primary consumer|консумент 1-го порядка","secondary consumer|консумент 2-го порядка","producer|продуцент"],a:0,
+ e:"Считаем звенья: grass = producer, grasshopper = primary (1), mouse = secondary (2), owl = tertiary (3)."},
+{c:1,t:"one",p:12,q:"Grass → Grasshopper → Mouse → Owl. The mouse is a…",r:"Трава → кузнечик → мышь → сова. Мышь — это…",
+ o:["secondary consumer|консумент 2-го порядка","primary consumer|консумент 1-го порядка","tertiary consumer|консумент 3-го порядка","producer|продуцент"],a:0,
+ e:"Мышь ест кузнечика (primary consumer), значит, она secondary consumer."},
+{c:1,t:"one",p:12,q:"An owl eats a grasshopper directly: Grass → Grasshopper → Owl. Now the owl is a…",r:"Сова съела кузнечика: трава → кузнечик → сова. Теперь сова — это…",
+ o:["secondary consumer|консумент 2-го порядка","tertiary consumer|консумент 3-го порядка","primary consumer|консумент 1-го порядка","producer|продуцент"],a:0,
+ e:"Порядок консумента зависит от того, кого он съел в этой цепи. Здесь сова — третье звено, то есть secondary consumer. Это есть в учебнике на стр. 12."},
+{c:1,t:"one",p:12,q:"What is a food web?",r:"Что такое пищевая сеть?",
+ o:["A system of connected food chains|Система связанных между собой пищевых цепей","One chain of three organisms|Одна цепь из трёх организмов","A list of plants|Список растений","A spider's web|Паутина"],a:0,
+ e:"Food chain — одна цепочка «кто кого ест». Food web — все цепи экосистемы, соединённые вместе."},
+{c:1,t:"one",p:22,q:"Plants 9600 J → Rabbit 930 J → Fox 105 J → Eagle 12 J. About what percent of energy passes from the rabbit to the fox?",r:"Сколько процентов энергии переходит от кролика к лисе?",
+ o:["≈ 11%|≈ 11%","≈ 89%|≈ 89%","≈ 1%|≈ 1%","≈ 50%|≈ 50%"],a:0,
+ e:"Считаем: 105 ÷ 930 × 100% ≈ 11,3%. На каждом звене остаётся примерно 10% энергии, остальное тратится на жизнь и уходит в тепло."},
+{c:1,t:"one",p:21,q:"Plants 9600 J → Rabbit 930 J → Fox 105 J → Eagle 12 J. Which is the secondary consumer?",r:"Кто здесь консумент 2-го порядка?",
+ o:["Fox|Лиса","Rabbit|Кролик","Eagle|Орёл","Plants|Растения"],a:0,
+ e:"Plants = producer, rabbit = primary, fox = secondary, eagle = tertiary."},
+{c:1,t:"one",p:14,q:"Primary succession takes place…",r:"Первичная сукцессия происходит…",
+ o:["on frozen lava or a new volcanic island|на застывшей лаве, на новом вулканическом острове","after a forest fire|после лесного пожара","after a flood in a forest|после наводнения в лесу","when seasons change|при смене времён года"],a:0,
+ e:"Primary succession — жизнь появляется там, где её раньше не было (голые камни, лава). Secondary — там, где жизнь была, но её уничтожили (пожар, наводнение, вырубка)."},
+{c:1,t:"one",p:14,q:"What kind of succession happens after a forest fire?",r:"Какая сукцессия начинается после лесного пожара?",
+ o:["Secondary succession|Вторичная сукцессия","Primary succession|Первичная сукцессия","No succession|Никакой","Food chain|Пищевая цепь"],a:0,
+ e:"После пожара остаётся почва и семена, жизнь там уже была, поэтому это secondary succession. Она идёт быстрее первичной."},
+{c:1,t:"one",p:15,q:"Which organism produces acids that break down rocks and form soil?",r:"Какой организм выделяет кислоты, разрушает камни и образует почву?",
+ o:["Lichen|Лишайник","Moss|Мох","Shrub|Кустарник","Pine|Сосна"],a:0,
+ e:"Lichens (лишайники) первыми поселяются на голых камнях и растворяют их кислотами, так появляется почва. После них приходят mosses (мхи)."},
+{c:1,t:"order",p:20,q:"Put the stages of primary succession in order.",r:"Расставь стадии первичной сукцессии по порядку.",
+ o:["Rocks|Камни","Lichens and mosses|Лишайники и мхи","Annual grasses|Однолетние травы","Perennial grasses|Многолетние травы","Shrubs|Кустарники","Trees|Деревья"],
+ e:"Rocks → lichens, mosses → annual grasses → perennial grasses → shrubs → trees. Каждая стадия готовит почву для следующей."},
+{c:1,t:"one",p:16,q:"Anthropogenic factors are…",r:"Антропогенные факторы — это…",
+ o:["human impact on the environment|влияние человека на природу","weather changes|изменения погоды","living organisms in soil|живые организмы в почве","sunlight and water|свет и вода"],a:0,
+ e:"«Anthropos» = человек. Anthropogenic factors — всё, что делает человек: заводы, машины, вырубка лесов, браконьерство."},
+{c:1,t:"multi",p:16,q:"Choose examples of negative human impact on nature.",r:"Выбери примеры вредного влияния человека на природу.",
+ o:["Exhaust gases from factories and cars|Выхлопные газы заводов и машин","Oil spills in the sea|Разливы нефти в море","Deforestation|Вырубка лесов","Creating nature reserves|Создание заповедников","Rain|Дождь"],a:[0,1,2],
+ e:"Загрязнение воздуха, разливы нефти (например, в Каспийском море), вырубка лесов, браконьерство вредят природе. Заповедники, наоборот, её защищают."},
+{c:1,t:"one",p:13,q:"In China, people killed almost 2 billion sparrows. Why did harvests then drop sharply?",r:"В Китае уничтожили почти 2 млрд воробьёв. Почему потом резко упал урожай?",
+ o:["Insects that sparrows ate multiplied and destroyed crops|Насекомые, которых ели воробьи, размножились и съели урожай","There was too much rain|Было слишком много дождей","Sparrows were producers|Воробьи были продуцентами","Soil became too acidic|Почва стала слишком кислой"],a:0,
+ e:"Воробьи ели не только зерно, но и насекомых-вредителей. Убрали одно звено цепи, и вредители размножились. Если удалить один вид, страдает вся пищевая сеть."},
+{c:1,t:"one",p:18,q:"How many nature reserves are there in Kazakhstan (by the textbook)?",r:"Сколько заповедников в Казахстане (по учебнику)?",
+ o:["10|10","13|13","5|5","25|25"],a:0,
+ e:"10 nature reserves (заповедников) и 13 national parks (национальных парков). Цифры легко перепутать, запомни: заповедников меньше."},
+{c:1,t:"one",p:19,q:"The oldest nature reserve in Kazakhstan is…",r:"Самый старый заповедник Казахстана —",
+ o:["Aksu-Zhabagly (1926)|Аксу-Жабаглы (1926)","Burabay|Бурабай","Charyn|Чарын","Ile-Alatau|Иле-Алатау"],a:0,
+ e:"Aksu-Zhabagly — на юге Казахстана, основан в 1926 году. Burabay, Charyn, Ile-Alatau — это национальные парки."},
+{c:1,t:"one",p:18,q:"What is the difference between a national park and a nature reserve?",r:"Чем национальный парк отличается от заповедника?",
+ o:["A national park is also used for ecotourism|В национальном парке ещё развивают экотуризм","Hunting is allowed in a national park|В нацпарке можно охотиться","A reserve has no animals|В заповеднике нет животных","There is no difference|Ничем"],a:0,
+ e:"В обоих охотиться и ловить рыбу нельзя. Но национальный парк ещё открыт для экотуризма, а заповедник охраняется строже."},
+{c:1,t:"one",p:18,q:"The Red Book of Kazakhstan contains…",r:"В Красную книгу Казахстана записаны…",
+ o:["rare and endangered species|редкие и исчезающие виды","all animals of Kazakhstan|все животные Казахстана","only plants|только растения","domestic animals|домашние животные"],a:0,
+ e:"The Red Data Book — список редких и исчезающих видов. Например: snow leopard (снежный барс), argali (архар), Turkestan lynx (рысь), Tien Shan spruce (ель Шренка), тюльпаны."},
+{c:1,t:"multi",p:24,q:"Choose members of Kazakhstan fauna.",r:"Выбери представителей фауны (животного мира) Казахстана.",
+ o:["Snow leopard|Снежный барс","Argali|Архар","Saiga|Сайгак","White lily|Белая кувшинка","Champignon|Шампиньон"],a:[0,1,2],
+ e:"Fauna = животные, flora = растения. Кувшинка — растение (flora), шампиньон — гриб."},
+{c:1,t:"one",p:25,q:"Who introduced the term “ecology”?",r:"Кто ввёл слово «экология»?",
+ o:["Ernst Haeckel|Эрнст Геккель","Carl Linnaeus|Карл Линней","Robert Hooke|Роберт Гук","Karl Semper|Карл Земпер"],a:0,
+ e:"Ernst Haeckel ввёл термин «ecology». Karl Semper первым построил модель пищевой цепи, Linnaeus описал пищевые цепи в XVIII веке."},
+
+// ===== Chapter 2 =====
+{c:2,t:"multi",p:28,q:"Living organisms are grouped into 5 kingdoms. Choose the kingdoms.",r:"Выбери царства живой природы (их 5).",
+ o:["Prokaryotes|Прокариоты","Protists|Протисты","Fungi|Грибы","Viruses|Вирусы","Minerals|Минералы"],a:[0,1,2],
+ e:"5 kingdoms: Prokaryotes, Protists, Fungi, Plants, Animals. Вирусы и минералы в этот список не входят."},
+{c:2,t:"one",p:28,q:"All bacteria belong to the kingdom…",r:"Все бактерии относятся к царству…",
+ o:["Prokaryotes|Прокариоты","Protists|Протисты","Fungi|Грибы","Plants|Растения"],a:0,
+ e:"Prokaryotes — одноклеточные без ядра. Некоторые вызывают болезни (туберкулёз), другие полезны, например молочнокислые бактерии для кефира и сыра."},
+{c:2,t:"one",p:40,q:"Member of the kingdom Protista:",r:"Представитель царства протистов:",
+ o:["Paramecium|Инфузория-туфелька","Bacteria|Бактерия","Bird|Птица","Mushroom|Гриб"],a:0,
+ e:"Протисты: amoeba (амёба), paramecium (инфузория-туфелька), euglena (эвглена). Они живут в воде и влажной почве."},
+{c:2,t:"one",p:29,q:"Why are fungi a separate kingdom?",r:"Почему грибы — отдельное царство?",
+ o:["They can't photosynthesize and feed like animals, but grow in soil like plants|Не могут фотосинтезировать и питаются как животные, но растут в почве как растения","They are bacteria|Они бактерии","They have bones|У них есть скелет","They can fly|Они летают"],a:0,
+ e:"У грибов есть черты и растений, и животных, поэтому их выделили отдельно. До 1969 года их относили к растениям."},
+{c:2,t:"one",p:29,q:"The antibiotic penicillin is made from…",r:"Антибиотик пенициллин получают из…",
+ o:["a mould fungus (penicillus)|плесневого гриба (пеницилл)","yeast|дрожжей","a bacterium|бактерии","a fern|папоротника"],a:0,
+ e:"Penicillin получают из плесневого гриба. Yeast (дрожжи) — одноклеточный гриб, их используют для выпечки хлеба."},
+{c:2,t:"one",p:28,q:"A lichen is formed by…",r:"Лишайник образован…",
+ o:["algae and fungi living together|водорослью и грибом, живущими вместе","moss and fern|мхом и папоротником","two bacteria|двумя бактериями","a plant and an insect|растением и насекомым"],a:0,
+ e:"Lichen — не один организм, а союз (symbiosis) водоросли и гриба."},
+{c:2,t:"one",p:30,q:"Who is the founder of the classification system?",r:"Кто основатель системы классификации?",
+ o:["Carl Linnaeus|Карл Линней","Aristotle|Аристотель","Lamarck|Ламарк","Robert Hooke|Роберт Гук"],a:0,
+ e:"Carl Linnaeus, книга «Systema Naturae». Он дал каждому виду название из двух латинских слов, например Homo sapiens."},
+{c:2,t:"order",p:36,q:"Put the classification levels in order from the largest to the smallest.",r:"Расставь уровни классификации от самого крупного к самому мелкому.",
+ o:["Kingdom|Царство","Phylum|Тип (отдел)","Class|Класс","Order|Отряд (порядок)","Family|Семейство","Genus|Род","Species|Вид"],
+ e:"Kingdom → Phylum → Class → Order → Family → Genus → Species. Запоминалка: «King Philip Came Over For Good Soup»."},
+{c:2,t:"one",p:30,q:"The basic unit of classification is…",r:"Основная единица классификации —",
+ o:["species|вид","kingdom|царство","family|семейство","class|класс"],a:0,
+ e:"Species (вид) — особи, которые могут скрещиваться друг с другом. С вида начинается классификация."},
+{c:2,t:"one",p:30,q:"The lion is called Panthera leo. The word “Panthera” is its…",r:"Лев — Panthera leo. Слово «Panthera» — это его…",
+ o:["genus|род","kingdom|царство","class|класс","phylum|тип"],a:0,
+ e:"Научное название из двух слов: первое — genus (род), второе — вид. Lion: Animalia → Chordata → Mammals → Carnivore → Felidae → Panthera → Panthera leo."},
+{c:2,t:"one",p:30,q:"Pine and spruce are gymnosperms because…",r:"Сосна и ель — голосеменные, потому что…",
+ o:["their seeds are in cones|их семена лежат в шишках","they have flowers|у них есть цветы","they have no seeds|у них нет семян","they live in water|они живут в воде"],a:0,
+ e:"Gymnosperms (голосеменные) — семена в шишках. Angiosperms (покрытосеменные) — семена внутри цветка/плода: роза, яблоня, тюльпан."},
+{c:2,t:"one",p:40,q:"Which is a flowering plant (angiosperm)?",r:"Какое растение цветковое (покрытосеменное)?",
+ o:["Rose|Роза","Pine|Сосна","Fern|Папоротник","Moss|Мох"],a:0,
+ e:"Rose — цветковое. Pine — голосеменное, fern — без семян, но с проводящей системой, moss — без семян и без проводящей системы."},
+{c:2,t:"one",p:30,q:"A fern has a transport (vascular) system but…",r:"У папоротника есть проводящая система, но…",
+ o:["does not produce seeds|он не образует семян","has no leaves|у него нет листьев","has flowers|у него есть цветы","has seeds in cones|у него семена в шишках"],a:0,
+ e:"Fern = seedless vascular plant (бессемянное, с сосудами). Moss = nonvascular (нет проводящей системы)."},
+{c:2,t:"one",p:40,q:"Which organism is a vertebrate?",r:"Какой организм позвоночный?",
+ o:["Whale|Кит","Spider|Паук","Starfish|Морская звезда","Crab|Краб"],a:0,
+ e:"Vertebrates (позвоночные) имеют позвоночник: fish, amphibians, reptiles, birds, mammals. Кит — млекопитающее. Паук, звезда и краб — беспозвоночные."},
+{c:2,t:"one",p:32,q:"The largest phylum in the animal kingdom is…",r:"Самый большой тип в царстве животных —",
+ o:["Arthropoda|Членистоногие","Chordata|Хордовые","Mollusca|Моллюски","Porifera|Губки"],a:0,
+ e:"Arthropoda: тело из сегментов. Классы: insects (насекомые), arachnids (паукообразные), crustaceans (ракообразные)."},
+{c:2,t:"multi",p:40,q:"Choose classes of the phylum Arthropoda.",r:"Выбери классы типа членистоногих.",
+ o:["Insects|Насекомые","Arachnids (spiders)|Паукообразные","Crustaceans|Ракообразные","Amphibians|Земноводные","Roundworms|Круглые черви"],a:[0,1,2],
+ e:"Insects (мухи, муравьи), arachnids (тарантул, скорпион), crustaceans (креветка, рак). Amphibians — позвоночные, roundworms — отдельный тип Nematoda."},
+{c:2,t:"one",p:32,q:"The earthworm and the leech belong to the phylum…",r:"Дождевой червь и пиявка относятся к типу…",
+ o:["Annelida (segmented worms)|Кольчатые черви","Nematoda (roundworms)|Круглые черви","Platyhelminthes (flatworms)|Плоские черви","Cnidaria|Кишечнополостные"],a:0,
+ e:"Annelida = segmented worms, тело из колечек. Nematoda: аскарида, острица. Platyhelminthes: печёночный сосальщик, бычий цепень."},
+{c:2,t:"one",p:32,q:"Jellyfish, corals and hydra have stinging cells. Their phylum is…",r:"У медузы, кораллов и гидры есть стрекательные клетки. Их тип —",
+ o:["Cnidaria|Кишечнополостные (стрекающие)","Mollusca|Моллюски","Echinodermata|Иглокожие","Porifera|Губки"],a:0,
+ e:"Cnidaria — стрекательные клетки для ловли добычи. Mollusca — мягкое тело (осьминог, кальмар, улитка). Echinodermata — морская звезда, морской ёж. Porifera — губки с порами."},
+{c:2,t:"one",p:33,q:"A poikilotherm is an animal whose body temperature…",r:"Пойкилотермное животное — у которого температура тела…",
+ o:["changes with the environment|меняется вместе со средой","is always constant|всегда постоянная","is always 100 °C|всегда 100 °C","does not exist|отсутствует"],a:0,
+ e:"Poikilotherms (холоднокровные): fish, amphibians, reptiles. Homeotherms (теплокровные, постоянная t°): birds, mammals."},
+{c:2,t:"multi",p:40,q:"Choose the characteristics of birds.",r:"Выбери признаки птиц.",
+ o:["Feathers|Перья","Beak|Клюв","Homeotherm (constant body temperature)|Постоянная температура тела","Gills|Жабры","Wet skin|Влажная кожа"],a:[0,1,2],
+ e:"Birds: перья, клюв, два крыла, откладывают яйца, теплокровные. Жабры — у рыб, влажная кожа — у земноводных."},
+{c:2,t:"one",p:33,q:"Why is a dolphin not a fish?",r:"Почему дельфин не рыба?",
+ o:["It breathes with lungs and feeds its young with milk|Дышит лёгкими и кормит детёнышей молоком","It lives in water|Живёт в воде","It has fins|У него есть плавники","It is a poikilotherm|Он холоднокровный"],a:0,
+ e:"Дельфин — mammal (млекопитающее): лёгкие, живорождение, молоко, теплокровный. Рыбы дышат жабрами (gills)."},
+{c:2,t:"one",p:33,q:"Amphibians (frogs) breathe…",r:"Земноводные (лягушки) дышат…",
+ o:["with gills as larvae, with lungs and skin as adults|личинки — жабрами, взрослые — лёгкими и кожей","only with gills|только жабрами","only with lungs|только лёгкими","they don't breathe|не дышат"],a:0,
+ e:"Головастик дышит жабрами, взрослая лягушка — лёгкими и влажной кожей. Живут и в воде, и на суше."},
+{c:2,t:"one",p:34,q:"In a dichotomous key, each step always gives…",r:"В дихотомическом ключе на каждом шаге всегда…",
+ o:["two choices (thesis and antithesis)|два варианта (теза и антитеза)","three choices|три варианта","one choice|один вариант","a picture only|только картинка"],a:0,
+ e:"«Dichotomous» = делящийся на два. Thesis — первый вариант, antithesis — противоположный ему. Ключ впервые использовал Jean-Baptiste Lamarck."},
+{c:2,t:"one",p:34,q:"Which feature is best for a dichotomous key?",r:"Какой признак лучше всего подходит для дихотомического ключа?",
+ o:["Number of legs|Количество ног","Colour|Цвет","Size|Размер","Age|Возраст"],a:0,
+ e:"Нужны постоянные признаки: число ног, тип размножения. Цвет и размер со временем меняются."},
+{c:2,t:"one",p:35,q:"Key: backbone? yes → wings? no → legs? yes → shell? no. What is the animal?",r:"Позвоночник есть → крыльев нет → ноги есть → панциря нет. Кто это?",
+ o:["Lizard|Ящерица","Turtle|Черепаха","Snake|Змея","Bat|Летучая мышь"],a:0,
+ e:"По ключу из учебника: с панцирем — turtle, без панциря — lizard. Без ног — snake, с крыльями — bat."},
+
+// ===== Chapter 3 =====
+{c:3,t:"one",p:44,q:"The smallest unit of living things is the…",r:"Самая маленькая единица живого —",
+ o:["cell|клетка","atom|атом","tissue|ткань","organ|орган"],a:0,
+ e:"Cell (клетка) — строительный блок всего живого. Атомы и молекулы меньше, но сами по себе они не живые."},
+{c:3,t:"order",p:44,q:"Put the levels of biological organization in order from the smallest.",r:"Расставь уровни организации живого от самого маленького.",
+ o:["Cell|Клетка","Tissue|Ткань","Organ|Орган","Organ system|Система органов","Organism|Организм"],
+ e:"Cell → tissue → organ → organ system → organism. Пример: мышечная клетка → мышечная ткань → желудок → пищеварительная система → человек."},
+{c:3,t:"one",p:44,q:"A group of cells with similar structure and function is a…",r:"Группа клеток с одинаковым строением и функцией — это…",
+ o:["tissue|ткань","organ|орган","organism|организм","organelle|органоид"],a:0,
+ e:"Tissue — ткань. Несколько тканей образуют organ."},
+{c:3,t:"one",p:44,q:"How many types of tissue do animals have?",r:"Сколько типов тканей у животных?",
+ o:["4: epithelial, muscular, connective, nervous|4: эпителиальная, мышечная, соединительная, нервная","3: ground, vascular, dermal|3: основная, проводящая, покровная","2|2","10|10"],a:0,
+ e:"У животных 4 ткани. У растений 3: ground (основная), vascular (проводящая), dermal (покровная)."},
+{c:3,t:"one",p:52,q:"Choose the TISSUE.",r:"Выбери ТКАНЬ.",
+ o:["Epithelium|Эпителий","Heart|Сердце","Nerve cell|Нервная клетка","Human body|Тело человека"],a:0,
+ e:"Epithelium — ткань. Heart — орган, nerve cell — клетка, human body — организм."},
+{c:3,t:"one",p:44,q:"The brain and nerves together make up…",r:"Головной мозг и нервы вместе образуют…",
+ o:["an organ system (nervous system)|систему органов (нервную систему)","a tissue|ткань","a cell|клетку","an organelle|органоид"],a:0,
+ e:"Органы, работающие вместе, — organ system. У растений пример — root system (корневая система)."},
+{c:3,t:"one",p:45,q:"Which organism consists of only ONE cell and has no tissues or organs?",r:"Какой организм состоит из ОДНОЙ клетки и не имеет тканей и органов?",
+ o:["Bacterium|Бактерия","Oak tree|Дуб","Cat|Кошка","Human|Человек"],a:0,
+ e:"Bacteria и protists — одноклеточные (unicellular). У них организм = одна клетка. Растения и животные многоклеточные (multicellular)."},
+{c:3,t:"multi",p:48,q:"Choose the structures found in plant cells but NOT in animal cells.",r:"Выбери то, что есть в растительной клетке, но НЕТ в животной.",
+ o:["Cell wall|Клеточная стенка","Chloroplast|Хлоропласт","Large vacuole|Большая вакуоль","Nucleus|Ядро","Cell membrane|Клеточная мембрана"],a:[0,1,2],
+ e:"Только у растений: cell wall, chloroplasts (и другие plastids), large vacuole. Nucleus, cytoplasm и cell membrane есть у обеих клеток."},
+{c:3,t:"one",p:46,q:"The plant cell wall is mostly made of…",r:"Клеточная стенка растений в основном состоит из…",
+ o:["cellulose|целлюлозы","protein|белка","fat|жира","chitin|хитина"],a:0,
+ e:"Cellulose (целлюлоза). Стенка защищает клетку и даёт ей прямоугольную форму. Хитин — в стенке клеток грибов."},
+{c:3,t:"one",p:46,q:"Which organelle controls all processes in the cell and contains DNA?",r:"Какой органоид управляет всеми процессами в клетке и содержит ДНК?",
+ o:["Nucleus|Ядро","Vacuole|Вакуоль","Cytoplasm|Цитоплазма","Cell wall|Клеточная стенка"],a:0,
+ e:"Nucleus — «командный центр» клетки, в нём хранится генетическая информация (DNA)."},
+{c:3,t:"one",p:46,q:"The liquid part of the cell that surrounds and holds the organelles is…",r:"Жидкая часть клетки, в которой находятся органоиды, —",
+ o:["cytoplasm|цитоплазма","nucleus|ядро","chloroplast|хлоропласт","cell membrane|мембрана"],a:0,
+ e:"Cytoplasm (цитоплазма) окружает и удерживает органоиды."},
+{c:3,t:"multi",p:52,q:"Choose the functions of the cell membrane.",r:"Выбери функции клеточной мембраны.",
+ o:["Protects the cell|Защищает клетку","Moves materials in and out of the cell|Пропускает вещества в клетку и из неё","Gives green colour|Даёт зелёный цвет","Stores genetic information|Хранит наследственную информацию"],a:[0,1],
+ e:"Cell membrane защищает клетку и транспортирует вещества. Зелёный цвет даёт chloroplast, генетическую информацию хранит nucleus."},
+{c:3,t:"one",p:52,q:"Which vacuole removes excess water from a protist cell?",r:"Какая вакуоль выводит лишнюю воду из клетки протиста?",
+ o:["Contractile vacuole|Сократительная","Digestive vacuole|Пищеварительная","Large central vacuole|Большая центральная","Storage vacuole|Запасающая"],a:0,
+ e:"Contractile vacuole — сократительная, выводит лишнее. Digestive vacuole — переваривает пищу. Есть у протистов, например у амёбы."},
+{c:3,t:"one",p:47,q:"Which plastid gives tomatoes and carrots their red, orange and yellow colour?",r:"Какие пластиды дают помидорам и моркови красный, оранжевый и жёлтый цвет?",
+ o:["Chromoplasts|Хромопласты","Chloroplasts|Хлоропласты","Leukoplasts|Лейкопласты","Ribosomes|Рибосомы"],a:0,
+ e:"Chloroplast — зелёный, ловит свет. Chromoplast — красный, жёлтый, оранжевый. Leukoplast — бесцветный, запасает питательные вещества (крахмал)."},
+{c:3,t:"one",p:47,q:"Leukoplasts are…",r:"Лейкопласты — это…",
+ o:["colourless plastids that store nutrients|бесцветные пластиды, запасающие вещества","green plastids|зелёные пластиды","red plastids|красные пластиды","part of the nucleus|часть ядра"],a:0,
+ e:"«Leuko» = белый, бесцветный. Например, в клубне картофеля лейкопласты запасают крахмал."},
+{c:3,t:"one",p:49,q:"If too much water enters, an animal cell bursts, but a plant cell does not. Why?",r:"Если в клетку попадёт слишком много воды, животная клетка лопнет, а растительная — нет. Почему?",
+ o:["The plant cell has a strong cell wall|У растительной клетки прочная клеточная стенка","The plant cell has no water|В растительной клетке нет воды","The plant cell has no nucleus|У растительной клетки нет ядра","Plant cells are bigger|Растительные клетки больше"],a:0,
+ e:"Cell wall — жёсткая оболочка, она не даёт клетке раздуться и лопнуть."},
+{c:3,t:"one",p:49,q:"A flower that is not watered wilts. Which organelle is responsible?",r:"Цветок без полива вянет. Какой органоид за это «отвечает»?",
+ o:["Vacuole|Вакуоль","Nucleus|Ядро","Chloroplast|Хлоропласт","Cell wall|Клеточная стенка"],a:0,
+ e:"Vacuole хранит воду. Без воды вакуоли сдуваются, клетки теряют упругость, и растение вянет."},
+{c:3,t:"one",p:53,q:"Who first saw and named the “cell” in 1665?",r:"Кто первым увидел и назвал «клетку» в 1665 году?",
+ o:["Robert Hooke|Роберт Гук","Anton van Leeuwenhoek|Антони ван Левенгук","Theodor Schwann|Теодор Шванн","Carl Linnaeus|Карл Линней"],a:0,
+ e:"Hooke рассматривал кору дерева (пробку) под микроскопом. Leeuwenhoek первым увидел бактерии. Schleiden и Schwann создали клеточную теорию (Cell Theory)."},
+
+// ===== Chapter 4 =====
+{c:4,t:"one",p:56,q:"What part of the human body is water?",r:"Какую часть тела человека составляет вода?",
+ o:["About two-thirds|Около двух третей","About one-tenth|Около одной десятой","Half of a percent|Полпроцента","All of it|Всё тело"],a:0,
+ e:"Около 2/3 тела — вода. Без воды человек проживёт всего 5–7 дней, без еды — около 20."},
+{c:4,t:"one",p:56,q:"Some small insects can walk on water because of…",r:"Некоторые насекомые могут ходить по воде благодаря…",
+ o:["surface tension|поверхностному натяжению","high temperature|высокой температуре","acidity|кислотности","density of ice|плотности льда"],a:0,
+ e:"Surface tension — поверхность воды как тонкая плёнка, она выдерживает лёгких насекомых. Опыт с монетой: капли собираются горкой и не растекаются."},
+{c:4,t:"one",p:64,q:"Cohesion is…",r:"Когезия — это…",
+ o:["water molecules sticking to each other|сцепление молекул воды друг с другом","water sticking to other molecules|прилипание воды к другим веществам","water turning into ice|превращение воды в лёд","water boiling|кипение воды"],a:0,
+ e:"Cohesion — вода + вода. Adhesion — вода + другое вещество (например, стенки сосудов растения)."},
+{c:4,t:"multi",p:56,q:"Which two properties help water move up from the roots to the leaves?",r:"Какие два свойства помогают воде подниматься от корней к листьям?",
+ o:["Cohesion|Когезия","Adhesion|Адгезия","Melting|Плавление","Acidity|Кислотность"],a:[0,1],
+ e:"Молекулы воды держатся друг за друга (cohesion) и прилипают к стенкам сосудов (adhesion), поэтому вода поднимается вверх."},
+{c:4,t:"one",p:56,q:"Why does ice float on water?",r:"Почему лёд плавает на воде?",
+ o:["Ice is less dense than water|Плотность льда меньше плотности воды","Ice is heavier than water|Лёд тяжелее воды","Ice is hot|Лёд горячий","Ice has surface tension|У льда поверхностное натяжение"],a:0,
+ e:"Density (плотность) льда меньше, поэтому лёд сверху. Водоёмы замерзают с поверхности, а внизу вода около 4 °C. Так рыбы переживают зиму."},
+{c:4,t:"one",p:64,q:"Ice melts at ___ and water boils at ___.",r:"Лёд тает при ___, вода кипит при ___.",
+ o:["0 °C and 100 °C|0 °C и 100 °C","4 °C and 50 °C|4 °C и 50 °C","−10 °C and 90 °C|−10 °C и 90 °C","0 °C and 4 °C|0 °C и 4 °C"],a:0,
+ e:"0 °C — melting (плавление льда), 100 °C — boiling (кипение). Три состояния воды: solid (лёд), liquid (вода), gas (пар)."},
+{c:4,t:"one",p:56,q:"Thanks to its high heat capacity, water…",r:"Благодаря высокой теплоёмкости вода…",
+ o:["keeps body temperature constant|поддерживает постоянную температуру тела","makes ice float|помогает льду плавать","dissolves rocks|растворяет камни","produces oxygen|выделяет кислород"],a:0,
+ e:"Specific heat capacity — вода долго нагревается и долго остывает, поэтому сглаживает перепады температуры в организме."},
+{c:4,t:"multi",p:58,q:"Which 4 elements make up about 96% of the organism?",r:"Какие 4 элемента составляют около 96% организма? (выбери 4)",
+ o:["Carbon (C)|Углерод","Oxygen (O)|Кислород","Hydrogen (H)|Водород","Nitrogen (N)|Азот","Iron (Fe)|Железо","Iodine (I)|Йод"],a:[0,1,2,3],
+ e:"C, O, H, N — главные macroelements. Запоминалка: «CHON». Iron и iodine — microelements, их нужно очень мало."},
+{c:4,t:"one",p:59,q:"Iron (Fe) is part of hemoglobin. What does hemoglobin do?",r:"Железо входит в гемоглобин. Что делает гемоглобин?",
+ o:["Carries oxygen in the blood|Переносит кислород в крови","Builds bones|Строит кости","Makes thyroid hormones|Образует гормоны щитовидки","Digests food|Переваривает пищу"],a:0,
+ e:"Hemoglobin — белок крови, переносит кислород. Мало железа — мало кислорода, человек быстро устаёт."},
+{c:4,t:"one",p:59,q:"Iodine (I) is the main component of…",r:"Йод — главная часть…",
+ o:["thyroid hormones|гормонов щитовидной железы","bones and teeth|костей и зубов","hemoglobin|гемоглобина","cellulose|целлюлозы"],a:0,
+ e:"Iodine нужен щитовидной железе (thyroid). Его много в морской рыбе и йодированной соли."},
+{c:4,t:"one",p:58,q:"Which element is found in bones and teeth and helps muscles contract and blood clot?",r:"Какой элемент есть в костях и зубах и помогает мышцам сокращаться, а крови свёртываться?",
+ o:["Calcium (Ca)|Кальций","Sodium (Na)|Натрий","Iron (Fe)|Железо","Carbon (C)|Углерод"],a:0,
+ e:"Calcium. Поэтому детям особенно нужен кальций: кости растут. Phosphorus тоже есть в костях и зубах."},
+{c:4,t:"multi",p:58,q:"Which elements form nerve impulses?",r:"Какие элементы участвуют в создании нервных импульсов?",
+ o:["Sodium (Na)|Натрий","Potassium (K)|Калий","Chlorine (Cl)|Хлор","Iron (Fe)|Железо","Iodine (I)|Йод"],a:[0,1,2],
+ e:"Na, K и Cl формируют нервные импульсы. Na — от латинского natrium, K — от kalium."},
+{c:4,t:"one",p:58,q:"Which of these is a MICROelement?",r:"Что из этого МИКРОэлемент?",
+ o:["Iron (Fe)|Железо","Carbon (C)|Углерод","Oxygen (O)|Кислород","Nitrogen (N)|Азот"],a:0,
+ e:"Microelements нужны в очень малых количествах: iron, manganese, fluorine, selenium, copper, iodine, zinc, cobalt."},
+{c:4,t:"one",p:60,q:"An organic molecule always contains…",r:"Органическая молекула всегда содержит…",
+ o:["carbon|углерод","iron|железо","sodium|натрий","only water|только воду"],a:0,
+ e:"Organic compounds содержат carbon (и hydrogen). Главные: carbohydrates (углеводы), proteins (белки), lipids (жиры), vitamins."},
+{c:4,t:"one",p:64,q:"The main source of energy for humans is…",r:"Главный источник энергии для человека —",
+ o:["carbohydrates|углеводы","proteins|белки","vitamins|витамины","water|вода"],a:0,
+ e:"Carbohydrates — основное «топливо». Lipids запасают больше всего энергии, хранят тепло и защищают органы. Proteins — строительный материал."},
+{c:4,t:"multi",p:60,q:"Choose the functions of proteins.",r:"Выбери функции белков.",
+ o:["Oxygen transport|Перенос кислорода","Muscle contraction|Сокращение мышц","Protection against bacteria and viruses|Защита от бактерий и вирусов","Main solvent in the cell|Главный растворитель в клетке"],a:[0,1,2],
+ e:"Белки переносят кислород (гемоглобин), сокращают мышцы, защищают от микробов, образуют волосы и кожу. Главный растворитель — вода."},
+{c:4,t:"one",p:61,q:"You add iodine solution to a potato and it turns blue-black. This shows…",r:"Капнули йод на картофель, он стал сине-чёрным. Значит, там есть…",
+ o:["carbohydrates (starch)|углеводы (крахмал)","protein|белок","fat|жир","water only|только вода"],a:0,
+ e:"Iodine test: коричневый → сине-чёрный = есть углеводы (крахмал)."},
+{c:4,t:"one",p:61,q:"Biuret reagent turns from blue to purple. The food contains…",r:"Биуретовый реактив стал из синего фиолетовым. В еде есть…",
+ o:["protein|белок","starch|крахмал","fat|жир","sugar only|только сахар"],a:0,
+ e:"Biuret test → purple = protein. Опыт делают с яичным белком."},
+{c:4,t:"one",p:61,q:"How do you test food for lipids (fats)?",r:"Как проверить еду на жиры?",
+ o:["Rub it on paper: a see-through spot means fat|Потереть о бумагу: прозрачное пятно = жир","Add iodine: it turns blue|Капнуть йод: станет синим","Add Biuret reagent: it turns purple|Биуретовый реактив: станет фиолетовым","Freeze it|Заморозить"],a:0,
+ e:"Lipid test: если на белой бумаге после высыхания остаётся прозрачный след — в продукте есть жир (например, оливки, масло)."},
+{c:4,t:"one",p:62,q:"A plant's leaves turn yellow, shrink and grow shorter; it flowers less. It lacks…",r:"Листья желтеют, мельчают, растение хуже цветёт. Ему не хватает…",
+ o:["nitrogen|азота","potassium|калия","phosphorus|фосфора","oxygen|кислорода"],a:0,
+ e:"Nitrogen deficiency → жёлтые мелкие листья. Potassium → темнеет/буреет край листа, растение боится мороза. Phosphorus → плоды не созревают, листья мелкие и их мало."},
+{c:4,t:"one",p:62,q:"Fruits stop ripening, leaves become smaller and fewer. The plant lacks…",r:"Плоды не созревают, листья мельчают и их становится меньше. Не хватает…",
+ o:["phosphorus|фосфора","nitrogen|азота","calcium|кальция","iron|железа"],a:0,
+ e:"Это нехватка phosphorus. Суперфосфат (superphosphate) — фосфорное удобрение, первый такой завод открыл Джон Лоуз в 1843 году."},
+{c:4,t:"multi",p:63,q:"Choose ORGANIC fertilizers.",r:"Выбери ОРГАНИЧЕСКИЕ удобрения.",
+ o:["Manure|Навоз","Compost|Компост","Guano|Гуано (помёт птиц)","Superphosphate|Суперфосфат","Potassium chloride|Хлорид калия"],a:[0,1,2],
+ e:"Organic — натуральные: навоз, компост, гуано. Inorganic — синтетические: superphosphate, potassium chloride, ammonium sulfate."},
+{c:4,t:"one",p:66,q:"Transpiration is…",r:"Транспирация — это…",
+ o:["plants releasing water vapour through leaves|испарение воды листьями растения","water freezing in a lake|замерзание воды в озере","roots absorbing minerals|поглощение минералов корнями","photosynthesis|фотосинтез"],a:0,
+ e:"Transpiration — растение выпускает воду через листья в виде пара (gas). Вода поднимается по корням и стеблю благодаря cohesion и adhesion."}
+];
+
+const CHEAT={
+1:[
+ "<b>Ecology</b> — экология: связи организмов друг с другом и со средой. <b>Ecosystem</b> — организмы + неживая среда.",
+ "<b>Abiotic</b> (неживые): light, temperature, humidity (влажность), acidity (pH). <b>Biotic</b> (живые): microorganisms, plants, animals.",
+ "<b>Producer</b> (растения) → <b>primary consumer</b> (травоядное) → <b>secondary</b> → <b>tertiary consumer</b>.<div class='chain'><span>Grass</span>→<span>Grasshopper</span>→<span>Mouse</span>→<span>Owl</span></div>",
+ "<b>Food web</b> — много пищевых цепей вместе. На следующее звено переходит ~10% энергии (930 J → 105 J ≈ 11%).",
+ "<b>Primary succession</b> — где жизни не было (лава, камни, новый остров).<div class='chain'><span>Rocks</span>→<span>Lichens, mosses</span>→<span>Annual grass</span>→<span>Perennial grass</span>→<span>Shrubs</span>→<span>Trees</span></div>",
+ "<b>Secondary succession</b> — после пожара, наводнения, вырубки. <b>Lichen</b> выделяет кислоты и делает из камня почву.",
+ "<b>Anthropogenic factors</b> — влияние человека: газы заводов, разливы нефти, вырубка лесов, браконьерство.",
+ "В Казахстане <b>10 заповедников</b> (nature reserves) и <b>13 нацпарков</b> (national parks). Самый старый — <b>Aksu-Zhabagly, 1926</b>. <b>Red Book</b> — редкие виды: snow leopard, argali, Turkestan lynx.",
+ "<b>Flora</b> — растения, <b>fauna</b> — животные. Haeckel ввёл слово «ecology», Semper сделал первую модель пищевой цепи."
+],
+2:[
+ "<b>5 kingdoms</b>: Prokaryotes (бактерии), Protists (амёба, инфузория, эвглена), Fungi (грибы), Plants, Animals.",
+ "<b>Fungi</b>: не фотосинтезируют, питаются как животные, но растут в почве как растения. Penicillin — из плесени, yeast (дрожжи) — для хлеба. <b>Lichen</b> = водоросль + гриб.",
+ "<b>Carl Linnaeus</b> — основатель классификации, названия из 2 латинских слов: <i>Homo sapiens</i>, <i>Panthera leo</i> (Panthera = genus).",
+ "Порядок:<div class='chain'><span>Kingdom</span>→<span>Phylum</span>→<span>Class</span>→<span>Order</span>→<span>Family</span>→<span>Genus</span>→<span>Species</span></div>",
+ "Растения: <b>moss</b> — без сосудов; <b>fern</b> — с сосудами, без семян; <b>gymnosperms</b> — семена в шишках (pine, spruce); <b>angiosperms</b> — цветковые (rose, apple).",
+ "Беспозвоночные (<b>invertebrates</b>, exoskeleton): Porifera (губки), Cnidaria (медуза), Platyhelminthes (плоские черви), Nematoda (круглые), Annelida (дождевой червь, пиявка), Mollusca (кальмар, улитка), Echinodermata (морская звезда), <b>Arthropoda</b> — самый большой тип: insects, arachnids, crustaceans.",
+ "Позвоночные (<b>vertebrates</b>, endoskeleton): fish (жабры, чешуя), amphibians (личинки — жабры, взрослые — лёгкие и кожа), reptiles (сухая чешуя), birds (перья, клюв), mammals (шерсть, молоко).",
+ "<b>Poikilotherm</b> — t° тела меняется (рыбы, земноводные, рептилии). <b>Homeotherm</b> — t° постоянная (птицы, млекопитающие).",
+ "<b>Dichotomous key</b> — на каждом шаге 2 варианта: thesis и antithesis. Брать постоянные признаки (число ног), а не цвет или размер. Ввёл <b>Lamarck</b>."
+],
+3:[
+ "<b>Cell</b> — самая маленькая единица живого.",
+ "Уровни:<div class='chain'><span>Cell</span>→<span>Tissue</span>→<span>Organ</span>→<span>Organ system</span>→<span>Organism</span></div>",
+ "Ткани животных (4): epithelial, muscular, connective, nervous. Растений (3): ground, vascular, dermal.",
+ "Бактерии и протисты — <b>unicellular</b> (одна клетка = весь организм).",
+ "Есть у обеих клеток: <b>nucleus</b> (управляет, DNA), <b>cytoplasm</b> (жидкость с органоидами), <b>cell membrane</b> (защищает, пропускает вещества).",
+ "Только у растений: <b>cell wall</b> (из cellulose, даёт форму, не даёт лопнуть), <b>chloroplasts</b>, <b>large vacuole</b> (хранит воду; без воды цветок вянет).",
+ "Пластиды: <b>chloroplast</b> — зелёный, ловит свет; <b>chromoplast</b> — красный, жёлтый, оранжевый; <b>leukoplast</b> — бесцветный, запасает вещества.",
+ "У протистов: <b>contractile vacuole</b> выводит лишнюю воду, <b>digestive vacuole</b> переваривает пищу.",
+ "<b>Hooke</b> (1665) назвал клетку; <b>Leeuwenhoek</b> увидел бактерии; <b>Schleiden + Schwann</b> — клеточная теория."
+],
+4:[
+ "Вода — ~2/3 тела, главный <b>solvent</b> (растворитель), переносит питательные вещества.",
+ "<b>Cohesion</b> — вода цепляется за воду; <b>adhesion</b> — вода прилипает к другому. Благодаря им вода поднимается по растению.",
+ "<b>Surface tension</b> — насекомые ходят по воде. Лёд тает при <b>0 °C</b>, вода кипит при <b>100 °C</b>.",
+ "Лёд легче воды (меньше <b>density</b>), поэтому плавает. Озёра замерзают сверху, внизу ~4 °C, и рыбы выживают.",
+ "Высокая <b>heat capacity</b> — вода держит температуру тела постоянной.",
+ "<b>Macroelements</b>: C, H, O, N = 96% («CHON»), плюс Ca, P, K, Na, Cl, S, Mg. Na, K, Cl — нервные импульсы. Ca и P — кости и зубы.",
+ "<b>Microelements</b>: Fe (гемоглобин, переносит O₂), I (гормоны щитовидки), Zn, Co, Cu, F, Mn, Se.",
+ "Organic = есть <b>carbon</b>. Carbohydrates — энергия; lipids — запас энергии, тепло, защита; proteins — строительство, перенос O₂, защита.",
+ "Тесты: <b>iodine</b> → сине-чёрный = крахмал; <b>Biuret</b> → фиолетовый = белок; <b>прозрачное пятно на бумаге</b> = жир.",
+ "Нехватка: <b>N</b> — листья жёлтые и мелкие; <b>K</b> — края листьев темнеют, боится мороза; <b>P</b> — плоды не зреют. Organic fertilizers: manure, compost, guano. Inorganic: superphosphate, KCl."
+]};
+
+/* ---------- storage (best-effort) ---------- */
+const store={get(k,d){try{const v=localStorage.getItem("arsenbio:"+k);return v?JSON.parse(v):d}catch(e){return d}},
+ set(k,v){try{localStorage.setItem("arsenbio:"+k,JSON.stringify(v))}catch(e){}}};
+Q.forEach((q,i)=>q.id=i);
+let mistakes=new Set(store.get("mist",[]));
+let best=store.get("best",{});
+
+const $=id=>document.getElementById(id);
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const split=s=>{const [en,ru]=s.split("|");return {en,ru:ru||""}};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const cvar=c=>`var(--c${c})`, csoft=c=>`var(--c${c}s)`;
+
+/* ---------- RU toggle ---------- */
+function setRu(on){document.body.classList.toggle("hide-ru",!on);$("ruBtn").setAttribute("aria-pressed",on);store.set("ru",on)}
+setRu(store.get("ru",true));
+$("ruBtn").onclick=()=>setRu(document.body.classList.contains("hide-ru"));
+
+/* ---------- screens ---------- */
+function show(id){["home","cheat","quiz","result"].forEach(s=>$(s).hidden=s!==id);
+ const inQuiz=id==="quiz";
+ $("homeBtn").hidden=id==="home"; $("brand").hidden=inQuiz; $("topBar").hidden=!inQuiz; $("topCount").hidden=!inQuiz;
+ window.scrollTo(0,0)}
+$("homeBtn").onclick=()=>{renderHome();show("home")};
+
+function renderHome(){
+ $("allCount").textContent=Q.length+" вопросов";
+ $("mistCount").textContent=mistakes.size?`Осталось: ${mistakes.size}`:"Ошибок пока нет";
+ $("startMist").disabled=!mistakes.size;
+ $("chapters").innerHTML=[1,2,3,4].map(c=>{
+  const n=Q.filter(q=>q.c===c).length, b=best[c];
+  return `<button class="chap" data-c="${c}"><span class="num" style="background:${csoft(c)};color:${cvar(c)}">${c}</span>
+  <span class="t"><b>${CH[c].en}</b><span class="muted">${CH[c].ru} · ${CH[c].pg} · ${n} вопр.</span></span>
+  <span class="best">${b!=null?"лучший<br>"+b+"%":""}</span></button>`}).join("");
+ document.querySelectorAll(".chap").forEach(b=>b.onclick=()=>start(Q.filter(q=>q.c===+b.dataset.c),+b.dataset.c));
+}
+$("startMix").onclick=()=>{const per=[1,2,3,4].flatMap(c=>shuffle(Q.filter(q=>q.c===c)).slice(0,5));start(per)};
+$("startAll").onclick=()=>start(Q);
+$("startMist").onclick=()=>start(Q.filter(q=>mistakes.has(q.id)),"mist");
+$("openCheat").onclick=()=>{renderCheat();show("cheat")};
+
+function renderCheat(){
+ $("cheatList").innerHTML=[1,2,3,4].map(c=>`<section class="cs"><h2><span class="num" style="background:${csoft(c)};color:${cvar(c)}">${c}</span>${CH[c].en}</h2>
+ <div class="muted" style="font-size:13px;margin-top:4px">${CH[c].ru} · ${CH[c].pg}</div>
+ <ul>${CHEAT[c].map(x=>`<li>${x}</li>`).join("")}</ul>
+ <button class="ghost" style="margin-top:14px;width:100%" data-c="${c}">Проверить себя по главе ${c}</button></section>`).join("");
+ $("cheatList").querySelectorAll("button[data-c]").forEach(b=>b.onclick=()=>start(Q.filter(q=>q.c===+b.dataset.c),+b.dataset.c));
+}
+
+/* ---------- quiz ---------- */
+let S=null;
+function start(list,tag){
+ S={list:shuffle(list),i:0,score:0,wrong:[],tag,per:{}};
+ show("quiz"); renderQ();
+}
+function renderQ(){
+ const q=S.list[S.i], n=S.list.length;
+ $("topFill").style.width=(S.i/n*100)+"%"; $("topCount").textContent=`${S.i+1}/${n}`;
+ const opts=q.o.map((s,k)=>({...split(s),k}));
+ const hint=q.t==="multi"?`Выбери все правильные (${q.a.length})`:q.t==="order"?"Нажимай по порядку. Нажми на строку, чтобы убрать":"Один правильный ответ";
+ let body="";
+ if(q.t==="order"){
+  body=`<div class="slots" id="slots">${opts.map(()=>`<button class="slot" disabled></button>`).join("")}</div>
+  <div class="pool" id="pool">${shuffle(opts).map(o=>`<button class="chip" data-k="${o.k}">${esc(o.en)} <span class="ru">· ${esc(o.ru)}</span></button>`).join("")}</div>`;
+ } else {
+  body=`<div class="opts">${shuffle(opts).map((o,i)=>`<button class="opt ${q.t}" data-k="${o.k}"><span class="mk">${q.t==="multi"?"":String.fromCharCode(65+i)}</span><span class="ot"><b>${esc(o.en)}</b><span class="ru">${esc(o.ru)}</span></span></button>`).join("")}</div>`;
+ }
+ $("qcard").innerHTML=`<span class="tag" style="background:${csoft(q.c)};color:${cvar(q.c)}">Глава ${q.c} · ${CH[q.c].en} · стр. ${q.p}</span>
+  <div class="qtext">${esc(q.q)}<span class="ru">${esc(q.r)}</span></div>
+  <div class="hint">${hint}</div>${body}
+  <div id="fb"></div>
+  <div class="actions" id="acts">${q.t==="one"?"":`<button class="main" id="check" disabled>Проверить</button>`}</div>`;
+
+ if(q.t==="one"){
+  $("qcard").querySelectorAll(".opt").forEach(b=>b.onclick=()=>{b.classList.add("sel");finish(q,+b.dataset.k===q.a,[+b.dataset.k])});
+ } else if(q.t==="multi"){
+  const sel=new Set();
+  $("qcard").querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const k=+b.dataset.k;
+   sel.has(k)?sel.delete(k):sel.add(k); b.classList.toggle("sel"); b.querySelector(".mk").textContent=sel.has(k)?"✓":""; $("check").disabled=!sel.size});
+  $("check").onclick=()=>{const ok=sel.size===q.a.length&&q.a.every(k=>sel.has(k));finish(q,ok,[...sel])};
+ } else {
+  const order=[]; const slots=[...$("slots").children];
+  const paint=()=>{slots.forEach((s,i)=>{const k=order[i];s.disabled=k==null;s.classList.toggle("filled",k!=null);
+    s.innerHTML=k!=null?`${esc(split(q.o[k]).en)} <span class="ru">· ${esc(split(q.o[k]).ru)}</span>`:""});
+   $("pool").querySelectorAll(".chip").forEach(c=>c.disabled=order.includes(+c.dataset.k));
+   $("check").disabled=order.length!==q.o.length};
+  $("pool").querySelectorAll(".chip").forEach(c=>c.onclick=()=>{order.push(+c.dataset.k);paint()});
+  slots.forEach((s,i)=>s.onclick=()=>{order.splice(i,1);paint()});
+  $("check").onclick=()=>{const ok=order.every((k,i)=>k===i);
+   slots.forEach((s,i)=>{s.disabled=true;s.classList.add(order[i]===i?"right":"wrong")});
+   $("pool").querySelectorAll(".chip").forEach(c=>c.disabled=true);
+   finish(q,ok,order)};
+ }
+}
+const PRAISE=["Верно!","Отлично, Арсен!","Точно!","Молодец!","Так держать!","Правильно!"];
+const SUPPORT=["Не совсем.","Почти, разберём.","Ошибка, это нормально.","Запомним это."];
+function finish(q,ok,picked){
+ const card=$("qcard");
+ if(q.t!=="order"){
+  card.querySelectorAll(".opt").forEach(b=>{const k=+b.dataset.k;b.disabled=true;
+   const right=q.t==="one"?k===q.a:q.a.includes(k);
+   if(right){b.classList.add("right");b.classList.remove("sel");b.querySelector(".mk").textContent="✓"}
+   else if(picked.includes(k)){b.classList.add("wrong");b.classList.remove("sel");b.querySelector(".mk").textContent="✕"}});
+ }
+ if(ok){S.score++; if(S.tag==="mist") mistakes.delete(q.id)} else {S.wrong.push(q); mistakes.add(q.id)}
+ S.per[q.c]=S.per[q.c]||{ok:0,n:0}; S.per[q.c].n++; if(ok)S.per[q.c].ok++;
+ store.set("mist",[...mistakes]);
+ const correctOrder=q.t==="order"?`<div style="margin-top:6px;font-weight:600">${q.o.map(s=>esc(split(s).en)).join(" → ")}</div>`:"";
+ const pick=a=>a[Math.floor(Math.random()*a.length)];
+ $("fb").innerHTML=`<div class="fb ${ok?"ok":"no"}"><b class="v">${ok?pick(PRAISE):pick(SUPPORT)}</b>${esc(q.e)}${ok?"":correctOrder}<span class="pg">Учебник, стр. ${q.p}</span></div>`;
+ const last=S.i===S.list.length-1;
+ $("acts").innerHTML=`<button class="main" id="next">${last?"Посмотреть результат":"Дальше →"}</button>`;
+ $("next").onclick=()=>{if(last)renderResult();else{S.i++;renderQ()}};
+ $("next").focus({preventScroll:true});
+ $("fb").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"nearest"});
+}
+function renderResult(){
+ const n=S.list.length, pct=Math.round(S.score/n*100);
+ if(typeof S.tag==="number"){best[S.tag]=Math.max(best[S.tag]||0,pct);store.set("best",best)}
+ const msg=pct>=90?"Ты готов к СОЧ. Отличная работа!":pct>=70?"Хорошо! Повтори ошибки, и будет отлично.":pct>=50?"Неплохо для начала. Прочитай шпаргалку и пройди ещё раз.":"Начнём со шпаргалки, потом пройдём главу снова. Ты справишься.";
+ const rows=Object.keys(S.per).sort().map(c=>{const p=S.per[c],v=Math.round(p.ok/p.n*100);
+  return `<div class="brow"><span><b>${c}.</b> ${CH[c].ru}</span><span class="counter">${p.ok}/${p.n}</span><div class="bar"><i style="width:${v}%;background:${cvar(c)}"></i></div></div>`}).join("");
+ $("result").innerHTML=`<section class="score"><div class="muted">Результат</div><div class="n">${S.score}<small>/${n}</small></div><div style="font-weight:700">${pct}%</div><p style="margin:6px 0 0">${msg}</p></section>
+ <div class="breakdown">${rows}</div>
+ <div class="actions" style="margin-top:20px">${S.wrong.length?`<button class="main" id="retryW">Прорешать ошибки (${S.wrong.length})</button>`:""}<button class="ghost" id="toHome">Меню</button></div>
+ ${S.wrong.length?`<div class="section-label">Правильные ответы на ошибки</div><div class="mist">${S.wrong.map(q=>{
+   const ans=q.t==="order"?q.o.map(s=>split(s).en).join(" → "):(q.t==="one"?[q.a]:q.a).map(k=>split(q.o[k]).en).join("; ");
+   return `<div class="mi"><b>${esc(q.q)}</b><span class="ru">${esc(q.r)}</span><div class="ans">✓ ${esc(ans)}</div></div>`}).join("")}</div>`:""}`;
+ show("result");
+ if(S.wrong.length) $("retryW").onclick=()=>start(S.wrong.slice(),"mist");
+ $("toHome").onclick=()=>{renderHome();show("home")};
+}
+renderHome();
+</script>
+
+</body></html>

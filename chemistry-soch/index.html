@@ -1,0 +1,535 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Арсен: химия к СОЧ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one column "lab notebook" on faint graph paper; periodic-table tiles carry levels and scores. */
+:root{
+  --bg:#F2F5F7; --grid:rgba(30,91,216,.06); --card:#FFFFFF; --ink:#0F1E2A; --muted:#566876; --line:#D6DEE5;
+  --accent:#1E5BD8; --accent-soft:#E4ECFC; --flame:#D9660A; --flame-soft:#FCEBDD;
+  --good:#12805A; --good-soft:#E1F3EA; --bad:#C2303B; --bad-soft:#FBE5E7;
+  --f-display:"Unbounded", "Arial Black", system-ui, sans-serif;
+  --f-body:"Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0C151E; --grid:rgba(110,155,255,.07); --card:#13212E; --ink:#E5EDF3; --muted:#93A5B4; --line:#24384B;
+  --accent:#7AA2FF; --accent-soft:#1A2D4D; --flame:#FF9C45; --flame-soft:#3A2614;
+  --good:#45C792; --good-soft:#123327; --bad:#FF7079; --bad-soft:#3A1A1E; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#0C151E; --grid:rgba(110,155,255,.07); --card:#13212E; --ink:#E5EDF3; --muted:#93A5B4; --line:#24384B;
+  --accent:#7AA2FF; --accent-soft:#1A2D4D; --flame:#FF9C45; --flame-soft:#3A2614;
+  --good:#45C792; --good-soft:#123327; --bad:#FF7079; --bad-soft:#3A1A1E; color-scheme:dark; }
+
+*{box-sizing:border-box}
+body{
+  background-color:var(--bg); color:var(--ink); font-family:var(--f-body); font-size:16px; line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.wrap{max-width:780px; margin:0 auto; padding-block:28px 64px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px));}
+h1,h2,h3{font-family:var(--f-display); text-wrap:balance; margin:0; letter-spacing:-.01em}
+button{font:inherit; color:inherit; cursor:pointer}
+button:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.label{font-family:var(--f-mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+
+/* Hero */
+.hero{display:flex; gap:22px; align-items:center; flex-wrap:wrap; margin-bottom:26px}
+.tile{width:118px; height:132px; border:2.5px solid var(--ink); border-radius:6px; background:var(--card);
+  display:grid; grid-template-rows:auto 1fr auto; padding:8px 10px; flex:none; box-shadow:6px 6px 0 var(--accent)}
+.tile .num{font-family:var(--f-mono); font-weight:700; font-size:15px}
+.tile .sym{font-family:var(--f-display); font-weight:800; font-size:50px; line-height:1; align-self:center}
+.tile .nm{font-size:12px; font-weight:700}
+.tile .ms{font-family:var(--f-mono); font-size:11px; color:var(--muted)}
+.hero-text{flex:1; min-width:240px}
+.hero h1{font-size:clamp(26px,5vw,38px); line-height:1.1; margin-block:6px 10px}
+.hero p{margin:0; color:var(--muted); max-width:52ch}
+
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:26px}
+.btn{border:2px solid var(--ink); background:var(--card); padding:10px 16px; border-radius:8px; font-weight:700;
+  display:inline-flex; gap:8px; align-items:center; transition:transform .12s, box-shadow .12s}
+.btn:hover{transform:translate(-1px,-1px); box-shadow:3px 3px 0 var(--ink)}
+.btn.primary{background:var(--accent); border-color:var(--accent); color:#fff}
+.btn.primary:hover{box-shadow:3px 3px 0 var(--ink)}
+.btn[disabled]{opacity:.45; cursor:not-allowed; transform:none; box-shadow:none}
+.switch{display:inline-flex; align-items:center; gap:8px; font-weight:600; font-size:14px; color:var(--muted);
+  border:1.5px dashed var(--line); padding:8px 12px; border-radius:8px; background:var(--card)}
+.switch input{accent-color:var(--accent); width:18px; height:18px}
+
+/* Levels grid */
+.levels{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px}
+.lvl{text-align:left; background:var(--card); border:1.5px solid var(--line); border-radius:10px; padding:14px 14px 12px;
+  display:grid; grid-template-columns:auto 1fr; gap:4px 12px; align-items:start; transition:border-color .12s, transform .12s}
+.lvl:hover{border-color:var(--accent); transform:translateY(-2px)}
+.lvl .code{grid-row:span 3; width:52px; height:58px; border:2px solid var(--ink); border-radius:5px; display:grid; place-items:center;
+  font-family:var(--f-display); font-weight:700; font-size:17px; background:var(--accent-soft)}
+.lvl .t{font-weight:800; line-height:1.25}
+.lvl .r{font-size:13px; color:var(--muted); line-height:1.3}
+.lvl .meta{font-family:var(--f-mono); font-size:12px; color:var(--muted); margin-top:6px; display:flex; gap:10px; flex-wrap:wrap}
+.best{color:var(--good); font-weight:700}
+.boss{grid-column:1/-1; display:flex; gap:16px; align-items:center; flex-wrap:wrap; background:var(--ink); color:var(--bg);
+  border:none; border-radius:12px; padding:18px 20px; text-align:left}
+.boss .code{width:60px; height:66px; border:2px solid var(--bg); border-radius:6px; display:grid; place-items:center;
+  font-family:var(--f-display); font-weight:800; font-size:18px; background:var(--flame); color:#fff; flex:none}
+.boss .t{font-family:var(--f-display); font-size:20px}
+.boss .r{opacity:.8; font-size:14px}
+.boss .grow{flex:1; min-width:200px}
+.boss:hover{transform:translateY(-2px)}
+.section-h{display:flex; justify-content:space-between; align-items:baseline; margin:30px 0 12px; gap:12px; flex-wrap:wrap}
+.section-h h2{font-size:18px}
+
+/* Quiz */
+.qtop{display:flex; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap}
+.qtop .grow{flex:1; min-width:140px}
+.bar{height:10px; background:var(--line); border-radius:99px; overflow:hidden}
+.bar > i{display:block; height:100%; width:0; background:var(--accent); transition:width .3s}
+.stats{display:flex; gap:8px; font-family:var(--f-mono); font-size:13px}
+.pill{padding:4px 10px; border-radius:99px; background:var(--card); border:1.5px solid var(--line); white-space:nowrap}
+.pill.streak{background:var(--flame-soft); border-color:var(--flame); color:var(--flame); font-weight:700}
+.card{background:var(--card); border:2px solid var(--ink); border-radius:12px; padding:22px; box-shadow:6px 6px 0 var(--line)}
+.qtag{display:flex; justify-content:space-between; gap:10px; margin-bottom:10px; flex-wrap:wrap}
+.qen{font-size:clamp(19px,3.2vw,23px); font-weight:800; line-height:1.3; margin:0}
+.qru{margin:8px 0 0; color:var(--muted); font-size:15px}
+.opts{display:grid; gap:10px; margin-top:20px}
+.opt{display:flex; gap:12px; align-items:flex-start; text-align:left; background:var(--bg); border:2px solid var(--line);
+  border-radius:10px; padding:12px 14px; transition:border-color .12s, background .12s}
+.opt:hover:not([disabled]){border-color:var(--accent)}
+.opt .k{font-family:var(--f-mono); font-weight:700; width:26px; height:26px; border-radius:6px; border:1.5px solid currentColor;
+  display:grid; place-items:center; flex:none; font-size:13px; opacity:.7}
+.opt .ot{min-width:0}
+.opt .ot small{display:block; color:var(--muted); font-size:13px}
+.opt.correct{border-color:var(--good); background:var(--good-soft)}
+.opt.wrong{border-color:var(--bad); background:var(--bad-soft)}
+.opt[disabled]{cursor:default}
+
+.sort{display:grid; gap:8px; margin-top:18px}
+.srow{display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; padding:10px 12px;
+  border:2px solid var(--line); border-radius:10px; background:var(--bg)}
+.srow .it{font-weight:700; min-width:0; flex:1 1 160px}
+.srow .it small{display:block; font-weight:500; color:var(--muted); font-size:13px}
+.seg{display:inline-flex; border:1.5px solid var(--line); border-radius:8px; overflow:hidden; flex-wrap:wrap}
+.seg button{border:none; background:var(--card); padding:7px 11px; font-size:13px; font-weight:700; border-right:1.5px solid var(--line)}
+.seg button:last-child{border-right:none}
+.seg button.on{background:var(--accent); color:#fff}
+.srow.ok{border-color:var(--good); background:var(--good-soft)}
+.srow.no{border-color:var(--bad); background:var(--bad-soft)}
+.srow .fix{font-size:13px; font-weight:700; color:var(--good); width:100%}
+
+.fb{margin-top:18px; border-radius:10px; padding:14px 16px; border:2px solid; display:grid; gap:6px}
+.fb.good{border-color:var(--good); background:var(--good-soft)}
+.fb.bad{border-color:var(--bad); background:var(--bad-soft)}
+.fb .v{font-weight:800}
+.fb p{margin:0}
+.term{font-family:var(--f-mono); font-size:13px; display:inline-block; padding:3px 8px; border-radius:6px; background:var(--card); border:1px solid var(--line); justify-self:start}
+.qactions{display:flex; justify-content:space-between; gap:10px; margin-top:18px; flex-wrap:wrap; align-items:center}
+.hint{font-size:13px; color:var(--muted)}
+
+/* Results */
+.res-head{display:flex; gap:22px; align-items:center; flex-wrap:wrap}
+.mark{width:120px; height:134px; border:2.5px solid var(--ink); border-radius:6px; background:var(--card); display:grid;
+  grid-template-rows:auto 1fr auto; padding:8px 10px; box-shadow:6px 6px 0 var(--flame); flex:none}
+.mark .sym{font-family:var(--f-display); font-weight:800; font-size:56px; line-height:1; align-self:center}
+.res-head h2{font-size:clamp(22px,4vw,30px)}
+.res-nums{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+.mist{display:grid; gap:12px; margin-top:12px}
+.mi{background:var(--card); border:1.5px solid var(--line); border-left:5px solid var(--bad); border-radius:8px; padding:12px 14px}
+.mi .q{font-weight:800}
+.mi .a{color:var(--good); font-weight:700; margin-top:4px}
+.mi .e{color:var(--muted); font-size:14px; margin-top:4px}
+
+/* Cheat sheet */
+.cheat{display:grid; gap:14px}
+.cs{background:var(--card); border:1.5px solid var(--line); border-radius:10px; padding:16px 18px}
+.cs h3{font-size:16px; display:flex; gap:10px; align-items:center; margin-bottom:8px}
+.cs h3 .code{font-family:var(--f-mono); font-size:12px; border:1.5px solid var(--ink); border-radius:4px; padding:2px 6px; background:var(--accent-soft)}
+.cs ul{margin:0; padding-left:20px; display:grid; gap:4px}
+.cs li{max-width:68ch}
+.cs b{font-weight:800}
+.tbl{overflow-x:auto}
+.tbl table{border-collapse:collapse; font-size:14px; min-width:420px}
+.tbl th,.tbl td{border:1px solid var(--line); padding:6px 10px; text-align:left}
+.tbl th{font-family:var(--f-mono); font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted)}
+
+@media (max-width:520px){ .card{padding:16px} .tile{width:96px; height:110px} .tile .sym{font-size:40px} }
+@media (prefers-reduced-motion:reduce){ *{transition:none!important; animation:none!important} }
+@keyframes pop{0%{transform:scale(.96)}60%{transform:scale(1.02)}100%{transform:scale(1)}}
+.pop{animation:pop .25s ease-out}
+</style>
+
+<div class="wrap">
+
+<!-- HOME -->
+<section id="home">
+  <div class="hero">
+    <div class="tile" aria-hidden="true">
+      <span class="num">18</span><span class="sym">Ar</span>
+      <span><span class="nm">Arsen</span><br><span class="ms">7th grade · 39.95</span></span>
+    </div>
+    <div class="hero-text">
+      <div class="label">Chemistry · Grade 7 · темы 1.1 – 3.1</div>
+      <h1>Арсен, готовимся к СОЧ</h1>
+      <p>Вопросы на английском, как будет на СОЧ, а под каждым — перевод и разбор по-русски. Проходи темы по очереди, а в конце сразись с «Финальным СОЧ».</p>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button class="btn" id="openCheat" type="button">Шпаргалка по всем темам</button>
+    <label class="switch" for="ruToggle"><input type="checkbox" id="ruToggle" checked> Показывать перевод на русский</label>
+  </div>
+
+  <div class="section-h"><h2>Темы</h2><span class="label" id="totalQ"></span></div>
+  <div class="levels" id="levels"></div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz" hidden>
+  <div class="qtop">
+    <button class="btn" id="quitBtn" type="button" aria-label="Выйти к темам">← Темы</button>
+    <div class="grow">
+      <div class="label" id="qLevelName" style="margin-bottom:6px"></div>
+      <div class="bar"><i id="qBar"></i></div>
+    </div>
+    <div class="stats"><span class="pill" id="qCount">1/10</span><span class="pill streak" id="qStreak" hidden></span></div>
+  </div>
+  <div class="card" id="qCard"></div>
+</section>
+
+<!-- RESULTS -->
+<section id="results" hidden>
+  <div class="res-head">
+    <div class="mark" aria-hidden="true"><span class="label" id="rMarkLbl">оценка</span><span class="sym" id="rMark">5</span><span class="label" id="rPct">100%</span></div>
+    <div style="flex:1; min-width:220px">
+      <div class="label" id="rLevel"></div>
+      <h2 id="rTitle"></h2>
+      <p id="rMsg" style="margin:8px 0 0; color:var(--muted)"></p>
+      <div class="res-nums" id="rNums"></div>
+    </div>
+  </div>
+  <div class="toolbar" style="margin-top:22px">
+    <button class="btn primary" id="retryMist" type="button">Повторить ошибки</button>
+    <button class="btn" id="retryAll" type="button">Пройти заново</button>
+    <button class="btn" id="toHome" type="button">К темам</button>
+  </div>
+  <div id="mistWrap">
+    <div class="section-h"><h2>Работа над ошибками</h2></div>
+    <div class="mist" id="mistList"></div>
+  </div>
+</section>
+
+<!-- CHEAT SHEET -->
+<section id="cheat" hidden>
+  <div class="qtop"><button class="btn" id="cheatBack" type="button">← Темы</button><div class="grow"><div class="label">Шпаргалка · темы 1.1 – 3.1</div></div></div>
+  <div class="cheat" id="cheatBody"></div>
+</section>
+
+</div>
+
+<script>
+/* ---------- DATA ---------- */
+const LEVELS = [
+ {id:'1.1', en:'Chemistry, a unique science', ru:'Химия, лаборатория и безопасность', qs:[
+  {en:'Chemistry can be defined as the study of…', ru:'Химию можно определить как науку о…', o:[['living organisms','живых организмах'],['matter and its changes','веществах (материи) и их изменениях'],['stars and planets','звёздах и планетах'],['numbers and shapes','числах и фигурах']], a:1, ex:'Определение из учебника: «Chemistry is the study of matter and its changes». Матери́я (matter) — всё, из чего состоит мир.', term:'matter — материя, вещество'},
+  {en:'Which equipment is used to measure EXACT volumes of liquids?', ru:'Чем измеряют ТОЧНЫЙ объём жидкости?', o:[['Beaker','химический стакан'],['Graduated cylinder','мерный цилиндр'],['Test tube','пробирка'],['Funnel','воронка']], a:1, ex:'Graduated cylinder — точный объём. Beaker — только примерный (approximate). Это любимая ловушка на СОЧ.', term:'graduated cylinder — мерный цилиндр'},
+  {en:'A beaker is used for measuring…', ru:'Химический стакан (beaker) используют для измерения…', o:[['approximate volumes','примерных объёмов'],['exact volumes','точных объёмов'],['temperature','температуры'],['mass','массы']], a:0, ex:'Beaker — «Measuring approximate volumes». Точный объём — graduated cylinder.', term:'beaker — химический стакан'},
+  {en:'What is a test tube holder used for?', ru:'Для чего нужен держатель для пробирок?', o:[['To hold hot test tubes','держать горячие пробирки'],['To measure liquids','измерять жидкости'],['To filter mixtures','фильтровать смеси'],['To store chemicals','хранить химикаты']], a:0, ex:'Test tube holder держит горячую пробирку, чтобы не обжечься. А test tube rack — подставка (штатив) для пробирок.', term:'test tube holder — держатель для пробирок'},
+  {en:'Stand and clamps are used to…', ru:'Штатив и зажимы нужны, чтобы…', o:[['hold and fix lab equipment','держать и закреплять оборудование'],['heat substances','нагревать вещества'],['mix substances','смешивать вещества'],['clean glassware','мыть посуду']], a:0, ex:'Stand and clamps — штатив с зажимами: закрепляют колбы, воронки и т.д.', term:'stand and clamps — штатив и зажимы'},
+  {en:'Which item is used for filtration or pouring liquids?', ru:'Что используют для фильтрования или переливания жидкостей?', o:[['Funnel','воронка'],['Burner','горелка'],['Wash bottle','промывалка'],['Erlenmeyer flask','коническая колба']], a:0, ex:'Funnel (воронка) — для фильтрования (с фильтровальной бумагой) и переливания.', term:'funnel — воронка'},
+  {en:'Which equipment is used for heating to VERY high temperatures?', ru:'Что используют для нагрева до ОЧЕНЬ высоких температур?', o:[['Crucible','тигель'],['Petri dish','чашка Петри'],['Spot plate','капельная пластинка'],['Graduated cylinder','мерный цилиндр']], a:0, ex:'Crucible (тигель) выдерживает очень высокие температуры. Spot plate — для микрореакций, Petri dish — плоская чашка.', term:'crucible — тигель'},
+  {en:'Which of these is NOT a lab safety rule?', ru:'Что из этого НЕ правило безопасности?', o:[['Tie long hair','завязывать длинные волосы'],['Taste chemicals to identify them','пробовать химикаты на вкус, чтобы узнать их'],['Wear a lab coat and safety goggles','носить халат и защитные очки'],['Quickly report all accidents to your teacher','сразу сообщать учителю о любых происшествиях']], a:1, ex:'Правило №10: Do not eat, drink, smell or taste any chemical — ничего не есть, не пить, не нюхать и не пробовать.', term:'safety goggles — защитные очки'},
+  {en:'Why is it important not to eat or drink anything in a lab?', ru:'Почему в лаборатории нельзя есть и пить?', o:[['Because it is not breakfast time','потому что сейчас не время завтрака'],['Because it would be messy','потому что будет грязно'],['Because you could swallow something dangerous accidentally','можно случайно проглотить что-то опасное'],['Because your teacher said so','потому что так сказал учитель']], a:2, ex:'Правильный ответ из Summative Assessment: чтобы случайно не съесть что-то опасное.', term:'accident — несчастный случай'},
+  {en:'You use something with batteries in class. What should you do?', ru:'Ты используешь прибор на батарейках. Что нужно делать?', o:[['Keep your hands dry','держать руки сухими'],['Keep your lab area away from water','держать рабочее место подальше от воды'],['Keep your lab supplies dry','держать материалы сухими'],['All answer choices are correct','все варианты верны']], a:3, fixed:true, ex:'Электричество и вода — опасное сочетание, поэтому верно всё сразу.', term:'equipment — оборудование'},
+  {en:'A hazard symbol shows a FLAME OVER A CIRCLE. What does it mean?', ru:'Знак опасности: ПЛАМЯ НАД КРУГОМ. Что он означает?', o:[['Oxidizing','окисляющее вещество'],['Flammable','легковоспламеняющееся'],['Explosive','взрывоопасное'],['Corrosive','едкое (разъедающее)']], a:0, ex:'Пламя над кругом — oxidizing. Просто пламя — flammable. Взрыв — explosive. Капли на руку и поверхность — corrosive. Череп — toxic. Трилистник — radioactive.', term:'hazard — опасность'},
+  {en:'The hazard symbol with a SKULL AND CROSSBONES means…', ru:'Знак ЧЕРЕП С КОСТЯМИ означает…', o:[['Toxic','ядовитое'],['Radioactive','радиоактивное'],['Corrosive','едкое'],['Oxidizing','окисляющее']], a:0, ex:'Skull and crossbones = toxic (ядовито).', term:'toxic — ядовитый'},
+  {en:'Why are chemicals usually NOT stored in metal containers?', ru:'Почему химикаты обычно НЕ хранят в металлической посуде?', o:[['Metal can react with the chemicals','металл может реагировать с химикатами'],['Metal is too heavy','металл слишком тяжёлый'],['Metal is transparent','металл прозрачный'],['Metal is too cheap','металл слишком дешёвый']], a:0, ex:'Многие вещества (например, кислоты) реагируют с металлами. Поэтому используют стеклянную посуду (glassware).', term:'glassware — стеклянная посуда'}
+ ]},
+ {id:'1.2', en:'Element, mixture and compound', ru:'Элемент, смесь, соединение', qs:[
+  {en:'Matter can be classified into two categories:', ru:'Материю делят на две категории:', o:[['pure substances and mixtures','чистые вещества и смеси'],['metals and nonmetals','металлы и неметаллы'],['solids and liquids','твёрдые и жидкие'],['atoms and molecules','атомы и молекулы']], a:0, ex:'Matter → pure substances (elements + compounds) и mixtures.', term:'pure substance — чистое вещество'},
+  {en:'An element is composed of…', ru:'Элемент состоит из…', o:[['a single kind of atom','атомов одного вида'],['two or more kinds of atoms in a fixed ratio','двух и более видов атомов в постоянном соотношении'],['different substances mixed together','разных смешанных веществ'],['only molecules of water','только молекул воды']], a:0, ex:'Element — один вид атомов. Например, медь (Cu) содержит только атомы меди.', term:'element — элемент'},
+  {en:'Water (H₂O) is a compound. In a water molecule, the ratio of hydrogen to oxygen atoms is…', ru:'В молекуле воды соотношение атомов водорода и кислорода…', o:[['2 : 1','2 : 1'],['1 : 1','1 : 1'],['1 : 2','1 : 2'],['any ratio','любое']], a:0, ex:'H₂O: два атома H на один атом O. Если соотношение другое — это уже не вода. Например, H₂O₂ — перекись водорода (дезинфицирующее средство).', term:'compound — соединение'},
+  {en:'Which one of the following is an element?', ru:'Что из этого — элемент?', o:[['Milk','молоко'],['Paint','краска'],['Oxygen','кислород'],['Salty water','солёная вода'],['Sand','песок']], a:2, ex:'Кислород (O) — элемент. Молоко, краска, солёная вода — смеси. Песок — в основном SiO₂ (соединение).', term:'oxygen — кислород'},
+  {en:'Which substance does NOT contain only one kind of atoms or molecules?', ru:'Какое вещество содержит НЕ один вид атомов или молекул?', o:[['Water','вода'],['Hydrogen peroxide','перекись водорода'],['Iron','железо'],['Acetic acid','уксусная кислота'],['Salty water','солёная вода']], a:4, ex:'Солёная вода — смесь: молекулы воды + соль. Остальные — чистые вещества.', term:'mixture — смесь'},
+  {en:'A compound has physical and chemical properties ___ the atoms that make it up.', ru:'Соединение имеет свойства ___ атомов, из которых оно состоит.', o:[['different from','отличающиеся от'],['the same as','такие же, как у'],['exactly half of','ровно половину от'],['no','никаких']], a:0, ex:'Водород и кислород — газы, а вода — жидкость. У соединения свои, новые свойства.', term:'property — свойство'},
+  {en:'In a homogeneous mixture, the composition of its parts is…', ru:'В однородной (homogeneous) смеси состав частей…', o:[['the same everywhere','одинаковый везде'],['different in different parts','разный в разных частях'],['always solid','всегда твёрдый'],['fixed in a 2:1 ratio','строго 2:1']], a:0, ex:'Homogeneous — однородная (сахар в воде, бензин, воздух). Heterogeneous — неоднородная (песок в воде, курт, пицца).', term:'homogeneous — однородный · heterogeneous — разнородный'},
+  {en:'Homogeneous mixtures are also called…', ru:'Однородные смеси также называют…', o:[['solids','твёрдыми телами'],['solutions','растворами'],['pure substances','чистыми веществами'],['elements','элементами']], a:1, ex:'Однородная смесь = раствор (solution). Пример: сахар, растворённый в воде.', term:'solution — раствор'},
+  {en:'River sand mixed with water is an example of a…', ru:'Речной песок с водой — это пример…', o:[['heterogeneous mixture','неоднородной смеси'],['homogeneous mixture','однородной смеси'],['compound','соединения'],['element','элемента']], a:0, ex:'Песок виден и оседает на дно — смесь неоднородная. Сахар в воде — однородная (рисунки 1.2.5 и 1.2.6).', term:'heterogeneous — разнородный'},
+  {en:'True or false: "There is no fixed ratio between the components of a mixture."', ru:'Верно или нет: «В смеси нет постоянного соотношения компонентов».', o:[['True','верно'],['False','неверно']], a:0, fixed:true, ex:'Верно. Чая можно положить больше или меньше сахара — это всё ещё смесь. А в соединении соотношение строго постоянное.', term:'component — компонент'},
+  {en:'True or false: "Elements are combinations of two or more pure substances."', ru:'Верно или нет: «Элементы — это сочетание двух и более чистых веществ».', o:[['True','верно'],['False','неверно']], a:1, fixed:true, ex:'Неверно! Это определение СМЕСИ (mixture). Элемент — один вид атомов.', term:'element ≠ mixture'},
+  {t:'sort', en:'Classify each material: element, compound or mixture.', ru:'Распредели: элемент, соединение или смесь.', cats:[['Element','элемент'],['Compound','соединение'],['Mixture','смесь']], items:[['Air','воздух',2],['Aluminium foil','алюминиевая фольга',0],['Blood','кровь',2],['Table salt (NaCl)','поваренная соль',1],['Milk','молоко',2],['Acetic acid','уксусная кислота',1],['Gold','золото',0],['Coffee','кофе',2]], ex:'Элементы — один вид атомов (Al, Au). Соединения — несколько элементов в постоянном соотношении (NaCl, уксусная кислота). Смеси — несколько веществ без постоянного соотношения (воздух, кровь, молоко, кофе).'}
+ ]},
+ {id:'1.3', en:'Separation of mixtures', ru:'Разделение смесей, методы очистки', qs:[
+  {en:'The separation of mixtures is possible when we use the ___ properties of substances.', ru:'Разделить смесь можно, используя ___ свойства веществ.', o:[['physical','физические'],['chemical','химические'],['magical','магические'],['nuclear','ядерные']], a:0, ex:'Смеси разделяют физическими методами — по физическим свойствам (магнитность, плотность, растворимость, температура кипения).', term:'separation — разделение'},
+  {en:'How can you separate an iron + sulfur mixture?', ru:'Как разделить смесь железа и серы?', o:[['With a magnet','магнитом'],['By distillation','перегонкой'],['With a separatory funnel','делительной воронкой'],['By evaporation','выпариванием']], a:0, ex:'Магнит притягивает железо, никель и кобальт. Сера — нет.', term:'magnetic — магнитный'},
+  {en:'Why is this sentence WRONG: "A chemist can use a magnet to separate gold fillings from a mixture"?', ru:'Почему неверно: «Химик может магнитом отделить золотые опилки из смеси»?', o:[['Gold is not attracted by a magnet','золото не притягивается магнитом'],['Gold is too heavy','золото слишком тяжёлое'],['Gold dissolves in water','золото растворяется в воде'],['Magnets melt gold','магнит плавит золото']], a:0, ex:'Магнит притягивает только iron, nickel, cobalt. Золото — немагнитный металл.', term:'attract — притягивать'},
+  {en:'Oil and water are immiscible liquids. How are they separated?', ru:'Масло и вода не смешиваются. Как их разделить?', o:[['Separatory funnel (density differences)','делительной воронкой (разная плотность)'],['Magnet','магнитом'],['Filter paper','фильтровальной бумагой'],['Crucible','в тигле']], a:0, ex:'Плотная жидкость (вода) внизу, лёгкая (масло) сверху. Открываем кран воронки — сливаем нижний слой.', term:'immiscible — несмешиваемый · density — плотность'},
+  {en:'Liquids that mix in any ratio (like water and ethyl alcohol) are called…', ru:'Жидкости, которые смешиваются в любом соотношении (вода и спирт), называются…', o:[['miscible','смешивающиеся'],['immiscible','несмешивающиеся'],['insoluble','нерастворимые'],['solid','твёрдые']], a:0, ex:'Miscible — смешиваются (вода + спирт). Immiscible — не смешиваются (оливковое масло + вода).', term:'miscible — смешивающийся'},
+  {en:'Which method is best for obtaining WATER from a salt solution (e.g. seawater)?', ru:'Как лучше получить ВОДУ из солёного раствора (морской воды)?', o:[['Distillation','дистилляция (перегонка)'],['Filtration','фильтрование'],['Magnet','магнит'],['Separatory funnel','делительная воронка']], a:0, ex:'При дистилляции вода испаряется, пар охлаждается в холодильнике (condenser) и собирается как чистая жидкость — distillate.', term:'distillation — дистилляция'},
+  {en:'Which method is used to get SALT back from salt water?', ru:'Как получить обратно СОЛЬ из солёной воды?', o:[['Evaporation','выпаривание'],['Filtration','фильтрование'],['Magnet','магнит'],['Separatory funnel','делительная воронка']], a:0, ex:'Выпариваем воду — соль остаётся кристаллами. Так добывают соль из морской воды (Chemistry in life).', term:'evaporation — испарение, выпаривание'},
+  {en:'Alcohol and water are best separated by…', ru:'Спирт и воду лучше всего разделить…', o:[['crystallization','кристаллизацией'],['a magnet','магнитом'],['density differences','по разнице плотностей'],['distillation','дистилляцией']], a:3, fixed:true, ex:'У спирта и воды разные температуры кипения — значит, дистилляция. (Вопрос 11 из Summative Assessment.)', term:'boiling point — температура кипения'},
+  {en:'In filtration, the solid that stays on the filter paper is called the…', ru:'При фильтровании твёрдое вещество, оставшееся на фильтре, называется…', o:[['residue','осадок (остаток)'],['filtrate','фильтрат'],['distillate','дистиллят'],['solvent','растворитель']], a:0, ex:'Residue — то, что осталось на фильтре. Filtrate — жидкость, которая прошла через фильтр. Distillate — жидкость, собранная при дистилляции.', term:'residue — осадок · filtrate — фильтрат'},
+  {en:'How do you separate a copper(II) chloride + sulfur mixture? Choose the correct order.', ru:'Как разделить смесь хлорида меди(II) и серы? Выбери правильный порядок.', o:[['Dissolve in water → filter → evaporate','растворить в воде → профильтровать → выпарить'],['Filter → dissolve → use a magnet','профильтровать → растворить → магнит'],['Evaporate → filter → dissolve','выпарить → профильтровать → растворить'],['Use a magnet → distil','магнит → дистилляция']], a:0, ex:'CuCl₂ растворяется в воде, сера — нет. Фильтр задерживает серу, затем выпариваем воду и получаем CuCl₂.', term:'solubility — растворимость'},
+  {en:'Why can’t filtration separate salt from a sugar solution?', ru:'Почему фильтрованием нельзя отделить соль от раствора сахара?', o:[['Both are dissolved, so they pass through the filter paper','оба растворены и проходят через фильтр'],['Salt is magnetic','соль магнитная'],['Sugar is a gas','сахар — газ'],['Filter paper dissolves in sugar','бумага растворяется в сахаре']], a:0, ex:'Фильтр задерживает только нерастворимые твёрдые частицы. Растворённые вещества проходят вместе с водой.', term:'filter paper — фильтровальная бумага'},
+  {en:'Chromatography separates substances by their different abilities to…', ru:'Хроматография разделяет вещества по их разной способности…', o:[['stick (be absorbed) to surfaces','прилипать (впитываться) к поверхности'],['be attracted by a magnet','притягиваться магнитом'],['boil','кипеть'],['float on water','плавать на воде']], a:0, ex:'Chromatography — один из самых чувствительных методов. Виды: liquid, gas, thin-layer, paper.', term:'chromatography — хроматография'},
+  {en:'Who was known in Europe as "Geber", the Father of Chemistry, and was the first to use lab equipment?', ru:'Кого в Европе называли «Гебер», отцом химии, и кто первым использовал лабораторное оборудование?', o:[['Jabir bin Hayyan','Джабир ибн Хайян'],['Al-Razi','Ар-Рази'],['Aristotle','Аристотель'],['Democritus','Демокрит']], a:0, ex:'Jabir bin Hayyan. Вместе с Al-Razi они улучшили фильтрование, кристаллизацию и дистилляцию (аппарат — alembic, перегонный куб).', term:'alchemy — алхимия'},
+  {t:'sort', en:'True or false? (Summative Assessment, question 13)', ru:'Верно или неверно?', cats:[['True','верно'],['False','неверно']], items:[['Chemists can obtain drinking water from seawater by distillation.','питьевую воду из морской получают дистилляцией',0],['Separating sand from water is done by filtration and distillation.','песок от воды отделяют фильтрованием и дистилляцией',1],['Density differences and filtration can remove the sugar in sugar water.','плотность и фильтр уберут сахар из сладкой воды',1],['A mixture is a combination of two or more pure substances.','смесь — сочетание двух и более чистых веществ',0],['Kerosene and gasoline are produced by distilling petroleum.','керосин и бензин получают перегонкой нефти',0]], ex:'Песок от воды отделяют только фильтрованием (дистилляция не нужна). Сахар растворён — фильтр и плотность не помогут, нужно выпаривание.'}
+ ]},
+ {id:'2.1', en:'Chemical and physical changes', ru:'Химические и физические изменения', qs:[
+  {en:'In a physical change…', ru:'При физическом изменении…', o:[['no new substance is formed','новое вещество не образуется'],['a new substance is always formed','всегда образуется новое вещество'],['atoms are destroyed','атомы разрушаются'],['light is always produced','всегда выделяется свет']], a:0, ex:'Physical change меняет форму, размер или агрегатное состояние, но состав вещества остаётся прежним.', term:'physical change — физическое изменение'},
+  {en:'Which is a CHEMICAL change?', ru:'Что из этого — ХИМИЧЕСКОЕ изменение?', o:[['Rusting of iron','ржавление железа'],['Dissolving sugar in water','растворение сахара в воде'],['Breaking glass','разбивание стекла'],['Melting ice','таяние льда']], a:0, ex:'При ржавлении образуется новое вещество — ржавчина. Остальное — физические изменения.', term:'rusting — ржавление'},
+  {en:'When a candle burns, which part is a CHEMICAL change?', ru:'Когда горит свеча, что является ХИМИЧЕСКИМ изменением?', o:[['Wax vapor reacts with oxygen to form carbon dioxide, ash and water','пары воска реагируют с кислородом → углекислый газ, сажа и вода'],['Solid wax melts','твёрдый воск плавится'],['Liquid wax evaporates','жидкий воск испаряется'],['The candle gets shorter','свеча становится короче']], a:0, ex:'Плавление и испарение воска — физические изменения. Реакция паров воска с кислородом — химическое. В свече есть оба вида!', term:'combustion — горение'},
+  {en:'Wood that has burned and formed carbon dioxide and water vapor has gone through a…', ru:'Дерево сгорело и образовало углекислый газ и пар. Это…', o:[['chemical change','химическое изменение'],['physical change','физическое изменение'],['change in state only','только смена состояния'],['change in color only','только смена цвета']], a:0, ex:'Появились новые вещества (CO₂ и H₂O) — значит, изменение химическое.', term:'chemical change — химическое изменение'},
+  {en:'Chalk (calcium carbonate) is added to hydrochloric acid. What do you observe? (Lab work №3)', ru:'Мел добавили в соляную кислоту. Что наблюдаем? (Лабораторная №3)', o:[['Gas bubbles','пузырьки газа'],['Nothing happens','ничего'],['The liquid freezes','жидкость замерзает'],['The chalk becomes magnetic','мел становится магнитным']], a:0, ex:'Выделяется углекислый газ (пузырьки) — признак химической реакции.', term:'reaction — реакция'},
+  {en:'Which is NOT a sign that a chemical change has happened?', ru:'Что НЕ является признаком химической реакции?', o:[['The substance changes shape','вещество меняет форму'],['Gas bubbles appear','появляются пузырьки газа'],['Colour changes or a precipitate forms','меняется цвет или выпадает осадок'],['Heat or light is given off','выделяется тепло или свет']], a:0, ex:'Смена формы — физическое изменение. Признаки химической: газ, цвет, осадок, тепло/свет, запах.', term:'evidence — признак, доказательство'},
+  {en:'A firefly produces yellowish-green light. What kind of change is this?', ru:'Светлячок излучает жёлто-зелёный свет. Какое это изменение?', o:[['Chemical','химическое'],['Physical','физическое']], a:0, fixed:true, ex:'Свет образуется в результате химической реакции внутри светлячка.', term:'firefly — светлячок'},
+  {en:'One sheet of paper is torn, one is burned, one is crumpled. Which sheet had its molecules CHANGED?', ru:'Один лист порвали, второй сожгли, третий скомкали. В каком листе молекулы ИЗМЕНИЛИСЬ?', o:[['Only the burned one','только в сожжённом'],['Only the torn one','только в порванном'],['All three','во всех трёх'],['None','ни в одном']], a:0, ex:'Порвать и скомкать — физические изменения. Сжечь — химическое: образуются новые вещества.', term:'tear — рвать · crumple — комкать'},
+  {t:'sort', en:'Classify each change as physical or chemical.', ru:'Распредели: физическое или химическое изменение.', cats:[['Physical','физическое'],['Chemical','химическое']], items:[['Freezing of water','замерзание воды',0],['Burning of wood','горение дерева',1],['Tearing of paper','разрывание бумаги',0],['Souring of milk','скисание молока',1],['Boiling of tea','кипячение чая',0],['Frying an egg','жарка яйца',1],['Breaking an egg','разбивание яйца',0],['Spoiling of meat','порча мяса',1],['Melting of ice cream','таяние мороженого',0],['Tarnishing of silver','потемнение серебра',1]], ex:'Физическое = то же вещество в другой форме/состоянии. Химическое = новое вещество (горение, гниение, скисание, жарка, ржавление, потемнение серебра).'},
+  {t:'sort', en:'Physical or chemical? (Chapter review exercise 6)', ru:'Физическое или химическое?', cats:[['Physical','физическое'],['Chemical','химическое']], items:[['Breaking a glass','разбить стакан',0],['Baking a cake','испечь торт',1],['Nail rusting','ржавление гвоздя',1],['Match burning','горение спички',1],['Fireworks','фейерверк',1],['Water boiling','кипение воды',0],['Painting a picture','рисование картины',0],['Decay of fallen leaves','гниение опавших листьев',1]], ex:'Кипение и замерзание — физические, даже если происходят при нагреве. Горение, ржавление, гниение и выпечка дают новые вещества.'}
+ ]},
+ {id:'2.2', en:'States of matter', ru:'Агрегатные состояния вещества', qs:[
+  {en:'Which state of matter has a definite volume AND a definite shape?', ru:'У какого состояния есть и постоянный объём, и постоянная форма?', o:[['Solid','твёрдое'],['Liquid','жидкое'],['Gas','газообразное'],['Plasma','плазма']], a:0, ex:'Solid: объём и форма постоянны. Liquid: объём есть, формы нет. Gas: нет ни того, ни другого.', term:'definite — определённый'},
+  {en:'Liquids have…', ru:'У жидкостей…', o:[['a definite volume but no definite shape','есть объём, но нет постоянной формы'],['a definite shape but no definite volume','есть форма, но нет постоянного объёма'],['both definite shape and volume','есть и форма, и объём'],['neither shape nor volume','нет ни формы, ни объёма']], a:0, ex:'Жидкость течёт и принимает форму сосуда, но её объём не меняется.', term:'liquid — жидкий'},
+  {en:'Gases…', ru:'Газы…', o:[['have no definite volume and no definite shape','не имеют ни объёма, ни формы'],['have a definite volume','имеют постоянный объём'],['cannot be compressed or spread out','не сжимаются и не расширяются'],['are always colored','всегда цветные']], a:0, ex:'Газ заполняет весь сосуд. Частицы далеко друг от друга и свободно движутся. Большинство газов бесцветны.', term:'gaseous — газообразный'},
+  {en:'Which is often called the FOURTH state of matter?', ru:'Что часто называют ЧЕТВЁРТЫМ состоянием вещества?', o:[['Plasma','плазма'],['Ice','лёд'],['Steam','пар'],['Non-Newtonian fluid','неньютоновская жидкость']], a:0, ex:'Plasma — четвёртое состояние (плазменный шар, молния, звёзды). Пятое — конденсат Бозе–Эйнштейна (Нобелевская премия 2001).', term:'plasma — плазма'},
+  {en:'In which state are the particles packed closely together, usually in a regular pattern?', ru:'В каком состоянии частицы плотно упакованы и обычно стоят упорядоченно?', o:[['Solid','твёрдое'],['Liquid','жидкое'],['Gas','газ']], a:0, fixed:true, ex:'В твёрдом теле частицы почти вплотную. В жидкости — рядом, но свободнее. В газе — далеко друг от друга.', term:'particles — частицы'},
+  {en:'Sublimation is a change directly from…', ru:'Сублимация — это переход напрямую из…', o:[['solid to gas','твёрдого в газ'],['gas to solid','газа в твёрдое'],['liquid to gas','жидкости в газ'],['solid to liquid','твёрдого в жидкость']], a:0, ex:'Sublimation: solid → gas, минуя жидкость (пример — йод). Обратный процесс gas → solid называется deposition (десублимация).', term:'sublimation — сублимация'},
+  {en:'The change from gas to liquid is called…', ru:'Переход из газа в жидкость называется…', o:[['condensation','конденсация'],['evaporation','испарение'],['melting','плавление'],['deposition','десублимация']], a:0, ex:'Condensation: пар → капли (запотевшее зеркало). Evaporation — наоборот, жидкость → газ.', term:'condensation — конденсация'},
+  {en:'Mixing corn starch and water makes a…', ru:'Если смешать кукурузный крахмал с водой, получится…', o:[['non-Newtonian fluid','неньютоновская жидкость'],['plasma','плазма'],['pure element','чистый элемент'],['gas','газ']], a:0, ex:'Неньютоновская жидкость «сопротивляется» быстрому нажатию и течёт при медленном.', term:'non-Newtonian fluid — неньютоновская жидкость'},
+  {en:'Empedocles said all substances are made of four elements. Which ones?', ru:'Эмпедокл считал, что все вещества состоят из четырёх «элементов». Каких?', o:[['Air, earth, fire and water','воздух, земля, огонь и вода'],['Hydrogen, oxygen, carbon and iron','водород, кислород, углерод, железо'],['Solid, liquid, gas and plasma','твёрдое, жидкое, газ, плазма'],['Gold, silver, lead and mercury','золото, серебро, свинец, ртуть']], a:0, ex:'Эмпедокл (V век до н.э.): air, earth, fire, water. Аристотель добавил пятый — ether (эфир) для небес.', term:'ether — эфир'},
+  {t:'sort', en:'Water diagram: Ice →(A)→ liquid water →(B)→ water vapor, and back: vapor →(D)→ liquid →(C)→ ice. Name each change.', ru:'Схема: лёд →A→ вода →B→ пар; обратно пар →D→ вода →C→ лёд. Назови каждый переход.', cats:[['Melting','плавление'],['Evaporation','испарение'],['Freezing','замерзание'],['Condensation','конденсация']], items:[['A: ice → liquid water','A: лёд → вода',0],['B: liquid water → vapor','B: вода → пар',1],['C: liquid water → ice','C: вода → лёд',2],['D: vapor → liquid water','D: пар → вода',3]], ex:'A melting, B evaporation (boiling), C freezing, D condensation — задание 11 из Chapter review.'},
+  {t:'sort', en:'Classify the following matter as solid, liquid or gas.', ru:'Распредели: твёрдое, жидкое или газ.', cats:[['Solid','твёрдое'],['Liquid','жидкое'],['Gas','газ']], items:[['Books','книги',0],['Steam','пар',2],['Milk','молоко',1],['Rock','камень',0],['Gasoline','бензин',1],['Air in a balloon','воздух в шарике',2],['Blood','кровь',1],['Computer','компьютер',0]], ex:'Подсказка: держит форму — solid; течёт и принимает форму сосуда — liquid; заполняет всё пространство — gas.'}
+ ]},
+ {id:'2.3–2.4', en:'Cooling and heating', ru:'Охлаждение и нагревание', qs:[
+  {en:'Cooling is a process in which heat transfers…', ru:'Охлаждение — это процесс, при котором тепло переходит…', o:[['from a hotter object to a colder one','от более горячего тела к более холодному'],['from a colder object to a hotter one','от холодного к горячему'],['only from the Sun','только от Солнца'],['nowhere','никуда']], a:0, ex:'Тепло всегда идёт от горячего к холодному. Горячая вода в комнате остывает, отдавая тепло воздуху.', term:'cooling — охлаждение'},
+  {en:'For freezing to take place, heat…', ru:'Чтобы произошло замерзание, тепло…', o:[['must be taken away','нужно отнять'],['must be added','нужно добавить']], a:0, fixed:true, ex:'Замерзание (liquid → solid) — охлаждение: тепло отнимают. Плавление — наоборот, тепло добавляют.', term:'freeze — замерзать'},
+  {en:'When particles are heated, they…', ru:'При нагревании частицы…', o:[['gain kinetic energy and move faster','получают кинетическую энергию и движутся быстрее'],['lose energy and slow down','теряют энергию и замедляются'],['stop moving','перестают двигаться'],['become bigger atoms','превращаются в более крупные атомы']], a:0, ex:'Чем горячее вещество, тем быстрее движутся частицы (схема 2.4.1).', term:'kinetic energy — кинетическая энергия'},
+  {en:'Alcohol rubbed on your arm evaporates, and your arm feels cool. Heat was taken from…', ru:'Спирт на руке испаряется, и руке прохладно. Тепло забрали у…', o:[['your arm','твоей руки'],['the air','воздуха'],['the classroom lights','ламп в классе'],['the Sun','Солнца']], a:0, ex:'Для испарения нужна энергия — спирт забирает тепло у кожи. Поэтому испарение — охлаждающий процесс, и поэтому мы потеем.', term:'evaporation — испарение'},
+  {en:'Why do people sweat?', ru:'Зачем люди потеют?', o:[['Evaporating sweat takes heat from the body and cools it','испаряясь, пот забирает тепло и охлаждает тело'],['Sweat heats the body','пот нагревает тело'],['Sweat makes the skin magnetic','пот делает кожу магнитной'],['To produce plasma','чтобы получить плазму']], a:0, ex:'Вывод из лабораторной №5: испарение — охлаждающий процесс.', term:'sweat — пот'},
+  {en:'At normal pressure water boils at 100 °C. At 4000 m above sea level it boils at about…', ru:'При нормальном давлении вода кипит при 100 °C. На высоте 4000 м — примерно при…', o:[['85 °C','85 °C'],['100 °C','100 °C'],['120 °C','120 °C'],['0 °C','0 °C']], a:0, ex:'В горах давление ниже (около 60 кПа), вода кипит примерно при 85 °C. Поэтому еда в горах варится дольше — на Шымбулаке тоже чуть ниже 100 °C.', term:'boiling point — температура кипения'},
+  {en:'On a cooling curve, the flat (horizontal) part shows that…', ru:'На графике охлаждения горизонтальный участок показывает, что…', o:[['the substance is changing state, so the temperature stays constant','вещество меняет состояние, температура не меняется'],['the substance is heating up','вещество нагревается'],['the thermometer is broken','термометр сломался'],['the substance disappears','вещество исчезает']], a:0, ex:'Пока вещество кристаллизуется (или кипит на графике нагрева), температура стоит на месте. Для воды «полки» при 0 °C и 100 °C.', term:'cooling curve — кривая охлаждения'},
+  {en:'How is cooling represented on a temperature–time graph?', ru:'Как выглядит охлаждение на графике «температура — время»?', o:[['The line goes down over time','линия идёт вниз'],['The line goes up over time','линия идёт вверх'],['A vertical line','вертикальная линия'],['A circle','круг']], a:0, ex:'Температура со временем падает — линия идёт вниз. Нагревание — линия вверх (задание 7 из Chapter review).', term:'graph — график'},
+  {en:'The temperature at which a substance changes from a liquid to a gas is called the…', ru:'Температура, при которой жидкость превращается в газ, — это…', o:[['boiling point','температура кипения'],['melting point','температура плавления'],['freezing point','температура замерзания'],['condensation point','температура конденсации']], a:0, ex:'Boiling point — кипение. Melting point — плавление (solid → liquid).', term:'boiling point — температура кипения'},
+  {en:'The temperature at which a substance changes from a solid to a liquid is called the…', ru:'Температура, при которой твёрдое вещество становится жидким, — это…', o:[['melting point','температура плавления'],['boiling point','температура кипения'],['condensation point','температура конденсации'],['freezing point','температура замерзания']], a:0, ex:'Melting point. Например, у льда 0 °C, у железа 1538 °C.', term:'melting point — температура плавления'},
+  {en:'What needs to be added to a solid to make it a liquid?', ru:'Что нужно добавить твёрдому веществу, чтобы оно стало жидким?', o:[['Energy','энергию'],['Gas','газ'],['Air','воздух'],['Water','воду']], a:0, ex:'Нагрев = добавление энергии. Лёд в руке тает, потому что тепло тела переходит в лёд.', term:'heat energy — тепловая энергия'},
+  {en:'Oxygen melts at −218.8 °C and boils at −183 °C. What is its state at −120 °C?', ru:'Кислород плавится при −218,8 °C, кипит при −183 °C. В каком он состоянии при −120 °C?', o:[['Gas','газ'],['Liquid','жидкость'],['Solid','твёрдое']], a:0, fixed:true, ex:'−120 °C выше температуры кипения (−183 °C), значит, кислород уже газ. Правило: ниже t плавления — solid, между ними — liquid, выше t кипения — gas.', term:'state — состояние'},
+  {en:'Candle wax melts at 80 °C and boils at 370 °C. What is its state at 300 °C?', ru:'Воск плавится при 80 °C, кипит при 370 °C. Какое состояние при 300 °C?', o:[['Liquid','жидкость'],['Solid','твёрдое'],['Gas','газ']], a:0, fixed:true, ex:'300 °C — между 80 и 370, значит, жидкость.', term:'candle wax — свечной воск'},
+  {en:'Potassium melts at 63.5 °C. What is its state at room temperature (25 °C)?', ru:'Калий плавится при 63,5 °C. Какое состояние при 25 °C?', o:[['Solid','твёрдое'],['Liquid','жидкость'],['Gas','газ']], a:0, fixed:true, ex:'25 °C ниже температуры плавления — калий твёрдый.', term:'room temperature — комнатная температура'},
+  {en:'The lowest temperature recorded in Kazakhstan (Atbasar) was…', ru:'Самая низкая температура в Казахстане (Атбасар) была…', o:[['−57 °C','−57 °C'],['−17 °C','−17 °C'],['−100 °C','−100 °C'],['0 °C','0 °C']], a:0, ex:'−57 °C в Атбасаре. А самая высокая в мире — около 58 °C в Сахаре.', term:'temperature — температура'}
+ ]},
+ {id:'3.1', en:'Atoms and molecules', ru:'Атомы и молекулы', qs:[
+  {en:'Democritus named the tiny particles of matter "atomos". What does it mean in Greek?', ru:'Демокрит назвал частицы «атомос». Что это значит по-гречески?', o:[['Indivisible','неделимый'],['Tiny','крошечный'],['Invisible','невидимый'],['Heavy','тяжёлый']], a:0, ex:'Atomos = indivisible (неделимый). Аристотель же считал, что материю можно делить бесконечно (matter is continuous).', term:'indivisible — неделимый'},
+  {en:'Different types of atoms are called…', ru:'Разные виды атомов называют…', o:[['chemical elements','химическими элементами'],['molecules','молекулами'],['mixtures','смесями'],['compounds','соединениями']], a:0, ex:'Каждый вид атома — химический элемент. Все они собраны в периодической таблице (например, hydrogen, gold).', term:'chemical element — химический элемент'},
+  {en:'A molecule is the smallest particle of an element or compound that…', ru:'Молекула — мельчайшая частица элемента или соединения, которая…', o:[['retains the characteristics of the original substance','сохраняет свойства исходного вещества'],['has no mass','не имеет массы'],['cannot be seen even with a microscope and has no atoms','не содержит атомов'],['is always a gas','всегда газ']], a:0, ex:'Определение из учебника. Одна молекула воды — самая маленькая «порция» воды, которая ещё остаётся водой.', term:'molecule — молекула'},
+  {en:'A molecule made of just TWO atoms (like N₂) is called…', ru:'Молекула всего из ДВУХ атомов (например, N₂) называется…', o:[['diatomic','двухатомная'],['monatomic','одноатомная'],['polyatomic','многоатомная'],['ionic','ионная']], a:0, ex:'Diatomic molecule: N₂, O₂, H₂. Азот в воздухе существует как N₂.', term:'diatomic — двухатомный'},
+  {en:'The formula H₂O tells us that one water molecule contains…', ru:'Формула H₂O показывает, что в одной молекуле воды…', o:[['2 hydrogen atoms and 1 oxygen atom','2 атома водорода и 1 атом кислорода'],['2 oxygen atoms and 1 hydrogen atom','2 атома кислорода и 1 водорода'],['2 water atoms','2 атома воды'],['1 hydrogen and 2 oxygen molecules','1 водород и 2 молекулы кислорода']], a:0, ex:'Маленькая цифра (индекс) после символа показывает число атомов: H₂ — два водорода, O — один кислород.', term:'formula — формула'},
+  {en:'How wide are atoms?', ru:'Какого размера атомы?', o:[['0.1 to 0.5 nanometers','от 0,1 до 0,5 нанометра'],['0.1 to 0.5 millimeters','от 0,1 до 0,5 миллиметра'],['about 1 centimeter','около 1 сантиметра'],['as wide as a human hair','как человеческий волос']], a:0, ex:'0,1–0,5 нм (1 нм = 10⁻⁹ м). Один нанометр примерно в 100 000 раз тоньше человеческого волоса.', term:'nanometer — нанометр'},
+  {en:'Atoms can be seen using an electron microscope. It can magnify objects up to…', ru:'Атомы можно увидеть в электронный микроскоп. Он увеличивает до…', o:[['two million times','двух миллионов раз'],['ten times','десяти раз'],['one thousand times','тысячи раз'],['one hundred times','ста раз']], a:0, ex:'Современный электронный микроскоп увеличивает до 2 000 000 раз.', term:'electron microscope — электронный микроскоп'},
+  {en:'Where is nearly all of the mass of an atom?', ru:'Где сосредоточена почти вся масса атома?', o:[['In the nucleus','в ядре'],['In the electrons','в электронах'],['In the empty space','в пустом пространстве'],['Spread evenly everywhere','равномерно везде']], a:0, ex:'Ядро очень плотное и содержит почти всю массу. Электроны очень лёгкие: 1836 электронов весят как один протон.', term:'nucleus — ядро'},
+  {en:'An atom is about 99.99% …', ru:'Атом примерно на 99,99% состоит из…', o:[['empty space','пустого пространства'],['electrons','электронов'],['water','воды'],['protons','протонов']], a:0, ex:'Если атом размером со спортивную арену, то ядро — как горошина.', term:'empty space — пустое пространство'},
+  {en:'Put the structure of matter in order from biggest to smallest.', ru:'Расположи от большего к меньшему.', o:[['Matter → molecule → atom → elementary particles','вещество → молекула → атом → элементарные частицы'],['Atom → molecule → matter → elementary particles','атом → молекула → вещество → элементарные частицы'],['Molecule → matter → atom → electron','молекула → вещество → атом → электрон'],['Elementary particles → atom → molecule → matter','элементарные частицы → атом → молекула → вещество']], a:0, ex:'Рисунок 3.1.4: matter → molecule → atom → elementary particles (electron, quark, gluon).', term:'elementary particles — элементарные частицы'},
+  {en:'What is the most abundant type of atom in the universe?', ru:'Какой атом самый распространённый во Вселенной?', o:[['Hydrogen','водород'],['Oxygen','кислород'],['Iron','железо'],['Gold','золото']], a:0, ex:'Около 74% атомов в галактике Млечный Путь — атомы водорода.', term:'universe — вселенная'},
+  {en:'The 100-tenge coin contains atoms of which metals?', ru:'Атомы каких металлов есть в монете 100 тенге?', o:[['Copper, nickel and zinc','медь, никель и цинк'],['Gold and silver','золото и серебро'],['Iron only','только железо'],['Aluminium and lead','алюминий и свинец']], a:0, ex:'Рисунок 3.1.1: copper, nickel, zinc atoms. Атомы есть во всём вокруг нас.', term:'copper — медь'},
+  {en:'You leave a football outside for a few days and it loses its shape. Why?', ru:'Мяч несколько дней лежал на улице и сдулся. Почему?', o:[['Tiny gas particles slowly escape through the material','крошечные частицы газа медленно выходят через материал'],['The air turns into a solid','воздух становится твёрдым'],['The atoms of air disappear','атомы воздуха исчезают'],['The ball becomes a compound','мяч превращается в соединение']], a:0, ex:'Частицы газа очень маленькие и постоянно движутся, поэтому понемногу просачиваются через стенки мяча.', term:'particle — частица'}
+ ]}
+];
+
+const CHEAT = [
+ ['1.1','Chemistry, a unique science',[
+  '<b>Chemistry</b> — the study of matter and its changes (наука о веществах и их изменениях).',
+  'Правила: слушать учителя; халат + <b>safety goggles</b>; перчатки; ничего не бросать; не трогать руками; завязать волосы; не бегать; <b>не есть, не пить, не нюхать, не пробовать</b>; сразу сообщать о происшествиях.',
+  '<b>Test tube</b> — смешивание · <b>Erlenmeyer (conical) flask</b> — смешивание, хранение токсичных веществ · <b>Beaker</b> — ПРИМЕРНЫЙ объём · <b>Graduated cylinder</b> — ТОЧНЫЙ объём.',
+  '<b>Test tube holder</b> — держать горячую пробирку · <b>Stand and clamps</b> — закрепить оборудование · <b>Wash bottle</b> — разбавление, мытьё · <b>Burner</b> — нагрев · <b>Funnel</b> — фильтрование и переливание · <b>Crucible</b> — очень высокие температуры.',
+  'Знаки: пламя — flammable; пламя над кругом — oxidizing; взрыв — explosive; капли на руку — corrosive; череп — toxic; трилистник — radioactive.']],
+ ['1.2','Element, mixture and compound',[
+  'Matter = <b>pure substances</b> (elements, compounds) + <b>mixtures</b>.',
+  '<b>Element</b> — один вид атомов (Cu, O₂, Au). <b>Compound</b> — разные атомы в постоянном соотношении (H₂O = 2 H : 1 O; H₂O₂ — уже другое вещество). Свойства соединения отличаются от свойств его атомов.',
+  '<b>Mixture</b> — 2+ чистых вещества без реакции; нет постоянного соотношения; компоненты сохраняют свои свойства; легко разделяются физическими методами.',
+  '<b>Homogeneous</b> (однородная, = solution): сахар в воде, бензин, воздух, сталь. <b>Heterogeneous</b> (неоднородная): песок + вода, курт, пицца.']],
+ ['1.3','Separation of mixtures',[
+  'Смеси разделяют по <b>физическим</b> свойствам.',
+  '<b>Magnet</b> — железо, никель, кобальт (Fe + S). Золото магнитом НЕ отделить.',
+  '<b>Separatory funnel</b> — несмешивающиеся жидкости с разной плотностью (масло + вода). <b>Immiscible</b> — не смешиваются; <b>miscible</b> — смешиваются (вода + спирт).',
+  '<b>Filtration</b> — нерастворимое твёрдое от жидкости (песок + вода). На фильтре — <b>residue</b>, прошло сквозь — <b>filtrate</b>.',
+  '<b>Evaporation</b> — получить твёрдое из раствора (соль из солёной воды). <b>Distillation</b> — по разной t кипения (вода из морской, спирт + вода, бензин из нефти); собранная жидкость — <b>distillate</b>.',
+  'CuCl₂ + S: растворить → профильтровать → выпарить. <b>Sedimentation</b> — оседание (уголь + песок). <b>Chromatography</b> — по способности прилипать к поверхности.']],
+ ['2.1','Chemical and physical changes',[
+  '<b>Physical</b> — меняется форма, размер, состояние; нового вещества нет (таяние, замерзание, кипение, растворение сахара, разбить, порвать, подстричь).',
+  '<b>Chemical</b> (= reaction) — образуется новое вещество (горение, ржавление, гниение, скисание молока, жарка, выпечка, йогурт, потемнение серебра, фейерверк).',
+  'Признаки химической реакции: газ (пузырьки), смена цвета, осадок, тепло/свет, запах.',
+  'Свеча: плавление и испарение воска — physical; реакция паров с кислородом → CO₂, сажа, вода — chemical.']],
+ ['2.2','States of matter',[
+  '<b>Solid</b>: есть объём и форма, частицы вплотную. <b>Liquid</b>: объём есть, формы нет, течёт. <b>Gas</b>: нет ни объёма, ни формы, частицы далеко. <b>Plasma</b> — 4-е состояние; BEC — 5-е.',
+  '<div class="tbl"><table><tr><th>Переход</th><th>English</th><th>Русский</th></tr><tr><td>solid → liquid</td><td>melting</td><td>плавление</td></tr><tr><td>liquid → solid</td><td>freezing</td><td>замерзание</td></tr><tr><td>liquid → gas</td><td>evaporation / boiling</td><td>испарение / кипение</td></tr><tr><td>gas → liquid</td><td>condensation</td><td>конденсация</td></tr><tr><td>solid → gas</td><td>sublimation</td><td>сублимация (йод)</td></tr><tr><td>gas → solid</td><td>deposition</td><td>десублимация</td></tr></table></div>',
+  'Неньютоновская жидкость — крахмал + вода. Эмпедокл: air, earth, fire, water; Аристотель: + ether.']],
+ ['2.3–2.4','Cooling and heating',[
+  '<b>Cooling</b> — тепло переходит от горячего к холодному; на графике линия вниз. <b>Heating</b> — частицы получают кинетическую энергию и движутся быстрее; линия вверх.',
+  'Горизонтальная «полка» на графике = смена состояния, температура постоянна (вода: 0 °C и 100 °C).',
+  '<b>Evaporation</b> — охлаждающий процесс (поэтому мы потеем; спирт холодит руку).',
+  '<b>Boiling point</b> — liquid → gas; <b>melting point</b> — solid → liquid. Вода кипит при 100 °C, а на 4000 м — около 85 °C.',
+  'Состояние по таблице: t ниже плавления → solid; между плавлением и кипением → liquid; выше кипения → gas.']],
+ ['3.1','Atoms and molecules',[
+  '<b>Atom</b> — мельчайшая частица элемента; 0,1–0,5 нм; 99,99% — пустота; почти вся масса в ядре (1836 электронов = 1 протон).',
+  '<b>Molecule</b> — мельчайшая частица вещества, сохраняющая его свойства. H₂O = 2 H + 1 O. Из двух атомов — <b>diatomic</b> (N₂).',
+  'Matter → molecule → atom → elementary particles (electron, quark, gluon).',
+  '<b>Democritus</b>: atomos = indivisible. <b>Aristotle</b>: материя непрерывна. Водород — самый распространённый атом (~74% атомов Млечного Пути). Электронный микроскоп — до ×2 000 000.']]
+];
+
+/* ---------- STATE ---------- */
+const $ = s => document.querySelector(s);
+const store = { get(k,d){ try{ const v=localStorage.getItem(k); return v==null?d:JSON.parse(v);}catch(e){return d;} },
+                set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} } };
+let showRu = store.get('arsen_ru', true);
+let run = null;
+const praise = ['Отлично, Арсен!','В точку!','Так держать!','Химик растёт!','Верно!','Чётко!'];
+const oops   = ['Почти! Запомни:','Не беда, разберём:','Тут ловушка:','Смотри, как правильно:'];
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; };
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function show(id){ ['home','quiz','results','cheat'].forEach(s=> $('#'+s).hidden = s!==id); window.scrollTo({top:0}); }
+
+/* ---------- HOME ---------- */
+function renderHome(){
+  const best = store.get('arsen_best', {});
+  const total = LEVELS.reduce((n,l)=>n+l.qs.length,0);
+  $('#totalQ').textContent = total + ' заданий';
+  const el = $('#levels'); el.innerHTML='';
+  LEVELS.forEach((l,i)=>{
+    const b = document.createElement('button'); b.className='lvl'; b.type='button';
+    const bs = best[l.id];
+    b.innerHTML = `<span class="code">${esc(l.id)}</span><span class="t">${esc(l.en)}</span><span class="r">${esc(l.ru)}</span>
+      <span class="meta"><span>${l.qs.length} заданий</span>${bs!=null?`<span class="best">рекорд ${bs}%</span>`:'<span>не пройдено</span>'}</span>`;
+    b.onclick = ()=> startRun({name:l.id+' · '+l.en, key:l.id, qs:l.qs.map(q=>({...q,lvl:l.id}))});
+    el.appendChild(b);
+  });
+  const boss = document.createElement('button'); boss.className='boss'; boss.type='button';
+  const bb = best['final'];
+  boss.innerHTML = `<span class="code">СОЧ</span><span class="grow"><span class="t">Финальный СОЧ</span><br>
+    <span class="r">20 случайных заданий по всем темам 1.1 – 3.1, как на настоящем СОЧ. ${bb!=null?'Рекорд: '+bb+'%':'Пройди после тем.'}</span></span>
+    <span class="btn" style="background:var(--flame);border-color:var(--flame);color:#fff">Начать</span>`;
+  boss.onclick = ()=>{
+    const all = LEVELS.flatMap(l=>l.qs.map(q=>({...q,lvl:l.id})));
+    startRun({name:'Финальный СОЧ · 1.1–3.1', key:'final', qs:shuffle(all).slice(0,20), noShuffle:true});
+  };
+  el.appendChild(boss);
+  $('#ruToggle').checked = showRu;
+}
+
+/* ---------- QUIZ ---------- */
+function startRun(cfg){
+  run = {...cfg, qs: cfg.noShuffle ? cfg.qs : shuffle(cfg.qs), i:0, score:0, streak:0, bestStreak:0, xp:0, wrong:[]};
+  $('#qLevelName').textContent = run.name;
+  show('quiz'); renderQ();
+}
+function ruLine(t){ return showRu && t ? `<p class="qru">${esc(t)}</p>` : ''; }
+function renderQ(){
+  const q = run.qs[run.i], n = run.qs.length;
+  $('#qCount').textContent = (run.i+1)+'/'+n;
+  $('#qBar').style.width = (run.i/n*100)+'%';
+  const st = $('#qStreak'); st.hidden = run.streak<2; st.textContent = 'серия ×'+run.streak;
+  const card = $('#qCard'); card.classList.remove('pop'); void card.offsetWidth; card.classList.add('pop');
+  const tag = `<div class="qtag"><span class="label">Тема ${esc(q.lvl)}</span><span class="label">${q.t==='sort'?'распредели':'выбери ответ'}</span></div>`;
+  if(q.t==='sort') return renderSort(q, card, tag);
+  let opts = q.o.map((o,idx)=>({o,idx}));
+  if(!q.fixed) opts = shuffle(opts);
+  card.innerHTML = tag + `<p class="qen">${esc(q.en)}</p>${ruLine(q.ru)}
+    <div class="opts">${opts.map((x,k)=>`<button type="button" class="opt" data-idx="${x.idx}"><span class="k">${'ABCDE'[k]}</span><span class="ot">${esc(x.o[0])}${showRu?`<small>${esc(x.o[1])}</small>`:''}</span></button>`).join('')}</div>
+    <div id="fbBox"></div>
+    <div class="qactions"><span class="hint">Клавиши 1–${opts.length} для ответа, Enter — дальше</span><button class="btn primary" id="nextBtn" type="button" hidden>Дальше →</button></div>`;
+  card.querySelectorAll('.opt').forEach(b=> b.onclick = ()=> answerMC(q, +b.dataset.idx));
+  $('#nextBtn').onclick = next;
+}
+function answerMC(q, idx){
+  const ok = idx===q.a;
+  $('#qCard').querySelectorAll('.opt').forEach(b=>{
+    b.disabled = true; const i=+b.dataset.idx;
+    if(i===q.a) b.classList.add('correct'); else if(i===idx) b.classList.add('wrong');
+  });
+  grade(q, ok, q.o[q.a][0] + (q.o[q.a][1]!==q.o[q.a][0] ? ' — '+q.o[q.a][1] : ''));
+}
+function renderSort(q, card, tag){
+  const items = shuffle(q.items.map((it,k)=>({it,k})));
+  card.innerHTML = tag + `<p class="qen">${esc(q.en)}</p>${ruLine(q.ru)}
+    <div class="sort">${items.map(x=>`<div class="srow" data-k="${x.k}"><span class="it">${esc(x.it[0])}${showRu?`<small>${esc(x.it[1])}</small>`:''}</span>
+      <span class="seg" role="group">${q.cats.map((c,ci)=>`<button type="button" data-c="${ci}" title="${esc(c[1])}">${esc(c[0])}</button>`).join('')}</span></div>`).join('')}</div>
+    <div id="fbBox"></div>
+    <div class="qactions"><span class="hint" id="sortHint">Выбери вариант для каждой строки</span>
+      <span style="display:flex;gap:10px"><button class="btn primary" id="checkBtn" type="button" disabled>Проверить</button><button class="btn primary" id="nextBtn" type="button" hidden>Дальше →</button></span></div>`;
+  const choice = {};
+  card.querySelectorAll('.srow').forEach(row=>{
+    row.querySelectorAll('.seg button').forEach(b=> b.onclick = ()=>{
+      if(row.dataset.done) return;
+      row.querySelectorAll('.seg button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+      choice[row.dataset.k] = +b.dataset.c;
+      $('#checkBtn').disabled = Object.keys(choice).length < q.items.length;
+    });
+  });
+  $('#checkBtn').onclick = ()=>{
+    let right=0;
+    card.querySelectorAll('.srow').forEach(row=>{
+      row.dataset.done='1'; const it=q.items[+row.dataset.k]; const good = choice[row.dataset.k]===it[2];
+      row.classList.add(good?'ok':'no'); if(good) right++;
+      else row.insertAdjacentHTML('beforeend', `<span class="fix">Правильно: ${esc(q.cats[it[2]][0])} (${esc(q.cats[it[2]][1])})</span>`);
+      row.querySelectorAll('.seg button').forEach(x=>x.disabled=true);
+    });
+    $('#checkBtn').hidden = true;
+    const ok = right===q.items.length;
+    grade(q, ok, q.items.map(it=>it[0]+' → '+q.cats[it[2]][0]).join('; '), `${right} из ${q.items.length} верно. `);
+  };
+  $('#nextBtn').onclick = next;
+}
+function grade(q, ok, correctText, prefix=''){
+  if(ok){ run.score++; run.streak++; run.bestStreak=Math.max(run.bestStreak,run.streak); run.xp += 10 + Math.min(run.streak,5)*2; }
+  else { run.streak=0; run.wrong.push({q, correctText}); }
+  const st = $('#qStreak'); st.hidden = run.streak<2; st.textContent = 'серия ×'+run.streak;
+  $('#fbBox').innerHTML = `<div class="fb ${ok?'good':'bad'}"><span class="v">${ok?pick(praise):pick(oops)}</span>
+    <p>${esc(prefix)}${esc(q.ex)}</p>${q.term?`<span class="term">${esc(q.term)}</span>`:''}</div>`;
+  const nb = $('#nextBtn'); nb.hidden=false; nb.textContent = run.i===run.qs.length-1 ? 'Результат →' : 'Дальше →'; nb.focus({preventScroll:true});
+}
+function next(){ run.i++; if(run.i>=run.qs.length) return finish(); renderQ(); }
+
+document.addEventListener('keydown', e=>{
+  if($('#quiz').hidden) return;
+  const nb = $('#nextBtn');
+  if(e.key==='Enter' && nb && !nb.hidden){ e.preventDefault(); next(); return; }
+  const n = parseInt(e.key,10);
+  if(n>=1){ const b = $('#qCard').querySelectorAll('.opt')[n-1]; if(b && !b.disabled) b.click(); }
+});
+
+/* ---------- RESULTS ---------- */
+function finish(){
+  const n = run.qs.length, pct = Math.round(run.score/n*100);
+  const mark = pct>=85?5:pct>=65?4:pct>=40?3:2;
+  $('#qBar').style.width='100%';
+  const best = store.get('arsen_best', {});
+  const isRecord = best[run.key]==null || pct>best[run.key];
+  if(!run.isRetry && isRecord){ best[run.key]=pct; store.set('arsen_best', best); }
+  $('#rMark').textContent = mark; $('#rPct').textContent = pct+'%';
+  $('#rLevel').textContent = run.name;
+  $('#rTitle').textContent = mark===5?'Арсен, это уровень пятёрки!':mark===4?'Хороший результат, почти пятёрка':mark===3?'Есть база, но надо подтянуть':'Пора повторить тему';
+  $('#rMsg').textContent = run.wrong.length ? 'Ниже все ошибки с правильными ответами. Прочитай их и нажми «Повторить ошибки» — пройди, пока не будет 100%.' : 'Ни одной ошибки. Переходи к следующей теме или к Финальному СОЧ.';
+  $('#rNums').innerHTML = `<span class="pill">${run.score} из ${n} верно</span><span class="pill">+${run.xp} XP</span><span class="pill streak">лучшая серия ×${run.bestStreak}</span>${(!run.isRetry && isRecord)?'<span class="pill" style="border-color:var(--good);color:var(--good)">новый рекорд</span>':''}`;
+  $('#mistWrap').hidden = !run.wrong.length; $('#retryMist').hidden = !run.wrong.length;
+  $('#mistList').innerHTML = run.wrong.map(w=>`<div class="mi"><div class="label">Тема ${esc(w.q.lvl)}</div><div class="q">${esc(w.q.en)}</div>
+    ${showRu&&w.q.ru?`<div class="e">${esc(w.q.ru)}</div>`:''}<div class="a">✓ ${esc(w.correctText)}</div><div class="e">${esc(w.q.ex)}</div></div>`).join('');
+  show('results');
+}
+$('#retryMist').onclick = ()=>{ const qs = run.wrong.map(w=>w.q); const name=run.name; const key=run.key; startRun({name:'Работа над ошибками · '+name, key, qs}); run.isRetry=true; };
+$('#retryAll').onclick = ()=>{ const base = run.key==='final' ? null : LEVELS.find(l=>l.id===run.key);
+  if(base) startRun({name:base.id+' · '+base.en, key:base.id, qs:base.qs.map(q=>({...q,lvl:base.id}))});
+  else { const all = LEVELS.flatMap(l=>l.qs.map(q=>({...q,lvl:l.id}))); startRun({name:'Финальный СОЧ · 1.1–3.1', key:'final', qs:shuffle(all).slice(0,20), noShuffle:true}); } };
+$('#toHome').onclick = ()=>{ renderHome(); show('home'); };
+$('#quitBtn').onclick = ()=>{ renderHome(); show('home'); };
+
+/* ---------- CHEAT SHEET ---------- */
+$('#cheatBody').innerHTML = CHEAT.map(([code,title,pts])=>`<div class="cs"><h3><span class="code">${code}</span>${esc(title)}</h3><ul>${pts.map(p=>`<li>${p}</li>`).join('')}</ul></div>`).join('');
+$('#openCheat').onclick = ()=> show('cheat');
+$('#cheatBack').onclick = ()=> show('home');
+$('#ruToggle').onchange = e=>{ showRu = e.target.checked; store.set('arsen_ru', showRu); };
+
+renderHome();
+</script>
+
+</body></html>

@@ -1,0 +1,274 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>СОР Algebra 9 минимум</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;700;800&family=Caveat:wght@600;700&display=swap">
+<style>
+/* Layout: school notebook page in squares — red margin line, ink-blue headings, cards = sticky notes for rules, trainer = worksheet */
+:root{
+  --paper:#f6f8fb; --grid:#dfe7f2; --card:#ffffff; --ink:#1d3f8f; --text:#1c2230; --muted:#5b6578;
+  --red:#d2405a; --good:#1f8a4c; --goodbg:#e6f5ec; --badbg:#fdecef; --line:#d5dceb; --hl:#fff4c2;
+  --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#121722; --grid:#1c2433; --card:#19202e; --ink:#93b3ff; --text:#e6eaf2; --muted:#9aa4b8;
+  --red:#ff7d90; --good:#5fd394; --goodbg:#16301f; --badbg:#3a1c23; --line:#2b3446; --hl:#3a3415; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#121722; --grid:#1c2433; --card:#19202e; --ink:#93b3ff; --text:#e6eaf2; --muted:#9aa4b8;
+  --red:#ff7d90; --good:#5fd394; --goodbg:#16301f; --badbg:#3a1c23; --line:#2b3446; --hl:#3a3415; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--text);font-family:var(--f-body);font-size:16px;line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;}
+.wrap{max-width:860px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance;color:var(--ink);margin:0}
+h1{font-size:clamp(28px,6vw,40px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:24px;font-weight:800;margin-top:44px;padding-bottom:6px;border-bottom:2px solid var(--red)}
+h3{font-size:17px;font-weight:700}
+.hand{font-family:var(--f-hand);color:var(--red);font-size:22px;line-height:1.1}
+.lead{color:var(--muted);max-width:62ch;margin:8px 0 0}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+nav.toc a{color:var(--ink);text-decoration:none;border:1.5px solid var(--ink);border-radius:999px;padding:4px 12px;font-weight:500;font-size:14px;background:var(--card)}
+nav.toc a:hover,nav.toc a:focus-visible{background:var(--ink);color:var(--card);outline:none}
+.plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:20px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
+.step b{color:var(--red);font-family:var(--f-hand);font-size:26px;margin-right:6px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,370px),1fr));gap:14px;margin-top:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0;display:flex;flex-direction:column;gap:8px}
+.card p{margin:0}
+.card ul{margin:0;padding-left:20px}
+.rule{background:var(--hl);border-radius:6px;padding:6px 10px;font-weight:700}
+.en{font-weight:700;color:var(--ink)}
+.ru{color:var(--muted)}
+.fig{display:flex;justify-content:center}
+.fig svg{max-width:100%;height:auto}
+svg .s{stroke:var(--ink);stroke-width:2;fill:none}
+svg .s2{stroke:var(--red);stroke-width:2;fill:none}
+svg .d{fill:var(--ink)}
+svg text{fill:var(--text);font:600 13px var(--f-body)}
+svg .tr{fill:var(--red)}
+.trap{border-left:4px solid var(--red);background:var(--badbg);padding:8px 12px;border-radius:0 8px 8px 0}
+.algo{background:var(--card);border:2px dashed var(--ink);border-radius:12px;padding:14px 18px;margin-top:16px}
+.algo ol{margin:6px 0 0;padding-left:22px}
+/* trainer */
+.score{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.bar{flex:1 1 160px;height:10px;background:var(--grid);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--good);transition:width .3s}
+.q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:12px;display:flex;flex-direction:column;gap:10px}
+.q.ok{border-color:var(--good);background:var(--goodbg)}
+.q.bad{border-color:var(--red)}
+.qh{display:flex;gap:10px;align-items:baseline}
+.qn{font-family:var(--f-hand);font-size:24px;color:var(--red);min-width:28px}
+.qt{min-width:0}
+.qt .tag{display:inline-block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+input[type=text]{font:inherit;width:120px;padding:6px 10px;border:1.5px solid var(--line);border-radius:8px;background:var(--paper);color:var(--text)}
+input[type=text]:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
+button{font:inherit;font-weight:500;cursor:pointer;border-radius:8px;padding:6px 12px;border:1.5px solid var(--ink);background:var(--ink);color:var(--card)}
+button.ghost{background:transparent;color:var(--ink)}
+button.opt{background:var(--card);color:var(--text);border-color:var(--line)}
+button.opt.right{border-color:var(--good);background:var(--goodbg)}
+button.opt.wrong{border-color:var(--red);background:var(--badbg)}
+button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.msg{font-weight:700}
+.msg.ok{color:var(--good)} .msg.bad{color:var(--red)}
+.sol{border-top:1px dashed var(--line);padding-top:8px;color:var(--text)}
+.hint{color:var(--muted);font-style:italic}
+.tablewrap{overflow-x:auto;margin-top:14px;background:var(--card);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:15px}
+th,td{text-align:left;padding:7px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--ink);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+td:first-child{font-weight:700;color:var(--ink);white-space:nowrap}
+footer{margin-top:40px;color:var(--muted);font-size:14px}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+
+<div class="wrap">
+  <style>
+.rcp{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;display:grid;grid-template-columns:44px 1fr;gap:4px 12px;min-width:0}
+.rcp .num{grid-row:span 4;font-family:var(--f-hand);font-size:34px;color:var(--red);line-height:1}
+.rcp h3{font-size:17px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:13px;border:1px solid var(--ink);color:var(--ink);border-radius:999px;padding:1px 9px;background:var(--paper)}
+.do{font-weight:700}
+.ex{color:var(--muted)}
+.pri{display:inline-block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:1px 6px;margin-left:6px;vertical-align:middle}
+.pri.hi{background:var(--goodbg);color:var(--good)}
+.pri.lo{background:var(--badbg);color:var(--red)}
+.rlist{display:grid;gap:10px;margin-top:14px}
+.key{background:var(--hl);border-radius:10px;padding:14px 16px;margin-top:18px;font-size:17px}
+</style>
+<div class="wrap">
+  <div class="hand">Algebra 9 · СОР · самый минимум</div>
+  <h1>Прочитал, сдал, забыл</h1>
+  <p class="lead">Без теории. Только «увидел в задаче такие слова — делаешь так». Комбинаторика, разделы 2.1–2.3 (из 2.3 — только треугольник Паскаля).</p>
+  <div class="plan">
+    <div class="step"><b>1</b>Сегодня: прочитай 15 рецептов ниже (15 минут) и реши тренажёр.</div>
+    <div class="step"><b>2</b>Ошибся — нажми «Какой рецепт?», перечитай его и реши снова.</div>
+    <div class="step"><b>3</b>Завтра утром: нажми «Начать заново» и реши тренажёр ещё раз.</div>
+  </div>
+
+  <div class="key"><b>Главный вопрос на весь СОР:</b> если двоих выбранных поменять местами — что-то изменится?<br>
+  <b>Да</b> (места, роли, порядок) → просто перемножай. &nbsp; <b>Нет</b> (команда, группа) → перемножай и дели.</div>
+
+  <h2 id="rules">15 рецептов</h2>
+  <p class="lead"><span class="pri hi">часто</span> — встречается почти всегда, выучи обязательно. <span class="pri lo">редко</span> — если времени мало, можно пропустить.</p>
+  <div class="rlist">
+
+    <div class="rcp"><div class="num">1</div><h3>Выбрать ОДНО из нескольких групп <span class="pri hi">часто</span></h3>
+      <div class="chips"><span class="chip">or</span><span class="chip">buy one</span><span class="chip">pick only one</span></div>
+      <div class="do">Делай: СКЛАДЫВАЙ.</div>
+      <div class="ex">4 кофе и 3 чая, берёт один напиток → 4 + 3 = 7</div></div>
+
+    <div class="rcp"><div class="num">2</div><h3>Выбрать по одному из КАЖДОЙ группы <span class="pri hi">часто</span></h3>
+      <div class="chips"><span class="chip">and</span><span class="chip">outfit</span><span class="chip">routes A → B → C</span><span class="chip">meal: starter, main, dessert</span></div>
+      <div class="do">Делай: ПЕРЕМНОЖАЙ.</div>
+      <div class="ex">2 юбки и 3 рубашки → 2 · 3 = 6 нарядов</div></div>
+
+    <div class="rcp"><div class="num">3</div><h3>Факториал n! <span class="pri hi">часто</span></h3>
+      <div class="chips"><span class="chip">evaluate 5!</span><span class="chip">factorial</span></div>
+      <div class="do">Делай: перемножь все числа от n вниз до 1. Помни 0! = 1.</div>
+      <div class="ex">5! = 5 · 4 · 3 · 2 · 1 = 120. Дробь 8!/6! → сокращай: 8 · 7 = 56</div></div>
+
+    <div class="rcp"><div class="num">4</div><h3>Расставить ВСЕХ в ряд <span class="pri hi">часто</span></h3>
+      <div class="chips"><span class="chip">arranged</span><span class="chip">seated in a row</span><span class="chip">on a shelf</span><span class="chip">letters of the word</span></div>
+      <div class="do">Делай: n! (всего n предметов).</div>
+      <div class="ex">5 книг на полку → 5! = 120. Слово UNITY (5 разных букв) → 120</div></div>
+
+    <div class="rcp"><div class="num">5</div><h3>Места, призы, роли, числа из цифр <span class="pri hi">часто</span></h3>
+      <div class="chips"><span class="chip">1st, 2nd, 3rd</span><span class="chip">president, vice president</span><span class="chip">three-digit number</span><span class="chip">not repeated</span><span class="chip">P(n, r)</span></div>
+      <div class="do">Делай: перемножь r чисел, начиная с n и уменьшая на 1.</div>
+      <div class="ex">Призы 1-2-3 среди 8 → 8 · 7 · 6 = 336. P(7, 2) = 7 · 6 = 42</div></div>
+
+    <div class="rcp"><div class="num">6</div><h3>Выбрать группу, команду <span class="pri hi">часто</span></h3>
+      <div class="chips"><span class="chip">team</span><span class="chip">group</span><span class="chip">committee</span><span class="chip">choose / select</span><span class="chip">C(n, r)</span></div>
+      <div class="do">Делай: как в рецепте 5, потом РАЗДЕЛИ на r!</div>
+      <div class="ex">3 из 10 в команду → 10 · 9 · 8 = 720, делим на 3! = 6 → 120</div></div>
+
+    <div class="rcp"><div class="num">7</div><h3>Рукопожатия, прямые через точки <span class="pri hi">часто</span></h3>
+      <div class="chips"><span class="chip">shakes hands</span><span class="chip">lines through points</span></div>
+      <div class="do">Делай: n · (n − 1) : 2.</div>
+      <div class="ex">10 человек → 10 · 9 : 2 = 45</div></div>
+
+    <div class="rcp"><div class="num">8</div><h3>Можно повторять <span class="pri hi">часто</span></h3>
+      <div class="chips"><span class="chip">code</span><span class="chip">phone number</span><span class="chip">true / false test</span><span class="chip">repetition is allowed</span></div>
+      <div class="do">Делай: (вариантов на одно место) в степени (число мест).</div>
+      <div class="ex">Код из 4 цифр → 10⁴ = 10 000. Тест 5 вопросов да/нет → 2⁵ = 32</div></div>
+
+    <div class="rcp"><div class="num">9</div><h3>Выбрать из двух групп сразу <span class="pri lo">редко</span></h3>
+      <div class="chips"><span class="chip">3 boys and 2 girls</span><span class="chip">from each class</span></div>
+      <div class="do">Делай: посчитай каждую группу по рецепту 6 и ПЕРЕМНОЖЬ.</div>
+      <div class="ex">3 мальчика из 4 (= 4) и 2 девочки из 5 (= 10) → 4 · 10 = 40</div></div>
+
+    <div class="rcp"><div class="num">10</div><h3>Книги одного предмета вместе <span class="pri lo">редко</span></h3>
+      <div class="chips"><span class="chip">cannot be separated</span><span class="chip">must be together</span></div>
+      <div class="do">Делай: (сколько групп)! · (! каждой группы).</div>
+      <div class="ex">2 математики + 3 истории → 2! · 2! · 3! = 2 · 2 · 6 = 24</div></div>
+
+    <div class="rcp"><div class="num">11</div><h3>Треугольник Паскаля: достроить строку <span class="pri hi">часто</span></h3>
+      <div class="chips"><span class="chip">Pascal's triangle</span><span class="chip">row</span><span class="chip">missing number</span></div>
+      <div class="do">Делай: по краям 1, внутри — сумма двух чисел сверху.</div>
+      <div class="ex">1 · 1 1 · 1 2 1 · 1 3 3 1 · 1 4 6 4 1 · 1 5 10 10 5 1 · 1 6 15 20 15 6 1</div></div>
+
+    <div class="rcp"><div class="num">12</div><h3>Раскрыть (a + b)ⁿ <span class="pri hi">часто</span></h3>
+      <div class="chips"><span class="chip">expand</span><span class="chip">coefficient</span></div>
+      <div class="do">Делай: возьми строку n. Степень a идёт вниз, степень b — вверх. При минусе знаки чередуются.</div>
+      <div class="ex">(a + b)³ = a³ + 3a²b + 3ab² + b³; &nbsp;(a − b)³ = a³ − 3a²b + 3ab² − b³</div></div>
+
+    <div class="rcp"><div class="num">13</div><h3>Сколько членов в разложении <span class="pri hi">часто</span></h3>
+      <div class="chips"><span class="chip">how many terms</span></div>
+      <div class="do">Делай: степень + 1.</div>
+      <div class="ex">(4x − 5)¹³ → 14</div></div>
+
+    <div class="rcp"><div class="num">14</div><h3>Сумма коэффициентов <span class="pri hi">часто</span></h3>
+      <div class="chips"><span class="chip">sum of the coefficients</span></div>
+      <div class="do">Делай: вместо всех букв поставь 1 и посчитай.</div>
+      <div class="ex">(8a − 6b)⁹ → (8 − 6)⁹ = 2⁹ = 512</div></div>
+
+    <div class="rcp"><div class="num">15</div><h3>Свободный член <span class="pri hi">часто</span></h3>
+      <div class="chips"><span class="chip">constant term</span></div>
+      <div class="do">Делай: вместо буквы поставь 0 и посчитай.</div>
+      <div class="ex">(6m − 3)⁶ → (−3)⁶ = 729</div></div>
+  </div>
+
+  <h2 id="train">Тренажёр</h2>
+  <p class="lead">Около 20 минут. Номер рецепта спрятан под кнопкой «Какой рецепт?» — сначала попробуй узнать задачу сама.</p>
+  <div class="score" role="status">
+    <span><b id="sc">0</b> из <b id="tot">0</b> решено верно</span>
+    <div class="bar" aria-hidden="true"><i id="barfill"></i></div>
+    <button class="ghost" id="reset" type="button">Начать заново</button>
+  </div>
+  <div id="qs"></div>
+
+  <footer>По учебнику «Algebra, Grade 9» (Astana-kitap, 2023), глава 2. Пометки «часто» и «редко» — по задачам учебника, точный состав СОР знает только учитель.</footer>
+</div>
+
+<script>
+const Q = [
+ {r:1,q:"There are 4 types of coffee and 3 types of tea. Raimkhan buys one drink. How many choices?",a:7,s:"Выбирает одно → складываем: 4 + 3 = 7."},
+ {r:2,q:"Mereke has 5 t-shirts, 3 trousers and 2 pairs of shoes. How many different outfits?",a:30,s:"По одному из каждой группы → 5 · 3 · 2 = 30."},
+ {r:2,q:"There are 3 routes from Pavlodar to Semei and 4 routes from Semei to Oskemen. How many ways from Pavlodar to Oskemen?",a:12,s:"3 · 4 = 12."},
+ {r:3,q:"Evaluate 5!",a:120,s:"5 · 4 · 3 · 2 · 1 = 120."},
+ {r:3,q:"Evaluate 8! / 6!",a:56,s:"Сокращаем 6!, остаётся 8 · 7 = 56."},
+ {r:4,q:"In how many ways can 5 textbooks be arranged on a shelf?",a:120,s:"Все в ряд → 5! = 120."},
+ {r:4,q:"In how many ways can 4 students be seated in a row?",a:24,s:"4! = 4 · 3 · 2 · 1 = 24."},
+ {r:5,q:"In how many ways can we award 1st, 2nd and 3rd place among 8 contestants?",a:336,s:"8 · 7 · 6 = 336."},
+ {r:5,q:"How many three-digit numbers can be formed from the digits 1, 2, 3, 4, 5 if digits are not repeated?",a:60,s:"5 · 4 · 3 = 60."},
+ {r:5,q:"Evaluate P(7, 2).",a:42,s:"Два числа начиная с 7: 7 · 6 = 42."},
+ {r:6,q:"In how many ways can a coach choose a team of 3 players from 5?",a:10,s:"5 · 4 · 3 = 60, делим на 3! = 6 → 10."},
+ {r:6,q:"Find the number of groups of 3 students chosen from 10.",a:120,s:"10 · 9 · 8 = 720, делим на 6 → 120."},
+ {r:7,q:"In a group of 10 people, each person shakes hands with everyone else once. How many handshakes?",a:45,s:"10 · 9 : 2 = 45."},
+ {r:8,q:"A 4-digit code uses digits 0–9 (digits can repeat). How many different codes?",a:10000,s:"10 · 10 · 10 · 10 = 10 000."},
+ {r:8,q:"A test has 5 true/false questions. In how many ways can it be answered?",a:32,s:"2⁵ = 32."},
+ {r:9,q:"Choose 3 boys from 4 and 2 girls from 5. How many ways?",a:40,s:"Мальчики: 4 · 3 · 2 : 6 = 4. Девочки: 5 · 4 : 2 = 10. Итого 4 · 10 = 40."},
+ {r:10,q:"2 Math and 3 History books are arranged on a shelf so that similar subjects cannot be separated. How many ways?",a:24,s:"2 группы → 2!, внутри 2! и 3!: 2 · 2 · 6 = 24."},
+ {r:11,q:"Which is row 4 of Pascal's triangle?",opts:["1 3 3 1","1 4 4 1","1 4 6 4 1","1 5 10 10 5 1"],a:2,s:"Строка 4: 1 4 6 4 1 (6 = 3 + 3)."},
+ {r:11,q:"Row 5 of Pascal's triangle is 1 5 ? 10 5 1. Find the missing number.",a:10,s:"Строка 4: 1 4 6 4 1. Над пропуском 4 и 6 → 10."},
+ {r:12,q:"Expand (x + 1)³.",opts:["x³ + 1","x³ + 3x² + 3x + 1","x³ + 2x² + 2x + 1","x³ + 3x + 1"],a:1,s:"Строка 3: 1 3 3 1 → x³ + 3x² + 3x + 1."},
+ {r:12,q:"Find the coefficient of a²b in the expansion of (a + b)³.",a:3,s:"Строка 3: 1 3 3 1. Член a²b — второй, коэффициент 3."},
+ {r:13,q:"How many terms are there in the expansion of (a + b)⁹?",a:10,s:"9 + 1 = 10."},
+ {r:14,q:"Find the sum of the coefficients in the expansion of (2x + y)³.",a:27,s:"Ставим 1: (2 + 1)³ = 3³ = 27."},
+ {r:15,q:"Find the constant term in the expansion of (x − 2)⁴.",a:16,s:"Ставим x = 0: (−2)⁴ = 16."},
+];
+const KEY="sor-alg9-min-v1";
+let st={};
+try{st=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){st={}}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const box=document.getElementById("qs");
+document.getElementById("tot").textContent=Q.length;
+function upd(){const n=Object.values(st).filter(v=>v==="ok").length;document.getElementById("sc").textContent=n;document.getElementById("barfill").style.width=(n/Q.length*100)+"%";}
+function render(){
+ box.innerHTML="";
+ Q.forEach((it,i)=>{
+  const d=document.createElement("div");d.className="q";d.id="q"+i;
+  d.innerHTML=`<div class="qh"><span class="qn">${i+1}</span><div class="qt"><div>${it.q}</div></div></div>`;
+  const row=document.createElement("div");row.className="row";
+  const msg=document.createElement("span");msg.className="msg";
+  const sol=document.createElement("div");sol.className="sol";sol.hidden=true;sol.innerHTML="<b>Решение:</b> "+it.s;
+  const hint=document.createElement("div");hint.className="hint";hint.hidden=true;hint.textContent="Рецепт № "+it.r+" — пролистай вверх и перечитай его.";
+  const mark=(ok)=>{d.classList.toggle("ok",ok);d.classList.toggle("bad",!ok);msg.className="msg "+(ok?"ok":"bad");msg.textContent=ok?"Верно!":"Пока нет, попробуй ещё";if(ok)sol.hidden=false;if(st[i]!=="ok"){st[i]=ok?"ok":"bad";save();upd();}};
+  if(it.opts){
+   it.opts.forEach((o,k)=>{const b=document.createElement("button");b.type="button";b.className="opt";b.textContent=o;
+    b.onclick=()=>{row.querySelectorAll(".opt").forEach(x=>x.classList.remove("right","wrong"));b.classList.add(k===it.a?"right":"wrong");mark(k===it.a);};row.appendChild(b);});
+  }else{
+   const inp=document.createElement("input");inp.type="text";inp.id="in"+i;inp.inputMode="numeric";inp.placeholder="ответ";inp.setAttribute("aria-label","Ответ к задаче "+(i+1));
+   const chk=document.createElement("button");chk.type="button";chk.textContent="Проверить";
+   const go=()=>{const v=parseFloat(inp.value.replace(",",".").replace(/[−–]/g,"-").replace(/\s/g,"").replace(/[^0-9.\-]/g,""));if(isNaN(v)){msg.className="msg bad";msg.textContent="Впиши число";return;}mark(Math.abs(v-it.a)<0.001);};
+   chk.onclick=go;inp.addEventListener("keydown",e=>{if(e.key==="Enter")go();});
+   row.append(inp,chk);
+  }
+  const hb=document.createElement("button");hb.type="button";hb.className="ghost";hb.textContent="Какой рецепт?";hb.onclick=()=>{hint.hidden=!hint.hidden;};
+  const sb=document.createElement("button");sb.type="button";sb.className="ghost";sb.textContent="Решение";sb.onclick=()=>{sol.hidden=!sol.hidden;};
+  row.append(hb,sb,msg);
+  d.append(row,hint,sol);
+  if(st[i]==="ok"){d.classList.add("ok");msg.className="msg ok";msg.textContent="Решено";}
+  box.appendChild(d);
+ });
+ upd();
+}
+document.getElementById("reset").onclick=()=>{st={};save();render();};
+render();
+</script>
+
+</body></html>
