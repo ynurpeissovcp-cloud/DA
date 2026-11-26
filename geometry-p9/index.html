@@ -1,0 +1,340 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Геометрия · Practice 9 · с. 75</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Layout: тетрадь в клетку, одна колонка: 5 шагов объяснения → разминка → домашка с проверкой */
+:root{
+  --paper:#f6f8fc; --grid:rgba(60,90,170,.07); --card:#ffffff; --ink:#1b2236; --muted:#5d6782;
+  --pen:#2546c4; --pen-soft:#e6ebfb; --red:#c4382e; --red-soft:#fbe9e7; --line:#dde3f0;
+  --amber:#a8670f; --amber-soft:#fdf1dc; --ok:#1f8a57; --ok-soft:#e3f4ea;
+  --dom:#2546c4; --dom-soft:#dfe6fb; --ran:#0f8a6a; --ran-soft:#dcf2ea;
+  --display:"Unbounded","Golos Text",system-ui,sans-serif; --body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#11151e; --grid:rgba(140,165,240,.06); --card:#191f2c; --ink:#e7ebf5; --muted:#9aa4bf;
+  --pen:#8aa2ff; --pen-soft:#232d4a; --red:#ff8a7e; --red-soft:#3a2224; --line:#2a3245;
+  --amber:#f0b75a; --amber-soft:#382c17; --ok:#5fd39a; --ok-soft:#1d3329;
+  --dom:#8aa2ff; --dom-soft:#232d4a; --ran:#4fd1a8; --ran-soft:#173229; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#11151e; --grid:rgba(140,165,240,.06); --card:#191f2c; --ink:#e7ebf5; --muted:#9aa4bf;
+  --pen:#8aa2ff; --pen-soft:#232d4a; --red:#ff8a7e; --red-soft:#3a2224; --line:#2a3245;
+  --amber:#f0b75a; --amber-soft:#382c17; --ok:#5fd39a; --ok-soft:#1d3329;
+  --dom:#8aa2ff; --dom-soft:#232d4a; --ran:#4fd1a8; --ran-soft:#173229; color-scheme:dark}
+[hidden]{display:none!important}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px}
+.wrap{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 64px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--pen);font-weight:600}
+h1{font-family:var(--display);font-size:clamp(23px,5vw,32px);line-height:1.15;margin:6px 0 10px;text-wrap:balance}
+h2{font-family:var(--display);font-weight:500;font-size:19px;margin:0 0 12px;text-wrap:balance;display:flex;gap:10px;align-items:baseline}
+h2 span{font-size:12.5px;color:var(--pen);flex:none}
+.lead{color:var(--muted);margin:0;max-width:62ch}
+section{margin-top:34px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px;min-width:0}
+.card>p:first-child{margin-top:0}.card>p:last-child{margin-bottom:0}
+.D{color:var(--dom);font-weight:700}.E{color:var(--ran);font-weight:700}
+.big2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.big2>div{border-radius:10px;padding:12px;min-width:0}
+.big2 .d{background:var(--dom-soft)}.big2 .e{background:var(--ran-soft)}
+.big2 b{font-family:var(--display);font-weight:500;font-size:15px;display:block;margin-bottom:2px}
+.big2 .d b{color:var(--dom)}.big2 .e b{color:var(--ran)}
+@media (max-width:480px){.big2{grid-template-columns:1fr}}
+.rule{border-left:3px solid var(--pen);background:var(--pen-soft);padding:10px 12px;border-radius:0 8px 8px 0;margin:12px 0}
+.pairs{display:flex;flex-wrap:wrap;gap:6px;font-variant-numeric:tabular-nums;font-size:17px;margin:8px 0}
+.pairs span{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:3px 8px}
+.ex{display:grid;gap:4px;margin:8px 0}
+.ex div{padding-left:12px}
+.note{font-size:14px;color:var(--muted)}
+.prog{display:flex;align-items:center;gap:12px;font-size:14px;font-variant-numeric:tabular-nums;margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.track{flex:1;height:8px;background:var(--pen-soft);border-radius:4px;overflow:hidden}
+.fill{height:100%;background:var(--ok);width:0;transition:width .3s}
+.notation{width:100%;border-collapse:collapse;font-size:15px}
+.notation td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.notation td:first-child{font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tbl-wrap{overflow-x:auto}
+/* demo */
+.demo-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.pick{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:6px 12px;border-radius:20px;cursor:pointer}
+.pick[aria-pressed="true"]{background:var(--pen);color:var(--card);border-color:var(--pen)}
+.demo-out{margin-top:6px;font-variant-numeric:tabular-nums}
+/* figures */
+.fig{display:block;width:100%;max-width:300px;height:auto;color:var(--ink)}
+.fig .g{stroke:var(--line);stroke-width:1}
+.fig .ax{stroke:var(--ink);stroke-width:1.4}
+.fig text{fill:var(--muted);font-size:10.5px;font-family:var(--body)}
+.fig .pt{fill:var(--red)}
+.fig .cv{stroke:var(--red);stroke-width:2.2;fill:none}
+.fig .end{fill:var(--red)}
+.fig .bandD{stroke:var(--dom);stroke-width:6;stroke-linecap:round;opacity:.85}
+.fig .bandE{stroke:var(--ran);stroke-width:6;stroke-linecap:round;opacity:.85}
+.fig .tickD{fill:var(--dom)}.fig .tickE{fill:var(--ran)}
+.fig .drop{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3}
+.fig .arD{fill:var(--dom)}.fig .arE{fill:var(--ran)}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:6px 0}
+/* tasks */
+.task{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px;min-width:0}
+.task.done{border-color:var(--ok)}
+.tno{font-family:var(--display);font-size:13px;color:var(--pen);display:block;margin-bottom:4px}
+.task.done .tno::after{content:" ✓";color:var(--ok)}
+.en{font-style:italic;color:var(--muted);font-size:14.5px;margin:0 0 4px}
+.ru{margin:0 0 6px}
+.like{font-size:13.5px;color:var(--muted);margin:0 0 6px}
+.item{border-top:1px dashed var(--line);padding-top:12px;margin-top:12px;min-width:0}
+.ilabel{font-weight:600;margin-bottom:6px}
+.ask{font-weight:600;margin:8px 0 4px;font-variant-numeric:tabular-nums}
+.kinds{display:flex;flex-wrap:wrap;gap:6px}
+.kind{font:inherit;font-size:14px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);padding:5px 10px;border-radius:8px;cursor:pointer;font-variant-numeric:tabular-nums}
+.kind[aria-pressed="true"]{border-color:var(--pen);background:var(--pen-soft);font-weight:600}
+.slot{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px;font-size:17px;font-variant-numeric:tabular-nums}
+.slot input{width:84px}
+.slot input.wide{width:auto;flex:1;min-width:0;max-width:300px}
+.irow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.irow input{flex:1;min-width:0;max-width:280px}
+input.ans{font:inherit;font-size:17px;padding:7px 10px;border:1.5px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);font-variant-numeric:tabular-nums}
+input.ans:focus-visible{outline:2px solid var(--pen);outline-offset:1px}
+.item.good input.ans{border-color:var(--ok);background:var(--ok-soft)}
+.pre{font-weight:600;white-space:nowrap}
+button{font:inherit;font-size:14.5px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:7px 13px;border-radius:8px;cursor:pointer}
+button:hover{border-color:var(--pen)}
+button:focus-visible,.kind:focus-visible,.pick:focus-visible{outline:2px solid var(--pen);outline-offset:2px}
+button.go{background:var(--pen);color:var(--card);border-color:var(--pen);font-weight:600;margin-top:10px}
+.choices{display:grid;gap:6px;margin-top:6px}
+.choices button{text-align:left}
+.choices button.on{border-color:var(--pen);background:var(--pen-soft)}
+.fb{margin-top:8px;font-size:15px}
+.msg{padding:8px 11px;border-radius:8px;margin-top:6px}
+.msg.ok{background:var(--ok-soft)}.msg.ok b{color:var(--ok)}
+.msg.no{background:var(--red-soft)}
+.msg.hint{background:var(--amber-soft)}.msg.hint b{color:var(--amber)}
+.msg.sol{background:var(--pen-soft)}
+.msg.sol ol{margin:4px 0 0;padding-left:20px}
+.foot{margin-top:24px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:14px}
+sup{font-size:.72em;line-height:0}
+@media (prefers-reduced-motion:reduce){.fill{transition:none}}
+</style>
+<style>
+.slider-row{display:flex;align-items:center;gap:10px;margin:6px 0;flex-wrap:wrap}
+.slider-row label{font-weight:700;min-width:22px}
+.slider-row input[type=range]{flex:1;min-width:150px;accent-color:var(--pen)}
+.slider-row output{min-width:44px;font-variant-numeric:tabular-nums;font-weight:600}
+.mval{font-family:var(--display);font-size:21px;margin:4px 0 6px;font-variant-numeric:tabular-nums;color:var(--pen)}
+.fig .ln{stroke:var(--pen);stroke-width:2.6;fill:none}
+.fig .ln2{stroke:var(--muted);stroke-width:1.6;fill:none;stroke-dasharray:5 4}
+.fig .nmark{fill:var(--ran)}
+.vals{border-collapse:collapse;font-variant-numeric:tabular-nums;margin:6px 0}
+.vals th,.vals td{border:1px solid var(--line);padding:0;text-align:center;min-width:54px;height:40px}
+.vals th{background:var(--pen-soft);color:var(--pen);padding:0 8px}
+.vals td.g{font-weight:600;padding:0 8px}
+.vals td.pair{color:var(--muted);padding:0 8px;min-width:76px}
+.vals input.ans{width:64px;border:0;border-radius:0;text-align:center;padding:7px 2px;font-size:16px;background:transparent}
+.vals input.ans.good{background:var(--ok-soft)}
+.vals input.ans.bad{background:var(--red-soft)}
+.plot{display:block;width:100%;max-width:340px;height:auto;touch-action:manipulation;cursor:crosshair;border:1px solid var(--line);border-radius:10px;background:var(--card);user-select:none;-webkit-user-select:none}
+.plot .g{stroke:var(--line);stroke-width:1}
+.plot .ax{stroke:var(--ink);stroke-width:1.4}
+.plot text{fill:var(--muted);font-size:10.5px;font-family:var(--body)}
+.plot .good{fill:var(--ok)}.plot .bad{fill:var(--red)}
+.plot .ln{stroke:var(--pen);stroke-width:2.6}
+.step-h{font-weight:600;margin:10px 0 4px;color:var(--pen);font-size:14.5px}
+.locked{opacity:.45;pointer-events:none}
+.keys{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.keys button{padding:4px 0;width:38px;font-size:15px}
+.ex div b{color:var(--pen)}
+</style>
+
+<style>
+.tri{display:block;width:100%;height:auto;max-width:420px;margin:6px auto}
+.tri .s{stroke:#1aa3d9;stroke-width:3;fill:none;stroke-linejoin:round}
+.tri .s.hl{stroke:var(--amber);stroke-width:6}
+.tri .s.inc{stroke:var(--ok);stroke-width:6}
+.tri .tk,.tri .ar{stroke:var(--red);stroke-width:2.4;fill:none}
+.tri .ar.hl{stroke:var(--pen);stroke-width:3.2}
+.tri text{fill:var(--ink);font:600 20px var(--body)}
+.tri circle{fill:var(--ink)}
+.signs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:8px 0}
+.signs>div{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:8px;min-width:0}
+.signs b{font-family:var(--display);font-weight:500;color:var(--pen);display:block}
+.signs small{display:block;color:var(--muted);font-size:13px;line-height:1.35}
+.signs .tri{max-width:160px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:14.5px;margin:6px 0}
+.algo{counter-reset:a;list-style:none;padding:0;margin:8px 0}
+.algo li{counter-increment:a;padding:6px 0 6px 34px;position:relative;border-bottom:1px dashed var(--line)}
+.algo li::before{content:counter(a);position:absolute;left:0;top:6px;width:24px;height:24px;border-radius:50%;background:var(--pen-soft);color:var(--pen);font-weight:700;text-align:center;line-height:24px;font-size:13px}
+.opts{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.opts .kind.good{border-color:var(--ok);background:var(--ok-soft)}
+.opts .kind.bad{border-color:var(--red);background:var(--red-soft)}
+.sub{font-weight:600;margin:12px 0 2px}
+.sub.locked{opacity:.45}
+.lockwrap.locked{opacity:.45;pointer-events:none}
+.readout{margin-top:6px;min-height:48px}
+</style>
+<div class="wrap">
+  <div class="eyebrow">Геометрия 7 · 2.4 · Congruence of triangles</div>
+  <h1>Признаки равенства треугольников: Practice 9</h1>
+  <p class="lead">Сначала 4 коротких шага, потом разминка. Домашку страница проверяет сама. Если ошибёшься, появится подсказка, а решение откроется только после трёх неудачных попыток.</p>
+  <div class="prog"><span>Домашка:</span><div class="track"><div class="fill" id="pf"></div></div><span id="pt">0 из 3</span></div>
+
+  <section>
+    <h2><span>Шаг 1</span>Как читать значки на чертеже</h2>
+    <div class="card">
+      <div class="legend"><span><b style="color:var(--red)">|</b> черточки на сторонах — эти <b>стороны равны</b></span><span><b style="color:var(--red)">◠</b> дужки у углов — эти <b>углы равны</b></span></div>
+      <p>Одинаковое число значков = одинаковые. Одна черточка равна одной черточке, двойная дужка — двойной дужке.</p>
+      <p class="note">≅ (congruent) значит «равны»: совпадут, если наложить. S = side (сторона), A = angle (угол).</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 2</span>Четыре признака</h2>
+    <div class="card">
+      <div class="signs" id="signs"></div>
+      <div class="rule">Только углы (AAA) или две стороны и угол <b>не между ними</b> (SSA) — <b>not possible</b>: этого мало, треугольники могут оказаться разными.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 3</span>Сторона между углами или нет? (самое важное)</h2>
+    <div class="card">
+      <p>У треугольника ABC отмечены углы <b>A</b> и <b>B</b>. Нажми на сторону и посмотри, «между» ли она этими углами.</p>
+      <div id="incFig"></div>
+      <div class="opts" id="incBtns"></div>
+      <div class="readout" id="incOut"></div>
+      <div class="rule">Сторона <b>между</b> углами (included) соединяет их вершины: у углов A и B это AB → <b>ASA</b>.<br>Сторона <b>не между</b> (nonincluded) — любая другая → <b>AAS</b>.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 4</span>Алгоритм</h2>
+    <div class="card">
+      <ol class="algo">
+        <li>Посчитай, сколько отмечено <b>сторон</b> и сколько <b>углов</b>.</li>
+        <li>3 стороны → <b>SSS</b>.</li>
+        <li>2 стороны и угол → угол между ними? Да → <b>SAS</b>. Нет → not possible.</li>
+        <li>2 угла и сторона → сторона между ними? Да → <b>ASA</b>. Нет → <b>AAS</b>.</li>
+        <li>Только углы → <b>not possible</b>.</li>
+        <li>Для записи △… ≅ △… сопоставь вершины по значкам: вершина с двойной дужкой ↔ вершина с двойной дужкой и т. д.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 5</span>Разминка</h2>
+    <p class="lead" style="margin-bottom:12px">Такие же задачи, но с другими треугольниками.</p>
+    <div id="warm"></div>
+  </section>
+
+  <section>
+    <h2><span>Шаг 6</span>Домашка: Practice 9, с. 75</h2>
+    <p class="lead" style="margin-bottom:12px">Чертежи перерисованы с учебника. Засчитанные ответы перепиши в тетрадь.</p>
+    <div id="hw"></div>
+  </section>
+
+  <div class="foot"><span>Учебник Geometry 7, с. 73–75</span><button type="button" id="reset">Начать заново</button></div>
+</div>
+<script>
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+/* ---------- чертёж треугольников ---------- */
+function tri(d){
+  const P=d.P,tris=d.tris;let s="";const k=Math.max(1,+d.vb.split(" ")[2]/400),sw=`style="stroke-width:${3*k}px"`;
+  const tOf=v=>tris.find(t=>t.includes(v));
+  const cen=t=>[0,1].map(k=>(P[t[0]][k]+P[t[1]][k]+P[t[2]][k])/3);
+  const hs=d.hl&&d.hl.side?d.hl.side.slice().sort().join(""):"";
+  tris.forEach(t=>{for(let i=0;i<3;i++){const a=t[i],b=t[(i+1)%3];const key=[a,b].sort().join("");
+    s+=`<line class="s${key===hs?" "+d.hl.cls:""}" ${key===hs?"":sw} x1="${P[a][0]}" y1="${P[a][1]}" x2="${P[b][0]}" y2="${P[b][1]}" stroke-linecap="round"/>`}});
+  (d.ticks||[]).forEach(([a,b,n])=>{const[x1,y1]=P[a],[x2,y2]=P[b],L=Math.hypot(x2-x1,y2-y1),ux=(x2-x1)/L,uy=(y2-y1)/L,nx=-uy,ny=ux,mx=(x1+x2)/2,my=(y1+y2)/2;
+    for(let j=0;j<n;j++){const o=(j-(n-1)/2)*7*k,q=9*k;s+=`<line class="tk" style="stroke-width:${2.4*k}px" x1="${mx+ux*o-nx*q}" y1="${my+uy*o-ny*q}" x2="${mx+ux*o+nx*q}" y2="${my+uy*o+ny*q}"/>`}});
+  (d.arcs||[]).forEach(([v,n])=>{const t=tOf(v),o=t.filter(x=>x!==v),[vx,vy]=P[v];
+    const a1=Math.atan2(P[o[0]][1]-vy,P[o[0]][0]-vx),a2=Math.atan2(P[o[1]][1]-vy,P[o[1]][0]-vx);
+    let da=a2-a1;while(da>Math.PI)da-=2*Math.PI;while(da<-Math.PI)da+=2*Math.PI;const sw=da>0?1:0;
+    const hl=(d.arcHl||[]).includes(v);
+    for(let j=0;j<n;j++){const r=(22+j*6)*k;s+=`<path class="ar${hl?" hl":""}" style="stroke-width:${(hl?3.2:2.4)*k}px" d="M${vx+r*Math.cos(a1)},${vy+r*Math.sin(a1)} A${r},${r} 0 0 ${sw} ${vx+r*Math.cos(a2)},${vy+r*Math.sin(a2)}"/>`}});
+  tris.forEach(t=>{const c=cen(t);t.forEach(v=>{const[x,y]=P[v],dx=x-c[0],dy=y-c[1],L=Math.hypot(dx,dy)||1;
+    s+=`<circle cx="${x}" cy="${y}" r="${3.5*k}"/><text style="font-size:${20*k}px" x="${x+dx/L*22*k-7*k}" y="${y+dy/L*22*k+7*k}">${v}</text>`})});
+  return `<svg class="tri" viewBox="${d.vb}" role="img" aria-label="${esc(d.label||"чертёж")}">${s}</svg>`}
+
+/* ---------- шаг 2: признаки ---------- */
+const T1={A:[30,150],B:[150,150],C:[95,40]};
+const SIGNS=[
+ ["SSS","3 стороны равны",{ticks:[["A","B",1],["B","C",2],["C","A",3]]}],
+ ["SAS","2 стороны и угол <b>между</b> ними",{ticks:[["A","B",1],["C","A",2]],arcs:[["A",1]]}],
+ ["ASA","2 угла и сторона <b>между</b> ними",{arcs:[["A",1],["B",2]],ticks:[["A","B",1]]}],
+ ["AAS","2 угла и сторона <b>не между</b> ними",{arcs:[["A",1],["B",2]],ticks:[["B","C",1]]}]];
+document.getElementById("signs").innerHTML=SIGNS.map(([n,t,d])=>`<div><b>${n}</b><small>${t}</small>${tri(Object.assign({vb:"0 10 190 175",P:T1,tris:[["A","B","C"]],label:n},d))}</div>`).join("");
+
+/* ---------- шаг 3: интерактив ---------- */
+const T3={A:[40,220],B:[330,220],C:[210,50]};
+function incDraw(side){const inc=side==="AB";
+  document.getElementById("incFig").innerHTML=tri({vb:"0 20 380 240",P:T3,tris:[["A","B","C"]],arcs:[["A",1],["B",2]],arcHl:["A","B"],hl:side?{side:[...side],cls:inc?"inc":"hl"}:null,label:"Треугольник ABC"});
+  const o=document.getElementById("incOut");
+  if(!side)o.innerHTML='<span class="note">Нажми AB, BC или CA.</span>';
+  else if(inc)o.innerHTML=`<div class="msg ok"><b>AB — между углами (included).</b> Она соединяет как раз вершины A и B. Углы A, B + сторона AB → <b>ASA</b>.</div>`;
+  else o.innerHTML=`<div class="msg hint"><b>${side} — не между углами (nonincluded).</b> Она не соединяет вершины A и B. Углы A, B + сторона ${side} → <b>AAS</b>.</div>`;
+  document.querySelectorAll("#incBtns .kind").forEach(b=>b.setAttribute("aria-pressed",b.textContent===side?"true":"false"))}
+["AB","BC","CA"].forEach(sd=>{const b=document.createElement("button");b.type="button";b.className="kind";b.textContent=sd;b.onclick=()=>incDraw(sd);document.getElementById("incBtns").appendChild(b)});
+incDraw(null);
+
+/* ---------- задания ---------- */
+const SG=["SSS","SAS","ASA","AAS","not possible"];
+const pair=(extra)=>Object.assign({vb:"0 0 440 200",P:{A:[20,170],B:[190,170],C:[120,40],D:[250,170],E:[420,170],F:[350,40]},tris:[["A","B","C"],["D","E","F"]]},extra);
+const WARM=[
+ {id:"w1",title:"Разминка 1",ru:"Какой признак здесь? Если доказать нельзя — not possible.",fig:pair({ticks:[["A","B",1],["B","C",2],["C","A",3],["D","E",1],["E","F",2],["F","D",3]]}),steps:[
+  {q:"Признак:",opts:SG,ans:"SSS",hints:["Посчитай черточки: сколько пар сторон отмечено?","Отмечены все 3 стороны, углов нет."],sol:"Все три стороны равны → SSS"}]},
+ {id:"w2",title:"Разминка 2",ru:"Какой признак здесь?",fig:pair({ticks:[["A","B",1],["C","A",2],["D","E",1],["F","D",2]],arcs:[["A",1],["D",1]]}),steps:[
+  {q:"Признак:",opts:SG,ans:"SAS",wrong:{"ASA":"Здесь отмечены две стороны и один угол, а ASA — это два угла."},hints:["Отмечены 2 стороны (AB и AC) и угол A.","Угол A лежит между сторонами AB и AC: они обе выходят из A."],sol:"AB, ∠A, AC — угол между сторонами → SAS"}]},
+ {id:"w3",title:"Разминка 3",ru:"Какой признак здесь?",fig:pair({arcs:[["A",1],["B",2],["D",1],["E",2]],ticks:[["B","C",1],["E","F",1]]}),steps:[
+  {q:"Признак:",opts:SG,ans:"AAS",wrong:{"ASA":"Сторона между углами A и B — это AB. А отмечена BC, она не между ними."},hints:["Отмечены 2 угла (A и B) и сторона BC.","Между углами A и B лежит AB. BC не между → значит, не ASA."],sol:"∠A, ∠B и BC (не между ними) → AAS"}]},
+ {id:"w4",title:"Разминка 4 (с подвохом)",ru:"Какой признак здесь?",fig:pair({ticks:[["A","B",1],["B","C",2],["D","E",1],["E","F",2]],arcs:[["A",1],["D",1]]}),steps:[
+  {q:"Признак:",opts:SG,ans:"not possible",wrong:{"SAS":"Стороны AB и BC выходят из вершины B, а отмечен угол A. Угол не между сторонами."},hints:["Две стороны AB и BC и угол A. Где встречаются AB и BC?","AB и BC встречаются в B. Угол A — не между ними (это SSA), так доказать нельзя."],sol:"AB, BC и ∠A — угол не между сторонами (SSA) → not possible"}]},
+ {id:"w5",title:"Разминка 5 (как № 1)",ru:"В △ABC и △DEF отмечены AB ≅ DE и ∠A ≅ ∠D. Какую ещё пару углов отметить, чтобы получился AAS?",fig:pair({ticks:[["A","B",1],["D","E",1]],arcs:[["A",1],["D",1]]}),steps:[
+  {q:"Пара углов:",opts:["∠B и ∠E","∠C и ∠F"],ans:"∠C и ∠F",wrong:{"∠B и ∠E":"Тогда AB окажется между отмеченными углами A и B — это ASA, а нужен AAS."},hints:["Для AAS сторона AB не должна быть между двумя отмеченными углами.","AB лежит между A и B. Значит, второй угол — не B."],sol:"∠C ≅ ∠F: углы A, C и сторона AB не между ними → AAS"}]}
+];
+const HW=[
+ {id:"h1",title:"№ 1",en:"△DEF and △LMN each have one pair of sides and one pair of angles marked to show congruence. What other pair of angles must be marked so that the two triangles are congruent by AAS Congruence Theorem?",ru:"Отмечены DF ≅ LM и ∠F ≅ ∠M. Какую ещё пару углов отметить, чтобы треугольники были равны по AAS?",
+  fig:{vb:"60 50 560 720",P:{D:[125,128],F:[130,600],E:[330,730],L:[185,95],M:[565,380],N:[550,620]},tris:[["D","E","F"],["L","M","N"]],ticks:[["D","F",1],["L","M",1]],arcs:[["F",1],["M",1]],label:"Треугольники DEF и LMN"},
+  steps:[
+  {q:"Шаг 1. Какая вершина соответствует F? (у них одинаковая дужка)",opts:["L","M","N"],ans:"M",hints:["Найди в △LMN угол с такой же дужкой, как у F."],sol:"F ↔ M. Тогда D ↔ L (концы равных сторон DF и LM), E ↔ N"},
+  {q:"Шаг 2. Какую пару углов отметить?",opts:["∠D и ∠L","∠E и ∠N","∠D и ∠N","∠E и ∠L"],ans:"∠E и ∠N",wrong:{"∠D и ∠L":"Тогда сторона DF окажется между отмеченными углами D и F — это ASA, а не AAS.","∠D и ∠N":"D и N не соответствуют друг другу: D ↔ L, E ↔ N.","∠E и ∠L":"E и L не соответствуют друг другу: D ↔ L, E ↔ N."},hints:["Сторона DF соединяет вершины D и F. Для AAS второй угол не должен быть в конце DF.","В △DEF остался угол E, а ему соответствует N."],sol:"∠E ≅ ∠N: углы F, E и сторона DF не между ними → AAS"}]},
+ {id:"h2a",title:"№ 2 a",en:"Determine whether each pair of triangles is congruent by SSS, SAS, ASA and AAS. If it is not possible to prove that they are congruent, write not possible.",ru:"Каким признаком равны треугольники? Если доказать нельзя — not possible.",
+  fig:{vb:"70 70 620 540",P:{G:[183,222],H:[530,125],I:[640,293],J:[125,308],K:[480,357],L:[510,565]},tris:[["G","H","I"],["J","K","L"]],ticks:[["G","H",1],["J","K",1]],arcs:[["G",2],["J",2],["H",1],["K",1]],label:"Треугольники GHI и JKL"},
+  steps:[
+  {q:"Шаг 1. Признак:",opts:SG,ans:"ASA",wrong:{"AAS":"Сторона GH соединяет вершины G и H, а углы отмечены как раз у G и H. Значит, она между углами.","SAS":"Отмечена только одна пара сторон, а для SAS нужны две."},hints:["Что отмечено: сколько сторон и сколько углов?","Углы G и H, сторона GH. GH соединяет G и H — она между ними."],sol:"∠G ≅ ∠J, GH ≅ JK, ∠H ≅ ∠K — сторона между углами → ASA"},
+  {q:"Шаг 2. Запиши равенство: △GHI ≅ △…",opts:["JKL","KJL","JLK"],ans:"JKL",hints:["Вершины идут в том же порядке: G (двойная дужка) ↔ J (двойная дужка), H ↔ K, I ↔ L."],sol:"△GHI ≅ △JKL by ASA"}]},
+ {id:"h2b",title:"№ 2 b",en:"Determine whether each pair of triangles is congruent by SSS, SAS, ASA and AAS. If it is not possible, write not possible.",ru:"Каким признаком равны треугольники?",
+  fig:{vb:"1190 50 720 560",P:{L:[1405,105],N:[1260,287],M:[1780,287],X:[1625,383],Z:[1262,567],Y:[1780,567]},tris:[["L","M","N"],["X","Y","Z"]],arcs:[["L",1],["X",1],["N",3],["Y",3],["M",2],["Z",2]],label:"Треугольники LMN и XYZ"},
+  steps:[
+  {q:"Признак:",opts:SG,ans:"not possible",wrong:{"ASA":"Для ASA нужна равная сторона. Посмотри: на сторонах нет ни одной черточки.","AAS":"Для AAS нужна равная сторона. А на сторонах нет ни одной черточки.","SSS":"Черточек на сторонах нет — стороны не отмечены.","SAS":"Черточек на сторонах нет — стороны не отмечены."},hints:["Есть ли на сторонах черточки?","Отмечены только углы (AAA). Треугольники могут быть одной формы, но разного размера."],sol:"Отмечены только углы → not possible"}]}
+];
+
+/* ---------- состояние ---------- */
+const KEY="geo-p9-arsen";let st={};try{st=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+const S=id=>st[id]||(st[id]={a:0});
+function renderTask(t,host){
+  const box=document.createElement("div");box.className="task";box.id=t.id;
+  box.innerHTML=`<span class="tno">${t.title}</span>${t.en?`<p class="en">${esc(t.en)}</p>`:""}<p class="ru">${esc(t.ru)}</p>${tri(t.fig)}`;
+  const wraps=[];
+  t.steps.forEach((sp,i)=>{const sid=t.id+"_"+i;const w=document.createElement("div");w.className="item lockwrap";
+    w.innerHTML=`<div class="sub">${esc(sp.q)}</div>`;const ops=document.createElement("div");ops.className="opts";w.appendChild(ops);
+    const fb=document.createElement("div");fb.className="fb";w.appendChild(fb);
+    sp.opts.forEach(o=>{const b=document.createElement("button");b.type="button";b.className="kind";b.textContent=o;
+      if(S(sid).ok&&o===sp.ans)b.classList.add("good");
+      b.onclick=()=>{const s=S(sid);if(s.ok)return;
+        if(o===sp.ans){s.ok=1;save();b.classList.add("good");fb.innerHTML=`<div class="msg ok"><b>Верно!</b> ${esc(sp.sol)}.${i===t.steps.length-1?" Перепиши в тетрадь.":""}</div>`;unlock();upd();return}
+        s.a++;save();b.classList.add("bad");
+        let h=`<div class="msg no">${esc((sp.wrong&&sp.wrong[o])||"Пока неверно.")}${s.a>1?` Попытка ${s.a}.`:""}</div>`;
+        for(let k=0;k<Math.min(s.a,sp.hints.length);k++)h+=`<div class="msg hint"><b>Подсказка ${k+1}:</b> ${esc(sp.hints[k])}</div>`;
+        h+=s.a>=3?`<div class="msg sol"><b>Решение:</b> ${esc(sp.sol)}. Теперь выбери ответ сам.</div>`:`<div class="note" style="margin-top:6px">Решение откроется после ${3-s.a} ${3-s.a===1?"неудачной попытки":"неудачных попыток"}.</div>`;
+        fb.innerHTML=h};ops.appendChild(b)});
+    if(S(sid).ok)fb.innerHTML=`<div class="msg ok"><b>Верно!</b> ${esc(sp.sol)}.</div>`;
+    wraps.push({w,sid});box.appendChild(w)});
+  function unlock(){let open=true;wraps.forEach(({w,sid})=>{w.classList.toggle("locked",!open);if(!S(sid).ok)open=false})}
+  unlock();host.appendChild(box)}
+const done=t=>t.steps.every((s,i)=>st[t.id+"_"+i]&&st[t.id+"_"+i].ok);
+function upd(){let n=0;WARM.concat(HW).forEach(t=>{const d=done(t);document.getElementById(t.id).classList.toggle("done",d);if(d&&t.id[0]==="h")n++});
+  document.getElementById("pt").textContent=`${n} из 3`;document.getElementById("pf").style.width=(n/3*100)+"%"}
+function build(){const w=document.getElementById("warm"),h=document.getElementById("hw");w.innerHTML="";h.innerHTML="";WARM.forEach(t=>renderTask(t,w));HW.forEach(t=>renderTask(t,h));upd()}
+document.getElementById("reset").onclick=()=>{st={};save();build();scrollTo(0,0)};
+build();
+</script>
+</body></html>
