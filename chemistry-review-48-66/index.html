@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<title>Арсен: повторение химии, с. 48–66</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one column "lab notebook" on faint graph paper; periodic-table tiles carry levels and scores. */
+:root{
+  --bg:#F2F5F7; --grid:rgba(30,91,216,.06); --card:#FFFFFF; --ink:#0F1E2A; --muted:#566876; --line:#D6DEE5;
+  --accent:#1E5BD8; --accent-soft:#E4ECFC; --flame:#D9660A; --flame-soft:#FCEBDD;
+  --good:#12805A; --good-soft:#E1F3EA; --bad:#C2303B; --bad-soft:#FBE5E7;
+  --f-display:"Unbounded", "Arial Black", system-ui, sans-serif;
+  --f-body:"Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0C151E; --grid:rgba(110,155,255,.07); --card:#13212E; --ink:#E5EDF3; --muted:#93A5B4; --line:#24384B;
+  --accent:#7AA2FF; --accent-soft:#1A2D4D; --flame:#FF9C45; --flame-soft:#3A2614;
+  --good:#45C792; --good-soft:#123327; --bad:#FF7079; --bad-soft:#3A1A1E; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#0C151E; --grid:rgba(110,155,255,.07); --card:#13212E; --ink:#E5EDF3; --muted:#93A5B4; --line:#24384B;
+  --accent:#7AA2FF; --accent-soft:#1A2D4D; --flame:#FF9C45; --flame-soft:#3A2614;
+  --good:#45C792; --good-soft:#123327; --bad:#FF7079; --bad-soft:#3A1A1E; color-scheme:dark; }
+
+*{box-sizing:border-box}
+body{
+  background-color:var(--bg); color:var(--ink); font-family:var(--f-body); font-size:16px; line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.wrap{max-width:780px; margin:0 auto; padding-block:28px 64px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px));}
+h1,h2,h3{font-family:var(--f-display); text-wrap:balance; margin:0; letter-spacing:-.01em}
+button{font:inherit; color:inherit; cursor:pointer}
+button:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.label{font-family:var(--f-mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+
+/* Hero */
+.hero{display:flex; gap:22px; align-items:center; flex-wrap:wrap; margin-bottom:26px}
+.tile{width:118px; height:132px; border:2.5px solid var(--ink); border-radius:6px; background:var(--card);
+  display:grid; grid-template-rows:auto 1fr auto; padding:8px 10px; flex:none; box-shadow:6px 6px 0 var(--accent)}
+.tile .num{font-family:var(--f-mono); font-weight:700; font-size:15px}
+.tile .sym{font-family:var(--f-display); font-weight:800; font-size:50px; line-height:1; align-self:center}
+.tile .nm{font-size:12px; font-weight:700}
+.tile .ms{font-family:var(--f-mono); font-size:11px; color:var(--muted)}
+.hero-text{flex:1; min-width:240px}
+.hero h1{font-size:clamp(26px,5vw,38px); line-height:1.1; margin-block:6px 10px}
+.hero p{margin:0; color:var(--muted); max-width:52ch}
+
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:26px}
+.btn{border:2px solid var(--ink); background:var(--card); padding:10px 16px; border-radius:8px; font-weight:700;
+  display:inline-flex; gap:8px; align-items:center; transition:transform .12s, box-shadow .12s}
+.btn:hover{transform:translate(-1px,-1px); box-shadow:3px 3px 0 var(--ink)}
+.btn.primary{background:var(--accent); border-color:var(--accent); color:#fff}
+.btn.primary:hover{box-shadow:3px 3px 0 var(--ink)}
+.btn[disabled]{opacity:.45; cursor:not-allowed; transform:none; box-shadow:none}
+.switch{display:inline-flex; align-items:center; gap:8px; font-weight:600; font-size:14px; color:var(--muted);
+  border:1.5px dashed var(--line); padding:8px 12px; border-radius:8px; background:var(--card)}
+.switch input{accent-color:var(--accent); width:18px; height:18px}
+
+/* Levels grid */
+.levels{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px}
+.lvl{text-align:left; background:var(--card); border:1.5px solid var(--line); border-radius:10px; padding:14px 14px 12px;
+  display:grid; grid-template-columns:auto 1fr; gap:4px 12px; align-items:start; transition:border-color .12s, transform .12s}
+.lvl:hover{border-color:var(--accent); transform:translateY(-2px)}
+.lvl .code{grid-row:span 3; width:52px; height:58px; border:2px solid var(--ink); border-radius:5px; display:grid; place-items:center;
+  font-family:var(--f-display); font-weight:700; font-size:17px; background:var(--accent-soft)}
+.lvl .t{font-weight:800; line-height:1.25}
+.lvl .r{font-size:13px; color:var(--muted); line-height:1.3}
+.lvl .meta{font-family:var(--f-mono); font-size:12px; color:var(--muted); margin-top:6px; display:flex; gap:10px; flex-wrap:wrap}
+.best{color:var(--good); font-weight:700}
+.boss{grid-column:1/-1; display:flex; gap:16px; align-items:center; flex-wrap:wrap; background:var(--ink); color:var(--bg);
+  border:none; border-radius:12px; padding:18px 20px; text-align:left}
+.boss .code{width:60px; height:66px; border:2px solid var(--bg); border-radius:6px; display:grid; place-items:center;
+  font-family:var(--f-display); font-weight:800; font-size:18px; background:var(--flame); color:#fff; flex:none}
+.boss .t{font-family:var(--f-display); font-size:20px}
+.boss .r{opacity:.8; font-size:14px}
+.boss .grow{flex:1; min-width:200px}
+.boss:hover{transform:translateY(-2px)}
+.section-h{display:flex; justify-content:space-between; align-items:baseline; margin:30px 0 12px; gap:12px; flex-wrap:wrap}
+.section-h h2{font-size:18px}
+
+/* Quiz */
+.qtop{display:flex; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap}
+.qtop .grow{flex:1; min-width:140px}
+.bar{height:10px; background:var(--line); border-radius:99px; overflow:hidden}
+.bar > i{display:block; height:100%; width:0; background:var(--accent); transition:width .3s}
+.stats{display:flex; gap:8px; font-family:var(--f-mono); font-size:13px}
+.pill{padding:4px 10px; border-radius:99px; background:var(--card); border:1.5px solid var(--line); white-space:nowrap}
+.pill.streak{background:var(--flame-soft); border-color:var(--flame); color:var(--flame); font-weight:700}
+.card{background:var(--card); border:2px solid var(--ink); border-radius:12px; padding:22px; box-shadow:6px 6px 0 var(--line)}
+.qtag{display:flex; justify-content:space-between; gap:10px; margin-bottom:10px; flex-wrap:wrap}
+.qen{font-size:clamp(19px,3.2vw,23px); font-weight:800; line-height:1.3; margin:0}
+.qru{margin:8px 0 0; color:var(--muted); font-size:15px}
+.opts{display:grid; gap:10px; margin-top:20px}
+.opt{display:flex; gap:12px; align-items:flex-start; text-align:left; background:var(--bg); border:2px solid var(--line);
+  border-radius:10px; padding:12px 14px; transition:border-color .12s, background .12s}
+.opt:hover:not([disabled]){border-color:var(--accent)}
+.opt .k{font-family:var(--f-mono); font-weight:700; width:26px; height:26px; border-radius:6px; border:1.5px solid currentColor;
+  display:grid; place-items:center; flex:none; font-size:13px; opacity:.7}
+.opt .ot{min-width:0}
+.opt .ot small{display:block; color:var(--muted); font-size:13px}
+.opt.correct{border-color:var(--good); background:var(--good-soft)}
+.opt.wrong{border-color:var(--bad); background:var(--bad-soft)}
+.opt[disabled]{cursor:default}
+
+.sort{display:grid; gap:8px; margin-top:18px}
+.srow{display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; padding:10px 12px;
+  border:2px solid var(--line); border-radius:10px; background:var(--bg)}
+.srow .it{font-weight:700; min-width:0; flex:1 1 160px}
+.srow .it small{display:block; font-weight:500; color:var(--muted); font-size:13px}
+.seg{display:inline-flex; border:1.5px solid var(--line); border-radius:8px; overflow:hidden; flex-wrap:wrap}
+.seg button{border:none; background:var(--card); padding:7px 11px; font-size:13px; font-weight:700; border-right:1.5px solid var(--line)}
+.seg button:last-child{border-right:none}
+.seg button.on{background:var(--accent); color:#fff}
+.srow.ok{border-color:var(--good); background:var(--good-soft)}
+.srow.no{border-color:var(--bad); background:var(--bad-soft)}
+.srow .fix{font-size:13px; font-weight:700; color:var(--good); width:100%}
+
+.fb{margin-top:18px; border-radius:10px; padding:14px 16px; border:2px solid; display:grid; gap:6px}
+.fb.good{border-color:var(--good); background:var(--good-soft)}
+.fb.bad{border-color:var(--bad); background:var(--bad-soft)}
+.fb .v{font-weight:800}
+.fb p{margin:0}
+.term{font-family:var(--f-mono); font-size:13px; display:inline-block; padding:3px 8px; border-radius:6px; background:var(--card); border:1px solid var(--line); justify-self:start}
+.qactions{display:flex; justify-content:space-between; gap:10px; margin-top:18px; flex-wrap:wrap; align-items:center}
+.hint{font-size:13px; color:var(--muted)}
+
+/* Results */
+.res-head{display:flex; gap:22px; align-items:center; flex-wrap:wrap}
+.mark{width:120px; height:134px; border:2.5px solid var(--ink); border-radius:6px; background:var(--card); display:grid;
+  grid-template-rows:auto 1fr auto; padding:8px 10px; box-shadow:6px 6px 0 var(--flame); flex:none}
+.mark .sym{font-family:var(--f-display); font-weight:800; font-size:56px; line-height:1; align-self:center}
+.res-head h2{font-size:clamp(22px,4vw,30px)}
+.res-nums{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+.mist{display:grid; gap:12px; margin-top:12px}
+.mi{background:var(--card); border:1.5px solid var(--line); border-left:5px solid var(--bad); border-radius:8px; padding:12px 14px}
+.mi .q{font-weight:800}
+.mi .a{color:var(--good); font-weight:700; margin-top:4px}
+.mi .e{color:var(--muted); font-size:14px; margin-top:4px}
+
+/* Cheat sheet */
+.cheat{display:grid; gap:14px; grid-template-columns:minmax(0,1fr)}.tbl{overflow-x:auto}
+.cs{background:var(--card); border:1.5px solid var(--line); border-radius:10px; padding:16px 18px}
+.cs h3{font-size:16px; display:flex; gap:10px; align-items:center; margin-bottom:8px}
+.cs h3 .code{font-family:var(--f-mono); font-size:12px; border:1.5px solid var(--ink); border-radius:4px; padding:2px 6px; background:var(--accent-soft)}
+.cs ul{margin:0; padding-left:20px; display:grid; gap:4px; grid-template-columns:minmax(0,1fr)}
+.cs li{max-width:68ch}
+.cs b{font-weight:800}
+.tbl{overflow-x:auto}
+.tbl table{border-collapse:collapse; font-size:14px; min-width:420px}
+.tbl th,.tbl td{border:1px solid var(--line); padding:6px 10px; text-align:left}
+.tbl th{font-family:var(--f-mono); font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted)}
+
+@media (max-width:520px){ .card{padding:16px} .tile{width:96px; height:110px} .tile .sym{font-size:40px} }
+@media (prefers-reduced-motion:reduce){ *{transition:none!important; animation:none!important} }
+@keyframes pop{0%{transform:scale(.96)}60%{transform:scale(1.02)}100%{transform:scale(1)}}
+.pop{animation:pop .25s ease-out}
+</style>
+
+<div class="wrap">
+
+<!-- HOME -->
+<section id="home">
+  <div class="hero">
+    <div class="tile" aria-hidden="true">
+      <span class="num">18</span><span class="sym">Ar</span>
+      <span><span class="nm">Arsen</span><br><span class="ms">7th grade · 39.95</span></span>
+    </div>
+    <div class="hero-text">
+      <div class="label">Chemistry · Grade 7 · с. 48–66</div>
+      <h1>Арсен, повторяем главу 3</h1>
+      <p>Повторение с. 48–66: атомы и молекулы, элементы и вещества, строение атома, изотопы, обзорные задания главы, история открытий и воздух (4.1). Вопросы на английском, под каждым перевод и разбор по-русски. Пройди 5 частей по очереди, в конце — «Мини-СОЧ».</p>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button class="btn" id="openCheat" type="button">Шпаргалка</button>
+    <label class="switch" for="ruToggle"><input type="checkbox" id="ruToggle" checked> Показывать перевод на русский</label>
+  </div>
+
+  <div class="section-h"><h2>Части повторения</h2><span class="label" id="totalQ"></span></div>
+  <div class="levels" id="levels"></div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz" hidden>
+  <div class="qtop">
+    <button class="btn" id="quitBtn" type="button" aria-label="Выйти к темам">← Назад</button>
+    <div class="grow">
+      <div class="label" id="qLevelName" style="margin-bottom:6px"></div>
+      <div class="bar"><i id="qBar"></i></div>
+    </div>
+    <div class="stats"><span class="pill" id="qCount">1/10</span><span class="pill streak" id="qStreak" hidden></span></div>
+  </div>
+  <div class="card" id="qCard"></div>
+</section>
+
+<!-- RESULTS -->
+<section id="results" hidden>
+  <div class="res-head">
+    <div class="mark" aria-hidden="true"><span class="label" id="rMarkLbl">оценка</span><span class="sym" id="rMark">5</span><span class="label" id="rPct">100%</span></div>
+    <div style="flex:1; min-width:220px">
+      <div class="label" id="rLevel"></div>
+      <h2 id="rTitle"></h2>
+      <p id="rMsg" style="margin:8px 0 0; color:var(--muted)"></p>
+      <div class="res-nums" id="rNums"></div>
+    </div>
+  </div>
+  <div class="toolbar" style="margin-top:22px">
+    <button class="btn primary" id="retryMist" type="button">Повторить ошибки</button>
+    <button class="btn" id="retryAll" type="button">Пройти заново</button>
+    <button class="btn" id="toHome" type="button">В начало</button>
+  </div>
+  <div id="mistWrap">
+    <div class="section-h"><h2>Работа над ошибками</h2></div>
+    <div class="mist" id="mistList"></div>
+  </div>
+</section>
+
+<!-- CHEAT SHEET -->
+<section id="cheat" hidden>
+  <div class="qtop"><button class="btn" id="cheatBack" type="button">← Назад</button><div class="grow"><div class="label">Шпаргалка · с. 48–66</div></div></div>
+  <div class="cheat" id="cheatBody"></div>
+</section>
+
+</div>
+
+<script>
+/* ---------- DATA ---------- */
+const LEVELS = [
+ {id:'3.1', en:'Atoms and molecules', ru:'Атомы и молекулы', qs:[
+  {en:'All things around us — trees, ships, computers — consist of tiny particles called…', ru:'Всё вокруг — деревья, корабли, компьютеры — состоит из крошечных частиц, которые называются…', o:[['atoms','атомы'],['cells','клетки'],['crystals','кристаллы'],['drops','капли']], a:0, ex:'Atoms — атомы. Они такие маленькие, что их не видно глазом, только в электронный микроскоп.', term:'atom — атом'},
+  {en:'How wide are atoms?', ru:'Какого размера атомы?', o:[['0.1 – 0.5 nanometers','0,1–0,5 нанометра'],['0.1 – 0.5 millimeters','0,1–0,5 миллиметра'],['1 – 5 centimeters','1–5 сантиметров'],['0.1 – 0.5 meters','0,1–0,5 метра']], a:0, ex:'0,1–0,5 нм. Один нанометр примерно в 100 000 раз тоньше волоса.', term:'tiny — крошечный'},
+  {en:'What tool lets scientists see atoms?', ru:'Каким прибором учёные могут увидеть атомы?', o:[['an electron microscope','электронный микроскоп'],['a magnifying glass','лупа'],['a telescope','телескоп'],['the naked eye','невооружённый глаз']], a:0, ex:'Электронный микроскоп увеличивает до 2 миллионов раз (рисунок 3.1.3).', term:'microscope — микроскоп'},
+  {en:'An atom is about 99.99% …', ru:'Атом примерно на 99,99% состоит из…', o:[['empty space','пустоты'],['protons','протонов'],['water','воды'],['electrons','электронов']], a:0, ex:'Почти вся масса — в ядре, а электроны летают далеко. Если атом размером со стадион, ядро — как горошина.', term:'nucleus — ядро'},
+  {en:'Where is almost all the mass of an atom?', ru:'Где находится почти вся масса атома?', o:[['in the nucleus','в ядре'],['in the electrons','в электронах'],['in the empty space','в пустоте'],['it is spread evenly','распределена равномерно']], a:0, ex:'Ядро очень плотное. Электроны почти ничего не весят: 1836 электронов = масса одного протона.', term:'dense — плотный'},
+  {en:'Atoms join together to make…', ru:'Атомы соединяются и образуют…', o:[['molecules','молекулы'],['electrons','электроны'],['nuclei','ядра'],['elements only','только элементы']], a:0, ex:'Молекула — это несколько атомов, соединённых вместе. Например, H₂O.', term:'molecule — молекула'},
+  {en:'The formula H₂O tells us that one water molecule has…', ru:'Формула H₂O говорит, что в одной молекуле воды…', o:[['2 hydrogen atoms and 1 oxygen atom','2 атома водорода и 1 атом кислорода'],['1 hydrogen atom and 2 oxygen atoms','1 атом водорода и 2 атома кислорода'],['2 hydrogen atoms and 2 oxygen atoms','2 атома водорода и 2 кислорода'],['3 oxygen atoms','3 атома кислорода']], a:0, ex:'Маленькая цифра 2 стоит после H — значит, водорода два. У O цифры нет — значит, один.', term:'formula — формула'},
+  {en:'A molecule made of just two atoms (like N₂) is called…', ru:'Молекула из двух атомов (как N₂) называется…', o:[['diatomic','двухатомной'],['complex','сложной'],['isotope','изотопом'],['nucleus','ядром']], a:0, ex:'Di = два. Азот в воздухе — это N₂, двухатомная молекула.', term:'diatomic — двухатомный'},
+  {en:'A molecule is the smallest particle of a substance that…', ru:'Молекула — это самая маленькая частица вещества, которая…', o:[['keeps the characteristics of the substance','сохраняет свойства этого вещества'],['has no mass','не имеет массы'],['has no charge and no mass','без заряда и без массы'],['is always a metal','всегда металл']], a:0, ex:'Одна молекула воды — это ещё вода. Если её разбить на атомы H и O, воды уже не будет.', term:'retain — сохранять'},
+  {en:'Who first said that everything is made of tiny particles called «atomos»?', ru:'Кто первым сказал, что всё состоит из крошечных частиц «атомос»?', o:[['Democritus','Демокрит'],['Aristotle','Аристотель'],['Bohr','Бор'],['Einstein','Эйнштейн']], a:0, ex:'Демокрит, Древняя Греция, 460–400 до н. э. «Atomos» по-гречески — «неделимый».', term:'indivisible — неделимый'},
+  {en:'The Greek word «atomos» means…', ru:'Греческое слово «atomos» значит…', o:[['indivisible','неделимый'],['tiny ball','маленький шарик'],['empty','пустой'],['charged','заряженный']], a:0, ex:'Indivisible — то, что нельзя разделить. Позже учёные узнали, что атом всё-таки делится на p, n, e.', term:'indivisible — неделимый'},
+  {en:'Which type of atom is the most abundant in the universe?', ru:'Каких атомов во Вселенной больше всего?', o:[['hydrogen','водорода'],['oxygen','кислорода'],['iron','железа'],['carbon','углерода']], a:0, ex:'Около 74% атомов в Млечном Пути — водород.', term:'universe — вселенная'}]},
+
+ {id:'3.2', en:'Elements, metals, simple & complex', ru:'Элементы, металлы, простые и сложные вещества', qs:[
+  {en:'An element contains…', ru:'Элемент содержит…', o:[['only one type of atom','атомы только одного вида'],['two or more types of atoms','атомы двух и более видов'],['molecules of water','молекулы воды'],['a mixture of substances','смесь веществ']], a:0, ex:'Элемент — атомы одного вида. Железо — только атомы железа.', term:'element — элемент'},
+  {en:'How many elements are known today, and how many occur naturally?', ru:'Сколько элементов известно и сколько из них природных?', o:[['118 known, 94 natural','118 всего, 94 природных'],['94 known, 118 natural','94 всего, 118 природных'],['500 known, 118 natural','500 всего, 118 природных'],['118 known, 24 natural','118 всего, 24 природных']], a:0, ex:'118 элементов: 94 природных + 24 синтетических. Они образуют около 500 простых веществ.', term:'synthetic — синтетический'},
+  {en:'Which symbol is written correctly?', ru:'Какой символ записан правильно?', o:[['Ca','Ca'],['CA','CA'],['ca','ca'],['cA','cA']], a:0, ex:'Первая буква заглавная, вторая строчная.', term:'symbol — символ'},
+  {t:'sort', en:'Match each element to its symbol.', ru:'Сопоставь элемент и символ.', cats:[['Na','натрий'],['Fe','железо'],['Au','золото'],['Pb','свинец']], items:[['Sodium','натрий',0],['Iron','железо',1],['Gold','золото',2],['Lead','свинец',3]], ex:'Sodium — Na, iron — Fe, gold — Au, lead — Pb. Символы от латинских названий.'},
+  {t:'sort', en:'Metal or nonmetal? (Chapter review, ex. 1)', ru:'Металл или неметалл? (обзорное задание 1)', cats:[['Metal','металл'],['Nonmetal','неметалл']], items:[['Copper','медь',0],['Aluminium','алюминий',0],['Lithium','литий',0],['Calcium','кальций',0],['Magnesium','магний',0],['Hydrogen','водород',1],['Sulfur','сера',1],['Helium','гелий',1],['Boron','бор',1],['Phosphorus','фосфор',1]], ex:'Металлы: Cu, Al, Li, Ca, Mg. Неметаллы: H, S, He, B, P. В таблице неметаллы справа вверху (и H).'},
+  {en:'Which is a property of METALS?', ru:'Какое свойство у МЕТАЛЛОВ?', o:[['they can be drawn into wires','их можно вытянуть в проволоку'],['they are brittle','они хрупкие'],['they are dull','они тусклые'],['they do not conduct electricity','не проводят ток']], a:0, ex:'Металлы: проводят ток, твёрдые (кроме ртути), блестят, куются в листы, тянутся в проволоку.', term:'ductile — тягучий; malleable — ковкий'},
+  {en:'Which metal is liquid at room conditions?', ru:'Какой металл жидкий при комнатной температуре?', o:[['mercury','ртуть'],['iron','железо'],['gold','золото'],['copper','медь']], a:0, ex:'Ртуть (Hg) — единственный жидкий металл. Все остальные металлы твёрдые.', term:'mercury — ртуть'},
+  {en:'Which nonmetal CAN conduct electricity?', ru:'Какой неметалл МОЖЕТ проводить ток?', o:[['carbon (graphite)','углерод (графит)'],['sulfur','сера'],['oxygen','кислород'],['helium','гелий']], a:0, ex:'Неметаллы обычно не проводят ток — исключение графит (C), из него делают стержни карандашей.', term:'conductor — проводник'},
+  {en:'Sulfur is yellow, dull and breaks when you hit it. It is…', ru:'Сера жёлтая, тусклая и рассыпается от удара. Это…', o:[['a nonmetal','неметалл'],['a metal','металл'],['a compound','сложное вещество'],['an isotope','изотоп']], a:0, ex:'Тусклый (dull) и хрупкий (brittle) — признаки неметалла.', term:'brittle — хрупкий'},
+  {en:'A simple substance is made of…', ru:'Простое вещество состоит из…', o:[['atoms of one element','атомов одного элемента'],['atoms of two or more elements','атомов двух и более элементов'],['only metals','только металлов'],['only gases','только газов']], a:0, ex:'Простое: O₂, S₈, Fe, He. Сложное: H₂O, CO₂, NaCl.', term:'simple substance — простое вещество'},
+  {t:'sort', en:'Simple (SS) or complex (CS) substance? (Chapter review, ex. 3)', ru:'Простое (SS) или сложное (CS) вещество?', cats:[['SS','простое'],['CS','сложное']], items:[['Gold','золото',0],['Sodium','натрий',0],['Diamond','алмаз',0],['Hydrogen','водород',0],['Iron','железо',0],['Sulfur','сера',0],['Water','вода',1],['Table salt','поваренная соль',1],['Ammonia','аммиак',1],['Sugar','сахар',1],['Hydrogen peroxide','перекись водорода',1],['Baking soda','пищевая сода',1]], ex:'Простое — один элемент (алмаз — это чистый углерод C). Сложное — несколько элементов: H₂O, NaCl, NH₃, C₁₂H₂₂O₁₁, H₂O₂, NaHCO₃.'},
+  {en:'S₈ has 8 atoms. Is sulfur S₈ a simple or complex substance?', ru:'В S₈ восемь атомов. Сера S₈ — простое или сложное вещество?', o:[['simple — only one element','простое — один элемент'],['complex — many atoms','сложное — много атомов'],['complex — it is a molecule','сложное — это молекула'],['it is a mixture','это смесь']], a:0, ex:'Считаем ВИДЫ атомов (разные буквы), а не количество. В S₈ только S → простое.', term:'complex substance — сложное вещество'},
+  {en:'How many atoms of carbon are in glucose C₆H₁₂O₆?', ru:'Сколько атомов углерода в глюкозе C₆H₁₂O₆?', o:[['6','6'],['12','12'],['24','24'],['1','1']], a:0, ex:'Цифра после C — 6. Всего атомов: 6 + 12 + 6 = 24. Элементов три: C, H, O.', term:'glucose — глюкоза'},
+  {en:'Salt NaCl contains…', ru:'Соль NaCl содержит…', o:[['1 atom Na and 1 atom Cl','1 атом Na и 1 атом Cl'],['2 atoms of Na','2 атома Na'],['1 atom N, 1 atom a, 1 atom Cl','1 атом N, 1 a и 1 Cl'],['only sodium','только натрий']], a:0, ex:'Na — натрий, Cl — хлор. Цифр нет — по одному атому. Это сложное вещество.', term:'sodium chloride — хлорид натрия'}]},
+
+ {id:'3.3', en:'Structure of the atom', ru:'Строение атома', qs:[
+  {en:'Which particles are in the nucleus of an atom?', ru:'Какие частицы находятся в ядре атома?', o:[['protons and neutrons','протоны и нейтроны'],['electrons only','только электроны'],['protons and electrons','протоны и электроны'],['neutrons and electrons','нейтроны и электроны']], a:0, ex:'В ядре — p и n. Электроны (e) движутся вокруг ядра.', term:'nucleus — ядро'},
+  {en:'What is the charge of a proton?', ru:'Какой заряд у протона?', o:[['positive (+)','положительный (+)'],['negative (−)','отрицательный (−)'],['no charge (0)','нет заряда (0)'],['it changes','меняется']], a:0, ex:'Proton +, neutron 0, electron −. Подсказка: Proton — Positive, Neutron — Neutral.', term:'positive — положительный'},
+  {en:'Which particle has NO charge?', ru:'У какой частицы НЕТ заряда?', o:[['neutron','нейтрон'],['proton','протон'],['electron','электрон'],['nucleus','ядро']], a:0, ex:'Neutron — neutral, нейтральный, заряд 0.', term:'neutron — нейтрон'},
+  {en:'Which particle is negatively charged and moves around the nucleus?', ru:'Какая частица заряжена отрицательно и движется вокруг ядра?', o:[['electron','электрон'],['proton','протон'],['neutron','нейтрон'],['quark','кварк']], a:0, ex:'Electron (e⁻), заряд −. Он очень лёгкий: ≈1/2000 массы протона.', term:'electron — электрон'},
+  {en:'Which particle is the lightest?', ru:'Какая частица самая лёгкая?', o:[['electron','электрон'],['proton','протон'],['neutron','нейтрон'],['they weigh the same','весят одинаково']], a:0, ex:'Протон и нейтрон весят примерно по 1 а.е.м., электрон — около 1/2000.', term:'atomic mass unit — атомная единица массы'},
+  {en:'The atomic number of an element is equal to the number of…', ru:'Атомный номер элемента равен числу…', o:[['protons','протонов'],['neutrons','нейтронов'],['protons + neutrons','протонов + нейтронов'],['molecules','молекул']], a:0, ex:'Атомный номер = протоны = электроны. Номер в таблице Менделеева.', term:'atomic number — атомный номер'},
+  {en:'In a neutral atom, the number of electrons is equal to the number of…', ru:'В нейтральном атоме число электронов равно числу…', o:[['protons','протонов'],['neutrons','нейтронов'],['isotopes','изотопов'],['molecules','молекул']], a:0, ex:'Плюсов (p) столько же, сколько минусов (e), поэтому атом в целом без заряда.', term:'equal — равный'},
+  {en:'Mass number = ?', ru:'Массовое число = ?', o:[['protons + neutrons','протоны + нейтроны'],['protons + electrons','протоны + электроны'],['neutrons − protons','нейтроны − протоны'],['electrons only','только электроны']], a:0, ex:'Массовое число = p + n (электроны почти ничего не весят). Значит, нейтроны = массовое число − атомный номер.', term:'mass number — массовое число'},
+  {en:'Lithium ⁷Li has atomic number 3. How many neutrons does it have?', ru:'У лития ⁷Li атомный номер 3. Сколько у него нейтронов?', o:[['4','4'],['3','3'],['7','7'],['10','10']], a:0, ex:'n = 7 − 3 = 4. Протонов 3, электронов 3 (рисунок 3.3.2).', term:'neutron — нейтрон'},
+  {en:'Sodium ²³Na has 11 protons. How many neutrons?', ru:'У натрия ²³Na 11 протонов. Сколько нейтронов?', o:[['12','12'],['11','11'],['23','23'],['34','34']], a:0, ex:'n = 23 − 11 = 12. Электронов 11 (рисунок 3.3.3).', term:'sodium — натрий'},
+  {en:'Chlorine ³⁵Cl, atomic number 17. Protons / neutrons / electrons = ?', ru:'Хлор ³⁵Cl, атомный номер 17. Протоны / нейтроны / электроны = ?', o:[['17 / 18 / 17','17 / 18 / 17'],['17 / 17 / 18','17 / 17 / 18'],['35 / 17 / 35','35 / 17 / 35'],['18 / 17 / 18','18 / 17 / 18']], a:0, ex:'p = e = 17, n = 35 − 17 = 18.', term:'chlorine — хлор'},
+  {en:'An atom has 13 protons and 14 neutrons. What is its mass number? (Chapter review, ex. 5)', ru:'В атоме 13 протонов и 14 нейтронов. Какое массовое число?', o:[['27','27'],['13','13'],['14','14'],['1','1']], a:0, ex:'13 + 14 = 27. Атомный номер 13 — это алюминий (Al). Из него делают фольгу, банки, посуду.', term:'mass number — массовое число'},
+  {en:'An atom with 13 protons is…', ru:'Атом с 13 протонами — это…', o:[['aluminium (Al)','алюминий (Al)'],['carbon (C)','углерод (C)'],['calcium (Ca)','кальций (Ca)'],['oxygen (O)','кислород (O)']], a:0, ex:'Элемент определяется числом протонов: 13 → Al. Его 13 электронов в рисунке не нарисованы, но их тоже 13.', term:'aluminium — алюминий'},
+  {t:'sort', en:'How many protons? (Chapter review, ex. 6)', ru:'Сколько протонов? (обзорное задание 6)', cats:[['6','6'],['13','13'],['15','15'],['18','18'],['20','20']], items:[['Carbon','углерод',0],['Aluminium','алюминий',1],['Phosphorus','фосфор',2],['Argon','аргон',3],['Calcium','кальций',4]], ex:'C — 6, Al — 13, P — 15, Ar — 18, Ca — 20. Номер в таблице = протоны = электроны.'},
+  {en:'Phosphorus: atomic number 15, atomic mass 31. Neutrons = ?', ru:'Фосфор: атомный номер 15, масса 31. Нейтронов = ?', o:[['16','16'],['15','15'],['31','31'],['46','46']], a:0, ex:'31 − 15 = 16.', term:'phosphorus — фосфор'},
+  {en:'Argon: atomic number 18, atomic mass 40. Neutrons = ?', ru:'Аргон: атомный номер 18, масса 40. Нейтронов = ?', o:[['22','22'],['18','18'],['40','40'],['20','20']], a:0, ex:'40 − 18 = 22.', term:'argon — аргон'}]},
+
+ {id:'3.3·iso', en:'Isotopes', ru:'Изотопы', qs:[
+  {en:'Isotopes are atoms of the same element with…', ru:'Изотопы — это атомы одного элемента с…', o:[['the same number of protons but different number of neutrons','одинаковым числом протонов, но разным числом нейтронов'],['different number of protons','разным числом протонов'],['the same number of neutrons but different protons','одинаковыми нейтронами, но разными протонами'],['no electrons','без электронов']], a:0, ex:'Протоны одинаковые (иначе это был бы другой элемент), а нейтронов разное число.', term:'isotope — изотоп'},
+  {en:'The three isotopes of hydrogen are…', ru:'Три изотопа водорода —…', o:[['protium, deuterium, tritium','протий, дейтерий, тритий'],['proton, neutron, electron','протон, нейтрон, электрон'],['helium, lithium, carbon','гелий, литий, углерод'],['H₂, H₂O, H₂O₂','H₂, H₂O, H₂O₂']], a:0, ex:'Протий ¹H — 0 нейтронов, дейтерий ²H — 1 нейтрон, тритий ³H — 2 нейтрона. Протон у всех один.', term:'protium, deuterium, tritium'},
+  {en:'How many neutrons does tritium ³H have?', ru:'Сколько нейтронов у трития ³H?', o:[['2','2'],['1','1'],['3','3'],['0','0']], a:0, ex:'3 − 1 = 2.', term:'tritium — тритий'},
+  {en:'Isotopes of one element have…', ru:'У изотопов одного элемента…', o:[['similar chemical but different physical properties','похожие химические, но разные физические свойства'],['different chemical properties','разные химические свойства'],['exactly the same mass','одинаковая масса'],['different number of electrons','разное число электронов']], a:0, ex:'Химия зависит от протонов и электронов — они одинаковые. А масса разная, поэтому физические свойства отличаются.', term:'similar — похожий'},
+  {en:'Neon isotopes ²⁰Ne, ²¹Ne, ²²Ne (atomic number 10). How many protons does each have? (Chapter review, ex. 9)', ru:'Изотопы неона ²⁰Ne, ²¹Ne, ²²Ne (атомный номер 10). Сколько протонов у каждого?', o:[['10 in each','по 10 у каждого'],['20, 21, 22','20, 21, 22'],['10, 11, 12','10, 11, 12'],['0','0']], a:0, ex:'Протоны у изотопов одинаковые: 10. Электронов тоже 10.', term:'neon — неон'},
+  {en:'How many neutrons does ²²Ne have?', ru:'Сколько нейтронов у ²²Ne?', o:[['12','12'],['10','10'],['22','22'],['11','11']], a:0, ex:'22 − 10 = 12. У ²⁰Ne — 10, у ²¹Ne — 11.', term:'neutron — нейтрон'},
+  {en:'Element X: X-32 (94.9%), X-33 (0.8%), X-34 (4.3%). How many isotopes are in the sample? (ex. 8)', ru:'Элемент X: X-32 (94,9%), X-33 (0,8%), X-34 (4,3%). Сколько изотопов в образце?', o:[['3','3'],['1','1'],['32','32'],['99','99']], a:0, ex:'Три части диаграммы — три изотопа.', term:'sample — образец'},
+  {en:'Which isotope of X is the most abundant?', ru:'Какого изотопа X больше всего?', o:[['X-32','X-32'],['X-33','X-33'],['X-34','X-34'],['all equal','поровну']], a:0, ex:'94,9% — почти весь круг. Масса 32 → это сера (S), её атомная масса ≈ 32.', term:'abundant — распространённый'},
+  {en:'Average atomic mass of X = 32·0.949 + 33·0.008 + 34·0.043 ≈ ?', ru:'Средняя атомная масса X = 32·0,949 + 33·0,008 + 34·0,043 ≈ ?', o:[['32.09','32,09'],['33.00','33,00'],['99.00','99,00'],['31.50','31,50']], a:0, ex:'Каждую массу умножаем на её долю и складываем: 30,368 + 0,264 + 1,462 = 32,094 ≈ 32,09. Проценты делим на 100!', term:'average — средний'},
+  {en:'Oxygen: O-16 (99.76%), O-17 (0.04%), O-18 (0.20%). Average atomic mass ≈ ? (ex. 4)', ru:'Кислород: O-16 (99,76%), O-17 (0,04%), O-18 (0,20%). Средняя атомная масса ≈ ?', o:[['16.00','16,00'],['17.00','17,00'],['51.00','51,00'],['15.00','15,00']], a:0, ex:'16·0,9976 + 17·0,0004 + 18·0,002 = 15,9616 + 0,0068 + 0,036 ≈ 16,00. Почти 16, потому что O-16 почти 100%.', term:'isotope — изотоп'}]},
+
+ {id:'Review', en:'Review, history and air', ru:'Повторение, история и воздух', qs:[
+  {t:'sort', en:'Metal or nonmetal? (Summative, ex. 4)', ru:'Металл или неметалл? (суммативная, задание 4)', cats:[['Metal','металл'],['Nonmetal','неметалл']], items:[['I shine when polished','блещу, если отполировать',0],['I am a good conductor of heat','хорошо провожу тепло',0],['Most known elements are made up of me','большинство известных элементов — это я',0],['You will mostly find me as a solid','обычно я твёрдый',0],['I am a bad conductor of electricity','плохо провожу ток',1],['You will mostly find me as a gas','обычно я газ',1],['Most matter in the universe is made up of me','из меня состоит большая часть Вселенной',1],['I never shine when polished','никогда не блещу',1]], ex:'Блеск, проводимость, твёрдость, «большинство элементов» — металл. Газ, плохой проводник, «большая часть Вселенной» (водород) — неметалл.'},
+  {en:'Hydrogen peroxide H₂O₂ contains which elements?', ru:'Из каких элементов состоит перекись водорода H₂O₂?', o:[['hydrogen and oxygen','водород и кислород'],['only hydrogen','только водород'],['helium and oxygen','гелий и кислород'],['hydrogen, oxygen and carbon','водород, кислород и углерод']], a:0, ex:'H — водород, O — кислород, по 2 атома. Это сложное вещество (антисептик).', term:'hydrogen peroxide — перекись водорода'},
+  {en:'For ¹⁶O (atomic number 8): protons / neutrons / electrons = ?', ru:'Для ¹⁶O (атомный номер 8): протоны / нейтроны / электроны = ?', o:[['8 / 8 / 8','8 / 8 / 8'],['16 / 8 / 16','16 / 8 / 16'],['8 / 16 / 8','8 / 16 / 8'],['8 / 8 / 16','8 / 8 / 16']], a:0, ex:'p = e = 8, n = 16 − 8 = 8. А у ¹H: 1 протон, 0 нейтронов, 1 электрон.', term:'oxygen — кислород'},
+  {en:'Densities of 7 metals are given. Why is a pie chart unsuitable? (ex. 10)', ru:'Даны плотности 7 металлов. Почему круговая диаграмма не подходит?', o:[['the data are not parts of one whole','данные — не части одного целого'],['there are too few metals','металлов слишком мало'],['densities are too big','плотности слишком большие'],['metals have no density','у металлов нет плотности']], a:0, ex:'Круговая диаграмма показывает доли целого (в сумме 100%). Плотности не складываются в целое — лучше столбчатая диаграмма.', term:'pie chart — круговая диаграмма'},
+  {en:'Who discovered the electron and proposed the «plum pudding» model?', ru:'Кто открыл электрон и предложил модель «пудинга с изюмом»?', o:[['J. J. Thomson','Дж. Дж. Томсон'],['E. Rutherford','Э. Резерфорд'],['J. Chadwick','Дж. Чедвик'],['N. Bohr','Н. Бор']], a:0, ex:'Томсон — электрон. Резерфорд — протон и ядро. Чедвик — нейтрон. Бор — электроны на слоях.', term:'discover — открыть'},
+  {en:'Who discovered the proton and the nucleus?', ru:'Кто открыл протон и ядро?', o:[['E. Rutherford','Э. Резерфорд'],['J. J. Thomson','Дж. Дж. Томсон'],['J. Dalton','Дж. Дальтон'],['Democritus','Демокрит']], a:0, ex:'Резерфорд: атом почти пустой, в центре маленькое положительное ядро.', term:'nucleus — ядро'},
+  {en:'Who discovered the neutron (Nobel Prize 1935)?', ru:'Кто открыл нейтрон (Нобелевская премия 1935)?', o:[['J. Chadwick','Дж. Чедвик'],['N. Bohr','Н. Бор'],['M. Gell-Mann','М. Гелл-Манн'],['J. J. Thomson','Дж. Дж. Томсон']], a:0, ex:'Чедвик, 1891–1974.', term:'neutron — нейтрон'},
+  {en:'Who proposed a model with electrons moving in specific layers?', ru:'Кто предложил модель, где электроны движутся по слоям?', o:[['N. Bohr','Н. Бор'],['J. Dalton','Дж. Дальтон'],['Aristotle','Аристотель'],['P. Higgs','П. Хиггс']], a:0, ex:'Бор (1885–1962). Дальтон представлял атомы твёрдыми шариками.', term:'layer — слой'},
+  {en:'Element 109, meitnerium (Mt), is named after…', ru:'Элемент 109, мейтнерий (Mt), назван в честь…', o:[['Lise Meitner','Лизы Мейтнер'],['Marie Curie','Марии Кюри'],['Glenn Seaborg','Гленна Сиборга'],['Niels Bohr','Нильса Бора']], a:0, ex:'Мейтнер изучала деление ядра. Мария Кюри открыла радий (Ra) и полоний (Po) и получила две Нобелевские премии. Сиборгий (Sg, №106) — в честь Сиборга.', term:'named after — назван в честь'},
+  {en:'Dry air contains about 78% of…', ru:'Сухой воздух примерно на 78% состоит из…', o:[['nitrogen','азота'],['oxygen','кислорода'],['carbon dioxide','углекислого газа'],['argon','аргона']], a:0, ex:'Азот 78%, кислород 21%, аргон 0,93%, CO₂ 0,04%. Тема 4.1, с. 66.', term:'nitrogen — азот'},
+  {en:'Combustion (burning) is a reaction of a substance with…', ru:'Горение — это реакция вещества с…', o:[['oxygen','кислородом'],['nitrogen','азотом'],['water','водой'],['argon','аргоном']], a:0, ex:'Carbon + oxygen = carbon dioxide; sulfur + oxygen = sulfur dioxide. При горении расходуется кислород воздуха.', term:'combustion — горение'},
+  {en:'Which gases pollute the air when coal, petroleum and fuels burn?', ru:'Какие газы загрязняют воздух, когда горят уголь, нефть и топливо?', o:[['SO₂, CO, CO₂','SO₂, CO, CO₂'],['O₂, N₂, Ar','O₂, N₂, Ar'],['He, Ne, Ar','He, Ne, Ar'],['H₂O only','только H₂O']], a:0, ex:'Сернистый газ SO₂, угарный газ CO и углекислый газ CO₂. Оксиды азота NO и NO₂ — от двигателей машин и электростанций.', term:'air pollution — загрязнение воздуха'},
+  {en:'An adult human body contains about 4 g of which element (mostly in haemoglobin)?', ru:'В теле взрослого около 4 г какого элемента (больше всего в гемоглобине)?', o:[['iron','железа'],['iodine','йода'],['gold','золота'],['helium','гелия']], a:0, ex:'Железо — в гемоглобине крови. Йод открыли в морских водорослях, Сатурн окутан водородом и гелием («Chemistry in life»).', term:'haemoglobin — гемоглобин'}]}
+];
+const CHEAT = [
+ ['3.1','Atoms and molecules',[
+  '<b>Atom</b> — крошечная частица (0,1–0,5 нм), видна только в электронный микроскоп. На 99,99% пустота, почти вся масса в <b>ядре</b>.',
+  '<b>Molecule</b> — атомы, соединённые вместе; самая маленькая частица вещества, которая сохраняет его свойства. H₂O: 2 H + 1 O. N₂ — <b>diatomic</b> (двухатомная).',
+  'Демокрит: «atomos» = <b>indivisible</b> (неделимый). Аристотель считал, что вещество можно делить бесконечно.',
+  'Во Вселенной больше всего атомов водорода (≈74%).']],
+ ['3.2','Elements and substances',[
+  '<b>Element</b> — атомы одного вида. 118 элементов: 94 природных + 24 синтетических. Символ: первая буква заглавная (Na, Fe, Au, Pb).',
+  '<b>Metals</b>: проводят ток и тепло, твёрдые (кроме ртути Hg), блестят, куются (malleable), тянутся в проволоку (ductile).',
+  '<b>Nonmetals</b>: не проводят (кроме графита), твёрдые/жидкие/газы, тусклые (dull), хрупкие (brittle).',
+  '<b>Simple substance</b> — один элемент: O₂, S₈, Fe, алмаз. <b>Complex</b> — два и более: H₂O, NaCl, CO₂, сахар. Считай разные буквы, а не атомы.']],
+ ['3.3','Atom structure and isotopes',[
+  '<div class="tbl"><table><tr><th></th><th>Charge</th><th>Mass</th><th>Where</th></tr><tr><td>proton p</td><td>+</td><td>1</td><td>nucleus</td></tr><tr><td>neutron n</td><td>0</td><td>1</td><td>nucleus</td></tr><tr><td>electron e</td><td>−</td><td>≈1/2000</td><td>around</td></tr></table></div>',
+  '<b>Атомный номер</b> = протоны = электроны. <b>Массовое число</b> = протоны + нейтроны. <b>Нейтроны</b> = массовое − атомный номер.',
+  'Примеры: ⁷Li 3p 4n 3e · ¹²C 6p 6n · ¹⁶O 8p 8n · ²³Na 11p 12n · ²⁷Al 13p 14n · ³¹P 15p 16n · ³⁵Cl 17p 18n · ⁴⁰Ar 18p 22n · ⁴⁰Ca 20p 20n.',
+  '<b>Isotopes</b> — одинаковые протоны, разные нейтроны. Водород: протий (0 n), дейтерий (1 n), тритий (2 n). Химия похожая, физические свойства разные.',
+  'Средняя атомная масса = Σ (масса × доля). Пример: 32·0,949 + 33·0,008 + 34·0,043 ≈ 32,09 (сера).']],
+ ['Review','History and air',[
+  'Демокрит — atomos · Аристотель — 5 стихий · Джабир ибн Хайян — атом делится · Дальтон — твёрдые шарики · Томсон — электрон, «пудинг» · Резерфорд — протон, ядро · Бор — слои · Чедвик — нейтрон · Гелл-Манн — кварки · Хиггс — бозон (2012).',
+  'Воздух: азот 78%, кислород 21%, аргон 0,93%, CO₂ 0,04%. <b>Combustion</b> — реакция с кислородом: C + O₂ = CO₂, S + O₂ = SO₂.',
+  'Загрязнители: SO₂, CO, CO₂ (уголь, нефть, топливо), NO и NO₂ (двигатели, электростанции), летучие вещества (краски, лаки).']]
+];
+
+/* ---------- STATE ---------- */
+const $ = s => document.querySelector(s);
+const store = { get(k,d){ try{ const v=localStorage.getItem(k); return v==null?d:JSON.parse(v);}catch(e){return d;} },
+                set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} } };
+let showRu = store.get('arsenRev48_ru', true);
+let run = null;
+const praise = ['Отлично, Арсен!','В точку!','Так держать!','Химик растёт!','Верно!','Чётко!'];
+const oops   = ['Почти! Запомни:','Не беда, разберём:','Тут ловушка:','Смотри, как правильно:'];
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; };
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function show(id){ ['home','quiz','results','cheat'].forEach(s=> $('#'+s).hidden = s!==id); window.scrollTo({top:0}); }
+
+/* ---------- HOME ---------- */
+function renderHome(){
+  const best = store.get('arsenRev48_best', {});
+  const total = LEVELS.reduce((n,l)=>n+l.qs.length,0);
+  $('#totalQ').textContent = total + ' заданий';
+  const el = $('#levels'); el.innerHTML='';
+  LEVELS.forEach((l,i)=>{
+    const b = document.createElement('button'); b.className='lvl'; b.type='button';
+    const bs = best[l.id];
+    b.innerHTML = `<span class="code">${esc(l.id)}</span><span class="t">${esc(l.en)}</span><span class="r">${esc(l.ru)}</span>
+      <span class="meta"><span>${l.qs.length} заданий</span>${bs!=null?`<span class="best">рекорд ${bs}%</span>`:'<span>не пройдено</span>'}</span>`;
+    b.onclick = ()=> startRun({name:l.id+' · '+l.en, key:l.id, qs:l.qs.map(q=>({...q,lvl:l.id}))});
+    el.appendChild(b);
+  });
+  const boss = document.createElement('button'); boss.className='boss'; boss.type='button';
+  const bb = best['final'];
+  boss.innerHTML = `<span class="code">СОЧ</span><span class="grow"><span class="t">Мини-СОЧ по с. 48–66</span><br>
+    <span class="r">20 случайных заданий из всех частей. ${bb!=null?'Рекорд: '+bb+'%':'Пройди после всех частей.'}</span></span>
+    <span class="btn" style="background:var(--flame);border-color:var(--flame);color:#fff">Начать</span>`;
+  boss.onclick = ()=>{
+    const all = LEVELS.flatMap(l=>l.qs.map(q=>({...q,lvl:l.id})));
+    startRun({name:'Мини-СОЧ · с. 48–66', key:'final', qs:shuffle(all).slice(0,20), noShuffle:true});
+  };
+  el.appendChild(boss);
+  $('#ruToggle').checked = showRu;
+}
+
+/* ---------- QUIZ ---------- */
+function startRun(cfg){
+  run = {...cfg, qs: cfg.noShuffle ? cfg.qs : shuffle(cfg.qs), i:0, score:0, streak:0, bestStreak:0, xp:0, wrong:[]};
+  $('#qLevelName').textContent = run.name;
+  show('quiz'); renderQ();
+}
+function ruLine(t){ return showRu && t ? `<p class="qru">${esc(t)}</p>` : ''; }
+function renderQ(){
+  const q = run.qs[run.i], n = run.qs.length;
+  $('#qCount').textContent = (run.i+1)+'/'+n;
+  $('#qBar').style.width = (run.i/n*100)+'%';
+  const st = $('#qStreak'); st.hidden = run.streak<2; st.textContent = 'серия ×'+run.streak;
+  const card = $('#qCard'); card.classList.remove('pop'); void card.offsetWidth; card.classList.add('pop');
+  const tag = `<div class="qtag"><span class="label">Часть ${esc(q.lvl)}</span><span class="label">${q.t==='sort'?'распредели':'выбери ответ'}</span></div>`;
+  if(q.t==='sort') return renderSort(q, card, tag);
+  let opts = q.o.map((o,idx)=>({o,idx}));
+  if(!q.fixed) opts = shuffle(opts);
+  card.innerHTML = tag + `<p class="qen">${esc(q.en)}</p>${ruLine(q.ru)}
+    <div class="opts">${opts.map((x,k)=>`<button type="button" class="opt" data-idx="${x.idx}"><span class="k">${'ABCDE'[k]}</span><span class="ot">${esc(x.o[0])}${showRu?`<small>${esc(x.o[1])}</small>`:''}</span></button>`).join('')}</div>
+    <div id="fbBox"></div>
+    <div class="qactions"><span class="hint">Клавиши 1–${opts.length} для ответа, Enter — дальше</span><button class="btn primary" id="nextBtn" type="button" hidden>Дальше →</button></div>`;
+  card.querySelectorAll('.opt').forEach(b=> b.onclick = ()=> answerMC(q, +b.dataset.idx));
+  $('#nextBtn').onclick = next;
+}
+function answerMC(q, idx){
+  const ok = idx===q.a;
+  $('#qCard').querySelectorAll('.opt').forEach(b=>{
+    b.disabled = true; const i=+b.dataset.idx;
+    if(i===q.a) b.classList.add('correct'); else if(i===idx) b.classList.add('wrong');
+  });
+  grade(q, ok, q.o[q.a][0] + (q.o[q.a][1]!==q.o[q.a][0] ? ' — '+q.o[q.a][1] : ''));
+}
+function renderSort(q, card, tag){
+  const items = shuffle(q.items.map((it,k)=>({it,k})));
+  card.innerHTML = tag + `<p class="qen">${esc(q.en)}</p>${ruLine(q.ru)}
+    <div class="sort">${items.map(x=>`<div class="srow" data-k="${x.k}"><span class="it">${esc(x.it[0])}${showRu?`<small>${esc(x.it[1])}</small>`:''}</span>
+      <span class="seg" role="group">${q.cats.map((c,ci)=>`<button type="button" data-c="${ci}" title="${esc(c[1])}">${esc(c[0])}</button>`).join('')}</span></div>`).join('')}</div>
+    <div id="fbBox"></div>
+    <div class="qactions"><span class="hint" id="sortHint">Выбери вариант для каждой строки</span>
+      <span style="display:flex;gap:10px"><button class="btn primary" id="checkBtn" type="button" disabled>Проверить</button><button class="btn primary" id="nextBtn" type="button" hidden>Дальше →</button></span></div>`;
+  const choice = {};
+  card.querySelectorAll('.srow').forEach(row=>{
+    row.querySelectorAll('.seg button').forEach(b=> b.onclick = ()=>{
+      if(row.dataset.done) return;
+      row.querySelectorAll('.seg button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+      choice[row.dataset.k] = +b.dataset.c;
+      $('#checkBtn').disabled = Object.keys(choice).length < q.items.length;
+    });
+  });
+  $('#checkBtn').onclick = ()=>{
+    let right=0;
+    card.querySelectorAll('.srow').forEach(row=>{
+      row.dataset.done='1'; const it=q.items[+row.dataset.k]; const good = choice[row.dataset.k]===it[2];
+      row.classList.add(good?'ok':'no'); if(good) right++;
+      else row.insertAdjacentHTML('beforeend', `<span class="fix">Правильно: ${esc(q.cats[it[2]][0])} (${esc(q.cats[it[2]][1])})</span>`);
+      row.querySelectorAll('.seg button').forEach(x=>x.disabled=true);
+    });
+    $('#checkBtn').hidden = true;
+    const ok = right===q.items.length;
+    grade(q, ok, q.items.map(it=>it[0]+' → '+q.cats[it[2]][0]).join('; '), `${right} из ${q.items.length} верно. `);
+  };
+  $('#nextBtn').onclick = next;
+}
+function grade(q, ok, correctText, prefix=''){
+  if(ok){ run.score++; run.streak++; run.bestStreak=Math.max(run.bestStreak,run.streak); run.xp += 10 + Math.min(run.streak,5)*2; }
+  else { run.streak=0; run.wrong.push({q, correctText}); }
+  const st = $('#qStreak'); st.hidden = run.streak<2; st.textContent = 'серия ×'+run.streak;
+  $('#fbBox').innerHTML = `<div class="fb ${ok?'good':'bad'}"><span class="v">${ok?pick(praise):pick(oops)}</span>
+    <p>${esc(prefix)}${esc(q.ex)}</p>${q.term?`<span class="term">${esc(q.term)}</span>`:''}</div>`;
+  const nb = $('#nextBtn'); nb.hidden=false; nb.textContent = run.i===run.qs.length-1 ? 'Результат →' : 'Дальше →'; nb.focus({preventScroll:true});
+}
+function next(){ run.i++; if(run.i>=run.qs.length) return finish(); renderQ(); }
+
+document.addEventListener('keydown', e=>{
+  if($('#quiz').hidden) return;
+  const nb = $('#nextBtn');
+  if(e.key==='Enter' && nb && !nb.hidden){ e.preventDefault(); next(); return; }
+  const n = parseInt(e.key,10);
+  if(n>=1){ const b = $('#qCard').querySelectorAll('.opt')[n-1]; if(b && !b.disabled) b.click(); }
+});
+
+/* ---------- RESULTS ---------- */
+function finish(){
+  const n = run.qs.length, pct = Math.round(run.score/n*100);
+  const mark = pct>=85?5:pct>=65?4:pct>=40?3:2;
+  $('#qBar').style.width='100%';
+  const best = store.get('arsenRev48_best', {});
+  const isRecord = best[run.key]==null || pct>best[run.key];
+  if(!run.isRetry && isRecord){ best[run.key]=pct; store.set('arsenRev48_best', best); }
+  $('#rMark').textContent = mark; $('#rPct').textContent = pct+'%';
+  $('#rLevel').textContent = run.name;
+  $('#rTitle').textContent = mark===5?'Арсен, это уровень пятёрки!':mark===4?'Хороший результат, почти пятёрка':mark===3?'Есть база, но надо подтянуть':'Пора повторить главу ещё раз';
+  $('#rMsg').textContent = run.wrong.length ? 'Ниже все ошибки с правильными ответами. Прочитай их и нажми «Повторить ошибки» — пройди, пока не будет 100%.' : 'Ни одной ошибки. Переходи к следующей части или к Мини-СОЧ.';
+  $('#rNums').innerHTML = `<span class="pill">${run.score} из ${n} верно</span><span class="pill">+${run.xp} XP</span><span class="pill streak">лучшая серия ×${run.bestStreak}</span>${(!run.isRetry && isRecord)?'<span class="pill" style="border-color:var(--good);color:var(--good)">новый рекорд</span>':''}`;
+  $('#mistWrap').hidden = !run.wrong.length; $('#retryMist').hidden = !run.wrong.length;
+  $('#mistList').innerHTML = run.wrong.map(w=>`<div class="mi"><div class="label">Часть ${esc(w.q.lvl)}</div><div class="q">${esc(w.q.en)}</div>
+    ${showRu&&w.q.ru?`<div class="e">${esc(w.q.ru)}</div>`:''}<div class="a">✓ ${esc(w.correctText)}</div><div class="e">${esc(w.q.ex)}</div></div>`).join('');
+  show('results');
+}
+$('#retryMist').onclick = ()=>{ const qs = run.wrong.map(w=>w.q); const name=run.name; const key=run.key; startRun({name:'Работа над ошибками · '+name, key, qs}); run.isRetry=true; };
+$('#retryAll').onclick = ()=>{ const base = run.key==='final' ? null : LEVELS.find(l=>l.id===run.key);
+  if(base) startRun({name:base.id+' · '+base.en, key:base.id, qs:base.qs.map(q=>({...q,lvl:base.id}))});
+  else { const all = LEVELS.flatMap(l=>l.qs.map(q=>({...q,lvl:l.id}))); startRun({name:'Мини-СОЧ · с. 48–66', key:'final', qs:shuffle(all).slice(0,20), noShuffle:true}); } };
+$('#toHome').onclick = ()=>{ renderHome(); show('home'); };
+$('#quitBtn').onclick = ()=>{ renderHome(); show('home'); };
+
+/* ---------- CHEAT SHEET ---------- */
+$('#cheatBody').innerHTML = CHEAT.map(([code,title,pts])=>`<div class="cs"><h3><span class="code">${code}</span>${esc(title)}</h3><ul>${pts.map(p=>`<li>${p}</li>`).join('')}</ul></div>`).join('');
+$('#openCheat').onclick = ()=> show('cheat');
+$('#cheatBack').onclick = ()=> show('home');
+$('#ruToggle').onchange = e=>{ showRu = e.target.checked; store.set('arsenRev48_ru', showRu); };
+
+renderHome();
+</script>
