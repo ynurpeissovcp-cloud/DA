@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<title>Арсен: повторение физики, с. 58–71</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one column "lab notebook" on faint graph paper; periodic-table tiles carry levels and scores. */
+:root{
+  --bg:#F2F5F7; --grid:rgba(30,91,216,.06); --card:#FFFFFF; --ink:#0F1E2A; --muted:#566876; --line:#D6DEE5;
+  --accent:#1E5BD8; --accent-soft:#E4ECFC; --flame:#D9660A; --flame-soft:#FCEBDD;
+  --good:#12805A; --good-soft:#E1F3EA; --bad:#C2303B; --bad-soft:#FBE5E7;
+  --f-display:"Unbounded", "Arial Black", system-ui, sans-serif;
+  --f-body:"Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0C151E; --grid:rgba(110,155,255,.07); --card:#13212E; --ink:#E5EDF3; --muted:#93A5B4; --line:#24384B;
+  --accent:#7AA2FF; --accent-soft:#1A2D4D; --flame:#FF9C45; --flame-soft:#3A2614;
+  --good:#45C792; --good-soft:#123327; --bad:#FF7079; --bad-soft:#3A1A1E; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#0C151E; --grid:rgba(110,155,255,.07); --card:#13212E; --ink:#E5EDF3; --muted:#93A5B4; --line:#24384B;
+  --accent:#7AA2FF; --accent-soft:#1A2D4D; --flame:#FF9C45; --flame-soft:#3A2614;
+  --good:#45C792; --good-soft:#123327; --bad:#FF7079; --bad-soft:#3A1A1E; color-scheme:dark; }
+
+*{box-sizing:border-box}
+body{
+  background-color:var(--bg); color:var(--ink); font-family:var(--f-body); font-size:16px; line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.wrap{max-width:780px; margin:0 auto; padding-block:28px 64px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px));}
+h1,h2,h3{font-family:var(--f-display); text-wrap:balance; margin:0; letter-spacing:-.01em}
+button{font:inherit; color:inherit; cursor:pointer}
+button:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.label{font-family:var(--f-mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+
+/* Hero */
+.hero{display:flex; gap:22px; align-items:center; flex-wrap:wrap; margin-bottom:26px}
+.tile{width:118px; height:132px; border:2.5px solid var(--ink); border-radius:6px; background:var(--card);
+  display:grid; grid-template-rows:auto 1fr auto; padding:8px 10px; flex:none; box-shadow:6px 6px 0 var(--accent)}
+.tile .num{font-family:var(--f-mono); font-weight:700; font-size:15px}
+.tile .sym{font-family:var(--f-display); font-weight:800; font-size:50px; line-height:1; align-self:center}
+.tile .nm{font-size:12px; font-weight:700}
+.tile .ms{font-family:var(--f-mono); font-size:11px; color:var(--muted)}
+.hero-text{flex:1; min-width:240px}
+.hero h1{font-size:clamp(26px,5vw,38px); line-height:1.1; margin-block:6px 10px}
+.hero p{margin:0; color:var(--muted); max-width:52ch}
+
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:26px}
+.btn{border:2px solid var(--ink); background:var(--card); padding:10px 16px; border-radius:8px; font-weight:700;
+  display:inline-flex; gap:8px; align-items:center; transition:transform .12s, box-shadow .12s}
+.btn:hover{transform:translate(-1px,-1px); box-shadow:3px 3px 0 var(--ink)}
+.btn.primary{background:var(--accent); border-color:var(--accent); color:#fff}
+.btn.primary:hover{box-shadow:3px 3px 0 var(--ink)}
+.btn[disabled]{opacity:.45; cursor:not-allowed; transform:none; box-shadow:none}
+.switch{display:inline-flex; align-items:center; gap:8px; font-weight:600; font-size:14px; color:var(--muted);
+  border:1.5px dashed var(--line); padding:8px 12px; border-radius:8px; background:var(--card)}
+.switch input{accent-color:var(--accent); width:18px; height:18px}
+
+/* Levels grid */
+.levels{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px}
+.lvl{text-align:left; background:var(--card); border:1.5px solid var(--line); border-radius:10px; padding:14px 14px 12px;
+  display:grid; grid-template-columns:auto 1fr; gap:4px 12px; align-items:start; transition:border-color .12s, transform .12s}
+.lvl:hover{border-color:var(--accent); transform:translateY(-2px)}
+.lvl .code{grid-row:span 3; width:52px; height:58px; border:2px solid var(--ink); border-radius:5px; display:grid; place-items:center;
+  font-family:var(--f-display); font-weight:700; font-size:17px; background:var(--accent-soft)}
+.lvl .t{font-weight:800; line-height:1.25}
+.lvl .r{font-size:13px; color:var(--muted); line-height:1.3}
+.lvl .meta{font-family:var(--f-mono); font-size:12px; color:var(--muted); margin-top:6px; display:flex; gap:10px; flex-wrap:wrap}
+.best{color:var(--good); font-weight:700}
+.boss{grid-column:1/-1; display:flex; gap:16px; align-items:center; flex-wrap:wrap; background:var(--ink); color:var(--bg);
+  border:none; border-radius:12px; padding:18px 20px; text-align:left}
+.boss .code{width:60px; height:66px; border:2px solid var(--bg); border-radius:6px; display:grid; place-items:center;
+  font-family:var(--f-display); font-weight:800; font-size:18px; background:var(--flame); color:#fff; flex:none}
+.boss .t{font-family:var(--f-display); font-size:20px}
+.boss .r{opacity:.8; font-size:14px}
+.boss .grow{flex:1; min-width:200px}
+.boss:hover{transform:translateY(-2px)}
+.section-h{display:flex; justify-content:space-between; align-items:baseline; margin:30px 0 12px; gap:12px; flex-wrap:wrap}
+.section-h h2{font-size:18px}
+
+/* Quiz */
+.qtop{display:flex; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap}
+.qtop .grow{flex:1; min-width:140px}
+.bar{height:10px; background:var(--line); border-radius:99px; overflow:hidden}
+.bar > i{display:block; height:100%; width:0; background:var(--accent); transition:width .3s}
+.stats{display:flex; gap:8px; font-family:var(--f-mono); font-size:13px}
+.pill{padding:4px 10px; border-radius:99px; background:var(--card); border:1.5px solid var(--line); white-space:nowrap}
+.pill.streak{background:var(--flame-soft); border-color:var(--flame); color:var(--flame); font-weight:700}
+.card{background:var(--card); border:2px solid var(--ink); border-radius:12px; padding:22px; box-shadow:6px 6px 0 var(--line)}
+.qtag{display:flex; justify-content:space-between; gap:10px; margin-bottom:10px; flex-wrap:wrap}
+.qen{font-size:clamp(19px,3.2vw,23px); font-weight:800; line-height:1.3; margin:0}
+.qru{margin:8px 0 0; color:var(--muted); font-size:15px}
+.opts{display:grid; gap:10px; margin-top:20px}
+.opt{display:flex; gap:12px; align-items:flex-start; text-align:left; background:var(--bg); border:2px solid var(--line);
+  border-radius:10px; padding:12px 14px; transition:border-color .12s, background .12s}
+.opt:hover:not([disabled]){border-color:var(--accent)}
+.opt .k{font-family:var(--f-mono); font-weight:700; width:26px; height:26px; border-radius:6px; border:1.5px solid currentColor;
+  display:grid; place-items:center; flex:none; font-size:13px; opacity:.7}
+.opt .ot{min-width:0}
+.opt .ot small{display:block; color:var(--muted); font-size:13px}
+.opt.correct{border-color:var(--good); background:var(--good-soft)}
+.opt.wrong{border-color:var(--bad); background:var(--bad-soft)}
+.opt[disabled]{cursor:default}
+
+.sort{display:grid; gap:8px; margin-top:18px}
+.srow{display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; padding:10px 12px;
+  border:2px solid var(--line); border-radius:10px; background:var(--bg)}
+.srow .it{font-weight:700; min-width:0; flex:1 1 160px}
+.srow .it small{display:block; font-weight:500; color:var(--muted); font-size:13px}
+.seg{display:inline-flex; border:1.5px solid var(--line); border-radius:8px; overflow:hidden; flex-wrap:wrap}
+.seg button{border:none; background:var(--card); padding:7px 11px; font-size:13px; font-weight:700; border-right:1.5px solid var(--line)}
+.seg button:last-child{border-right:none}
+.seg button.on{background:var(--accent); color:#fff}
+.srow.ok{border-color:var(--good); background:var(--good-soft)}
+.srow.no{border-color:var(--bad); background:var(--bad-soft)}
+.srow .fix{font-size:13px; font-weight:700; color:var(--good); width:100%}
+
+.fb{margin-top:18px; border-radius:10px; padding:14px 16px; border:2px solid; display:grid; gap:6px}
+.fb.good{border-color:var(--good); background:var(--good-soft)}
+.fb.bad{border-color:var(--bad); background:var(--bad-soft)}
+.fb .v{font-weight:800}
+.fb p{margin:0}
+.term{font-family:var(--f-mono); font-size:13px; display:inline-block; padding:3px 8px; border-radius:6px; background:var(--card); border:1px solid var(--line); justify-self:start}
+.qactions{display:flex; justify-content:space-between; gap:10px; margin-top:18px; flex-wrap:wrap; align-items:center}
+.hint{font-size:13px; color:var(--muted)}
+
+/* Results */
+.res-head{display:flex; gap:22px; align-items:center; flex-wrap:wrap}
+.mark{width:120px; height:134px; border:2.5px solid var(--ink); border-radius:6px; background:var(--card); display:grid;
+  grid-template-rows:auto 1fr auto; padding:8px 10px; box-shadow:6px 6px 0 var(--flame); flex:none}
+.mark .sym{font-family:var(--f-display); font-weight:800; font-size:56px; line-height:1; align-self:center}
+.res-head h2{font-size:clamp(22px,4vw,30px)}
+.res-nums{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+.mist{display:grid; gap:12px; margin-top:12px}
+.mi{background:var(--card); border:1.5px solid var(--line); border-left:5px solid var(--bad); border-radius:8px; padding:12px 14px}
+.mi .q{font-weight:800}
+.mi .a{color:var(--good); font-weight:700; margin-top:4px}
+.mi .e{color:var(--muted); font-size:14px; margin-top:4px}
+
+/* Cheat sheet */
+.cheat{display:grid; gap:14px; grid-template-columns:minmax(0,1fr)}.tbl{overflow-x:auto}
+.cs{background:var(--card); border:1.5px solid var(--line); border-radius:10px; padding:16px 18px}
+.cs h3{font-size:16px; display:flex; gap:10px; align-items:center; margin-bottom:8px}
+.cs h3 .code{font-family:var(--f-mono); font-size:12px; border:1.5px solid var(--ink); border-radius:4px; padding:2px 6px; background:var(--accent-soft)}
+.cs ul{margin:0; padding-left:20px; display:grid; gap:4px; grid-template-columns:minmax(0,1fr)}
+.cs li{max-width:68ch}
+.cs b{font-weight:800}
+.tbl{overflow-x:auto}
+.tbl table{border-collapse:collapse; font-size:14px; min-width:420px}
+.tbl th,.tbl td{border:1px solid var(--line); padding:6px 10px; text-align:left}
+.tbl th{font-family:var(--f-mono); font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted)}
+
+@media (max-width:520px){ .card{padding:16px} .tile{width:96px; height:110px} .tile .sym{font-size:40px} }
+@media (prefers-reduced-motion:reduce){ *{transition:none!important; animation:none!important} }
+@keyframes pop{0%{transform:scale(.96)}60%{transform:scale(1.02)}100%{transform:scale(1)}}
+.pop{animation:pop .25s ease-out}
+</style>
+
+<div class="wrap">
+
+<!-- HOME -->
+<section id="home">
+  <div class="hero">
+    <div class="tile" aria-hidden="true">
+      <span class="num">7</span><span class="sym">F</span>
+      <span><span class="nm">Arsen</span><br><span class="ms">Grade 7</span></span>
+    </div>
+    <div class="hero-text">
+      <div class="label">Physics · Grade 7 · с. 58–71</div>
+      <h1>Арсен, повторяем физику</h1>
+      <p>Повторение с. 58–71: плотность смеси, лабораторная по плотности, итоговый тест и задачи с таблицей главы 3, а ещё сила (4.1) и инерция (4.2). Вопросы на английском, под каждым перевод и разбор по-русски. Пройди 6 частей по очереди, в конце — «Мини-СОЧ».</p>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button class="btn" id="openCheat" type="button">Шпаргалка</button>
+    <label class="switch" for="ruToggle"><input type="checkbox" id="ruToggle" checked> Показывать перевод на русский</label>
+  </div>
+
+  <div class="section-h"><h2>Части повторения</h2><span class="label" id="totalQ"></span></div>
+  <div class="levels" id="levels"></div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz" hidden>
+  <div class="qtop">
+    <button class="btn" id="quitBtn" type="button" aria-label="Выйти к темам">← Назад</button>
+    <div class="grow">
+      <div class="label" id="qLevelName" style="margin-bottom:6px"></div>
+      <div class="bar"><i id="qBar"></i></div>
+    </div>
+    <div class="stats"><span class="pill" id="qCount">1/10</span><span class="pill streak" id="qStreak" hidden></span></div>
+  </div>
+  <div class="card" id="qCard"></div>
+</section>
+
+<!-- RESULTS -->
+<section id="results" hidden>
+  <div class="res-head">
+    <div class="mark" aria-hidden="true"><span class="label" id="rMarkLbl">оценка</span><span class="sym" id="rMark">5</span><span class="label" id="rPct">100%</span></div>
+    <div style="flex:1; min-width:220px">
+      <div class="label" id="rLevel"></div>
+      <h2 id="rTitle"></h2>
+      <p id="rMsg" style="margin:8px 0 0; color:var(--muted)"></p>
+      <div class="res-nums" id="rNums"></div>
+    </div>
+  </div>
+  <div class="toolbar" style="margin-top:22px">
+    <button class="btn primary" id="retryMist" type="button">Повторить ошибки</button>
+    <button class="btn" id="retryAll" type="button">Пройти заново</button>
+    <button class="btn" id="toHome" type="button">В начало</button>
+  </div>
+  <div id="mistWrap">
+    <div class="section-h"><h2>Работа над ошибками</h2></div>
+    <div class="mist" id="mistList"></div>
+  </div>
+</section>
+
+<!-- CHEAT SHEET -->
+<section id="cheat" hidden>
+  <div class="qtop"><button class="btn" id="cheatBack" type="button">← Назад</button><div class="grow"><div class="label">Шпаргалка · с. 58–71</div></div></div>
+  <div class="cheat" id="cheatBody"></div>
+</section>
+
+</div>
+
+<script>
+/* ---------- DATA ---------- */
+const LEVELS = [
+ {id:'3.4', en:'Density of mixture', ru:'Плотность смеси', qs:[
+  {en:'Two pure substances mixed together are called…', ru:'Два чистых вещества, смешанные вместе, называются…', o:[['a mixture','смесь'],['a pure substance','чистое вещество'],['an element','элемент'],['a vector','вектор']], a:0, ex:'Mixture — смесь. Пример: сталь (steel) — смесь углерода и железа, чай с сахаром.', term:'mixture — смесь'},
+  {en:'Which of these is a pure substance?', ru:'Что из этого — чистое вещество?', o:[['gold','золото'],['steel','сталь'],['tea with sugar','чай с сахаром'],['salty water','солёная вода']], a:0, ex:'Pure substance — частицы одного вида: вода, кислород, золото, серебро. Сталь и солёная вода — смеси.', term:'pure — чистый'},
+  {en:'How do you find the density of a mixture?', ru:'Как найти плотность смеси?', o:[['total mass ÷ total volume','общая масса ÷ общий объём'],['add the two densities','сложить две плотности'],['total volume ÷ total mass','общий объём ÷ общая масса'],['mass × volume','масса × объём']], a:0, ex:'d смеси = (m₁ + m₂ + …) / (V₁ + V₂ + …). Плотности складывать НЕЛЬЗЯ!', term:'total — общий'},
+  {en:'Example 1: 178 g copper (8.9 g/cm³) and 113 g lead (11.3 g/cm³). Volume of the copper = ?', ru:'Пример 1: 178 г меди (8,9 г/см³) и 113 г свинца (11,3 г/см³). Объём меди = ?', o:[['20 cm³','20 см³'],['10 cm³','10 см³'],['1584 cm³','1584 см³'],['30 cm³','30 см³']], a:0, ex:'V = m / d = 178 / 8,9 = 20 см³. А свинца: 113 / 11,3 = 10 см³.', term:'copper — медь; lead — свинец'},
+  {en:'Example 1 (continued): density of the copper–lead mixture = ?', ru:'Пример 1 (дальше): плотность смеси меди и свинца = ?', o:[['9.7 g/cm³','9,7 г/см³'],['20.2 g/cm³','20,2 г/см³'],['10.1 g/cm³','10,1 г/см³'],['291 g/cm³','291 г/см³']], a:0, ex:'Масса 178 + 113 = 291 г, объём 20 + 10 = 30 см³. d = 291 / 30 = 9,7 г/см³. Ответ всегда между плотностями двух веществ!', term:'density — плотность'},
+  {en:'Example 2: a cube with side 10 cm. Its volume = ?', ru:'Пример 2: куб со стороной 10 см. Его объём = ?', o:[['1000 cm³','1000 см³'],['100 cm³','100 см³'],['30 cm³','30 см³'],['10 cm³','10 см³']], a:0, ex:'V = a³ = 10 · 10 · 10 = 1000 см³.', term:'cube — куб'},
+  {en:'The cube (1000 cm³) is full of a mixture with mass 0.9 kg. Density of the mixture = ?', ru:'Куб (1000 см³) заполнен смесью массой 0,9 кг. Плотность смеси = ?', o:[['0.9 g/cm³','0,9 г/см³'],['900 g/cm³','900 г/см³'],['1.1 g/cm³','1,1 г/см³'],['9 g/cm³','9 г/см³']], a:0, ex:'Сначала переводим: 0,9 кг = 900 г. d = 900 / 1000 = 0,9 г/см³.', term:'container — сосуд'},
+  {en:'Half of the cube (500 cm³) is water. Mass of the water = ?', ru:'Половина куба (500 см³) — вода. Масса воды = ?', o:[['500 g','500 г'],['1000 g','1000 г'],['250 g','250 г'],['900 g','900 г']], a:0, ex:'m = d · V = 1 г/см³ · 500 см³ = 500 г. Тогда вторая жидкость: 900 − 500 = 400 г, d = 400 / 500 = 0,8 г/см³.', term:'mass — масса'},
+  {en:'Literacy 1: 1.3 kg of a liquid (1.3 g/cm³) and 2 kg of water (1 g/cm³) are mixed. Density of the mixture = ?', ru:'Задание 1: смешали 1,3 кг жидкости (1,3 г/см³) и 2 кг воды (1 г/см³). Плотность смеси = ?', o:[['1.1 g/cm³','1,1 г/см³'],['2.3 g/cm³','2,3 г/см³'],['1.15 g/cm³','1,15 г/см³'],['3.3 g/cm³','3,3 г/см³']], a:0, ex:'V жидкости = 1300 г / 1,3 = 1000 см³, V воды = 2000 / 1 = 2000 см³. d = (1300 + 2000) / (1000 + 2000) = 3300 / 3000 = 1,1 г/см³.', term:'liquid — жидкость'},
+  {en:'Literacy 2: 200 cm³ (1.2 g/cm³) and 300 cm³ (1.6 g/cm³) make an alloy. Density of the alloy = ?', ru:'Задание 2: 200 см³ (1,2 г/см³) и 300 см³ (1,6 г/см³) сплавили. Плотность сплава = ?', o:[['1.44 g/cm³','1,44 г/см³'],['1.4 g/cm³','1,4 г/см³'],['2.8 g/cm³','2,8 г/см³'],['720 g/cm³','720 г/см³']], a:0, ex:'m₁ = 200 · 1,2 = 240 г, m₂ = 300 · 1,6 = 480 г. d = 720 / 500 = 1,44 г/см³. Ловушка: 1,4 — это просто среднее, оно неверно, т. к. объёмы разные.', term:'alloy — сплав'},
+  {en:'Water at 4 °C is denser than ice. That is why…', ru:'Вода при 4 °C плотнее льда. Поэтому…', o:[['ice floats and fish can live under it','лёд плавает, и рыбы живут подо льдом'],['ice sinks to the bottom','лёд тонет'],['water cannot freeze','вода не может замёрзнуть'],['fish freeze in winter','рыбы замерзают зимой']], a:0, ex:'Менее плотное всплывает. Лёд остаётся сверху, а внизу вода +4 °C — там живут рыбы.', term:'denser — плотнее'}]},
+
+ {id:'Lab', en:'Mass, volume, density, lab work', ru:'Масса, объём, плотность, лабораторная', qs:[
+  {en:'The formula for density is…', ru:'Формула плотности —…', o:[['d = m / V','d = m / V'],['d = m · V','d = m · V'],['d = V / m','d = V / m'],['d = m + V','d = m + V']], a:0, ex:'Density = mass / volume. Отсюда m = d · V и V = m / d.', term:'density — плотность'},
+  {en:'The SI unit of density is…', ru:'Единица плотности в СИ —…', o:[['kg/m³','кг/м³'],['g/cm³','г/см³'],['kg','кг'],['m³','м³']], a:0, ex:'СИ: масса — кг, объём — м³, плотность — кг/м³. Дополнительные единицы: г, см³, г/см³.', term:'SI unit — единица СИ'},
+  {en:'In 1 cm³ of lead there are 11.3 g. The density of lead is…', ru:'В 1 см³ свинца 11,3 г. Плотность свинца —…', o:[['11.3 g/cm³','11,3 г/см³'],['1 g/cm³','1 г/см³'],['113 g/cm³','113 г/см³'],['0.113 g/cm³','0,113 г/см³']], a:0, ex:'Плотность = сколько граммов в 1 см³. У воды — 1 г/см³.', term:'lead — свинец'},
+  {en:'In the lab: mass of beaker = 100 g, beaker with liquid = 180 g. Mass of the liquid = ?', ru:'В лабораторной: стакан 100 г, стакан с жидкостью 180 г. Масса жидкости = ?', o:[['80 g','80 г'],['180 g','180 г'],['280 g','280 г'],['100 g','100 г']], a:0, ex:'Из массы стакана с жидкостью вычитаем массу пустого стакана: 180 − 100 = 80 г.', term:'beaker — мерный стакан'},
+  {en:'How do you find the volume of an irregular object (a stone)?', ru:'Как найти объём тела неправильной формы (камня)?', o:[['put it in a measuring cylinder: V = V₂ − V₁','опустить в мензурку: V = V₂ − V₁'],['use V = a³','по формуле V = a³'],['weigh it on scales','взвесить на весах'],['it has no volume','у него нет объёма']], a:0, ex:'Volume immersed = volume of object. Сколько поднялась вода в мензурке, таков и объём камня.', term:'measuring cylinder — мензурка'},
+  {en:'Water level was 50 ml, after putting a stone it is 65 ml. Volume of the stone = ?', ru:'Вода была 50 мл, после камня стала 65 мл. Объём камня = ?', o:[['15 cm³','15 см³'],['65 cm³','65 см³'],['115 cm³','115 см³'],['50 cm³','50 см³']], a:0, ex:'65 − 50 = 15 мл = 15 см³ (1 мл = 1 см³).', term:'immerse — погрузить'},
+  {en:'Volume of a cube with side a is…', ru:'Объём куба со стороной a —…', o:[['a³','a³'],['a²','a²'],['3a','3a'],['6a²','6a²']], a:0, ex:'V = a · a · a = a³. Например, a = 2 см → V = 8 см³.', term:'volume — объём'},
+  {en:'Mass is…', ru:'Масса — это…', o:[['the amount of matter in an object','количество вещества в теле'],['the space an object takes up','место, которое занимает тело'],['how fast an object moves','как быстро движется тело'],['a push or a pull','толчок или тяга']], a:0, ex:'Масса — сколько вещества. Единица СИ — кг. Измеряют весами (lever scales, electric scales).', term:'mass — масса'},
+  {en:'Volume is…', ru:'Объём — это…', o:[['the amount of space that matter occupies','сколько места занимает вещество'],['the amount of matter','количество вещества'],['mass ÷ volume','масса ÷ объём'],['a type of force','вид силы']], a:0, ex:'Объём — место в пространстве. Единица СИ — м³.', term:'occupy — занимать'},
+  {en:'The densest element on Earth is…', ru:'Самый плотный элемент на Земле —…', o:[['osmium (22.61 g/cm³)','осмий (22,61 г/см³)'],['gold','золото'],['lead','свинец'],['iron','железо']], a:0, ex:'Осмий Os. Ещё факты: в 1795 году за 1 грамм приняли массу 1 см³ воды; объём Каспия ≈ 78 200 км³, Балхаша ≈ 112 км³.', term:'osmium — осмий'}]},
+
+ {id:'Test', en:'Summative assessment', ru:'Суммативная работа (с. 64)', qs:[
+  {en:'1. What is the unit of area?', ru:'1. Какая единица площади?', o:[['m²','м²'],['m','м'],['m³','м³'],['l','л']], a:0, ex:'Площадь — м² (квадратные), объём — м³ (кубические), длина — м.', term:'area — площадь'},
+  {en:'2. 2 ml is equal to…', ru:'2. 2 мл равно…', o:[['2 cm³','2 см³'],['2 m³','2 м³'],['20 cm³','20 см³'],['20 m³','20 м³']], a:0, ex:'1 мл = 1 см³, значит 2 мл = 2 см³.', term:'millilitre — миллилитр'},
+  {en:'3. A container has base area 100 cm² and height 5 cm, half-filled with water. Volume of the water = ?', ru:'3. Сосуд: площадь дна 100 см², высота 5 см, наполовину с водой. Объём воды = ?', o:[['250 ml','250 мл'],['500 ml','500 мл'],['100 ml','100 мл'],['200 ml','200 мл']], a:0, ex:'Весь сосуд: 100 · 5 = 500 см³. Наполовину: 500 / 2 = 250 см³ = 250 мл.', term:'half-filled — наполовину заполненный'},
+  {en:'4. Mass of that water (ρ = 1 g/cm³) = ?', ru:'4. Масса этой воды (ρ = 1 г/см³) = ?', o:[['250 g','250 г'],['500 g','500 г'],['100 g','100 г'],['200 g','200 г']], a:0, ex:'m = ρ · V = 1 · 250 = 250 г.', term:'mass — масса'},
+  {en:'5. Alcohol instead of water (ρ = 0.8 g/cm³). Mass = ?', ru:'5. Спирт вместо воды (ρ = 0,8 г/см³). Масса = ?', o:[['200 g','200 г'],['250 g','250 г'],['500 g','500 г'],['100 g','100 г']], a:0, ex:'m = 0,8 · 250 = 200 г.', term:'alcohol — спирт'},
+  {en:'6. Volume of a wooden block of mass 7.2 g (ρ = 0.6 g/cm³) = ?', ru:'6. Объём деревянного бруска массой 7,2 г (ρ = 0,6 г/см³) = ?', o:[['12 cm³','12 см³'],['10 cm³','10 см³'],['14 cm³','14 см³'],['16 cm³','16 см³']], a:0, ex:'V = m / ρ = 7,2 / 0,6 = 12 см³.', term:'wooden block — деревянный брусок'},
+  {en:'7. Which of the following measures mass?', ru:'7. Чем измеряют массу?', o:[['equal-arm balance','рычажные весы'],['spring balance','динамометр'],['thermometer','термометр'],['meter stick','метровая линейка']], a:0, ex:'Рычажные весы (equal-arm balance) сравнивают массы. Динамометр (spring balance) измеряет силу.', term:'balance — весы'},
+  {en:'8. Liquid A (0.5 g/cm³) is mixed with the SAME volume of liquid B. Mixture = 0.8 g/cm³. Density of B = ?', ru:'8. Жидкость A (0,5 г/см³) смешали с ТАКИМ ЖЕ объёмом жидкости B. Смесь 0,8 г/см³. Плотность B = ?', o:[['1.1','1,1'],['1.2','1,2'],['2.2','2,2'],['1.5','1,5']], a:0, ex:'Объёмы равны — тогда плотность смеси = среднее: (0,5 + d) / 2 = 0,8 → 0,5 + d = 1,6 → d = 1,1 г/см³.', term:'same volume — одинаковый объём'},
+  {en:'9. How many iron spheres (3 cm³ each) displace 15 cm³ of water?', ru:'9. Сколько железных шариков (по 3 см³) вытеснят 15 см³ воды?', o:[['5','5'],['3','3'],['10','10'],['15','15']], a:0, ex:'15 / 3 = 5 шариков.', term:'displace — вытеснить'},
+  {en:'10. The amount of matter in a substance is…', ru:'10. Количество вещества в теле — это…', o:[['mass','масса'],['density','плотность'],['volume','объём'],['area','площадь']], a:0, ex:'Mass — количество вещества.', term:'matter — вещество'},
+  {en:'11. The amount of space that an object takes up is…', ru:'11. Место, которое занимает тело, — это…', o:[['volume','объём'],['mass','масса'],['density','плотность'],['area','площадь']], a:0, ex:'Volume — объём.', term:'take up — занимать'}]},
+
+ {id:'Tab', en:'Context-based questions', ru:'Задачи с таблицей (с. 65)', qs:[
+  {en:'Oil: mass 93 g, volume 100 cm³. Density of oil = ?', ru:'Масло: масса 93 г, объём 100 см³. Плотность масла = ?', o:[['0.93 g/cm³','0,93 г/см³'],['9.3 g/cm³','9,3 г/см³'],['1.07 g/cm³','1,07 г/см³'],['93 g/cm³','93 г/см³']], a:0, ex:'93 / 100 = 0,93 г/см³ — меньше, чем у воды (1), поэтому масло плавает.', term:'oil — масло'},
+  {en:'Honey: density 1.45 g/cm³, volume 200 cm³. Mass = ?', ru:'Мёд: плотность 1,45 г/см³, объём 200 см³. Масса = ?', o:[['290 g','290 г'],['145 g','145 г'],['201.45 g','201,45 г'],['138 g','138 г']], a:0, ex:'m = ρ · V = 1,45 · 200 = 290 г.', term:'honey — мёд'},
+  {en:'Water: density 1, mass 50 g. Volume = ? Grape juice: density 1.07, volume 50. Mass = ?', ru:'Вода: плотность 1, масса 50 г. Объём = ? Сок: плотность 1,07, объём 50. Масса = ?', o:[['50 cm³ and 53.5 g','50 см³ и 53,5 г'],['1 cm³ and 1.07 g','1 см³ и 1,07 г'],['50 cm³ and 50 g','50 см³ и 50 г'],['100 cm³ and 107 g','100 см³ и 107 г']], a:0, ex:'V воды = 50 / 1 = 50 см³. m сока = 1,07 · 50 = 53,5 г.', term:'grape juice — виноградный сок'},
+  {en:'1. Which formulas are correct? (two answers)', ru:'1. Какие формулы верны? (два ответа)', o:[['ρ = m/V and m = ρV','ρ = m/V и m = ρV'],['ρ = mV and V = ρm','ρ = mV и V = ρm'],['ρ = V/m and m = ρV','ρ = V/m и m = ρV'],['ρ = m/V and V = ρm','ρ = m/V и V = ρm']], a:0, ex:'В учебнике это ответы B и D. Проверь: V = m / ρ, а не ρm.', term:'formula — формула'},
+  {en:'2. When liquids with different densities meet, they…', ru:'2. Когда встречаются жидкости разной плотности, они…', o:[['separate according to their densities','расслаиваются по плотности'],['exchange densities','обмениваются плотностями'],['mix uniformly','равномерно смешиваются'],['push one another','отталкивают друг друга']], a:0, ex:'Тяжёлые (плотные) внизу, лёгкие сверху — как в опыте «9 слоёв» (IT link).', term:'separate — разделяться'},
+  {en:'3. Which order is true? (mercury is 13.6 g/cm³)', ru:'3. Какой порядок верный? (ртуть — 13,6 г/см³)', o:[['ρ mercury > ρ honey > ρ grape juice > ρ water > ρ oil','ртуть > мёд > сок > вода > масло'],['ρ oil > ρ honey > ρ mercury > ρ water > ρ grape juice','масло > мёд > ртуть > вода > сок'],['ρ honey > ρ mercury > ρ grape juice > ρ oil > ρ water','мёд > ртуть > сок > масло > вода'],['ρ honey = ρ mercury > ρ grape juice > ρ water > ρ oil','мёд = ртуть > сок > вода > масло']], a:0, ex:'13,6 > 1,45 > 1,07 > 1 > 0,93. В таблице учебника число 13,6 стоит в столбце массы — это опечатка, это плотность ртути.', term:'mercury — ртуть'},
+  {en:'4. Ratio of densities of honey and oil = ?', ru:'4. Во сколько раз плотность мёда больше, чем масла?', o:[['≈ 1.6','≈ 1,6'],['1.2','1,2'],['1','1'],['2','2']], a:0, ex:'1,45 / 0,93 ≈ 1,56 ≈ 1,6.', term:'ratio — отношение'},
+  {en:'5. Which liquid has the biggest volume?', ru:'5. У какой жидкости самый большой объём?', o:[['honey (200 cm³)','мёд (200 см³)'],['oil (100 cm³)','масло (100 см³)'],['water (50 cm³)','вода (50 см³)'],['grape juice (50 cm³)','сок (50 см³)']], a:0, ex:'Смотри столбец Volume: мёд — 200 см³.', term:'volume — объём'},
+  {en:'8. A 48 g metal bar is put in 50 ml of water. Final volume is 56 ml. Volume and density of the bar = ?', ru:'8. Брусок 48 г опустили в 50 мл воды. Стало 56 мл. Объём и плотность бруска = ?', o:[['6 ml, 8 g/ml','6 мл, 8 г/мл'],['6 ml, 54 g/ml','6 мл, 54 г/мл'],['56 ml, 0.86 g/ml','56 мл, 0,86 г/мл'],['6 ml, 288 g/ml','6 мл, 288 г/мл']], a:0, ex:'V = 56 − 50 = 6 мл. ρ = 48 / 6 = 8 г/мл.', term:'metal bar — металлический брусок'}]},
+
+ {id:'4.1', en:'Force', ru:'Сила', qs:[
+  {en:'In physics, a force is…', ru:'В физике сила — это…', o:[['a push or a pull','толчок или тяга'],['the amount of matter','количество вещества'],['the space an object takes up','место, которое занимает тело'],['a type of energy only','только вид энергии']], a:0, ex:'Force is a push or a pull that acts on an object. Push — от себя, pull — к себе.', term:'force — сила'},
+  {en:'Which can a force NOT do?', ru:'Чего сила НЕ может сделать?', o:[['change the mass of a body','изменить массу тела'],['start motion','начать движение'],['stop motion','остановить движение'],['change the shape of a body','изменить форму тела']], a:0, ex:'Сила может: начать движение, остановить, изменить скорость или направление, изменить форму или размер. Массу она не меняет.', term:'effect — действие'},
+  {en:'Force is a vector quantity because it has…', ru:'Сила — векторная величина, потому что у неё есть…', o:[['magnitude and direction','величина и направление'],['only magnitude','только величина'],['only mass','только масса'],['colour and size','цвет и размер']], a:0, ex:'Вектор — стрелка: направление стрелки = направление силы, длина стрелки = величина силы.', term:'vector — вектор'},
+  {en:'A longer arrow on a drawing means…', ru:'Более длинная стрелка на рисунке значит…', o:[['a bigger force','бо́льшая сила'],['a smaller force','меньшая сила'],['no force','силы нет'],['a heavier object','более тяжёлое тело']], a:0, ex:'The bigger the arrow, the bigger the force.', term:'arrow — стрелка'},
+  {en:'Which is a NON-contact force?', ru:'Какая сила действует БЕЗ касания?', o:[['force between two magnets','между двумя магнитами'],['pushing a car','толкать машину'],['opening a door','открывать дверь'],['hitting a nail with a hammer','бить молотком по гвоздю']], a:0, ex:'Без касания: Солнце и Земля, два магнита. Контактные: толкнуть машину, открыть дверь, поднять коробку.', term:'non-contact — бесконтактный'},
+  {t:'sort', en:'Contact or non-contact force?', ru:'Контактная или бесконтактная сила?', cats:[['Contact','с касанием'],['Non-contact','без касания']], items:[['Pushing a car','толкать машину',0],['Lifting a box','поднимать коробку',0],['Opening a door','открывать дверь',0],['Sun pulls the Earth','Солнце притягивает Землю',1],['Two magnets attract','два магнита притягиваются',1]], ex:'Контактные — предметы касаются. Бесконтактные — притяжение Солнца и Земли, магниты.'},
+  {en:'The symbol and unit of force are…', ru:'Обозначение и единица силы —…', o:[['F, newton (N)','F, ньютон (Н)'],['m, kilogram (kg)','m, килограмм (кг)'],['d, kg/m³','d, кг/м³'],['V, m³','V, м³']], a:0, ex:'Force — F, единица — ньютон, N.', term:'Newton — ньютон'},
+  {en:'A device that measures force is…', ru:'Прибор для измерения силы —…', o:[['a dynamometer (spring balance)','динамометр (пружинные весы)'],['a thermometer','термометр'],['a measuring cylinder','мензурка'],['a ruler','линейка']], a:0, ex:'Пружина растягивается тем сильнее, чем сильнее тянем. По шкале (graduation) читаем силу в ньютонах.', term:'dynamometer — динамометр'},
+  {en:'To lift 1 kg on the Earth we need about…', ru:'Чтобы поднять 1 кг на Земле, нужно примерно…', o:[['10 N','10 Н'],['1 N','1 Н'],['100 N','100 Н'],['0.1 N','0,1 Н']], a:0, ex:'100 г → примерно 1 Н, 1 кг → 10 Н. Значит 5 кг → 50 Н.', term:'lift — поднимать'},
+  {en:'About how much force is needed to lift 300 g?', ru:'Какая сила нужна, чтобы поднять 300 г?', o:[['3 N','3 Н'],['30 N','30 Н'],['300 N','300 Н'],['0.3 N','0,3 Н']], a:0, ex:'Каждые 100 г ≈ 1 Н, значит 300 г ≈ 3 Н.', term:'force — сила'}]},
+
+ {id:'4.2', en:'Inertia', ru:'Инерция', qs:[
+  {en:'Inertia means that objects…', ru:'Инерция значит, что тела…', o:[['at rest stay at rest, and objects in motion stay in motion','в покое остаются в покое, а в движении продолжают двигаться'],['always stop by themselves','всегда останавливаются сами'],['move faster without force','без силы ускоряются'],['lose mass when moving','теряют массу в движении']], a:0, ex:'Ньютон: «An object in motion tends to stay in motion and an object at rest tends to stay at rest unless acted upon by an external force».', term:'inertia — инерция'},
+  {en:'When a bus suddenly stops, passengers…', ru:'Когда автобус резко тормозит, пассажиры…', o:[['move forward','наклоняются вперёд'],['move back','отклоняются назад'],['do not move','не двигаются'],['jump up','подпрыгивают']], a:0, ex:'Тело по инерции продолжает двигаться вперёд, хотя автобус уже остановился.', term:'suddenly — внезапно'},
+  {en:'When a bus quickly speeds up, passengers…', ru:'Когда автобус резко трогается, пассажиры…', o:[['move back','отклоняются назад'],['move forward','наклоняются вперёд'],['fall to the side','падают вбок'],['do not feel anything','ничего не чувствуют']], a:0, ex:'Тело по инерции «хочет» остаться на месте, а автобус уезжает вперёд.', term:'accelerate — ускоряться'},
+  {en:'Inertia is proportional to…', ru:'Инерция пропорциональна…', o:[['mass','массе'],['volume','объёму'],['colour','цвету'],['speed only','только скорости']], a:0, ex:'Mass is a measure of inertia. Чем больше масса, тем больше инерция.', term:'proportional — пропорциональный'},
+  {en:'Boxes 100 kg or a car 2550 kg — which has more inertia?', ru:'Коробки 100 кг или машина 2550 кг — у чего инерция больше?', o:[['the car','у машины'],['the boxes','у коробок'],['the same','одинаково'],['neither','ни у чего']], a:0, ex:'У машины масса больше — значит, больше инерция, её труднее сдвинуть и остановить.', term:'load — груз'},
+  {en:'Why does an oil tanker turn off its engine 25 km before the port?', ru:'Почему танкер выключает двигатель за 25 км до порта?', o:[['it has a big mass and a lot of inertia, so it needs a long time to stop','масса большая, инерция большая — долго останавливается'],['to save the engine from water','чтобы двигатель не намок'],['because the port is closed','потому что порт закрыт'],['it has no inertia','у него нет инерции']], a:0, ex:'Огромная масса → огромная инерция. Ещё пример: велосипед резко остановился, а велосипедист летит дальше.', term:'tanker — танкер'},
+  {en:'Why are there weight classes in boxing?', ru:'Почему в боксе есть весовые категории?', o:[['a heavier boxer has more inertia, the fight would not be fair','у тяжёлого боксёра больше инерция, бой был бы нечестным'],['heavy boxers are slower to learn','тяжёлые медленнее учатся'],['for TV','для телевидения'],['inertia does not matter','инерция не важна']], a:0, ex:'Большая масса = большая инерция: такого соперника труднее сдвинуть и остановить.', term:'weight class — весовая категория'},
+  {en:'A card is on a cup with a coin on top. You flick the card quickly. The coin…', ru:'На стакане карточка, на ней монета. Резко выбиваешь карточку. Монета…', o:[['falls into the cup because of inertia','падает в стакан по инерции'],['flies away with the card','улетает вместе с карточкой'],['stays in the air','висит в воздухе'],['jumps up','подпрыгивает']], a:0, ex:'Монета была в покое и по инерции остаётся на месте, а потом падает вниз.', term:'slide — скользить'},
+  {en:'Why is it important to wear a seat belt?', ru:'Зачем пристёгиваться ремнём безопасности?', o:[['when the car stops suddenly, your body keeps moving forward by inertia','при резком торможении тело по инерции летит вперёд'],['to make the car faster','чтобы машина ехала быстрее'],['to increase your mass','чтобы увеличить массу'],['it removes inertia','он убирает инерцию']], a:0, ex:'Ремень — это внешняя сила, которая останавливает тело вместе с машиной.', term:'seat belt — ремень безопасности'}]}
+];
+const CHEAT = [
+ ['3.4','Density of mixture',[
+  '<b>Pure substance</b> — частицы одного вида (вода, золото). <b>Mixture</b> — смесь (сталь, чай с сахаром).',
+  '<b>d смеси = общая масса / общий объём</b> = (m₁ + m₂) / (V₁ + V₂). Плотности НЕ складываем.',
+  'План: 1) V каждого = m / d; 2) сложить массы; 3) сложить объёмы; 4) разделить.',
+  'Пример: 178 г меди (20 см³) + 113 г свинца (10 см³) → 291 / 30 = 9,7 г/см³.',
+  'Если объёмы равны — плотность смеси = среднее двух плотностей.']],
+ ['Lab','Mass, volume, density',[
+  '<b>d = m / V</b>, m = d · V, V = m / d. СИ: кг, м³, кг/м³. Ещё: г, см³, г/см³. 1 мл = 1 см³.',
+  'Масса жидкости = (стакан с жидкостью) − (пустой стакан).',
+  'Объём тела неправильной формы: V = V₂ − V₁ (насколько поднялась вода в мензурке). Куб: V = a³.',
+  'Вода 1 г/см³, масло 0,93, мёд 1,45, ртуть 13,6, свинец 11,3, медь 8,9, осмий 22,61 (самый плотный).']],
+ ['4.1','Force',[
+  '<b>Force</b> — толчок (push) или тяга (pull). Обозначение <b>F</b>, единица <b>ньютон (N)</b>.',
+  'Сила может: начать движение, остановить, изменить скорость/направление, изменить форму или размер.',
+  'Сила — <b>вектор</b>: величина + направление (стрелка; длиннее стрелка — больше сила).',
+  'Контактные (толкнуть, открыть дверь) и бесконтактные (Солнце–Земля, магниты).',
+  'Измеряют <b>динамометром</b>. 100 г ≈ 1 Н, 1 кг ≈ 10 Н.']],
+ ['4.2','Inertia',[
+  '<b>Inertia</b>: тело в покое остаётся в покое, в движении — продолжает двигаться, пока не подействует сила.',
+  'Автобус тормозит → мы вперёд. Автобус трогается → мы назад.',
+  '<b>Масса — мера инерции</b>: машина 2550 кг инертнее коробок 100 кг. Танкер долго тормозит.',
+  'Ремень безопасности, весовые категории в боксе, монета на карточке — всё про инерцию.']]
+];
+
+/* ---------- STATE ---------- */
+const $ = s => document.querySelector(s);
+const store = { get(k,d){ try{ const v=localStorage.getItem(k); return v==null?d:JSON.parse(v);}catch(e){return d;} },
+                set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} } };
+let showRu = store.get('arsenPhys58_ru', true);
+let run = null;
+const praise = ['Отлично, Арсен!','В точку!','Так держать!','Физик растёт!','Верно!','Чётко!'];
+const oops   = ['Почти! Запомни:','Не беда, разберём:','Тут ловушка:','Смотри, как правильно:'];
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; };
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function show(id){ ['home','quiz','results','cheat'].forEach(s=> $('#'+s).hidden = s!==id); window.scrollTo({top:0}); }
+
+/* ---------- HOME ---------- */
+function renderHome(){
+  const best = store.get('arsenPhys58_best', {});
+  const total = LEVELS.reduce((n,l)=>n+l.qs.length,0);
+  $('#totalQ').textContent = total + ' заданий';
+  const el = $('#levels'); el.innerHTML='';
+  LEVELS.forEach((l,i)=>{
+    const b = document.createElement('button'); b.className='lvl'; b.type='button';
+    const bs = best[l.id];
+    b.innerHTML = `<span class="code">${esc(l.id)}</span><span class="t">${esc(l.en)}</span><span class="r">${esc(l.ru)}</span>
+      <span class="meta"><span>${l.qs.length} заданий</span>${bs!=null?`<span class="best">рекорд ${bs}%</span>`:'<span>не пройдено</span>'}</span>`;
+    b.onclick = ()=> startRun({name:l.id+' · '+l.en, key:l.id, qs:l.qs.map(q=>({...q,lvl:l.id}))});
+    el.appendChild(b);
+  });
+  const boss = document.createElement('button'); boss.className='boss'; boss.type='button';
+  const bb = best['final'];
+  boss.innerHTML = `<span class="code">СОЧ</span><span class="grow"><span class="t">Мини-СОЧ по с. 58–71</span><br>
+    <span class="r">20 случайных заданий из всех частей. ${bb!=null?'Рекорд: '+bb+'%':'Пройди после всех частей.'}</span></span>
+    <span class="btn" style="background:var(--flame);border-color:var(--flame);color:#fff">Начать</span>`;
+  boss.onclick = ()=>{
+    const all = LEVELS.flatMap(l=>l.qs.map(q=>({...q,lvl:l.id})));
+    startRun({name:'Мини-СОЧ · с. 58–71', key:'final', qs:shuffle(all).slice(0,20), noShuffle:true});
+  };
+  el.appendChild(boss);
+  $('#ruToggle').checked = showRu;
+}
+
+/* ---------- QUIZ ---------- */
+function startRun(cfg){
+  run = {...cfg, qs: cfg.noShuffle ? cfg.qs : shuffle(cfg.qs), i:0, score:0, streak:0, bestStreak:0, xp:0, wrong:[]};
+  $('#qLevelName').textContent = run.name;
+  show('quiz'); renderQ();
+}
+function ruLine(t){ return showRu && t ? `<p class="qru">${esc(t)}</p>` : ''; }
+function renderQ(){
+  const q = run.qs[run.i], n = run.qs.length;
+  $('#qCount').textContent = (run.i+1)+'/'+n;
+  $('#qBar').style.width = (run.i/n*100)+'%';
+  const st = $('#qStreak'); st.hidden = run.streak<2; st.textContent = 'серия ×'+run.streak;
+  const card = $('#qCard'); card.classList.remove('pop'); void card.offsetWidth; card.classList.add('pop');
+  const tag = `<div class="qtag"><span class="label">Часть ${esc(q.lvl)}</span><span class="label">${q.t==='sort'?'распредели':'выбери ответ'}</span></div>`;
+  if(q.t==='sort') return renderSort(q, card, tag);
+  let opts = q.o.map((o,idx)=>({o,idx}));
+  if(!q.fixed) opts = shuffle(opts);
+  card.innerHTML = tag + `<p class="qen">${esc(q.en)}</p>${ruLine(q.ru)}
+    <div class="opts">${opts.map((x,k)=>`<button type="button" class="opt" data-idx="${x.idx}"><span class="k">${'ABCDE'[k]}</span><span class="ot">${esc(x.o[0])}${showRu?`<small>${esc(x.o[1])}</small>`:''}</span></button>`).join('')}</div>
+    <div id="fbBox"></div>
+    <div class="qactions"><span class="hint">Клавиши 1–${opts.length} для ответа, Enter — дальше</span><button class="btn primary" id="nextBtn" type="button" hidden>Дальше →</button></div>`;
+  card.querySelectorAll('.opt').forEach(b=> b.onclick = ()=> answerMC(q, +b.dataset.idx));
+  $('#nextBtn').onclick = next;
+}
+function answerMC(q, idx){
+  const ok = idx===q.a;
+  $('#qCard').querySelectorAll('.opt').forEach(b=>{
+    b.disabled = true; const i=+b.dataset.idx;
+    if(i===q.a) b.classList.add('correct'); else if(i===idx) b.classList.add('wrong');
+  });
+  grade(q, ok, q.o[q.a][0] + (q.o[q.a][1]!==q.o[q.a][0] ? ' — '+q.o[q.a][1] : ''));
+}
+function renderSort(q, card, tag){
+  const items = shuffle(q.items.map((it,k)=>({it,k})));
+  card.innerHTML = tag + `<p class="qen">${esc(q.en)}</p>${ruLine(q.ru)}
+    <div class="sort">${items.map(x=>`<div class="srow" data-k="${x.k}"><span class="it">${esc(x.it[0])}${showRu?`<small>${esc(x.it[1])}</small>`:''}</span>
+      <span class="seg" role="group">${q.cats.map((c,ci)=>`<button type="button" data-c="${ci}" title="${esc(c[1])}">${esc(c[0])}</button>`).join('')}</span></div>`).join('')}</div>
+    <div id="fbBox"></div>
+    <div class="qactions"><span class="hint" id="sortHint">Выбери вариант для каждой строки</span>
+      <span style="display:flex;gap:10px"><button class="btn primary" id="checkBtn" type="button" disabled>Проверить</button><button class="btn primary" id="nextBtn" type="button" hidden>Дальше →</button></span></div>`;
+  const choice = {};
+  card.querySelectorAll('.srow').forEach(row=>{
+    row.querySelectorAll('.seg button').forEach(b=> b.onclick = ()=>{
+      if(row.dataset.done) return;
+      row.querySelectorAll('.seg button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+      choice[row.dataset.k] = +b.dataset.c;
+      $('#checkBtn').disabled = Object.keys(choice).length < q.items.length;
+    });
+  });
+  $('#checkBtn').onclick = ()=>{
+    let right=0;
+    card.querySelectorAll('.srow').forEach(row=>{
+      row.dataset.done='1'; const it=q.items[+row.dataset.k]; const good = choice[row.dataset.k]===it[2];
+      row.classList.add(good?'ok':'no'); if(good) right++;
+      else row.insertAdjacentHTML('beforeend', `<span class="fix">Правильно: ${esc(q.cats[it[2]][0])} (${esc(q.cats[it[2]][1])})</span>`);
+      row.querySelectorAll('.seg button').forEach(x=>x.disabled=true);
+    });
+    $('#checkBtn').hidden = true;
+    const ok = right===q.items.length;
+    grade(q, ok, q.items.map(it=>it[0]+' → '+q.cats[it[2]][0]).join('; '), `${right} из ${q.items.length} верно. `);
+  };
+  $('#nextBtn').onclick = next;
+}
+function grade(q, ok, correctText, prefix=''){
+  if(ok){ run.score++; run.streak++; run.bestStreak=Math.max(run.bestStreak,run.streak); run.xp += 10 + Math.min(run.streak,5)*2; }
+  else { run.streak=0; run.wrong.push({q, correctText}); }
+  const st = $('#qStreak'); st.hidden = run.streak<2; st.textContent = 'серия ×'+run.streak;
+  $('#fbBox').innerHTML = `<div class="fb ${ok?'good':'bad'}"><span class="v">${ok?pick(praise):pick(oops)}</span>
+    <p>${esc(prefix)}${esc(q.ex)}</p>${q.term?`<span class="term">${esc(q.term)}</span>`:''}</div>`;
+  const nb = $('#nextBtn'); nb.hidden=false; nb.textContent = run.i===run.qs.length-1 ? 'Результат →' : 'Дальше →'; nb.focus({preventScroll:true});
+}
+function next(){ run.i++; if(run.i>=run.qs.length) return finish(); renderQ(); }
+
+document.addEventListener('keydown', e=>{
+  if($('#quiz').hidden) return;
+  const nb = $('#nextBtn');
+  if(e.key==='Enter' && nb && !nb.hidden){ e.preventDefault(); next(); return; }
+  const n = parseInt(e.key,10);
+  if(n>=1){ const b = $('#qCard').querySelectorAll('.opt')[n-1]; if(b && !b.disabled) b.click(); }
+});
+
+/* ---------- RESULTS ---------- */
+function finish(){
+  const n = run.qs.length, pct = Math.round(run.score/n*100);
+  const mark = pct>=85?5:pct>=65?4:pct>=40?3:2;
+  $('#qBar').style.width='100%';
+  const best = store.get('arsenPhys58_best', {});
+  const isRecord = best[run.key]==null || pct>best[run.key];
+  if(!run.isRetry && isRecord){ best[run.key]=pct; store.set('arsenPhys58_best', best); }
+  $('#rMark').textContent = mark; $('#rPct').textContent = pct+'%';
+  $('#rLevel').textContent = run.name;
+  $('#rTitle').textContent = mark===5?'Арсен, это уровень пятёрки!':mark===4?'Хороший результат, почти пятёрка':mark===3?'Есть база, но надо подтянуть':'Пора повторить главу ещё раз';
+  $('#rMsg').textContent = run.wrong.length ? 'Ниже все ошибки с правильными ответами. Прочитай их и нажми «Повторить ошибки» — пройди, пока не будет 100%.' : 'Ни одной ошибки. Переходи к следующей части или к Мини-СОЧ.';
+  $('#rNums').innerHTML = `<span class="pill">${run.score} из ${n} верно</span><span class="pill">+${run.xp} XP</span><span class="pill streak">лучшая серия ×${run.bestStreak}</span>${(!run.isRetry && isRecord)?'<span class="pill" style="border-color:var(--good);color:var(--good)">новый рекорд</span>':''}`;
+  $('#mistWrap').hidden = !run.wrong.length; $('#retryMist').hidden = !run.wrong.length;
+  $('#mistList').innerHTML = run.wrong.map(w=>`<div class="mi"><div class="label">Часть ${esc(w.q.lvl)}</div><div class="q">${esc(w.q.en)}</div>
+    ${showRu&&w.q.ru?`<div class="e">${esc(w.q.ru)}</div>`:''}<div class="a">✓ ${esc(w.correctText)}</div><div class="e">${esc(w.q.ex)}</div></div>`).join('');
+  show('results');
+}
+$('#retryMist').onclick = ()=>{ const qs = run.wrong.map(w=>w.q); const name=run.name; const key=run.key; startRun({name:'Работа над ошибками · '+name, key, qs}); run.isRetry=true; };
+$('#retryAll').onclick = ()=>{ const base = run.key==='final' ? null : LEVELS.find(l=>l.id===run.key);
+  if(base) startRun({name:base.id+' · '+base.en, key:base.id, qs:base.qs.map(q=>({...q,lvl:base.id}))});
+  else { const all = LEVELS.flatMap(l=>l.qs.map(q=>({...q,lvl:l.id}))); startRun({name:'Мини-СОЧ · с. 58–71', key:'final', qs:shuffle(all).slice(0,20), noShuffle:true}); } };
+$('#toHome').onclick = ()=>{ renderHome(); show('home'); };
+$('#quitBtn').onclick = ()=>{ renderHome(); show('home'); };
+
+/* ---------- CHEAT SHEET ---------- */
+$('#cheatBody').innerHTML = CHEAT.map(([code,title,pts])=>`<div class="cs"><h3><span class="code">${code}</span>${esc(title)}</h3><ul>${pts.map(p=>`<li>${p}</li>`).join('')}</ul></div>`).join('');
+$('#openCheat').onclick = ()=> show('cheat');
+$('#cheatBack').onclick = ()=> show('home');
+$('#ruToggle').onchange = e=>{ showRu = e.target.checked; store.set('arsenPhys58_ru', showRu); };
+
+renderHome();
+</script>
